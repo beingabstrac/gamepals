@@ -32,4 +32,4 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 3. `apps/client/src/games/<id>/<Name>Scene.ts` + registry entry.
 
 ## Status
-M0 in progress (2026-09-12): rules core + Tic-Tac-Toe + client shell written; repo/CI/Cloudflare Pages not yet set up.
+M0 in progress (2026-09-12): rules core + Tic-Tac-Toe + client shell on GitHub (`beingabstrac/gamepals`, private); CI green. Next: Cloudflare Pages URL (owner connects the repo in the Cloudflare dashboard), Playwright smoke test, then M1.

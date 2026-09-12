@@ -7,7 +7,7 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] `packages/rules` core (contract, seeded RNG, search, bots, replay) + Tic-Tac-Toe with 4 bot tiers + tests
 - [x] Client: home, game setup (vs bot with tier, 2 players same device), game screen with rematch
 - [x] Devcontainer (Node 22, pnpm, Claude Code) + CI workflow (typecheck, test, build)
-- [ ] GitHub repo, first green CI run, lockfile committed
+- [x] Private GitHub repo `beingabstrac/gamepals`, first green CI run, lockfile committed
 - [ ] Cloudflare Pages connected → playable URL on every push
 - [ ] Playwright smoke test; ESLint/Prettier
 - [ ] Free trademark search for "Game Pals" ([09](09-naming.md))
