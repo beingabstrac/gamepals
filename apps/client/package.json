@@ -1,0 +1,22 @@
+{
+  "name": "@gamepals/client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@gamepals/rules": "workspace:*",
+    "phaser": "^4.1.0",
+    "preact": "^10.26.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.0",
+    "typescript": "^5.8.0",
+    "vite": "^6.3.0"
+  }
+}
