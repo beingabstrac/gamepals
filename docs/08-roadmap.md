@@ -13,8 +13,11 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [ ] Free trademark search for "Game Pals" ([09](09-naming.md))
 
 ## M1 — App shell + 3 games, offline, on phones (weeks 2–5)
-- [ ] Shell: seat picker (You / Friend here / Bot tier, 2–4 seats), results, settings, dark mode, i18n scaffold
-- [ ] Four in a Row, Ludo (2–4, bots fill seats), Air Hockey (2P split-screen + bot)
+- [x] Shell: seat picker (vs bots with player count, same device 2–4, Mix & match any seat), result sheet, sound/haptics settings
+- [ ] Shell: dark/light theme, i18n scaffold
+- [x] Visual pass: toy-like UI, fonts, sound, haptics, animated scenes ([11](11-visual-design.md))
+- [x] Four in a Row, Ludo (2–4, bots fill seats)
+- [ ] Air Hockey (2P split-screen + bot)
 - [ ] Bot Web Worker
 - [ ] Capacitor iOS/Android projects; Preferences + SQLite; haptics; safe areas; rotated UI for same-device seats
 - [ ] GitHub Actions Android AAB → Play internal testing; Codemagic iOS → TestFlight

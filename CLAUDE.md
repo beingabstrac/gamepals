@@ -33,4 +33,4 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 3. `apps/client/src/games/<id>/<Name>Scene.ts` + registry entry.
 
 ## Status
-M0 in progress (2026-09-12): rules core + Tic-Tac-Toe + client shell on GitHub (`beingabstrac/gamepals`, private); CI green. Next: Cloudflare Pages URL (owner connects the repo in the Cloudflare dashboard), Playwright smoke test, then M1.
+M1 in progress (2026-09-12). Live at https://beingabstrac.github.io/gamepals/ (GitHub Pages, deploys on push to main). Done: Tic-Tac-Toe, Four in a Row, Ludo (2–4), seat picker, visual pass. Next: Air Hockey, bot Web Worker, Capacitor iOS/Android + cloud builds, Playwright smoke test.
