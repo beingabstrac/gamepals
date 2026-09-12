@@ -10,6 +10,8 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@fontsource/fredoka": "^5.2.0",
+    "@fontsource/nunito": "^5.2.0",
     "@gamepals/rules": "workspace:*",
     "phaser": "^4.1.0",
     "preact": "^10.26.0"

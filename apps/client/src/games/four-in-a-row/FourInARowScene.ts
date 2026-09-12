@@ -5,8 +5,8 @@ import type { Session } from '../../session';
 const CELL = 100;
 export const FOUR_IN_A_ROW_SIZE = { width: COLS * CELL, height: ROWS * CELL };
 
-const BOARD_COLOR = 0x2d4bb3;
-const HOLE_COLOR = 0x1b1d2b;
+const BOARD_COLOR = 0x3552c9;
+const HOLE_COLOR = 0x171a3a;
 const SEAT_COLORS = [0xffd23f, 0xff6b6b];
 const RADIUS = CELL / 2 - 10;
 
@@ -18,6 +18,7 @@ const cellCenter = (col: number, row: number) => ({
 export class FourInARowScene extends Scene {
   private board!: GameObjects.Graphics;
   private falling: GameObjects.Arc | null = null;
+  private winRings: GameObjects.Graphics | null = null;
   private shownMoves = 0;
 
   constructor(private readonly session: Session<FourInARowMove>) {
@@ -34,6 +35,7 @@ export class FourInARowScene extends Scene {
         .on('pointerdown', () => this.session.play(col));
     }
 
+    this.shownMoves = this.session.moves.length;
     const unsubscribe = this.session.subscribe(() => this.onChange());
     this.events.once('shutdown', unsubscribe);
     this.draw(null);
@@ -78,9 +80,9 @@ export class FourInARowScene extends Scene {
     const g = this.board;
     g.clear();
 
-    // Board face with holes: discs show through as colored circles, empty holes as background.
+    // Board face with holes: discs show as colored circles, empty holes as background.
     g.fillStyle(BOARD_COLOR, 1);
-    g.fillRoundedRect(0, 0, COLS * CELL, ROWS * CELL, 24);
+    g.fillRoundedRect(0, 0, COLS * CELL, ROWS * CELL, 28);
 
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
@@ -89,15 +91,27 @@ export class FourInARowScene extends Scene {
         const { x, y } = cellCenter(col, row);
         g.fillStyle(disc === null || disc === undefined ? HOLE_COLOR : (SEAT_COLORS[disc] ?? 0xffffff), 1);
         g.fillCircle(x, y, RADIUS);
+        if (disc !== null && disc !== undefined) {
+          // Inner ring gives each disc a little depth.
+          g.lineStyle(5, 0x000000, 0.12);
+          g.strokeCircle(x, y, RADIUS - 12);
+        }
       }
     }
 
-    if (state.winLine && hideCell === null) {
-      g.lineStyle(8, 0xffffff, 0.9);
-      for (const index of state.winLine) {
-        const { x, y } = cellCenter(index % COLS, Math.floor(index / COLS));
-        g.strokeCircle(x, y, RADIUS - 4);
-      }
+    if (state.winLine && hideCell === null) this.showWin(state.winLine);
+  }
+
+  private showWin(line: readonly number[]): void {
+    if (this.winRings) return;
+    const rings = this.add.graphics();
+    rings.lineStyle(9, 0xffffff, 1);
+    for (const index of line) {
+      const { x, y } = cellCenter(index % COLS, Math.floor(index / COLS));
+      rings.strokeCircle(x, y, RADIUS - 3);
     }
+    this.winRings = rings;
+    this.cameras.main.shake(180, 0.006);
+    this.tweens.add({ targets: rings, alpha: 0.25, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
 }

@@ -10,6 +10,12 @@ importers:
 
   apps/client:
     dependencies:
+      '@fontsource/fredoka':
+        specifier: ^5.2.0
+        version: 5.3.0
+      '@fontsource/nunito':
+        specifier: ^5.2.0
+        version: 5.3.0
       '@gamepals/rules':
         specifier: workspace:*
         version: link:../../packages/rules
@@ -289,6 +295,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource/fredoka@5.3.0':
+    resolution: {integrity: sha512-s2IhjQ50wDnKkkaKmjhtL0rxQg6ITsVusiipM3m7zUwVZZbbCKsscNDkngwp28xVzfIt7neWrkgU1qKqyTycQg==}
+
+  '@fontsource/nunito@5.3.0':
+    resolution: {integrity: sha512-vw9TaTQJ/zpEpKrsODuPmOvaVjXgdda6B+xXA4YqjrdeJ62MLgVoDerdRXFQHyBnSCt2yQ2nHKCHPP/Pv7Xq4Q==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -1097,6 +1109,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.12':
     optional: true
+
+  '@fontsource/fredoka@5.3.0': {}
+
+  '@fontsource/nunito@5.3.0': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:

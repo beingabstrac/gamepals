@@ -14,6 +14,7 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 - App saves: native storage (`@capacitor/preferences` / SQLite), never localStorage/IndexedDB inside the apps (iOS can evict them).
 - No GPL code in shipped apps (e.g. no Stockfish). No trademarked game names (see docs/03). CC0/permissive assets only, logged in `docs/licenses.md`.
 - No free-text chat — emotes/preset phrases only. Bots never cheat.
+- Look & feel follows `docs/11-visual-design.md`: every action gets motion + `cue()` sound/haptic (`apps/client/src/feedback.ts`), each game has a `colors` gradient in the registry, player colors always paired with a shape, respect sound/haptics settings and reduced motion. Run the per-game juice checklist before calling a game done.
 
 ## Layout
 - `packages/rules/src/core` — `GameDefinition`/`GameState` contract, `createRng`, negamax search, `createSearchBot`, move-log `replay`.

@@ -1,8 +1,9 @@
 import { BOT_TIERS, type BotTier } from '@gamepals/rules';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { GameScreen } from './components/GameScreen';
 import { COMING_SOON, GAMES, type GameEntry } from './games/registry';
 import type { SeatController } from './session';
+import { settings, type Settings } from './settings';
 
 type Screen =
   | { name: 'home' }
@@ -15,6 +16,8 @@ const TIER_LABEL: Record<BotTier, string> = {
   hard: 'Hard',
   expert: 'Expert',
 };
+
+const gradient = ([from, to]: readonly [string, string]) => ({ '--game-from': from, '--game-to': to });
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
@@ -40,26 +43,69 @@ export function App() {
   return <Home onPick={(entry) => setScreen({ name: 'setup', entry })} />;
 }
 
+function useSettings(): Settings {
+  const [value, setValue] = useState(settings.get());
+  useEffect(() => settings.subscribe(setValue), []);
+  return value;
+}
+
+function SettingsToggles() {
+  const { sound, haptics } = useSettings();
+  return (
+    <div class="toggles">
+      <button
+        class="icon-btn"
+        aria-pressed={sound}
+        aria-label={sound ? 'Sound on' : 'Sound off'}
+        onClick={() => settings.set({ sound: !sound })}
+      >
+        {sound ? '🔊' : '🔇'}
+      </button>
+      <button
+        class="icon-btn"
+        aria-pressed={haptics}
+        aria-label={haptics ? 'Vibration on' : 'Vibration off'}
+        onClick={() => settings.set({ haptics: !haptics })}
+      >
+        {haptics ? '📳' : '📴'}
+      </button>
+    </div>
+  );
+}
+
 function Home({ onPick }: { onPick(entry: GameEntry): void }) {
   return (
     <div class="screen">
       <header class="hero">
-        <h1>Game Pals</h1>
-        <p class="muted">Every game. Every way to play.</p>
+        <div>
+          <h1 class="logo">Game Pals</h1>
+          <p class="muted">Every game. Every way to play.</p>
+        </div>
+        <SettingsToggles />
       </header>
       <div class="grid">
-        {GAMES.map((entry) => (
-          <button key={entry.definition.id} class="game-card" onClick={() => onPick(entry)}>
+        {GAMES.map((entry, i) => (
+          <button
+            key={entry.definition.id}
+            class="game-card"
+            style={{ ...gradient(entry.colors), animationDelay: `${i * 40}ms` }}
+            onClick={() => onPick(entry)}
+          >
             <span class="emoji">{entry.emoji}</span>
             <span class="title">{entry.definition.name}</span>
-            <span class="muted small">{entry.tagline}</span>
+            <span class="small">{entry.tagline}</span>
           </button>
         ))}
-        {COMING_SOON.map((game) => (
-          <div key={game.name} class="game-card disabled" aria-disabled="true">
+        {COMING_SOON.map((game, i) => (
+          <div
+            key={game.name}
+            class="game-card soon"
+            aria-disabled="true"
+            style={{ ...gradient(game.colors), animationDelay: `${(GAMES.length + i) * 40}ms` }}
+          >
             <span class="emoji">{game.emoji}</span>
             <span class="title">{game.name}</span>
-            <span class="muted small">Coming soon</span>
+            <span class="small">Coming soon</span>
           </div>
         ))}
       </div>
@@ -78,20 +124,23 @@ function Setup({ entry, onBack, onStart }: SetupProps) {
   const { modes, name } = entry.definition;
 
   return (
-    <div class="screen">
+    <div class="screen" style={gradient(entry.colors)}>
       <header class="topbar">
         <button class="ghost" onClick={onBack}>
           ← Games
         </button>
-        <h1>
-          {entry.emoji} {name}
-        </h1>
+        <h1>{name}</h1>
         <span />
       </header>
 
+      <div class="setup-hero">
+        <span class="emoji big">{entry.emoji}</span>
+        <p class="muted">{entry.tagline}</p>
+      </div>
+
       {modes.includes('bot') && (
         <section class="card">
-          <h2>Play vs Bot</h2>
+          <h2>🤖 Play vs Bot</h2>
           <div class="chips" role="radiogroup" aria-label="Bot difficulty">
             {BOT_TIERS.map((t) => (
               <button
@@ -106,7 +155,7 @@ function Setup({ entry, onBack, onStart }: SetupProps) {
             ))}
           </div>
           <button
-            class="primary"
+            class="btn primary"
             onClick={() =>
               onStart([
                 { kind: 'human', label: 'You' },
@@ -121,10 +170,10 @@ function Setup({ entry, onBack, onStart }: SetupProps) {
 
       {modes.includes('sameDevice') && (
         <section class="card">
-          <h2>2 Players · Same device</h2>
+          <h2>👫 2 Players · Same device</h2>
           <p class="muted">Take turns on this phone or tablet.</p>
           <button
-            class="primary"
+            class="btn primary"
             onClick={() =>
               onStart([
                 { kind: 'human', label: 'Player 1' },
@@ -137,8 +186,8 @@ function Setup({ entry, onBack, onStart }: SetupProps) {
         </section>
       )}
 
-      <section class="card disabled" aria-disabled="true">
-        <h2>Online</h2>
+      <section class="card soon" aria-disabled="true">
+        <h2>🌍 Online</h2>
         <p class="muted">Play friends, family and people worldwide. Coming soon.</p>
       </section>
     </div>

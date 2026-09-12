@@ -30,5 +30,6 @@ Coming next: `apps/mobile` (Capacitor iOS/Android), `apps/server` (Cloudflare Wo
 | 08 | [Roadmap](docs/08-roadmap.md) | Milestones M0–M5 with deliverables |
 | 09 | [Naming](docs/09-naming.md) | Why "Game Pals", availability checks |
 | 10 | [Zero-budget plan](docs/10-zero-budget-plan.md) | Free stack, free-tier limits, launch order, money expectations |
+| 11 | [Visual design & game feel](docs/11-visual-design.md) | Style, fonts, colors, motion, sound, haptics, per-game juice checklist |
 
 Raw research: [docs/research/](docs/research/) (podcast + YouTube transcripts). Asset licenses: [docs/licenses.md](docs/licenses.md).
