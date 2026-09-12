@@ -1,6 +1,6 @@
-import { BOT_TIERS, type BotTier } from '@gamepals/rules';
 import { useEffect, useState } from 'preact/hooks';
 import { GameScreen } from './components/GameScreen';
+import { gradient, Setup } from './components/Setup';
 import { COMING_SOON, GAMES, type GameEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
@@ -9,15 +9,6 @@ type Screen =
   | { name: 'home' }
   | { name: 'setup'; entry: GameEntry }
   | { name: 'play'; entry: GameEntry; seats: SeatController[] };
-
-const TIER_LABEL: Record<BotTier, string> = {
-  easy: 'Easy',
-  medium: 'Medium',
-  hard: 'Hard',
-  expert: 'Expert',
-};
-
-const gradient = ([from, to]: readonly [string, string]) => ({ '--game-from': from, '--game-to': to });
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
@@ -109,87 +100,6 @@ function Home({ onPick }: { onPick(entry: GameEntry): void }) {
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-interface SetupProps {
-  entry: GameEntry;
-  onBack(): void;
-  onStart(seats: SeatController[]): void;
-}
-
-function Setup({ entry, onBack, onStart }: SetupProps) {
-  const [tier, setTier] = useState<BotTier>('medium');
-  const { modes, name } = entry.definition;
-
-  return (
-    <div class="screen" style={gradient(entry.colors)}>
-      <header class="topbar">
-        <button class="ghost" onClick={onBack}>
-          ← Games
-        </button>
-        <h1>{name}</h1>
-        <span />
-      </header>
-
-      <div class="setup-hero">
-        <span class="emoji big">{entry.emoji}</span>
-        <p class="muted">{entry.tagline}</p>
-      </div>
-
-      {modes.includes('bot') && (
-        <section class="card">
-          <h2>🤖 Play vs Bot</h2>
-          <div class="chips" role="radiogroup" aria-label="Bot difficulty">
-            {BOT_TIERS.map((t) => (
-              <button
-                key={t}
-                class={t === tier ? 'chip selected' : 'chip'}
-                role="radio"
-                aria-checked={t === tier}
-                onClick={() => setTier(t)}
-              >
-                {TIER_LABEL[t]}
-              </button>
-            ))}
-          </div>
-          <button
-            class="btn primary"
-            onClick={() =>
-              onStart([
-                { kind: 'human', label: 'You' },
-                { kind: 'bot', tier, label: `${TIER_LABEL[tier]} bot` },
-              ])
-            }
-          >
-            Play
-          </button>
-        </section>
-      )}
-
-      {modes.includes('sameDevice') && (
-        <section class="card">
-          <h2>👫 2 Players · Same device</h2>
-          <p class="muted">Take turns on this phone or tablet.</p>
-          <button
-            class="btn primary"
-            onClick={() =>
-              onStart([
-                { kind: 'human', label: 'Player 1' },
-                { kind: 'human', label: 'Player 2' },
-              ])
-            }
-          >
-            Play
-          </button>
-        </section>
-      )}
-
-      <section class="card soon" aria-disabled="true">
-        <h2>🌍 Online</h2>
-        <p class="muted">Play friends, family and people worldwide. Coming soon.</p>
-      </section>
     </div>
   );
 }

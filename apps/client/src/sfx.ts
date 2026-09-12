@@ -24,6 +24,15 @@ export const SFX = {
   win: [note(523, 0), note(659, 0.09), note(784, 0.18), note(1047, 0.27, 0.32)],
   lose: [note(392, 0, 0.18), note(330, 0.16, 0.18), note(262, 0.32, 0.36)],
   draw: [note(440, 0, 0.16), note(440, 0.18, 0.2)],
+  roll: [
+    { freq: 300, to: 520, duration: 0.04, type: 'square', volume: 0.05 },
+    { freq: 480, to: 280, duration: 0.04, type: 'square', volume: 0.05, delay: 0.06 },
+    { freq: 340, to: 620, duration: 0.05, type: 'square', volume: 0.05, delay: 0.12 },
+  ],
+  capture: [
+    { freq: 880, to: 220, duration: 0.22, type: 'sawtooth', volume: 0.09 },
+    { freq: 660, to: 990, duration: 0.12, type: 'triangle', volume: 0.12, delay: 0.2 },
+  ],
 } satisfies Record<string, readonly Tone[]>;
 
 export type SoundName = keyof typeof SFX;

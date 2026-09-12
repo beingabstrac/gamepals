@@ -5,7 +5,7 @@ export type SeatController =
   | { readonly kind: 'human'; readonly label: string }
   | { readonly kind: 'bot'; readonly tier: BotTier; readonly label: string };
 
-const BOT_MOVE_DELAY_MS = 450;
+const DEFAULT_BOT_DELAY_MS = 450;
 
 /**
  * One game in progress on this device. Every combination of local humans and bots
@@ -23,6 +23,8 @@ export class Session<M> {
     readonly definition: GameDefinition<M>,
     readonly seats: readonly SeatController[],
     readonly seed: number,
+    /** Pause before each bot action, so animations finish and players can follow along. */
+    private readonly botDelayMs = DEFAULT_BOT_DELAY_MS,
   ) {
     this.state = definition.newGame({ players: seats.length }, seed);
     // Bots get their own stream so their choices don't shift the game's own randomness.
@@ -65,6 +67,6 @@ export class Session<M> {
     const seat = this.state.currentSeat;
     const bot = this.bots[seat];
     if (this.state.result || !bot) return;
-    this.botTimer = setTimeout(() => this.commit(bot.chooseMove(this.state, seat, this.rng)), BOT_MOVE_DELAY_MS);
+    this.botTimer = setTimeout(() => this.commit(bot.chooseMove(this.state, seat, this.rng)), this.botDelayMs);
   }
 }
