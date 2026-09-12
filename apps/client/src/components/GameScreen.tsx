@@ -24,8 +24,8 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
     const game = new Game({
       type: AUTO,
       parent: host.current!,
-      width: 600,
-      height: 600,
+      width: entry.size.width,
+      height: entry.size.height,
       transparent: true,
       scale: { mode: Scale.FIT, autoCenter: Scale.CENTER_BOTH },
       scene: [entry.createScene(session)],
@@ -66,7 +66,7 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
       <p class="status" aria-live="polite">
         {status}
       </p>
-      <div class="board" ref={host} />
+      <div class="board" ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
       <div class="actions">
         {state.result && (
           <button class="primary" onClick={rematch}>
