@@ -20,9 +20,9 @@ Decided 2026-09-12: **Phaser 4 + TypeScript, developed fully in the cloud, $0.**
 | Game Center / Play Games | `@openforge/capacitor-game-connect` | Check Capacitor-version support before adopting |
 | Local saves | `@capacitor/preferences` + `@capacitor-community/sqlite`; IndexedDB on web | iOS may evict WebView storage — never keep app saves there |
 | Haptics, share, status bar, splash | Official `@capacitor/*` plugins | Native feel (App Store guideline 4.2) |
-| Dev environment | GitHub Codespaces + devcontainer (Node 22, pnpm, Claude Code) | 60 h/month on 2 cores, 15 GB |
-| CI / builds | GitHub Actions (typecheck, test, web build, Android AAB) · Codemagic (iOS → TestFlight) | 2,000 Linux min/month (private repo) · 500 macOS M2 min/month |
-| Web hosting | Cloudflare Pages (Git integration, preview URL per branch) | Free; also hosts privacy policy, `app-ads.txt`, deep-link files |
+| Dev environment | GitHub Codespaces + devcontainer (Node 22, pnpm, Claude Code) | GitHub Pro: 180 core-hours/month (~90 h on 2 cores), 20 GB |
+| CI / builds | GitHub Actions (typecheck, test, web build, Android AAB) · Codemagic (iOS → TestFlight) | GitHub Pro: 3,000 Linux min/month · 500 macOS M2 min/month |
+| Web hosting | GitHub Pages (Pro allows Pages from private repos; `pages.yml` deploys on push) · Cloudflare Pages later for per-branch previews | Free; also hosts privacy policy, `app-ads.txt`, deep-link files. Pages sites are public even when the repo is private |
 
 ## 2. Repository layout
 ```

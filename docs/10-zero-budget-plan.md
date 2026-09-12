@@ -13,7 +13,7 @@ Google Play note: if the Play account is a *personal* account created after 2023
 | Need | Free choice | Free limits / gotchas | When you'd pay |
 |---|---|---|---|
 | Engine | Phaser 4 + TypeScript + Vite; Capacitor for iOS/Android | MIT, free forever | Never |
-| Dev environment | GitHub Codespaces (VS Code in the browser) + Claude Code | 60 h/month on a 2-core machine, 15 GB storage; stop codespaces when idle | Past 60 h/month, work in a light local folder instead |
+| Dev environment | GitHub Codespaces (VS Code in the browser) + Claude Code | GitHub Pro (already owned): 180 core-hours/month (~90 h on a 2-core machine), 20 GB storage; stop codespaces when idle | Past ~90 h/month, work in a light local folder instead |
 | Source control | GitHub private repo | — | — |
 | 2D art | **Kenney CC0 packs**: Board Game Pack (490), Playing Cards (270), Board Game Icons (250), Domino Pack (30); plus Krita / Inkscape / Blender | CC0 = free for commercial use, no credit required | Custom art later |
 | Sound | Kenney UI/digital sound packs (CC0), Freesound filtered to CC0 | Check each file's license; log it | — |
@@ -30,8 +30,8 @@ Google Play note: if the Play account is a *personal* account created after 2023
 | Website, privacy policy, deep links | Cloudflare Pages or GitHub Pages (`*.pages.dev` / `*.github.io`) | ⚠ Verify AdMob accepts `app-ads.txt` on a free subdomain before relying on it; if not, a ~$10 domain is the **first** thing to buy from revenue | Custom domain |
 | Web distribution | itch.io (you choose the platform cut, 0–100%, default 10%), CrazyGames (Basic Launch without SDK: ≤ 50 MB, ≤ 20 MB for mobile home; ad revenue share needs SDK/Full Launch), GameDistribution (Unity SDK), Poki (selective, < 8 MB initial download) | Non-exclusive — publish everywhere | — |
 | Google Play production access | 12 testers opted in for 14 continuous days (personal accounts created after 2023-11-13) | Free sources: friends/family, Reddit tester-swap threads, Testers Community free exchange. Organization accounts skip this but need a D-U-N-S number (free) and a registered business | — |
-| Builds | GitHub Actions (typecheck, tests, web build, Android) + Codemagic (iOS → TestFlight) | Actions: 2,000 Linux minutes/month on a private repo · Codemagic: 500 macOS M2 minutes/month | Never at this scale |
-| Web hosting | Cloudflare Pages (Git integration, preview URL per branch) | Free | — |
+| Builds | GitHub Actions (typecheck, tests, web build, Android) + Codemagic (iOS → TestFlight) | Actions (GitHub Pro): 3,000 Linux minutes/month · Codemagic: 500 macOS M2 minutes/month | Never at this scale |
+| Web hosting | GitHub Pages (Pro allows it from the private repo) · Cloudflare Pages for per-branch previews later | Free; the site itself is public | — |
 | Trailers & store video | OBS Studio + DaVinci Resolve (free) | — | — |
 | Marketing | ASO, YouTube Shorts, TikTok, Instagram Reels, Reddit, Discord | Organic reach for gaming accounts reported down to ~4–8% in 2026 → post 3–5 short videos per week | Small paid tests later |
 

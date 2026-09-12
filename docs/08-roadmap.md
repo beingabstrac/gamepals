@@ -8,7 +8,7 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Client: home, game setup (vs bot with tier, 2 players same device), game screen with rematch
 - [x] Devcontainer (Node 22, pnpm, Claude Code) + CI workflow (typecheck, test, build)
 - [x] Private GitHub repo `beingabstrac/gamepals`, first green CI run, lockfile committed
-- [ ] Cloudflare Pages connected → playable URL on every push
+- [ ] GitHub Pages (GitHub Pro) → playable URL on every push to main
 - [ ] Playwright smoke test; ESLint/Prettier
 - [ ] Free trademark search for "Game Pals" ([09](09-naming.md))
 
