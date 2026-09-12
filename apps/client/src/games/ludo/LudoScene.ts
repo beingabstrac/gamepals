@@ -67,13 +67,18 @@ function tokenPoint(color: number, progress: number, token: number): { x: number
 }
 
 function drawStar(g: GameObjects.Graphics, x: number, y: number, radius: number, color: number): void {
-  const points = Array.from({ length: 10 }, (_, i) => {
+  g.fillStyle(color, 1);
+  g.beginPath();
+  for (let i = 0; i < 10; i++) {
     const r = i % 2 === 0 ? radius : radius * 0.45;
     const angle = -Math.PI / 2 + (i * Math.PI) / 5;
-    return { x: x + Math.cos(angle) * r, y: y + Math.sin(angle) * r };
-  });
-  g.fillStyle(color, 1);
-  g.fillPoints(points, true);
+    const px = x + Math.cos(angle) * r;
+    const py = y + Math.sin(angle) * r;
+    if (i === 0) g.moveTo(px, py);
+    else g.lineTo(px, py);
+  }
+  g.closePath();
+  g.fillPath();
 }
 
 export class LudoScene extends Scene {
