@@ -185,14 +185,14 @@ h2,
   border-radius: var(--radius);
   background: var(--card);
   text-align: center;
-  box-shadow: 0 6px 0 color-mix(in srgb, var(--c) 30%, var(--line)), var(--soft-shadow);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--c) 55%, var(--line)), var(--soft-shadow);
   animation: pop-in 520ms var(--spring) both;
   transition: transform 180ms var(--spring), box-shadow 180ms;
 }
 
 .tile:not(.soon):active {
   transform: translateY(5px) scale(0.96);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--c) 30%, var(--line)), var(--soft-shadow);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--c) 55%, var(--line)), var(--soft-shadow);
 }
 
 .tile .art {
@@ -202,7 +202,7 @@ h2,
   border-radius: 22px;
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, var(--c) 22%, white);
+  background: color-mix(in srgb, var(--c) 38%, white);
 }
 
 .tile .art svg {
@@ -260,8 +260,8 @@ h2,
   display: grid;
   place-items: center;
   border-radius: 40px;
-  background: color-mix(in srgb, var(--game) 22%, white);
-  box-shadow: 0 8px 0 color-mix(in srgb, var(--game) 40%, var(--line)), var(--soft-shadow);
+  background: color-mix(in srgb, var(--game) 38%, white);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--game) 60%, var(--line)), var(--soft-shadow);
   animation: pop-in 560ms var(--spring) both;
 }
 

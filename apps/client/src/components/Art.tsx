@@ -11,7 +11,7 @@ function TicTacToeArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       {[35, 65].map((p) => (
-        <g key={p} fill="#D9D1F2">
+        <g key={p} fill="#B9A8F0">
           <rect x={p - 2.5} y="8" width="5" height="84" rx="2.5" />
           <rect x="8" y={p - 2.5} width="84" height="5" rx="2.5" />
         </g>
@@ -71,9 +71,9 @@ function LudoArt() {
 function AirHockeyArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="20" y="6" width="60" height="88" rx="16" fill="#EEF7FF" stroke={DARK.sky} strokeWidth="3" />
-      <line x1="24" y1="50" x2="76" y2="50" stroke="#BFDCFF" strokeWidth="2.5" />
-      <circle cx="50" cy="50" r="9" fill="none" stroke="#BFDCFF" strokeWidth="2.5" />
+      <rect x="20" y="6" width="60" height="88" rx="16" fill="#DCEEFF" stroke={DARK.sky} strokeWidth="3" />
+      <line x1="24" y1="50" x2="76" y2="50" stroke="#8EC2FF" strokeWidth="2.5" />
+      <circle cx="50" cy="50" r="9" fill="none" stroke="#8EC2FF" strokeWidth="2.5" />
       <rect x="38" y="6" width="24" height="4" rx="2" fill={COLORS.tomato} />
       <rect x="38" y="90" width="24" height="4" rx="2" fill={COLORS.sky} />
       <circle cx="50" cy="24" r="9" fill={COLORS.tomato} stroke="#fff" strokeWidth="2" />
@@ -90,7 +90,7 @@ function CheckersArt() {
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="12" y="12" width="76" height="76" rx="14" fill="#fff" stroke="#F1E3D8" strokeWidth="2" />
       {[0, 1, 2, 3].flatMap((r) =>
-        [0, 1, 2, 3].map((c) => ((r + c) % 2 ? <rect key={`${r}${c}`} x={12 + c * 19} y={12 + r * 19} width="19" height="19" fill="#FFD7BF" /> : null)),
+        [0, 1, 2, 3].map((c) => ((r + c) % 2 ? <rect key={`${r}${c}`} x={12 + c * 19} y={12 + r * 19} width="19" height="19" fill="#FFBE96" /> : null)),
       )}
       <circle cx="40.5" cy="21.5" r="7" fill={COLORS.tomato} />
       <circle cx="78.5" cy="21.5" r="7" fill={COLORS.tomato} />
