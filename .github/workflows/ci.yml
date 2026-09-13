@@ -1,9 +1,22 @@
 name: CI
 
+# One gated pipeline: nothing ships unless every stage before it passed.
+#   check  → typecheck, unit tests, web build
+#   e2e    → every game opened and played in a headless phone browser; any console error fails
+#   deploy → GitHub Pages (main only)
+# Release tags (v*) run the same gate; phone builds (TestFlight / Play internal) attach
+# to tags once the Capacitor projects exist (docs/08-roadmap.md, M1).
+
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:
@@ -25,3 +38,53 @@ jobs:
         with:
           name: web-build
           path: apps/client/dist
+
+  e2e:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: apps/client/dist
+      - run: pnpm --filter @gamepals/client exec playwright install --with-deps chromium
+      - run: pnpm e2e
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/client/playwright-report
+
+  deploy-web:
+    needs: [check, e2e]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: dist
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

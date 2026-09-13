@@ -351,6 +351,187 @@ h2,
   color: var(--soft);
 }
 
+.quick-starts {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.quick {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--card);
+  font-family: var(--font-display);
+  font-weight: 600;
+  box-shadow: 0 4px 0 var(--line), var(--soft-shadow);
+  transition: transform 160ms var(--spring), background 160ms, color 160ms;
+}
+
+.quick.selected {
+  background: var(--game);
+  color: #fff;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--game) 72%, black);
+}
+
+.quick:active {
+  transform: translateY(3px) scale(0.96);
+}
+
+.avatar {
+  position: relative;
+}
+
+.edit-badge {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  color: var(--soft);
+  font-size: 0.8rem;
+  box-shadow: 0 2px 0 var(--line), 0 4px 10px rgba(43, 42, 58, 0.12);
+}
+
+.meter {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.meter span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.meter span.on {
+  background: var(--game);
+}
+
+.picker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(43, 42, 58, 0.22);
+  animation: fade-in 200ms ease both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.picker {
+  width: min(560px, 100%);
+  margin: 0 12px calc(env(safe-area-inset-bottom) + 12px);
+  padding: 20px 16px 18px;
+  border-radius: 32px;
+  background: var(--card);
+  box-shadow: 0 8px 0 var(--line), 0 24px 48px rgba(43, 42, 58, 0.18);
+  animation: sheet-up 480ms var(--spring) both;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(80px) scale(0.94);
+    opacity: 0;
+  }
+}
+
+.picker-title {
+  margin: 0 0 14px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 12px 6px 10px;
+  border-radius: 22px;
+  background: var(--paper);
+  border: 3px solid transparent;
+  animation: pop-in 420ms var(--spring) both;
+  transition: transform 160ms var(--spring), border-color 160ms;
+}
+
+.option:nth-child(2) {
+  animation-delay: 30ms;
+}
+
+.option:nth-child(3) {
+  animation-delay: 60ms;
+}
+
+.option:nth-child(4) {
+  animation-delay: 90ms;
+}
+
+.option:nth-child(5) {
+  animation-delay: 120ms;
+}
+
+.option:nth-child(6) {
+  animation-delay: 150ms;
+}
+
+.option.selected {
+  border-color: var(--game);
+  background: color-mix(in srgb, var(--game) 10%, white);
+}
+
+.option:active {
+  transform: scale(0.93);
+}
+
+.option-face {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+}
+
+.option-face svg {
+  width: 100%;
+  height: 100%;
+}
+
+.option-face.empty {
+  border-radius: 50%;
+  border: 3px dashed #d6d0e8;
+  color: var(--soft);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+
+.option-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.option-note {
+  font-size: 0.72rem;
+  color: var(--soft);
+}
+
 .play-bubble {
   align-self: center;
   width: min(100%, 320px);

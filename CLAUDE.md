@@ -16,6 +16,8 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 - No free-text chat — emotes/preset phrases only. Bots never cheat.
 - Look & feel follows `docs/12-catalog-and-direction.md` Part 3 (supersedes the style in docs/11): white app, flat candy colors from `apps/client/src/theme.ts`, **no gradients**, cute bubbly rounded UI, original vector art (`components/Art.tsx`), crisp rendering (`games/crisp.ts` — every scene calls `fitCamera` first), springy/physical motion (gravity, arcs, squash), and choices made by tapping things (table setup), never forms. Every action gets motion + `cue()` sound/haptic. Run the per-game juice checklist before calling a game done.
 - Game catalog and build waves: `docs/12-catalog-and-direction.md` Part 2.
+- **Research before building:** every game gets a brief in `docs/games/<id>.md` (real rules with sources, what makes it feel right, reference apps, our design, tests) before any code. Each game must be clearly its own game, not a reskin of another.
+- **Nothing ships unless it's green:** one CI pipeline (`.github/workflows/ci.yml`): typecheck + unit tests + build → Playwright e2e on a phone browser (every game opened and played; any console error fails) → deploy web. Phone builds (TestFlight / Play internal) go out on release tags `v*` through the same gate. Add every new game to `apps/client/e2e/smoke.spec.ts`.
 
 ## Layout
 - `packages/rules/src/core` — `GameDefinition`/`GameState` contract, `createRng`, negamax search, `createSearchBot`, move-log `replay`.
