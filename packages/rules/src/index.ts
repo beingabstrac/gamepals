@@ -13,3 +13,4 @@ export * from './games/reflex-race';
 export * from './games/sumo';
 export * from './games/penalty-kicks';
 export * from './games/snake-battle';
+export * from './games/twenty48';

@@ -78,9 +78,9 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
       </header>
       <p class="status" aria-live="polite">
         {!state.result && (
-          <span class="turn-pill">
+          <span class="turn-pill" key={entry.status ? entry.status(state) : undefined}>
             <span class="turn-dot" style={{ background: sideColors[state.currentSeat] ?? '#9B7BFF' }} />
-            {sideName(state.currentSeat)} {thinking ? 'is thinking…' : 'to move'}
+            {entry.status ? entry.status(state) : `${sideName(state.currentSeat)} ${thinking ? 'is thinking…' : 'to move'}`}
           </span>
         )}
       </p>
@@ -88,7 +88,7 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
       {Controls && <Controls session={session} />}
       {state.result && (
         <ResultSheet
-          title={resultTitle(state.result, seats, sideName)}
+          title={entry.resultText?.(state) ?? resultTitle(state.result, seats, sideName)}
           outcome={outcomeOf(state.result, seats)}
           onRematch={rematch}
           onChangeMode={onExit}

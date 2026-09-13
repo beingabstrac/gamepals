@@ -28,6 +28,7 @@ const VALID: readonly SeatChoice[] = ['empty', 'human', ...BOT_TIERS];
 
 /** Chairs go clockwise from the player holding the phone. */
 function positionsFor(maxPlayers: number): Position[] {
+  if (maxPlayers === 1) return ['bottom'];
   if (maxPlayers <= 2) return ['bottom', 'top'];
   if (maxPlayers === 3) return ['bottom', 'left', 'right'];
   return ['bottom', 'left', 'top', 'right'];
@@ -147,6 +148,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
   }, [id, choices]);
 
   const positions = positionsFor(maxPlayers);
+  const solo = maxPlayers === 1;
   const seats = toSeats(choices);
   const sideNames = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
@@ -182,7 +184,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         <span />
       </header>
 
-      <div class="quick-starts" role="group" aria-label="Quick start">
+      <div class="quick-starts" role="group" aria-label="Quick start" hidden={solo}>
         {quickStarts.map((quick) => (
           <button
             key={quick.label}
@@ -218,15 +220,17 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
               class="seat"
               data-pos={position}
               style={{ '--side': side }}
-              onClick={() => setPicking(index)}
-              aria-label={`${seat.label} plays ${sideName}. Tap to change.`}
+              onClick={() => !solo && setPicking(index)}
+              aria-label={solo ? 'You' : `${seat.label} plays ${sideName}. Tap to change.`}
             >
               {/* Keyed on the choice so the avatar springs in each time it changes. */}
               <span class="avatar" key={choice}>
                 {choice === 'human' ? <PersonFace color={side} /> : <BotFace tier={choice} />}
-                <span class="edit-badge" aria-hidden="true">
-                  ✎
-                </span>
+                {!solo && (
+                  <span class="edit-badge" aria-hidden="true">
+                    ✎
+                  </span>
+                )}
               </span>
               <span class="who">{seat.label}</span>
               {choice === 'human' ? <span class="level">{sideName}</span> : <Meter tier={choice} />}
@@ -235,7 +239,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         })}
       </div>
 
-      <p class="hint">Tap a chair to choose who sits there.</p>
+      <p class="hint">{solo ? 'A solo game. Race a friend on the same puzzle soon.' : 'Tap a chair to choose who sits there.'}</p>
 
       <button class="play-bubble" onClick={() => onStart(seats)}>
         Play

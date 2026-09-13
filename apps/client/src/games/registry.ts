@@ -10,6 +10,8 @@ import {
   sumo,
   ticTacToe,
   tugOfWar,
+  twenty48,
+  type Twenty48State,
   type GameDefinition,
   type GameState,
   type LudoState,
@@ -33,6 +35,7 @@ import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { LudoControls } from './ludo/LudoControls';
 import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
+import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
 
 /** What the home shelf and the table setup need to know about any game. */
 export interface EntryBase {
@@ -64,6 +67,10 @@ export interface GameEntry<M = unknown> extends EntryBase {
   moveCue?(before: GameState<M>, after: GameState<M>): SoundName | undefined;
   /** Extra controls rendered under the board (e.g. dice). */
   readonly Controls?: ComponentType<{ session: Session<M> }>;
+  /** Replaces "X to move" (e.g. a score for solo puzzles). */
+  status?(state: GameState<M>): string;
+  /** Replaces the result headline (e.g. "No more moves · 2,340 points"). */
+  resultText?(state: GameState<M>): string;
   createScene(session: Session<M>): Scene;
 }
 
@@ -116,6 +123,20 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: LudoControls,
     createScene: (session) => new LudoScene(session),
+  }),
+  entry({
+    definition: twenty48,
+    tagline: 'Slide, merge, reach 2048',
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.peach],
+    size: TWENTY48_SIZE,
+    color: COLORS.peach,
+    status: (state) => `Score ${(state as Twenty48State).score.toLocaleString()}`,
+    resultText: (state) => {
+      const s = state as Twenty48State;
+      return s.best >= 2048 ? `2048! ${s.score.toLocaleString()} points 🎉` : `No more moves · ${s.score.toLocaleString()} points`;
+    },
+    createScene: (session) => new Twenty48Scene(session),
   }),
   {
     kind: 'realtime',

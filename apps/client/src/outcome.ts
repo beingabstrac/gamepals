@@ -5,6 +5,8 @@ export type Outcome = 'win' | 'lose' | 'draw';
 
 /** A win against bots is "yours" only if a person won; a people-only (or bots-only) game is always celebrated. */
 export function outcomeOf(result: GameResult, seats: readonly SeatController[]): Outcome {
+  // Solo puzzles: celebrate reaching the goal; otherwise it's just "game over".
+  if (seats.length === 1) return result.winners.includes(0) ? 'win' : 'draw';
   if (result.draw) return 'draw';
   const vsBot = seats.some((seat) => seat.kind === 'bot');
   const humans = seats.filter((seat) => seat.kind === 'human').length;

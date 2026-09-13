@@ -238,7 +238,39 @@ function SnakeArt() {
   );
 }
 
+function Twenty48Art() {
+  const cells: [number, number, string, string][] = [
+    [0, 0, '2', '#FFF4E0'],
+    [1, 0, '4', '#FFE3C4'],
+    [0, 1, '8', COLORS.peach],
+    [1, 1, '16', COLORS.tomato],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="16" fill="#E7E1F5" />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill="#F3EFFB" />
+      {cells.map(([cx, cy, label, fill]) => (
+        <g key={label}>
+          <rect x={16 + cx * 36} y={16 + cy * 36} width="32" height="32" rx="8" fill={fill} />
+          <text
+            x={32 + cx * 36}
+            y={38 + cy * 36}
+            textAnchor="middle"
+            fontFamily="Fredoka, sans-serif"
+            fontWeight="600"
+            fontSize={label.length > 1 ? 14 : 17}
+            fill={label === '2' || label === '4' ? INK : '#fff'}
+          >
+            {label}
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 const ART: Record<string, () => JSX.Element> = {
+  '2048': Twenty48Art,
   sumo: SumoArt,
   'snake-battle': SnakeArt,
   'penalty-kicks': PenaltyArt,

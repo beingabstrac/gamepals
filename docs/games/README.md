@@ -32,4 +32,7 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Table Tennis (Ping Pong)](ping-pong.md) — rebuilt from this brief
 - [Sumo](sumo.md) — next
 - [Penalty Kicks](penalty-kicks.md)
-- [Snake Battle](snake-battle.md)
+- [Snake Battle](snake-battle.md) — built
+- [2048](2048.md) — building
+- [Sudoku](sudoku.md)
+- [Solitaire (Klondike)](solitaire.md)
