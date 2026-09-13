@@ -2,7 +2,7 @@ import type { BotTier, GameResult, RealtimeGameDefinition, Seat } from '../../co
 
 /** Portrait table in logical pixels. Seat 0 defends the bottom goal, seat 1 the top goal. */
 export const TABLE = { width: 600, height: 900 } as const;
-export const GOAL_WIDTH = 220;
+export const GOAL_WIDTH = 240;
 export const PUCK_RADIUS = 24;
 export const MALLET_RADIUS = 40;
 export const AIR_HOCKEY_WIN_SCORE = 7;
@@ -191,13 +191,15 @@ export interface AirHockeyTier {
   readonly aggression: number;
   /** 0 = aims at the middle of the goal; 1 = aims at the corner away from the opponent's mallet. */
   readonly cornerAim: number;
+  /** How fully the bot covers the goal-to-puck line when defending (1 = perfect goalie). */
+  readonly defense: number;
 }
 
 export const AIR_HOCKEY_TIERS: Record<BotTier, AirHockeyTier> = {
-  easy: { maxSpeed: 650, reactionMs: 260, aimError: 110, aggression: 0.35, cornerAim: 0 },
-  medium: { maxSpeed: 1000, reactionMs: 170, aimError: 60, aggression: 0.6, cornerAim: 0.4 },
-  hard: { maxSpeed: 1500, reactionMs: 110, aimError: 30, aggression: 0.85, cornerAim: 0.7 },
-  expert: { maxSpeed: 2100, reactionMs: 60, aimError: 12, aggression: 1, cornerAim: 0.9 },
+  easy: { maxSpeed: 650, reactionMs: 260, aimError: 110, aggression: 0.35, cornerAim: 0, defense: 0.45 },
+  medium: { maxSpeed: 1000, reactionMs: 170, aimError: 60, aggression: 0.6, cornerAim: 0.4, defense: 0.7 },
+  hard: { maxSpeed: 1500, reactionMs: 110, aimError: 30, aggression: 0.85, cornerAim: 0.7, defense: 0.85 },
+  expert: { maxSpeed: 2100, reactionMs: 60, aimError: 12, aggression: 1, cornerAim: 0.9, defense: 1 },
 };
 
 /**
@@ -238,7 +240,9 @@ export function airHockeyBotTarget(state: AirHockeyState, seat: Seat, tier: AirH
     const goal = { x: w / 2, y: 0 };
     const length = Math.hypot(puck.x - goal.x, puck.y - goal.y) || 1;
     const guard = 110 + 40 * tier.aggression;
-    target = { x: goal.x + ((puck.x - goal.x) / length) * guard, y: goal.y + ((puck.y - goal.y) / length) * guard };
+    const lineX = goal.x + ((puck.x - goal.x) / length) * guard;
+    // Weaker bots drift back toward the middle instead of tracking the puck's line exactly.
+    target = { x: goal.x + (lineX - goal.x) * tier.defense, y: goal.y + ((puck.y - goal.y) / length) * guard };
   }
   return toFrame(target);
 }
