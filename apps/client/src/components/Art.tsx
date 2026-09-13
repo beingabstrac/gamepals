@@ -148,12 +148,15 @@ function SudokuArt() {
 function PingPongArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="18" y="10" width="64" height="80" rx="14" fill={DARK.mint} />
-      <rect x="18" y="8" width="64" height="80" rx="14" fill={COLORS.mint} />
-      <line x1="22" y1="48" x2="78" y2="48" stroke="#fff" strokeWidth="3" strokeDasharray="6 5" />
-      <rect x="36" y="16" width="28" height="7" rx="3.5" fill={COLORS.tomato} />
-      <rect x="30" y="74" width="28" height="7" rx="3.5" fill={COLORS.sky} />
-      <circle cx="58" cy="38" r="5" fill="#fff" stroke="#E6E1F3" strokeWidth="1.5" />
+      <rect x="22" y="14" width="56" height="74" rx="8" fill={DARK.sky} />
+      <rect x="22" y="10" width="56" height="74" rx="8" fill={COLORS.sky} />
+      <rect x="25" y="13" width="50" height="68" rx="6" fill="none" stroke="#fff" strokeWidth="2.5" />
+      <line x1="50" y1="14" x2="50" y2="80" stroke="#fff" strokeWidth="1.5" />
+      <rect x="16" y="44" width="68" height="6" rx="2" fill="#F4F1FF" stroke={INK} strokeWidth="1.5" />
+      <ellipse cx="62" cy="32" rx="4" ry="2.5" fill={INK} opacity="0.2" />
+      <circle cx="62" cy="25" r="4.5" fill="#fff" stroke="#FFE9B8" strokeWidth="1.5" />
+      <circle cx="34" cy="88" r="9" fill={COLORS.sky} stroke="#fff" strokeWidth="2" />
+      <circle cx="66" cy="8" r="7" fill={COLORS.tomato} stroke="#fff" strokeWidth="2" />
     </svg>
   );
 }

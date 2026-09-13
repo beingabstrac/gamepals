@@ -1,190 +1,274 @@
 import type { BotTier, GameResult, RealtimeGameDefinition, Seat } from '../../core/types';
 
-/** Portrait table in logical pixels. Seat 0 plays at the bottom, seat 1 at the top. */
-export const PONG_TABLE = { width: 600, height: 900 } as const;
-export const PADDLE_WIDTH = 130;
-export const PADDLE_HEIGHT = 22;
-export const PADDLE_INSET = 70;
-export const BALL_RADIUS = 14;
-export const PONG_WIN_SCORE = 7;
-export const PONG_STEP = 1 / 120;
+/**
+ * Table tennis (docs/games/ping-pong.md). Seen from above: x across, y along the table
+ * (seat 0 at the bottom end, seat 1 at the top), z = height above the table. Gravity pulls z;
+ * the table bounces the ball; a net stands across the middle.
+ */
+export const PP_CANVAS = { width: 600, height: 900 } as const;
+export const PP_TABLE = { x0: 80, x1: 520, y0: 110, y1: 790 } as const;
+export const NET_Y = 450;
+export const NET_HEIGHT = 26;
+export const PP_STEP = 1 / 120;
+export const PP_GRAVITY = 2400;
+export const PP_WIN_SCORE = 11;
 
-const START_SPEED = 540;
-const SPEEDUP = 1.05;
-const MAX_SPEED = 1500;
-const MAX_BOUNCE_ANGLE = (60 * Math.PI) / 180;
-const SERVE_FREEZE = 0.8;
+const RESTITUTION = 0.8;
+const BOUNCE_FRICTION = 0.95;
+const POINT_PAUSE = 1.1;
+const SERVE_HEIGHT = 60;
+/** Height at which a returned ball is struck best (the top of its bounce). */
+const SWEET_SPOT_Z = 90;
 
-export interface PongBall {
+export interface Ball3 {
   readonly x: number;
   readonly y: number;
+  readonly z: number;
   readonly vx: number;
   readonly vy: number;
+  readonly vz: number;
 }
 
-export interface PongState {
-  readonly ball: PongBall;
-  /** Paddle centers along x. */
-  readonly paddles: readonly [number, number];
+/** serve: the server holds the ball · rally: ball in play · point: short pause after a point. */
+export type PingPongPhase = 'serve' | 'rally' | 'point';
+export type PointReason = 'missed' | 'double-bounce' | 'out' | 'net' | 'own-side' | 'bad-serve';
+
+export interface PingPongState {
+  readonly ball: Ball3;
+  readonly phase: PingPongPhase;
+  readonly server: Seat;
+  /** True from the serve until the ball bounces on the receiver's side. */
+  readonly serving: boolean;
+  readonly lastHitter: Seat | null;
+  /** Bounces on each side since the last hit. */
+  readonly bounces: readonly [number, number];
   readonly scores: readonly [number, number];
-  /** Seconds before a served ball starts moving. */
-  readonly freeze: number;
-  readonly rally: number;
+  readonly pause: number;
+  readonly lastPoint: { readonly winner: Seat; readonly reason: PointReason } | null;
   readonly result: GameResult | null;
 }
 
-export interface PongEvents {
-  hit: boolean;
-  wall: boolean;
-  /** Seat that won the point this step, if any. */
+export interface PingPongEvents {
+  bounce: boolean;
+  net: boolean;
+  /** The serve clipped the net: replayed, no point. */
+  let: boolean;
   point: Seat | null;
 }
 
-export interface PaddleInput {
-  /** Where the player wants the paddle's center; null = stay put. */
-  readonly targetX: number | null;
-  /** Pixels per second. */
-  readonly maxSpeed: number;
+/** A swing: aim −1 (left) … 1 (right) across the table, power 0 … 1. */
+export interface Swing {
+  readonly aim: number;
+  readonly power: number;
 }
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+const other = (seat: Seat): Seat => (seat === 0 ? 1 : 0);
+const CENTER_X = (PP_TABLE.x0 + PP_TABLE.x1) / 2;
+const HALF_WIDTH = (PP_TABLE.x1 - PP_TABLE.x0) / 2;
+const HALF_LENGTH = NET_Y - PP_TABLE.y0;
 
-export const paddleY = (seat: Seat): number => (seat === 0 ? PONG_TABLE.height - PADDLE_INSET : PADDLE_INSET);
+export const sideOf = (y: number): Seat => (y > NET_Y ? 0 : 1);
+const onTable = (x: number, y: number) => x >= PP_TABLE.x0 && x <= PP_TABLE.x1 && y >= PP_TABLE.y0 && y <= PP_TABLE.y1;
 
-/** The side toward the receiver, angled alternately left and right so serves vary. */
-function serveBall(receiver: Seat, servesSoFar: number): PongBall {
-  const angle = (servesSoFar % 2 ? 1 : -1) * 0.35;
-  const dir = receiver === 0 ? 1 : -1;
+/** Serve changes every 2 points, and every point once both players reach 10. */
+export function serverFor(scores: readonly [number, number]): Seat {
+  const total = scores[0] + scores[1];
+  if (scores[0] >= 10 && scores[1] >= 10) return total % 2 === 0 ? 0 : 1;
+  return Math.floor(total / 2) % 2 === 0 ? 0 : 1;
+}
+
+function heldBall(server: Seat): Ball3 {
+  return { x: CENTER_X, y: server === 0 ? PP_TABLE.y1 - 10 : PP_TABLE.y0 + 10, z: SERVE_HEIGHT, vx: 0, vy: 0, vz: 0 };
+}
+
+export function newPingPongGame(): PingPongState {
   return {
-    x: PONG_TABLE.width / 2,
-    y: PONG_TABLE.height / 2,
-    vx: Math.sin(angle) * START_SPEED,
-    vy: dir * Math.cos(angle) * START_SPEED,
+    ball: heldBall(0),
+    phase: 'serve',
+    server: 0,
+    serving: false,
+    lastHitter: null,
+    bounces: [0, 0],
+    scores: [0, 0],
+    pause: 0,
+    lastPoint: null,
+    result: null,
   };
 }
 
-export function newPongGame(): PongState {
-  const center = PONG_TABLE.width / 2;
-  return { ball: serveBall(0, 0), paddles: [center, center], scores: [0, 0], freeze: SERVE_FREEZE, rally: 0, result: null };
+/** A player may return the ball once it has bounced exactly once on their side. */
+export function isHittable(state: PingPongState, seat: Seat): boolean {
+  if (state.phase !== 'rally' || state.serving || state.lastHitter === seat) return false;
+  return sideOf(state.ball.y) === seat && state.bounces[seat] === 1;
 }
 
-function movePaddle(x: number, input: PaddleInput, dt: number): number {
-  if (input.targetX === null) return x;
-  const half = PADDLE_WIDTH / 2;
-  const target = clamp(input.targetX, half, PONG_TABLE.width - half);
-  const maxStep = input.maxSpeed * dt;
-  return x + clamp(target - x, -maxStep, maxStep);
+/** 1 at the top of the bounce, falling off the further the ball is from that height. */
+export function hitQuality(z: number): number {
+  return 1 - Math.min(Math.abs(z - SWEET_SPOT_Z) / 110, 1);
 }
 
-/** Advances the table by one fixed step. Pure: returns a new state and what happened. */
-export function stepPong(state: PongState, inputs: readonly [PaddleInput, PaddleInput], dt = PONG_STEP): { state: PongState; events: PongEvents } {
-  const events: PongEvents = { hit: false, wall: false, point: null };
-  if (state.result) return { state, events };
+/** Velocity that carries the ball from where it is to (tx, ty) on the table in T seconds. */
+function launch(from: Ball3, tx: number, ty: number, T: number): Ball3 {
+  return { ...from, vx: (tx - from.x) / T, vy: (ty - from.y) / T, vz: ((PP_GRAVITY / 2) * T * T - from.z) / T };
+}
 
-  const paddles: readonly [number, number] = [movePaddle(state.paddles[0], inputs[0], dt), movePaddle(state.paddles[1], inputs[1], dt)];
-  if (state.freeze > 0) return { state: { ...state, paddles, freeze: Math.max(0, state.freeze - dt) }, events };
+/** Serves (if it's this seat's serve) or returns the ball (if it's hittable). Otherwise nothing happens. */
+export function swing(state: PingPongState, seat: Seat, input: Swing): PingPongState {
+  if (state.result) return state;
+  const aim = clamp(input.aim, -1, 1);
+  const power = clamp(input.power, 0, 1);
+  const toward = seat === 0 ? -1 : 1;
 
-  const { width: w, height: h } = PONG_TABLE;
-  const r = BALL_RADIUS;
-  let { x, y, vx, vy } = state.ball;
-  x += vx * dt;
-  y += vy * dt;
-
-  if (x < r) {
-    x = r;
-    vx = Math.abs(vx);
-    events.wall = true;
-  } else if (x > w - r) {
-    x = w - r;
-    vx = -Math.abs(vx);
-    events.wall = true;
+  if (state.phase === 'serve') {
+    if (seat !== state.server) return state;
+    // The serve bounces once on the server's half (after T1) and carries over the net (flight T2).
+    const T1 = 0.55;
+    const T2 = 0.5;
+    const carry = T1 + BOUNCE_FRICTION * T2;
+    const landY = NET_Y + toward * lerp(0.3, 0.8, power) * HALF_LENGTH;
+    const landX = CENTER_X + aim * (HALF_WIDTH - 40);
+    const b = state.ball;
+    const ball: Ball3 = {
+      ...b,
+      vx: (landX - b.x) / carry,
+      vy: (landY - b.y) / carry,
+      vz: ((PP_GRAVITY / 2) * T1 * T1 - b.z) / T1,
+    };
+    return { ...state, phase: 'rally', serving: true, lastHitter: seat, bounces: [0, 0], ball };
   }
 
-  let rally = state.rally;
-  for (const seat of [0, 1] as const) {
-    const movingToward = seat === 0 ? vy > 0 : vy < 0;
-    if (!movingToward) continue;
-    const py = paddleY(seat);
-    const face = seat === 0 ? py - PADDLE_HEIGHT / 2 : py + PADDLE_HEIGHT / 2;
-    const back = seat === 0 ? py + PADDLE_HEIGHT / 2 : py - PADDLE_HEIGHT / 2;
-    const reached = seat === 0 ? y + r >= face && y - r <= back : y - r <= face && y + r >= back;
-    const px = paddles[seat];
-    if (!reached || Math.abs(x - px) > PADDLE_WIDTH / 2 + r) continue;
+  if (!isHittable(state, seat)) return state;
+  // Timing matters: mistimed power shots fly long or wide, mistimed flat shots find the net.
+  const quality = hitQuality(state.ball.z);
+  const depth = HALF_LENGTH * (0.3 + 0.65 * power) * (1 + (1 - quality) * 0.6);
+  const tx = CENTER_X + aim * (HALF_WIDTH - 30) * (1 + (1 - quality) * 0.8);
+  const T = lerp(1.1, 0.6, power) - (1 - quality) * 0.2;
+  return { ...state, lastHitter: seat, bounces: [0, 0], ball: launch(state.ball, tx, NET_Y + toward * depth, T) };
+}
 
-    // Where the ball meets the paddle sets its new angle: edges send it wide.
-    const offset = clamp((x - px) / (PADDLE_WIDTH / 2 + r), -1, 1);
-    const speed = Math.min(Math.hypot(vx, vy) * SPEEDUP, MAX_SPEED);
-    const angle = offset * MAX_BOUNCE_ANGLE;
-    vx = Math.sin(angle) * speed;
-    vy = (seat === 0 ? -1 : 1) * Math.cos(angle) * speed;
-    y = seat === 0 ? face - r : face + r;
-    events.hit = true;
-    rally++;
-  }
+function award(state: PingPongState, winner: Seat, reason: PointReason, events: PingPongEvents): { state: PingPongState; events: PingPongEvents } {
+  events.point = winner;
+  const scores: [number, number] = [state.scores[0], state.scores[1]];
+  scores[winner]++;
+  const won = scores[winner] >= PP_WIN_SCORE && scores[winner] - scores[other(winner)] >= 2;
+  const result: GameResult | null = won ? { winners: [winner], draw: false } : null;
+  return {
+    state: { ...state, phase: 'point', serving: false, pause: POINT_PAUSE, scores, lastPoint: { winner, reason }, result },
+    events,
+  };
+}
 
-  if (y > h + r || y < -r) {
-    const scorer: Seat = y > h ? 1 : 0;
-    const scores: [number, number] = [state.scores[0], state.scores[1]];
-    scores[scorer]++;
-    events.point = scorer;
-    const receiver: Seat = scorer === 0 ? 1 : 0;
-    const result: GameResult | null = scores[scorer] >= PONG_WIN_SCORE ? { winners: [scorer], draw: false } : null;
+/** Advances the ball by one fixed step and applies the rules. Pure. */
+export function stepPingPong(state: PingPongState, dt = PP_STEP): { state: PingPongState; events: PingPongEvents } {
+  const events: PingPongEvents = { bounce: false, net: false, let: false, point: null };
+  if (state.result || state.phase === 'serve') return { state, events };
+
+  if (state.phase === 'point') {
+    const pause = state.pause - dt;
+    if (pause > 0) return { state: { ...state, pause }, events };
+    const server = serverFor(state.scores);
     return {
-      state: { ball: serveBall(receiver, scores[0] + scores[1]), paddles, scores, freeze: SERVE_FREEZE, rally: 0, result },
+      state: { ...state, phase: 'serve', server, serving: false, lastHitter: null, bounces: [0, 0], pause: 0, ball: heldBall(server) },
       events,
     };
   }
 
-  return { state: { ...state, ball: { x, y, vx, vy }, paddles, rally }, events };
+  const b = state.ball;
+  const hitter = state.lastHitter ?? state.server;
+  let vx = b.vx;
+  let vy = b.vy;
+  let vz = b.vz - PP_GRAVITY * dt;
+  const x = b.x + vx * dt;
+  const y = b.y + vy * dt;
+  let z = b.z + vz * dt;
+
+  // Crossing the middle below the top of the net: the net stops it.
+  const crossed = b.y > NET_Y !== y > NET_Y;
+  if (crossed && z < NET_HEIGHT && x >= PP_TABLE.x0 - 20 && x <= PP_TABLE.x1 + 20) {
+    events.net = true;
+    if (state.serving) {
+      events.let = true;
+      return {
+        state: { ...state, phase: 'serve', serving: false, lastHitter: null, bounces: [0, 0], ball: heldBall(state.server) },
+        events,
+      };
+    }
+    return award(state, other(hitter), 'net', events);
+  }
+
+  if (z <= 0 && vz < 0) {
+    const receiver = other(hitter);
+    if (!onTable(x, y)) {
+      // Off the table: if it already landed on the receiver's side, they failed to return it.
+      const landed = !state.serving && state.bounces[receiver] >= 1;
+      return award(state, landed ? hitter : receiver, landed ? 'missed' : 'out', events);
+    }
+
+    const side = sideOf(y);
+    const bounces: [number, number] = [state.bounces[0], state.bounces[1]];
+    bounces[side]++;
+    events.bounce = true;
+    z = 0;
+    vz = -vz * RESTITUTION;
+    vx *= BOUNCE_FRICTION;
+    vy *= BOUNCE_FRICTION;
+
+    let serving = state.serving;
+    if (serving) {
+      // A serve must bounce on the server's side first, then once on the receiver's side.
+      if (side === hitter && bounces[hitter] > 1) return award(state, receiver, 'bad-serve', events);
+      if (side === receiver) {
+        if (bounces[hitter] === 0) return award(state, receiver, 'bad-serve', events);
+        serving = false;
+      }
+    } else {
+      if (side === hitter) return award(state, receiver, 'own-side', events);
+      if (bounces[side] >= 2) return award(state, hitter, 'double-bounce', events);
+    }
+    return { state: { ...state, serving, bounces, ball: { x, y, z, vx, vy, vz } }, events };
+  }
+
+  return { state: { ...state, ball: { x, y, z, vx, vy, vz } }, events };
 }
 
-/** Where the ball will cross `targetY`, bouncing off the side walls on the way. */
-export function predictLandingX(ball: PongBall, targetY: number): number {
-  const { width: w } = PONG_TABLE;
-  const r = BALL_RADIUS;
-  if (ball.vy === 0) return ball.x;
-  const t = (targetY - ball.y) / ball.vy;
-  if (t <= 0) return ball.x;
-  const span = w - 2 * r;
-  const period = 2 * span;
-  const raw = ball.x + ball.vx * t - r;
-  const u = ((raw % period) + period) % period;
-  return r + (u <= span ? u : period - u);
-}
-
-export interface PongTier {
-  readonly maxSpeed: number;
-  /** How stale the bot's view of the ball is — the client feeds it an older snapshot. */
-  readonly reactionMs: number;
-  /** Pixels of random positioning error. */
-  readonly error: number;
-  /** Predicts wall bounces instead of chasing where the ball is now. */
-  readonly anticipation: boolean;
-  /** 0 = returns straight back; 1 = uses the paddle edge to send the ball away from the opponent. */
+export interface PingPongTier {
+  /** How far from the sweet spot the bot may strike (0 = always perfect timing). */
+  readonly timingError: number;
+  /** How close to the lines it aims (0 = middle of the table). */
   readonly aim: number;
+  readonly power: number;
+  /** Chance of not reaching an easy ball; wide, fast balls are missed more often. */
+  readonly missBase: number;
 }
 
-export const PONG_TIERS: Record<BotTier, PongTier> = {
-  easy: { maxSpeed: 420, reactionMs: 240, error: 60, anticipation: false, aim: 0 },
-  medium: { maxSpeed: 650, reactionMs: 170, error: 35, anticipation: true, aim: 0.3 },
-  hard: { maxSpeed: 950, reactionMs: 110, error: 18, anticipation: true, aim: 0.6 },
-  expert: { maxSpeed: 1300, reactionMs: 60, error: 8, anticipation: true, aim: 0.8 },
+export const PING_PONG_TIERS: Record<BotTier, PingPongTier> = {
+  easy: { timingError: 0.9, aim: 0.15, power: 0.3, missBase: 0.22 },
+  medium: { timingError: 0.6, aim: 0.4, power: 0.5, missBase: 0.12 },
+  hard: { timingError: 0.35, aim: 0.65, power: 0.7, missBase: 0.06 },
+  expert: { timingError: 0.15, aim: 0.85, power: 0.85, missBase: 0.025 },
 };
 
-/** Where a bot wants its paddle's center. `noise` in [-1, 1] adds its positioning error. */
-export function pongBotTarget(state: PongState, seat: Seat, tier: PongTier, noise = 0): number {
-  const { width: w } = PONG_TABLE;
-  const ball = state.ball;
-  const coming = seat === 0 ? ball.vy > 0 : ball.vy < 0;
-  if (!coming || state.freeze > 0) return w / 2 + noise * tier.error;
+/** Noise for one ball, each value in [-1, 1]: [timing, side, power, reach]. */
+export type BotNoise = readonly [number, number, number, number];
 
-  const face = seat === 0 ? paddleY(0) - PADDLE_HEIGHT / 2 : paddleY(1) + PADDLE_HEIGHT / 2;
-  const landing = tier.anticipation ? predictLandingX(ball, face) : ball.x;
-  // To send the ball left, meet it with the paddle's left side (paddle shifted right), and vice versa.
-  const opponent = state.paddles[seat === 0 ? 1 : 0];
-  const sendLeft = opponent > w / 2;
-  const shift = tier.aim * PADDLE_WIDTH * 0.35 * (sendLeft ? 1 : -1);
-  return landing + shift + noise * tier.error;
+/**
+ * The bot's swing this step, or null to wait. The caller re-rolls `noise` for each new ball.
+ */
+export function pingPongBotSwing(state: PingPongState, seat: Seat, tier: PingPongTier, noise: BotNoise): Swing | null {
+  const side = noise[1] >= 0 ? 1 : -1;
+  const aim = clamp(tier.aim * side + noise[1] * 0.1, -1, 1);
+  const power = clamp(tier.power * (0.85 + 0.15 * noise[2]), 0.1, 1);
+  if (state.phase === 'serve') return state.server === seat ? { aim: aim * 0.6, power: 0.5 } : null;
+  if (!isHittable(state, seat)) return null;
+  // Wide and fast balls are harder to reach; weaker bots miss them more.
+  const width = Math.abs(state.ball.x - CENTER_X) / HALF_WIDTH;
+  const speed = Math.hypot(state.ball.vx, state.ball.vy) / 1200;
+  const missChance = tier.missBase * (1 + 2 * (0.6 * width + 0.4 * speed));
+  if ((noise[3] + 1) / 2 < missChance) return null;
+  const strikeHeight = SWEET_SPOT_Z + noise[0] * tier.timingError * 80;
+  return state.ball.vz <= 0 && state.ball.z <= strikeHeight ? { aim, power } : null;
 }
 
 export const pingPong: RealtimeGameDefinition = {

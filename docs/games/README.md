@@ -29,4 +29,4 @@ Rules unit tests, bot-tier test, e2e steps.
 ```
 
 ## Briefs
-- [Table Tennis (Ping Pong)](ping-pong.md) — rebuild planned
+- [Table Tennis (Ping Pong)](ping-pong.md) — rebuilt from this brief

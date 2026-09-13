@@ -1,6 +1,10 @@
 # Ping Pong (table tennis)
 
-Status: **rebuild planned.** The first version was top-down "Pong" with paddles — too close to Air Hockey. This brief defines the real thing.
+Status: **rebuilt (2026-09-13)** as real table tennis. The first version was top-down "Pong" with paddles — too close to Air Hockey.
+
+Decisions while building:
+- **View:** straight top-down with the ball's height shown by its shadow and size, instead of a tilted table — a tilt would favor the bottom player when two people share one phone.
+- **Spin:** deferred to a later pass; v1 has aim, power and timing.
 
 ## The real game
 - Rally: after the serve, the ball must bounce **once on the receiver's side** before they return it; a return must clear the net and land on the opponent's half. Volleying (hitting before the bounce) is a fault in table tennis.

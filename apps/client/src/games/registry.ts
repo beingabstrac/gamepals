@@ -124,7 +124,7 @@ export const GAMES: readonly AnyEntry[] = [
   {
     kind: 'realtime',
     definition: pingPong,
-    tagline: 'Angle it past them, first to 7',
+    tagline: 'Swipe to hit, first to 11',
     sideNames: () => ['Bottom', 'Top'],
     sideColors: () => DUEL_COLORS,
     size: PING_PONG_SIZE,
