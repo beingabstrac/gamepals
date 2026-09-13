@@ -16,8 +16,10 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Shell: seat picker (vs bots with player count, same device 2–4, Mix & match any seat), result sheet, sound/haptics settings
 - [ ] Shell: dark/light theme, i18n scaffold
 - [x] Visual pass: toy-like UI, fonts, sound, haptics, animated scenes ([11](11-visual-design.md))
+- [x] Design v2: white, flat, cute, crisp; table setup; physical motion ([12](12-catalog-and-direction.md))
 - [x] Four in a Row, Ludo (2–4, bots fill seats)
-- [ ] Air Hockey (2P split-screen + bot)
+- [x] Air Hockey (2P split-screen + bot, deterministic physics)
+- [ ] Wave 2 duels: Ping Pong, Sumo, Tug of War, Reflex Race, Penalty Kicks, Snake Battle ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
 - [ ] Bot Web Worker
 - [ ] Capacitor iOS/Android projects; Preferences + SQLite; haptics; safe areas; rotated UI for same-device seats
 - [ ] GitHub Actions Android AAB → Play internal testing; Codemagic iOS → TestFlight
