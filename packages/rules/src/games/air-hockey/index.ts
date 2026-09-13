@@ -64,7 +64,8 @@ const homeMallets = (): readonly [Body, Body] => [
 
 export function newAirHockeyGame(): AirHockeyState {
   return {
-    puck: still(TABLE.width / 2, TABLE.height / 2),
+    // Seat 0 (the bottom player — the person, in games against a bot) serves first.
+    puck: still(TABLE.width / 2, TABLE.height * 0.62),
     mallets: homeMallets(),
     scores: [0, 0],
     freeze: SERVE_FREEZE,
@@ -188,13 +189,15 @@ export interface AirHockeyTier {
   readonly aimError: number;
   /** 0 = only defends; 1 = strikes whenever the puck is on its side. */
   readonly aggression: number;
+  /** 0 = aims at the middle of the goal; 1 = aims at the corner away from the opponent's mallet. */
+  readonly cornerAim: number;
 }
 
 export const AIR_HOCKEY_TIERS: Record<BotTier, AirHockeyTier> = {
-  easy: { maxSpeed: 650, reactionMs: 260, aimError: 110, aggression: 0.35 },
-  medium: { maxSpeed: 1000, reactionMs: 170, aimError: 60, aggression: 0.6 },
-  hard: { maxSpeed: 1500, reactionMs: 110, aimError: 30, aggression: 0.85 },
-  expert: { maxSpeed: 2100, reactionMs: 60, aimError: 12, aggression: 1 },
+  easy: { maxSpeed: 650, reactionMs: 260, aimError: 110, aggression: 0.35, cornerAim: 0 },
+  medium: { maxSpeed: 1000, reactionMs: 170, aimError: 60, aggression: 0.6, cornerAim: 0.4 },
+  hard: { maxSpeed: 1500, reactionMs: 110, aimError: 30, aggression: 0.85, cornerAim: 0.7 },
+  expert: { maxSpeed: 2100, reactionMs: 60, aimError: 12, aggression: 1, cornerAim: 0.9 },
 };
 
 /**
@@ -208,15 +211,20 @@ export function airHockeyBotTarget(state: AirHockeyState, seat: Seat, tier: AirH
   const puck = toFrame(state.puck);
   const puckVy = seat === 1 ? state.puck.vy : -state.puck.vy;
   const me = toFrame(state.mallets[seat]);
+  const them = toFrame(state.mallets[seat === 0 ? 1 : 0]);
   const reach = MALLET_RADIUS + PUCK_RADIUS;
 
-  const onMySide = puck.y < h / 2;
+  // A puck resting on the center line is still reachable, so count it as ours.
+  const onMySide = puck.y < h / 2 + PUCK_RADIUS;
   const incomingFast = puckVy < -350;
   const shouldStrike = onMySide && !(incomingFast && tier.aggression < 0.7);
 
   let target: Point;
   if (shouldStrike) {
-    const aim = { x: w / 2 + tier.aimError * noise, y: h + 50 };
+    // Better bots shoot for the side of the goal the opponent's mallet isn't covering.
+    const openSide = them.x < w / 2 ? 1 : -1;
+    const cornerOffset = openSide * tier.cornerAim * (GOAL_WIDTH / 2 - PUCK_RADIUS - 6);
+    const aim = { x: w / 2 + cornerOffset + tier.aimError * noise, y: h + 50 };
     const length = Math.hypot(aim.x - puck.x, aim.y - puck.y) || 1;
     const dir = { x: (aim.x - puck.x) / length, y: (aim.y - puck.y) / length };
     const behindPuck = me.y < puck.y - reach * 0.5;
