@@ -3,7 +3,10 @@ import {
   COLORS_BY_PLAYERS,
   fourInARow,
   ludo,
+  pingPong,
+  reflexRace,
   ticTacToe,
+  tugOfWar,
   type GameDefinition,
   type GameState,
   type LudoState,
@@ -16,7 +19,11 @@ import type { Session } from '../session';
 import type { SoundName } from '../sfx';
 import { COLORS } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
+import { DUEL_COLORS } from './duel';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
+import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
+import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
+import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { LudoControls } from './ludo/LudoControls';
 import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
@@ -113,6 +120,36 @@ export const GAMES: readonly AnyEntry[] = [
     size: AIR_HOCKEY_SIZE,
     color: COLORS.tomato,
     createScene: (options) => new AirHockeyScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: pingPong,
+    tagline: 'Angle it past them, first to 7',
+    sideNames: () => ['Bottom', 'Top'],
+    sideColors: () => DUEL_COLORS,
+    size: PING_PONG_SIZE,
+    color: COLORS.peach,
+    createScene: (options) => new PingPongScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: tugOfWar,
+    tagline: 'Tap faster to pull them over',
+    sideNames: () => ['Bottom', 'Top'],
+    sideColors: () => DUEL_COLORS,
+    size: TUG_OF_WAR_SIZE,
+    color: COLORS.bubblegum,
+    createScene: (options) => new TugOfWarScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: reflexRace,
+    tagline: 'Wait for green, then tap first',
+    sideNames: () => ['Bottom', 'Top'],
+    sideColors: () => DUEL_COLORS,
+    size: REFLEX_RACE_SIZE,
+    color: COLORS.grape,
+    createScene: (options) => new ReflexRaceScene(options),
   },
 ];
 

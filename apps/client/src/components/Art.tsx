@@ -145,7 +145,49 @@ function SudokuArt() {
   );
 }
 
+function PingPongArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="18" y="10" width="64" height="80" rx="14" fill={DARK.mint} />
+      <rect x="18" y="8" width="64" height="80" rx="14" fill={COLORS.mint} />
+      <line x1="22" y1="48" x2="78" y2="48" stroke="#fff" strokeWidth="3" strokeDasharray="6 5" />
+      <rect x="36" y="16" width="28" height="7" rx="3.5" fill={COLORS.tomato} />
+      <rect x="30" y="74" width="28" height="7" rx="3.5" fill={COLORS.sky} />
+      <circle cx="58" cy="38" r="5" fill="#fff" stroke="#E6E1F3" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function TugOfWarArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="47" y="18" width="6" height="64" rx="3" fill="#D9A86C" />
+      <circle cx="50" cy="56" r="6" fill={COLORS.sunny} stroke="#fff" strokeWidth="2" />
+      <rect x="34" y="4" width="32" height="22" rx="11" fill={COLORS.tomato} />
+      <circle cx="44" cy="15" r="2.2" fill={INK} />
+      <circle cx="56" cy="15" r="2.2" fill={INK} />
+      <rect x="34" y="74" width="32" height="22" rx="11" fill={COLORS.sky} />
+      <circle cx="44" cy="85" r="2.2" fill={INK} />
+      <circle cx="56" cy="85" r="2.2" fill={INK} />
+    </svg>
+  );
+}
+
+function ReflexArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="54" r="34" fill={DARK.mint} />
+      <circle cx="50" cy="50" r="34" fill={COLORS.mint} />
+      <circle cx="50" cy="50" r="34" fill="none" stroke="#fff" strokeWidth="4" />
+      <path d="M54 26 L38 54 L50 54 L45 74 L63 44 L51 44 Z" fill="#fff" />
+    </svg>
+  );
+}
+
 const ART: Record<string, () => JSX.Element> = {
+  'ping-pong': PingPongArt,
+  'tug-of-war': TugOfWarArt,
+  'reflex-race': ReflexArt,
   'tic-tac-toe': TicTacToeArt,
   'four-in-a-row': FourInARowArt,
   ludo: LudoArt,

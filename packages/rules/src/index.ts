@@ -7,3 +7,6 @@ export * from './games/tic-tac-toe';
 export * from './games/four-in-a-row';
 export * from './games/ludo';
 export * from './games/air-hockey';
+export * from './games/ping-pong';
+export * from './games/tug-of-war';
+export * from './games/reflex-race';

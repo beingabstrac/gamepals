@@ -36,6 +36,12 @@ export const SFX = {
     note(659, 0.12, 0.16),
     note(880, 0.24, 0.3),
   ],
+  pull: [{ freq: 240, to: 180, duration: 0.05, type: 'triangle', volume: 0.12 }],
+  go: [{ freq: 880, duration: 0.12, type: 'square', volume: 0.07 }, note(1175, 0.1, 0.16)],
+  buzz: [
+    { freq: 150, duration: 0.18, type: 'sawtooth', volume: 0.09 },
+    { freq: 120, duration: 0.2, type: 'sawtooth', volume: 0.09, delay: 0.2 },
+  ],
   capture: [
     { freq: 880, to: 220, duration: 0.22, type: 'sawtooth', volume: 0.09 },
     { freq: 660, to: 990, duration: 0.12, type: 'triangle', volume: 0.12, delay: 0.2 },
