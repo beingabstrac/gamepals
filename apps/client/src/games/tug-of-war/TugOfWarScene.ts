@@ -59,14 +59,16 @@ export class TugOfWarScene extends Scene {
       lines.fillRoundedRect(x, H / 2 - TRAVEL - 2, 18, 4, 2);
     }
 
+    this.rope = this.add.graphics();
+
+    // Hints sit in the open middle of each half (clear of the pullers) and above the rope.
     this.hints = [0, 1].map((seat) =>
-      sharpText(this, W / 2, seat === 0 ? H - 70 : 70, 'TAP TAP TAP!', 34, seat === 0 ? COLORS.sky : COLORS.tomato)
+      sharpText(this, W / 2, seat === 0 ? H / 2 + 170 : H / 2 - 170, 'TAP TAP TAP!', 38, seat === 0 ? COLORS.sky : COLORS.tomato)
         .setAngle(seat === 1 ? 180 : 0)
-        .setAlpha(0.8),
+        .setAlpha(0.85)
+        .setDepth(2),
     );
     this.tweens.add({ targets: this.hints, alpha: 0.35, duration: 500, yoyo: true, repeat: -1 });
-
-    this.rope = this.add.graphics();
     this.knot = this.add.container(W / 2, H / 2, [
       this.add.circle(0, 0, 20, toHex(COLORS.sunny)).setStrokeStyle(5, 0xffffff),
       this.add.triangle(26, -18, 0, 0, 34, 12, 0, 24, toHex(COLORS.sunny)),
