@@ -8,7 +8,7 @@ import {
   STEP,
   stepAirHockey,
   TABLE,
-  WIN_SCORE,
+  AIR_HOCKEY_WIN_SCORE,
   type AirHockeyState,
   type Body,
   type MalletInput,
@@ -82,7 +82,7 @@ describe('air hockey physics', () => {
   });
 
   it('ends the match at the winning score and then stops changing', () => {
-    const { state } = run(live({ scores: [WIN_SCORE - 1, 3], puck: puckAt(300, 60, 0, -900) }), () => [idle, idle], 0.5);
+    const { state } = run(live({ scores: [AIR_HOCKEY_WIN_SCORE - 1, 3], puck: puckAt(300, 60, 0, -900) }), () => [idle, idle], 0.5);
     expect(state.result).toEqual({ winners: [0], draw: false });
     expect(stepAirHockey(state, [idle, idle]).state).toBe(state);
   });

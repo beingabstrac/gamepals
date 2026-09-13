@@ -5,7 +5,7 @@ export const TABLE = { width: 600, height: 900 } as const;
 export const GOAL_WIDTH = 220;
 export const PUCK_RADIUS = 24;
 export const MALLET_RADIUS = 40;
-export const WIN_SCORE = 7;
+export const AIR_HOCKEY_WIN_SCORE = 7;
 /** Fixed simulation step (seconds). Same step everywhere ⇒ same outcome everywhere. */
 export const STEP = 1 / 120;
 
@@ -146,7 +146,7 @@ export function stepAirHockey(state: AirHockeyState, inputs: readonly [MalletInp
     scores[scorer]++;
     events.goal = scorer;
     const conceder: Seat = scorer === 0 ? 1 : 0;
-    const result: GameResult | null = scores[scorer] >= WIN_SCORE ? { winners: [scorer], draw: false } : null;
+    const result: GameResult | null = scores[scorer] >= AIR_HOCKEY_WIN_SCORE ? { winners: [scorer], draw: false } : null;
     // The player who conceded serves from their own half.
     const puck = still(w / 2, conceder === 0 ? h * 0.72 : h * 0.28);
     return { state: { puck, mallets: homeMallets(), scores, freeze: SERVE_FREEZE, result }, events };
