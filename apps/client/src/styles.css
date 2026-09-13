@@ -256,7 +256,7 @@ h2,
 
 .table-top {
   position: absolute;
-  inset: 24%;
+  inset: 27%;
   display: grid;
   place-items: center;
   border-radius: 40px;
@@ -283,23 +283,23 @@ h2,
 
 .seat[data-pos='bottom'] {
   left: 50%;
-  top: 89%;
+  top: 88%;
 }
 
 .seat[data-pos='top'] {
   left: 50%;
-  top: 11%;
+  top: 12%;
   animation-delay: 60ms;
 }
 
 .seat[data-pos='left'] {
-  left: 11%;
+  left: 12%;
   top: 50%;
   animation-delay: 30ms;
 }
 
 .seat[data-pos='right'] {
-  left: 89%;
+  left: 88%;
   top: 50%;
   animation-delay: 90ms;
 }

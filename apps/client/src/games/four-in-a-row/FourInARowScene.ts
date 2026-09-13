@@ -76,6 +76,7 @@ export class FourInARowScene extends Scene {
       return;
     }
     this.drop = null;
+    this.tweens.killTweensOf(drop.disc);
     drop.disc.destroy();
     this.draw(null);
   }
@@ -98,6 +99,7 @@ export class FourInARowScene extends Scene {
 
     // Finish any disc still bouncing, then drop the new one from above the board.
     if (this.drop) {
+      this.tweens.killTweensOf(this.drop.disc);
       this.drop.disc.destroy();
       this.drop = null;
     }
