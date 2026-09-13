@@ -25,8 +25,10 @@ export class Session<M> {
     readonly seed: number,
     /** Pause before each bot action, so animations finish and players can follow along. */
     private readonly botDelayMs = DEFAULT_BOT_DELAY_MS,
+    /** Game option such as a puzzle level. */
+    readonly variant?: string,
   ) {
-    this.state = definition.newGame({ players: seats.length }, seed);
+    this.state = definition.newGame({ players: seats.length, variant }, seed);
     // Bots get their own stream so their choices don't shift the game's own randomness.
     this.rng = createRng(seed ^ 0x5bd1e995);
     this.bots = seats.map((seat) => (seat.kind === 'bot' ? definition.createBot(seat.tier) : undefined));

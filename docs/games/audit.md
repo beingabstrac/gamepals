@@ -15,6 +15,7 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Sumo | Yes: push out of the ring | Drag to move, tap to shove | Weight, momentum, clinch friction | None |
 | Penalty Kicks | Yes: 5 kicks each, early finish, sudden death, roles swap | Swipe to shoot, drag and flick to dive | Curling ball, diving keeper | None |
 | Snake Battle | Yes: grid snake, crashes lose, head-on draw | Turn buttons | Snakes glide between cells | None |
+| Sudoku | Yes: 9×9, one answer, levels by solving tricks, notes, mirrored clues | Tap a square, tap a number | Numbers pop in, repeats shake, finished lines sparkle | Race mode is planned |
 
 Look and feel rules applied to every game (2026-09-13):
 - Bright candy colors, no pastels, no gradients.

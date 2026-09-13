@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /** Every playable game on the shelf. Add new games here so they're opened and played on every push. */
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle', '2048'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle', '2048', 'Sudoku'];
 
 /** Collects uncaught exceptions and console errors; any of them fails the test. */
 function watchErrors(page: Page): string[] {
@@ -53,6 +53,24 @@ for (const name of GAMES) {
     expect(errors).toEqual([]);
   });
 }
+
+test('Sudoku: pick a level, use a hint, undo it', async ({ page }) => {
+  const errors = watchErrors(page);
+  await openTable(page, 'Sudoku');
+  await page.getByRole('button', { name: 'Hard', exact: true }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+
+  const status = page.locator('.status');
+  await expect(status).toContainText('Hard');
+  const before = await status.innerText();
+  await page.getByRole('button', { name: /^Hint/ }).click();
+  await expect(page.locator('.hint-bubble')).toBeVisible();
+  await expect(status).not.toHaveText(before);
+  await page.getByRole('button', { name: 'Undo', exact: true }).click();
+  await expect(status).toHaveText(before);
+  await expect(page.getByRole('button', { name: /^Hint/ })).toHaveAccessibleName('Hint, 2 left');
+  expect(errors).toEqual([]);
+});
 
 test('a full Tic-Tac-Toe game against a bot reaches a result', async ({ page }) => {
   const errors = watchErrors(page);

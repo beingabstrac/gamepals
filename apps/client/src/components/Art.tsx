@@ -134,11 +134,13 @@ function SeaBattleArt() {
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="14" y="14" width="72" height="72" rx="12" fill="#fff" stroke="#EADFB8" strokeWidth="3" />
-      <path d="M38 16 V84 M62 16 V84 M16 38 H84 M16 62 H84" stroke="#F3E7BF" strokeWidth="2.5" />
+      <rect x="14" y="20" width="72" height="72" rx="12" fill={DARK.sky} />
+      <rect x="14" y="14" width="72" height="72" rx="12" fill="#fff" stroke={COLORS.sky} strokeWidth="3" />
+      <path d="M38 16 V84 M62 16 V84 M16 38 H84 M16 62 H84" stroke={COLORS.sky} strokeWidth="2.5" />
+      <rect x="40" y="40" width="20" height="20" rx="4" fill={COLORS.sunny} />
       <g fontFamily="Fredoka, sans-serif" fontWeight="600" fontSize="17" textAnchor="middle" fill={INK}>
         <text x="26" y="32">1</text>
-        <text x="50" y="56" fill={DARK.sunny}>5</text>
+        <text x="50" y="56" fill={COLORS.grape}>5</text>
         <text x="74" y="80">9</text>
       </g>
     </svg>

@@ -34,5 +34,5 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Penalty Kicks](penalty-kicks.md)
 - [Snake Battle](snake-battle.md) — built
 - [2048](2048.md) — building
-- [Sudoku](sudoku.md)
+- [Sudoku](sudoku.md), built
 - [Solitaire (Klondike)](solitaire.md)

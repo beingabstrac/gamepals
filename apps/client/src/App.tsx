@@ -10,7 +10,7 @@ import { settings, type Settings } from './settings';
 type Screen =
   | { name: 'home' }
   | { name: 'setup'; entry: AnyEntry }
-  | { name: 'play'; entry: AnyEntry; seats: SeatController[] };
+  | { name: 'play'; entry: AnyEntry; seats: SeatController[]; variant?: string };
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
@@ -20,14 +20,14 @@ export function App() {
     if (screen.entry.kind === 'realtime') {
       return <RealtimeGameScreen entry={screen.entry} seats={screen.seats} onExit={onExit} />;
     }
-    return <GameScreen entry={screen.entry} seats={screen.seats} onExit={onExit} />;
+    return <GameScreen entry={screen.entry} seats={screen.seats} variant={screen.variant} onExit={onExit} />;
   }
   if (screen.name === 'setup') {
     return (
       <Setup
         entry={screen.entry}
         onBack={() => setScreen({ name: 'home' })}
-        onStart={(seats) => setScreen({ name: 'play', entry: screen.entry, seats })}
+        onStart={(seats, variant) => setScreen({ name: 'play', entry: screen.entry, seats, variant })}
       />
     );
   }

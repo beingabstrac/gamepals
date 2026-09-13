@@ -11,20 +11,22 @@ import { ResultSheet } from './ResultSheet';
 interface Props {
   entry: GameEntry;
   seats: readonly SeatController[];
+  /** Game option picked at the table, such as a puzzle level. */
+  variant?: string;
   onExit(): void;
 }
 
 const newSeed = () => Math.floor(Math.random() * 0xffffffff);
 
-export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
+export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Props) {
   const [seats, setSeats] = useState(initialSeats);
   const [seed, setSeed] = useState(newSeed);
   const [, setTick] = useState(0);
   const host = useRef<HTMLDivElement>(null);
 
   const session = useMemo(
-    () => new Session(entry.definition, seats, seed, entry.botDelayMs),
-    [entry, seats, seed],
+    () => new Session(entry.definition, seats, seed, entry.botDelayMs, variant),
+    [entry, seats, seed, variant],
   );
 
   useEffect(() => {

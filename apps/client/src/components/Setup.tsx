@@ -130,7 +130,20 @@ function SeatPicker({ current, side, sideName, canLeave, onPick, onClose }: Pick
 interface SetupProps {
   entry: EntryBase;
   onBack(): void;
-  onStart(seats: SeatController[]): void;
+  onStart(seats: SeatController[], variant?: string): void;
+}
+
+const levelKey = (id: string) => `gamepals.level.${id}`;
+
+function loadLevel(id: string, levels: EntryBase['levels']): string | undefined {
+  if (!levels) return undefined;
+  try {
+    const saved = localStorage.getItem(levelKey(id));
+    if (saved && levels.some((level) => level.id === saved)) return saved;
+  } catch {
+    // Ignore unreadable storage.
+  }
+  return levels[0]?.id;
 }
 
 /** Game setup as a table: tap a chair to choose who sits there, or use a quick start. No forms. */
@@ -138,6 +151,16 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
   const { id, name, minPlayers, maxPlayers } = entry.definition;
   const [choices, setChoices] = useState(() => loadChoices(id, minPlayers, maxPlayers));
   const [picking, setPicking] = useState<number | null>(null);
+  const [level, setLevel] = useState(() => loadLevel(id, entry.levels));
+
+  useEffect(() => {
+    if (!level) return;
+    try {
+      localStorage.setItem(levelKey(id), level);
+    } catch {
+      // Remembering the level is a convenience; ignore storage failures.
+    }
+  }, [id, level]);
 
   useEffect(() => {
     try {
@@ -183,6 +206,16 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         <h1>{name}</h1>
         <span />
       </header>
+
+      {entry.levels && (
+        <div class="quick-starts" role="group" aria-label="Level">
+          {entry.levels.map((option) => (
+            <button key={option.id} class={option.id === level ? 'quick selected' : 'quick'} onClick={() => setLevel(option.id)}>
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div class="quick-starts" role="group" aria-label="Quick start" hidden={solo}>
         {quickStarts.map((quick) => (
@@ -239,7 +272,9 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         })}
       </div>
 
-      <p class="hint">{solo ? 'Just you. Racing a friend on the same puzzle is coming soon.' : 'Tap a chair to choose who sits there.'}</p>
+      <p class="hint">
+        {!solo ? 'Tap a chair to choose who sits there.' : entry.levels ? 'Just you. Pick a level, then press Play.' : 'Just you. Racing a friend on the same puzzle is coming soon.'}
+      </p>
 
       <section class="how-to" aria-label="How to play">
         <h2>How to play</h2>
@@ -271,7 +306,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         </ul>
       </section>
 
-      <button class="play-bubble" onClick={() => onStart(seats)}>
+      <button class="play-bubble" onClick={() => onStart(seats, level)}>
         Play
       </button>
 

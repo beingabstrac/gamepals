@@ -1,6 +1,8 @@
 # Sudoku
 
-Status: brief.
+Status: built (2026-09-13).
+
+Levels as built: Easy needs only "one option left" squares (38 givens). Medium also needs "one place left for a number" (30 givens). Hard needs pointing pairs, box/line or naked pairs. Expert needs more than those tricks. Puzzles are mirrored like printed ones and always have one answer. 3 hints per game; a hint fixes a wrong number first and explains itself in one sentence.
 
 ## The real game
 - 9×9 grid in nine 3×3 boxes, some cells given. Fill every row, column and box with 1–9 exactly once. A proper puzzle has **exactly one solution**.

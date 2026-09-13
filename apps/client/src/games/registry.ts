@@ -7,6 +7,9 @@ import {
   pingPong,
   reflexRace,
   snakeBattle,
+  sudoku,
+  SUDOKU_HINTS,
+  SUDOKU_LEVELS,
   sumo,
   ticTacToe,
   tugOfWar,
@@ -16,6 +19,8 @@ import {
   type LudoState,
   type PlayMode,
   type RealtimeGameDefinition,
+  type SudokuLevel,
+  type SudokuState,
   type Twenty48State,
 } from '@gamepals/rules';
 import type { Scene } from 'phaser';
@@ -32,6 +37,8 @@ import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
+import { SudokuControls } from './sudoku/SudokuControls';
+import { SUDOKU_SIZE, SudokuScene } from './sudoku/SudokuScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
@@ -57,6 +64,8 @@ export interface EntryBase {
   };
   readonly tagline: string;
   readonly howTo: HowTo;
+  /** Levels picked at the table (passed to the rules as the game variant). */
+  readonly levels?: readonly { readonly id: string; readonly label: string }[];
   /** Name of each seat's side for a given player count, e.g. X and O. */
   sideNames(players: number): readonly string[];
   /** CSS color of each seat's side for a given player count. */
@@ -96,6 +105,8 @@ export type AnyEntry = GameEntry | RealtimeEntry;
 function entry<M>(value: Omit<GameEntry<M>, 'kind'>): GameEntry {
   return { ...value, kind: 'turn' } as unknown as GameEntry;
 }
+
+const LEVEL_LABEL: Record<SudokuLevel, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard', expert: 'Expert' };
 
 const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_PLAYERS[4]!;
 const duelSides = { sideNames: () => ['Bottom', 'Top'], sideColors: () => DUEL_COLORS } as const;
@@ -172,6 +183,37 @@ export const GAMES: readonly AnyEntry[] = [
       return s.best >= 2048 ? `You made 2048! ${s.score.toLocaleString()} points 🎉` : `No more moves. ${s.score.toLocaleString()} points`;
     },
     createScene: (session) => new Twenty48Scene(session),
+  }),
+  entry({
+    definition: sudoku,
+    tagline: 'Fill the grid with 1 to 9',
+    levels: SUDOKU_LEVELS.map((id) => ({ id, label: LEVEL_LABEL[id] })),
+    howTo: {
+      goal: 'Fill every empty square with a number from 1 to 9.',
+      controls: 'Tap a square, then tap a number. Turn on Notes to jot down small guesses.',
+      win: 'Every row, every column and every 3 by 3 box has 1 to 9 exactly once.',
+      tip: 'Each puzzle has only one answer, so you never have to guess. A repeated number turns red. Stuck? You get 3 hints.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.sunny],
+    size: SUDOKU_SIZE,
+    color: DARK.sky,
+    status: (state) => {
+      const s = state as SudokuState;
+      return `${LEVEL_LABEL[s.level]}: ${s.remaining} squares left`;
+    },
+    resultText: (state) => {
+      const used = SUDOKU_HINTS - (state as SudokuState).hintsLeft;
+      return used === 0 ? 'Solved with no hints! 🌟' : `Solved! You used ${used} hint${used === 1 ? '' : 's'}.`;
+    },
+    moveCue: (before, after) => {
+      const a = after as SudokuState;
+      if (a.lastHint) return 'go';
+      if (a.conflicts().size > (before as SudokuState).conflicts().size) return 'buzz';
+      return a.values.some((v, i) => v !== (before as SudokuState).values[i]) ? 'place' : 'tap';
+    },
+    Controls: SudokuControls,
+    createScene: (session) => new SudokuScene(session),
   }),
   {
     kind: 'realtime',
@@ -286,5 +328,4 @@ export const COMING_SOON: readonly { id: string; name: string; color: string }[]
   { id: 'chess', name: 'Chess', color: COLORS.grape },
   { id: 'solitaire', name: 'Solitaire', color: COLORS.mint },
   { id: 'sea-battle', name: 'Sea Battle', color: COLORS.sky },
-  { id: 'sudoku', name: 'Sudoku', color: COLORS.sunny },
 ];
