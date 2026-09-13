@@ -1,6 +1,6 @@
 # Solitaire (Klondike)
 
-Status: brief.
+Status: built (2026-09-13). Draw 1 and Draw 3, tap-to-move and drag, undo, hints, Finish, standard scoring. Still to do: a solver for "winnable deals only", Race and Daily Deal.
 
 ## The real game
 - 52 cards. **Tableau**: 7 columns with 1–7 cards, top card face up. Build **down in alternating colors**; move face-up runs together; only a King (or a run starting with a King) fills an empty column. **Foundations**: build each suit up from Ace to King. **Stock/waste**: draw 1 (or 3) at a time; recycle the waste when the stock runs out.

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /** Every playable game on the shelf. Add new games here so they're opened and played on every push. */
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle', '2048', 'Sudoku'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle', '2048', 'Sudoku', 'Solitaire'];
 
 /** Collects uncaught exceptions and console errors; any of them fails the test. */
 function watchErrors(page: Page): string[] {
@@ -69,6 +69,25 @@ test('Sudoku: pick a level, use a hint, undo it', async ({ page }) => {
   await page.getByRole('button', { name: 'Undo', exact: true }).click();
   await expect(status).toHaveText(before);
   await expect(page.getByRole('button', { name: /^Hint/ })).toHaveAccessibleName('Hint, 2 left');
+  expect(errors).toEqual([]);
+});
+
+test('Solitaire: draw from the deck, then undo it', async ({ page }) => {
+  const errors = watchErrors(page);
+  await openTable(page, 'Solitaire');
+  await page.getByRole('button', { name: 'Draw 3', exact: true }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+
+  const box = await page.locator('.board canvas').boundingBox();
+  if (!box) throw new Error('Game canvas has no size');
+  const undo = page.getByRole('button', { name: 'Undo', exact: true });
+  await expect(undo).toBeDisabled();
+  // The deck sits in the top-left corner of the table.
+  await page.mouse.click(box.x + box.width * 0.078, box.y + box.height * 0.078);
+  await expect(undo).toBeEnabled();
+  await undo.click();
+  await expect(undo).toBeDisabled();
+  await page.getByRole('button', { name: 'Hint', exact: true }).click();
   expect(errors).toEqual([]);
 });
 

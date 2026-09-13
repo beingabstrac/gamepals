@@ -7,6 +7,7 @@ import {
   pingPong,
   reflexRace,
   snakeBattle,
+  solitaire,
   sudoku,
   SUDOKU_HINTS,
   SUDOKU_LEVELS,
@@ -19,6 +20,7 @@ import {
   type LudoState,
   type PlayMode,
   type RealtimeGameDefinition,
+  type SolitaireState,
   type SudokuLevel,
   type SudokuState,
   type Twenty48State,
@@ -37,6 +39,8 @@ import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
+import { SolitaireControls } from './solitaire/SolitaireControls';
+import { SOLITAIRE_SIZE, SolitaireScene } from './solitaire/SolitaireScene';
 import { SudokuControls } from './sudoku/SudokuControls';
 import { SUDOKU_SIZE, SudokuScene } from './sudoku/SudokuScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
@@ -215,6 +219,39 @@ export const GAMES: readonly AnyEntry[] = [
     Controls: SudokuControls,
     createScene: (session) => new SudokuScene(session),
   }),
+  entry({
+    definition: solitaire,
+    tagline: 'Sort the deck, Ace to King',
+    levels: [
+      { id: 'draw1', label: 'Draw 1' },
+      { id: 'draw3', label: 'Draw 3' },
+    ],
+    howTo: {
+      goal: 'Move all 52 cards onto the four piles at the top. Each pile is one suit, from Ace up to King.',
+      controls: 'Tap a card to send it to the best spot, or drag it where you want. Tap the deck to draw.',
+      win: 'You win when every card is on the four piles.',
+      tip: 'In the columns, stack cards going down and switch between red and black. Only a King can go in an empty column. Draw 3 is harder than Draw 1.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.mint],
+    size: SOLITAIRE_SIZE,
+    color: DARK.mint,
+    status: (state) => `Score ${(state as SolitaireState).score}`,
+    resultText: (state) => {
+      const s = state as SolitaireState;
+      return `You won! ${s.score} points in ${s.moveCount} moves.`;
+    },
+    moveCue: (before, after) => {
+      const a = after as SolitaireState;
+      const b = before as SolitaireState;
+      if (a.moveCount < b.moveCount) return 'tap';
+      if (a.stock.length !== b.stock.length) return 'tap';
+      const home = (s: SolitaireState) => s.foundations.reduce((n, pile) => n + pile.length, 0);
+      return home(a) > home(b) ? 'go' : 'place';
+    },
+    Controls: SolitaireControls,
+    createScene: (session) => new SolitaireScene(session),
+  }),
   {
     kind: 'realtime',
     definition: airHockey,
@@ -326,6 +363,5 @@ export const GAMES: readonly AnyEntry[] = [
 export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [
   { id: 'checkers', name: 'Checkers', color: COLORS.peach },
   { id: 'chess', name: 'Chess', color: COLORS.grape },
-  { id: 'solitaire', name: 'Solitaire', color: COLORS.mint },
   { id: 'sea-battle', name: 'Sea Battle', color: COLORS.sky },
 ];

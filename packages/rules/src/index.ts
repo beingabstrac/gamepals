@@ -15,3 +15,4 @@ export * from './games/penalty-kicks';
 export * from './games/snake-battle';
 export * from './games/twenty48';
 export * from './games/sudoku';
+export * from './games/solitaire';

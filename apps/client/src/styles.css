@@ -711,7 +711,8 @@ h2,
 
 /* ---------- Ludo dice ---------- */
 
-.sudoku-controls {
+.sudoku-controls,
+.card-controls {
   display: flex;
   flex-direction: column;
   gap: 12px;
