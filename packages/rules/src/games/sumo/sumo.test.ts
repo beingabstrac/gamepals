@@ -81,7 +81,8 @@ describe('sumo physics', () => {
   it('walking yourself out loses', () => {
     const { state } = run(live(), () => [{ steer: { x: 1, y: 0 }, shove: false }, idle], 5, (_s, e) => e.boutOver !== null);
     expect(state.bouts).toEqual([0, 1]);
-    expect(state.wrestlers[0].x - RING.x).toBeGreaterThan(RING.radius - 5);
+    expect(isOut(state.wrestlers[0])).toBe(true);
+    expect(state.wrestlers[0].x).toBeGreaterThan(RING.x);
   });
 });
 
