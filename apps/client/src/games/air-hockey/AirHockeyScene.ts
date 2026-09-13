@@ -22,6 +22,7 @@ import type { SeatController } from '../../session';
 import type { SoundName } from '../../sfx';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
+import { facing } from '../duel';
 
 export interface RealtimeSceneOptions {
   readonly seats: readonly SeatController[];
@@ -77,8 +78,7 @@ export class AirHockeyScene extends Scene {
     this.scoreTexts = [0, 1].map((seat) =>
       sharpText(this, w - 70, seat === 0 ? h / 2 + 80 : h / 2 - 80, '0', 88, AIR_HOCKEY_COLORS[seat] ?? COLORS.ink)
         .setAlpha(0.35)
-        // The top player sits on the other side of the phone.
-        .setAngle(seat === 1 ? 180 : 0),
+        .setAngle(facing(this.options.seats, seat as Seat)),
     );
 
     this.trail = this.add.graphics();

@@ -9,7 +9,7 @@ export const TIC_TAC_TOE_SIZE = { width: SIZE, height: SIZE };
 
 const CELL = SIZE / 3;
 const PAD = 40;
-const GRID_COLOR = 0xe0d8f4;
+const GRID_COLOR = 0xcdbff7;
 const SEAT_COLORS = [toHex(COLORS.tomato), toHex(COLORS.sky)];
 const INK = toHex(COLORS.ink);
 const MARK_RADIUS = CELL / 2 - 46;

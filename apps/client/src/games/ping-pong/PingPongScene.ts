@@ -22,7 +22,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
-import { seatForY } from '../duel';
+import { facing, seatForY } from '../duel';
 
 export const PING_PONG_SIZE = { width: PP_CANVAS.width, height: PP_CANVAS.height };
 
@@ -93,7 +93,7 @@ export class PingPongScene extends Scene {
     this.scoreTexts = [0, 1].map((seat) =>
       sharpText(this, W / 2, seat === 0 ? H * 0.7 : H * 0.3, '0', 110, '#ffffff')
         .setAlpha(0.45)
-        .setAngle(seat === 1 ? 180 : 0),
+        .setAngle(facing(this.options.seats, seat as Seat)),
     );
 
     this.shadow = this.add.ellipse(0, 0, BALL_RADIUS * 2.2, BALL_RADIUS * 1.4, 0x2b2a3a, 0.22);
@@ -222,7 +222,7 @@ export class PingPongScene extends Scene {
   /** A short call-out facing the player it's for. */
   private say(text: string, towardSeat: Seat): void {
     this.tweens.killTweensOf(this.callout);
-    this.callout.setText(text).setAngle(towardSeat === 1 ? 180 : 0).setAlpha(1).setScale(0.6);
+    this.callout.setText(text).setAngle(facing(this.options.seats, towardSeat)).setAlpha(1).setScale(0.6);
     this.tweens.add({ targets: this.callout, scale: 1, duration: 280, ease: 'Back.easeOut' });
     this.tweens.add({ targets: this.callout, alpha: 0, delay: 800, duration: 300 });
   }
@@ -235,7 +235,7 @@ export class PingPongScene extends Scene {
     if (!this.tweens.isTweening(this.ball)) this.ball.setScale(lift);
 
     this.serveHint.setVisible(phase === 'serve' && this.options.seats[server]?.kind === 'human');
-    this.serveHint.setPosition(W / 2, server === 0 ? H - 22 : 22).setAngle(server === 1 ? 180 : 0);
+    this.serveHint.setPosition(W / 2, server === 0 ? H - 22 : 22).setAngle(facing(this.options.seats, server));
 
     // Paddles: people's follow their finger; bots glide toward the ball.
     for (const seat of [0, 1] as Seat[]) {

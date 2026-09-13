@@ -28,13 +28,13 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
-import { seatForY } from '../duel';
+import { facing, seatForY } from '../duel';
 
 export const PENALTY_SIZE = { width: PK_CANVAS.width, height: PK_CANVAS.height };
 
 const W = PK_CANVAS.width;
 const H = PK_CANVAS.height;
-const GRASS = [0x8fe0a5, 0x7fd598];
+const GRASS = [0x5fd684, 0x4ecb74];
 const SEAT_HEX = [toHex(COLORS.sky), toHex(COLORS.tomato)];
 const SEAT_DARK = [toHex(DARK.sky), toHex(DARK.tomato)];
 const GOAL_DEPTH = 40;
@@ -95,7 +95,9 @@ export class PenaltyScene extends Scene {
     this.kicker = this.add.container(0, 0).setDepth(3);
     this.ball = this.add.container(0, 0, this.makeBall()).setDepth(6);
     this.callout = sharpText(this, W / 2, H / 2, '', 64, COLORS.ink).setDepth(10).setAlpha(0);
-    this.hints = [0, 1].map((seat) => sharpText(this, W / 2, seat === 0 ? H - 30 : 30, '', 24, COLORS.ink).setAlpha(0.75).setAngle(seat === 1 ? 180 : 0));
+    this.hints = [0, 1].map((seat) =>
+      sharpText(this, W / 2, seat === 0 ? H - 30 : 30, '', 24, COLORS.ink).setAlpha(0.75).setAngle(facing(this.options.seats, seat as Seat)),
+    );
 
     this.input.on('pointerdown', (p: { id: number; worldX: number; worldY: number }) => {
       const seat = seatForY(p.worldY, H);
@@ -173,7 +175,7 @@ export class PenaltyScene extends Scene {
     const kickerHuman = this.options.seats[kicker]?.kind === 'human';
     const keeperHuman = this.options.seats[keeper]?.kind === 'human';
     this.hints[kicker]?.setText(kickerHuman ? 'Swipe toward the goal to shoot' : '');
-    this.hints[keeper]?.setText(keeperHuman ? 'Drag to move · flick to dive' : '');
+    this.hints[keeper]?.setText(keeperHuman ? 'Drag to move. Flick left or right to dive.' : '');
     this.say(kickerHuman ? 'Your kick!' : `${this.options.seats[kicker]?.label ?? 'Bot'} to kick`, kicker, false);
     this.drawDots();
     this.sync();
@@ -247,7 +249,7 @@ export class PenaltyScene extends Scene {
     this.callout
       .setText(text)
       .setFontSize(big ? 64 : 40)
-      .setAngle(towardSeat === 1 ? 180 : 0)
+      .setAngle(facing(this.options.seats, towardSeat))
       .setAlpha(1)
       .setScale(0.6);
     this.tweens.add({ targets: this.callout, scale: 1, duration: 280, ease: 'Back.easeOut' });

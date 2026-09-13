@@ -27,7 +27,7 @@ export const SNAKE_SIZE = { width: W, height: H };
 const CELL = 30;
 const BOARD_X = (W - GRID.cols * CELL) / 2;
 const BOARD_Y = (H - GRID.rows * CELL) / 2;
-const TILE = [0xc9f2d9, 0xbdeccf];
+const TILE = [0xb3efcc, 0xa2e8bf];
 const SEAT_HEX = [toHex(COLORS.sky), toHex(COLORS.tomato)];
 const SEAT_DARK = [toHex(DARK.sky), toHex(DARK.tomato)];
 const BUTTON_RADIUS = 40;
@@ -255,6 +255,8 @@ export class SnakeScene extends Scene {
       g.fillStyle(0xffffff, 1);
       g.fillTriangle(tipX - 8, -6, tipX + 8, -6, tipX, 6);
       const view = this.add.container(spec.x, spec.y, [g]).setDepth(5).setAngle(spec.seat === 1 ? 180 : 0);
+      // A bot doesn't need buttons: only show the controls of people who are playing.
+      view.setVisible(this.options.seats[spec.seat]?.kind === 'human');
       if (flip === -1) view.setScale(-1, 1);
       return { ...spec, view };
     });

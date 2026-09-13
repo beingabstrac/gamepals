@@ -11,12 +11,12 @@ import {
   ticTacToe,
   tugOfWar,
   twenty48,
-  type Twenty48State,
   type GameDefinition,
   type GameState,
   type LudoState,
   type PlayMode,
   type RealtimeGameDefinition,
+  type Twenty48State,
 } from '@gamepals/rules';
 import type { Scene } from 'phaser';
 import type { ComponentType } from 'preact';
@@ -26,16 +26,25 @@ import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
 import { DUEL_COLORS } from './duel';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
+import { LudoControls } from './ludo/LudoControls';
+import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
 import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
-import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
-import { LudoControls } from './ludo/LudoControls';
-import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
+import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
+
+/** Short, plain-language rules shown before a game starts. No jargon, no long sentences. */
+export interface HowTo {
+  readonly goal: string;
+  readonly controls: string;
+  readonly win: string;
+  readonly draw?: string;
+  readonly tip?: string;
+}
 
 /** What the home shelf and the table setup need to know about any game. */
 export interface EntryBase {
@@ -47,6 +56,7 @@ export interface EntryBase {
     readonly modes: readonly PlayMode[];
   };
   readonly tagline: string;
+  readonly howTo: HowTo;
   /** Name of each seat's side for a given player count, e.g. X and O. */
   sideNames(players: number): readonly string[];
   /** CSS color of each seat's side for a given player count. */
@@ -69,7 +79,7 @@ export interface GameEntry<M = unknown> extends EntryBase {
   readonly Controls?: ComponentType<{ session: Session<M> }>;
   /** Replaces "X to move" (e.g. a score for solo puzzles). */
   status?(state: GameState<M>): string;
-  /** Replaces the result headline (e.g. "No more moves · 2,340 points"). */
+  /** Replaces the result headline (e.g. "No more moves. 2,340 points"). */
   resultText?(state: GameState<M>): string;
   createScene(session: Session<M>): Scene;
 }
@@ -88,11 +98,18 @@ function entry<M>(value: Omit<GameEntry<M>, 'kind'>): GameEntry {
 }
 
 const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_PLAYERS[4]!;
+const duelSides = { sideNames: () => ['Bottom', 'Top'], sideColors: () => DUEL_COLORS } as const;
 
 export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ticTacToe,
     tagline: 'Three in a row wins',
+    howTo: {
+      goal: 'Get three of your marks in a row.',
+      controls: 'Tap an empty square to put your mark there.',
+      win: 'Three in a row across, down, or corner to corner.',
+      draw: 'If all nine squares fill up and nobody has three in a row, it is a draw.',
+    },
     sideNames: () => ['X', 'O'],
     sideColors: () => [COLORS.tomato, COLORS.sky],
     size: TIC_TAC_TOE_SIZE,
@@ -102,6 +119,12 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: fourInARow,
     tagline: 'Drop discs, connect four',
+    howTo: {
+      goal: 'Line up four of your discs.',
+      controls: 'Tap a column. Your disc drops to the lowest empty spot.',
+      win: 'Four in a row across, down, or on a slant.',
+      draw: 'If the board fills up first, it is a draw.',
+    },
     sideNames: () => ['Yellow', 'Red'],
     sideColors: () => [COLORS.sunny, COLORS.tomato],
     size: FOUR_IN_A_ROW_SIZE,
@@ -111,6 +134,12 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ludo,
     tagline: 'Race your four tokens home',
+    howTo: {
+      goal: 'Move all four of your tokens around the board and into the middle.',
+      controls: 'Tap Roll. Then tap a bouncing token to move it.',
+      win: 'The first player with all four tokens home wins.',
+      tip: 'You need a 6 to bring a token out. A 6 gives you another roll, but three 6s in a row ends your turn. Land on someone to send them back. Star squares are safe.',
+    },
     sideNames: (players) => ludoSides(players).map((color) => LUDO_COLOR_NAMES[color]!),
     sideColors: (players) => ludoSides(players).map((color) => LUDO_COLORS[color]!),
     size: LUDO_SIZE,
@@ -127,6 +156,12 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: twenty48,
     tagline: 'Slide, merge, reach 2048',
+    howTo: {
+      goal: 'Join tiles with the same number to make bigger numbers.',
+      controls: 'Swipe up, down, left or right. Every tile slides that way.',
+      win: 'Make a 2048 tile. You can keep going for a higher score.',
+      tip: 'A new tile appears after every move. The game ends when nothing can move.',
+    },
     sideNames: () => ['You'],
     sideColors: () => [COLORS.peach],
     size: TWENTY48_SIZE,
@@ -134,7 +169,7 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state) => `Score ${(state as Twenty48State).score.toLocaleString()}`,
     resultText: (state) => {
       const s = state as Twenty48State;
-      return s.best >= 2048 ? `2048! ${s.score.toLocaleString()} points 🎉` : `No more moves · ${s.score.toLocaleString()} points`;
+      return s.best >= 2048 ? `You made 2048! ${s.score.toLocaleString()} points 🎉` : `No more moves. ${s.score.toLocaleString()} points`;
     },
     createScene: (session) => new Twenty48Scene(session),
   }),
@@ -142,6 +177,11 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: airHockey,
     tagline: 'Fast 1-on-1, first to 7',
+    howTo: {
+      goal: 'Knock the puck into the other goal.',
+      controls: 'Drag your paddle around your half of the table.',
+      win: 'First to 7 goals wins.',
+    },
     sideNames: () => ['Bottom', 'Top'],
     sideColors: () => AIR_HOCKEY_COLORS,
     size: AIR_HOCKEY_SIZE,
@@ -152,8 +192,13 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: pingPong,
     tagline: 'Swipe to hit, first to 11',
-    sideNames: () => ['Bottom', 'Top'],
-    sideColors: () => DUEL_COLORS,
+    howTo: {
+      goal: 'Hit the ball over the net so it bounces on the other side.',
+      controls: 'When the ball bounces on your side, swipe toward the net. Swipe faster to hit harder. Swipe to serve too.',
+      win: 'First to 11 points. You must be 2 points ahead.',
+      tip: 'The ball must bounce once on each side. Hitting it long, wide or into the net loses the point.',
+    },
+    ...duelSides,
     size: PING_PONG_SIZE,
     color: COLORS.peach,
     createScene: (options) => new PingPongScene(options),
@@ -162,8 +207,12 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: tugOfWar,
     tagline: 'Tap faster to pull them over',
-    sideNames: () => ['Bottom', 'Top'],
-    sideColors: () => DUEL_COLORS,
+    howTo: {
+      goal: 'Pull the yellow knot over to your side.',
+      controls: 'Tap your half of the screen as fast as you can.',
+      win: 'Pull the knot past your dashed line.',
+    },
+    ...duelSides,
     size: TUG_OF_WAR_SIZE,
     color: COLORS.bubblegum,
     createScene: (options) => new TugOfWarScene(options),
@@ -172,8 +221,13 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: reflexRace,
     tagline: 'Wait for green, then tap first',
-    sideNames: () => ['Bottom', 'Top'],
-    sideColors: () => DUEL_COLORS,
+    howTo: {
+      goal: 'Tap faster than the other player.',
+      controls: 'Wait until the big circle turns green. Then tap your half.',
+      win: 'First to 3 points wins.',
+      tip: 'Tap too soon and the other player gets the point.',
+    },
+    ...duelSides,
     size: REFLEX_RACE_SIZE,
     color: COLORS.grape,
     createScene: (options) => new ReflexRaceScene(options),
@@ -182,8 +236,13 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: sumo,
     tagline: 'Shove them out of the ring',
-    sideNames: () => ['Bottom', 'Top'],
-    sideColors: () => DUEL_COLORS,
+    howTo: {
+      goal: 'Push the other wrestler out of the ring.',
+      controls: 'Hold and drag in your half to move. Tap to shove.',
+      win: 'Win 2 rounds to win the match.',
+      tip: 'Stay away from the edge. A big shove that misses can carry you out.',
+    },
+    ...duelSides,
     size: SUMO_SIZE,
     color: DARK.peach,
     createScene: (options) => new SumoScene(options),
@@ -192,8 +251,13 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: penaltyKicks,
     tagline: 'Shoot, dive, five kicks each',
-    sideNames: () => ['Bottom', 'Top'],
-    sideColors: () => DUEL_COLORS,
+    howTo: {
+      goal: 'Score more goals than the other player.',
+      controls: 'Kicking: swipe toward the goal. Saving: drag to move, then flick left or right to dive.',
+      win: 'Five kicks each. If it is tied, keep going until one scores and the other misses.',
+      tip: 'You take turns kicking and saving. A very hard kick can fly over the bar.',
+    },
+    ...duelSides,
     size: PENALTY_SIZE,
     color: DARK.mint,
     createScene: (options) => new PenaltyScene(options),
@@ -202,8 +266,14 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: snakeBattle,
     tagline: 'Trap them before they trap you',
-    sideNames: () => ['Bottom', 'Top'],
-    sideColors: () => DUEL_COLORS,
+    howTo: {
+      goal: 'Make the other snake crash first.',
+      controls: 'Tap the arrow buttons to turn left or right.',
+      win: 'Win 3 rounds to win the match.',
+      draw: 'If both snakes crash into each other head first, nobody gets the round.',
+      tip: 'Hitting a wall, yourself or the other snake ends the round. Eat fruit to grow longer.',
+    },
+    ...duelSides,
     size: SNAKE_SIZE,
     color: DARK.grape,
     createScene: (options) => new SnakeScene(options),

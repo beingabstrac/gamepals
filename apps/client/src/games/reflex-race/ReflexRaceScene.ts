@@ -13,13 +13,13 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
-import { DUEL_COLORS, drawHalves, onHalfTap } from '../duel';
+import { DUEL_COLORS, drawHalves, facing, isPerson, onHalfTap } from '../duel';
 
 const W = 600;
 const H = 900;
 export const REFLEX_RACE_SIZE = { width: W, height: H };
 
-const TINTS: readonly [number, number] = [0xe3f0ff, 0xffe5e5];
+const TINTS: readonly [number, number] = [0xcfe4ff, 0xffd6d6];
 const WAIT_COLOR = toHex(COLORS.grape);
 const GO_COLOR = toHex(COLORS.mint);
 const SEAT_HEX = DUEL_COLORS.map(toHex);
@@ -45,11 +45,14 @@ export class ReflexRaceScene extends Scene {
     fitCamera(this, W, H);
     drawHalves(this, W, H, TINTS);
 
+    const seats = this.options.seats;
     this.scoreTexts = [0, 1].map((seat) =>
-      sharpText(this, W / 2, seat === 0 ? H * 0.82 : H * 0.18, '0', 110, DUEL_COLORS[seat]!).setAngle(seat === 1 ? 180 : 0),
+      sharpText(this, W / 2, seat === 0 ? H * 0.82 : H * 0.18, '0', 110, DUEL_COLORS[seat]!).setAngle(facing(seats, seat as Seat)),
     );
     [0, 1].forEach((seat) =>
-      sharpText(this, W / 2, seat === 0 ? H - 40 : 40, 'tap your side', 26, COLORS.soft).setAngle(seat === 1 ? 180 : 0),
+      sharpText(this, W / 2, seat === 0 ? H - 40 : 40, 'Tap your side', 26, COLORS.soft)
+        .setAngle(facing(seats, seat as Seat))
+        .setVisible(isPerson(seats, seat as Seat)),
     );
 
     this.add.circle(W / 2, H / 2 + 10, 150, 0x2b2a3a, 0.1);
@@ -135,8 +138,7 @@ export class ReflexRaceScene extends Scene {
       color = SEAT_HEX[lastPoint.seat] ?? WAIT_COLOR;
       label = lastPoint.reason === 'falseStart' ? 'Too soon!' : '+1';
       sub = lastPoint.reactionMs !== null ? `${lastPoint.reactionMs} ms` : 'false start';
-      // Face the player who scored.
-      angle = lastPoint.seat === 1 ? 180 : 0;
+      angle = facing(this.options.seats, lastPoint.seat);
     }
     this.light.setFillStyle(color);
     this.label.setText(label).setAngle(angle);

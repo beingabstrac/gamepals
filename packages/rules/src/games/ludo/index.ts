@@ -66,6 +66,8 @@ export class LudoState implements GameState<LudoMove> {
     readonly rollCount: number,
     readonly result: GameResult | null,
     readonly lastEvent: LudoEvent | null,
+    /** Sixes rolled in a row this turn; a third one ends the turn (standard Ludo rule). */
+    readonly sixes = 0,
   ) {}
 
   colorOf(seat: Seat): number {
@@ -101,6 +103,11 @@ export class LudoState implements GameState<LudoMove> {
   private roll(): LudoState {
     if (this.phase !== 'roll') throw new Error('Move a token before rolling again');
     const value = dieValue(this.seed, this.rollCount);
+    const sixes = value === 6 ? this.sixes + 1 : 0;
+    // Three sixes in a row: the turn ends without moving.
+    if (sixes === 3) {
+      return new LudoState(this.players, this.seed, this.tokens, this.nextSeat(), 'roll', value, this.rollCount + 1, null, null, 0);
+    }
     const canMove = this.movableTokens(this.currentSeat, value).length > 0;
     return new LudoState(
       this.players,
@@ -112,6 +119,7 @@ export class LudoState implements GameState<LudoMove> {
       this.rollCount + 1,
       null,
       null,
+      canMove ? sixes : 0,
     );
   }
 
@@ -148,7 +156,9 @@ export class LudoState implements GameState<LudoMove> {
     }
     // A six, a capture or bringing a token home earns another roll.
     const again = value === 6 || captured.length > 0 || to === HOME;
-    return new LudoState(this.players, this.seed, tokens, again ? seat : this.nextSeat(), 'roll', value, this.rollCount, null, event);
+    // Keep counting sixes only while the extra rolls come from sixes.
+    const sixes = again && value === 6 ? this.sixes : 0;
+    return new LudoState(this.players, this.seed, tokens, again ? seat : this.nextSeat(), 'roll', value, this.rollCount, null, event, sixes);
   }
 }
 

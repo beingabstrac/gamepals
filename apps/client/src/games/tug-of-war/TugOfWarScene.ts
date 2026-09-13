@@ -14,7 +14,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
-import { drawHalves, onHalfTap } from '../duel';
+import { drawHalves, facing, isPerson, onHalfTap } from '../duel';
 
 const W = 600;
 const H = 900;
@@ -22,7 +22,7 @@ export const TUG_OF_WAR_SIZE = { width: W, height: H };
 
 const SEAT_HEX = [toHex(COLORS.sky), toHex(COLORS.tomato)];
 const SEAT_DARK = [toHex(DARK.sky), toHex(DARK.tomato)];
-const TINTS: readonly [number, number] = [0xe3f0ff, 0xffe5e5];
+const TINTS: readonly [number, number] = [0xcfe4ff, 0xffd6d6];
 const ROPE = 0xd9a86c;
 const ROPE_DARK = 0xb98649;
 /** The marker travels this far from the middle before someone wins. */
@@ -63,10 +63,11 @@ export class TugOfWarScene extends Scene {
 
     // Hints sit in the open middle of each half (clear of the pullers) and above the rope.
     this.hints = [0, 1].map((seat) =>
-      sharpText(this, W / 2, seat === 0 ? H / 2 + 170 : H / 2 - 170, 'TAP TAP TAP!', 38, seat === 0 ? COLORS.sky : COLORS.tomato)
-        .setAngle(seat === 1 ? 180 : 0)
+      sharpText(this, W / 2, seat === 0 ? H / 2 + 170 : H / 2 - 170, 'Tap tap tap!', 38, seat === 0 ? COLORS.sky : COLORS.tomato)
+        .setAngle(facing(this.options.seats, seat as Seat))
         .setAlpha(0.85)
-        .setDepth(2),
+        .setDepth(2)
+        .setVisible(isPerson(this.options.seats, seat as Seat)),
     );
     this.tweens.add({ targets: this.hints, alpha: 0.35, duration: 500, yoyo: true, repeat: -1 });
     this.knot = this.add.container(W / 2, H / 2, [

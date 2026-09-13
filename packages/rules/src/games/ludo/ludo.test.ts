@@ -92,6 +92,17 @@ describe('ludo rules', () => {
     expect(after.result).toEqual({ winners: [0], draw: false });
   });
 
+  it('a third six in a row ends the turn without moving', () => {
+    // Find a seed whose first roll is a 6, then pretend two sixes were already rolled this turn.
+    let seed = 0;
+    while (dieValue(seed, 0) !== 6) seed++;
+    const twoSixes = new LudoState(2, seed, [[0, Y, Y, Y], [Y, Y, Y, Y]], 0, 'roll', 6, 0, null, null, 2);
+    const after = twoSixes.apply('roll');
+    expect(after.currentSeat).toBe(1);
+    expect(after.phase).toBe('roll');
+    expect(after.tokens[0]).toEqual([0, Y, Y, Y]);
+  });
+
   it('rejects out-of-turn and illegal actions', () => {
     const state = twoPlayer([[3, Y, Y, Y], [Y, Y, Y, Y]], 2);
     expect(() => state.apply('roll')).toThrow();

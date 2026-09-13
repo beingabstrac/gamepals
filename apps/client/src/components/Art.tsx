@@ -206,8 +206,8 @@ function SumoArt() {
 function PenaltyArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="8" y="8" width="84" height="84" rx="14" fill="#8FE0A5" />
-      <rect x="8" y="50" width="84" height="20" fill="#7FD598" />
+      <rect x="8" y="8" width="84" height="84" rx="14" fill="#5FD684" />
+      <rect x="8" y="50" width="84" height="20" fill="#4ECB74" />
       <rect x="20" y="14" width="60" height="16" rx="3" fill="#F4F1FF" stroke="#fff" strokeWidth="3" />
       <path d="M26 14 V30 M34 14 V30 M42 14 V30 M50 14 V30 M58 14 V30 M66 14 V30 M74 14 V30" stroke="#C9C2E6" strokeWidth="1" />
       <circle cx="44" cy="34" r="8" fill={COLORS.tomato} />
@@ -225,7 +225,7 @@ function SnakeArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
-      <rect x="10" y="10" width="80" height="80" rx="16" fill="#C9F2D9" />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill="#B3EFCC" />
       <path d="M24 74 H48 V56 H70" fill="none" stroke={COLORS.sky} strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="70" cy="56" r="8" fill={COLORS.sky} />
       <circle cx="73" cy="53" r="2.2" fill={INK} />

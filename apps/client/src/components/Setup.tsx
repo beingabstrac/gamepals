@@ -239,7 +239,37 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         })}
       </div>
 
-      <p class="hint">{solo ? 'A solo game. Race a friend on the same puzzle soon.' : 'Tap a chair to choose who sits there.'}</p>
+      <p class="hint">{solo ? 'Just you. Racing a friend on the same puzzle is coming soon.' : 'Tap a chair to choose who sits there.'}</p>
+
+      <section class="how-to" aria-label="How to play">
+        <h2>How to play</h2>
+        <ul>
+          <li>
+            <span aria-hidden="true">🎯</span>
+            <span>{entry.howTo.goal}</span>
+          </li>
+          <li>
+            <span aria-hidden="true">👆</span>
+            <span>{entry.howTo.controls}</span>
+          </li>
+          <li>
+            <span aria-hidden="true">🏆</span>
+            <span>{entry.howTo.win}</span>
+          </li>
+          {entry.howTo.draw && (
+            <li>
+              <span aria-hidden="true">🤝</span>
+              <span>{entry.howTo.draw}</span>
+            </li>
+          )}
+          {entry.howTo.tip && (
+            <li>
+              <span aria-hidden="true">💡</span>
+              <span>{entry.howTo.tip}</span>
+            </li>
+          )}
+        </ul>
+      </section>
 
       <button class="play-bubble" onClick={() => onStart(seats)}>
         Play

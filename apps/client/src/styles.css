@@ -6,13 +6,13 @@
   --ink: #2b2a3a;
   --soft: #7a7890;
   --line: #ece8f5;
-  --tomato: #ff6b6b;
-  --sunny: #ffc93c;
-  --mint: #3ddc97;
-  --sky: #4da8ff;
-  --grape: #9b7bff;
-  --peach: #ff9f6b;
-  --bubblegum: #ff8cc6;
+  --tomato: #ff4f4f;
+  --sunny: #ffc21a;
+  --mint: #16c47f;
+  --sky: #2e8bff;
+  --grape: #7b4dff;
+  --peach: #ff8a2b;
+  --bubblegum: #ff4da6;
   --game: var(--grape);
   --radius: 28px;
   /* Overshoot-and-settle, used for everything that pops, presses or appears. */
@@ -202,7 +202,7 @@ h2,
   border-radius: 22px;
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, var(--c) 14%, white);
+  background: color-mix(in srgb, var(--c) 22%, white);
 }
 
 .tile .art svg {
@@ -260,8 +260,8 @@ h2,
   display: grid;
   place-items: center;
   border-radius: 40px;
-  background: color-mix(in srgb, var(--game) 14%, white);
-  box-shadow: 0 8px 0 color-mix(in srgb, var(--game) 28%, var(--line)), var(--soft-shadow);
+  background: color-mix(in srgb, var(--game) 22%, white);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--game) 40%, var(--line)), var(--soft-shadow);
   animation: pop-in 560ms var(--spring) both;
 }
 
@@ -349,6 +349,37 @@ h2,
   margin: 0;
   text-align: center;
   color: var(--soft);
+}
+
+.how-to {
+  padding: 16px 18px;
+  border-radius: 26px;
+  background: var(--card);
+  box-shadow: 0 5px 0 var(--line), var(--soft-shadow);
+  animation: pop-in 520ms var(--spring) 80ms both;
+}
+
+.how-to h2 {
+  margin: 0 0 10px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.how-to ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.how-to li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: start;
+  font-size: 1rem;
+  line-height: 1.35;
 }
 
 .quick-starts {

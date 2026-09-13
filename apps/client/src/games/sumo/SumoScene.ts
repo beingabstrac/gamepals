@@ -18,7 +18,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
-import { seatForY } from '../duel';
+import { facing, isPerson, seatForY } from '../duel';
 
 export const SUMO_SIZE = { width: SUMO_CANVAS.width, height: SUMO_CANVAS.height };
 
@@ -72,7 +72,9 @@ export class SumoScene extends Scene {
     this.drawRing();
 
     this.hints = [0, 1].map((seat) =>
-      sharpText(this, W / 2, seat === 0 ? H - 45 : 45, 'drag to move · tap to shove', 26, COLORS.soft).setAngle(seat === 1 ? 180 : 0),
+      sharpText(this, W / 2, seat === 0 ? H - 45 : 45, 'Drag to move. Tap to shove.', 26, COLORS.soft)
+        .setAngle(facing(this.options.seats, seat as Seat))
+        .setVisible(isPerson(this.options.seats, seat as Seat)),
     );
     this.bodies = [0, 1].map((seat) => this.makeWrestler(seat as Seat));
     this.banner = sharpText(this, W / 2, RING.y, '', 70, COLORS.ink).setDepth(10);
