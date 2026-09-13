@@ -221,8 +221,26 @@ function PenaltyArt() {
   );
 }
 
+function SnakeArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill="#C9F2D9" />
+      <path d="M24 74 H48 V56 H70" fill="none" stroke={COLORS.sky} strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="70" cy="56" r="8" fill={COLORS.sky} />
+      <circle cx="73" cy="53" r="2.2" fill={INK} />
+      <path d="M76 26 H54 V40 H34" fill="none" stroke={COLORS.tomato} strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="34" cy="40" r="8" fill={COLORS.tomato} />
+      <circle cx="31" cy="43" r="2.2" fill={INK} />
+      <circle cx="62" cy="76" r="6" fill={COLORS.tomato} />
+      <ellipse cx="66" cy="70" rx="4" ry="2" fill={COLORS.mint} />
+    </svg>
+  );
+}
+
 const ART: Record<string, () => JSX.Element> = {
   sumo: SumoArt,
+  'snake-battle': SnakeArt,
   'penalty-kicks': PenaltyArt,
   'ping-pong': PingPongArt,
   'tug-of-war': TugOfWarArt,

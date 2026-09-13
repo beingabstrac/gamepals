@@ -6,6 +6,7 @@ import {
   penaltyKicks,
   pingPong,
   reflexRace,
+  snakeBattle,
   sumo,
   ticTacToe,
   tugOfWar,
@@ -26,6 +27,7 @@ import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowS
 import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
+import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { LudoControls } from './ludo/LudoControls';
@@ -174,6 +176,16 @@ export const GAMES: readonly AnyEntry[] = [
     size: PENALTY_SIZE,
     color: DARK.mint,
     createScene: (options) => new PenaltyScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: snakeBattle,
+    tagline: 'Trap them before they trap you',
+    sideNames: () => ['Bottom', 'Top'],
+    sideColors: () => DUEL_COLORS,
+    size: SNAKE_SIZE,
+    color: DARK.grape,
+    createScene: (options) => new SnakeScene(options),
   },
 ];
 

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /** Every playable game on the shelf. Add new games here so they're opened and played on every push. */
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 
 /** Collects uncaught exceptions and console errors; any of them fails the test. */
 function watchErrors(page: Page): string[] {
