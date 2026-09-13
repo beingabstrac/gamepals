@@ -19,6 +19,7 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 - **Bright** candy colors (not pastel). Every game has a plain-language `howTo` (goal, controls, win, draw/tip) shown before play. All app text is simple and plain spoken, and never uses em dashes.
 - **Facing:** use `facing()` / `isPerson()` from `apps/client/src/games/duel.ts`. With two people, the top player's text is flipped; against a bot, all text faces the person and the bot's controls/hints are hidden.
 - Audit of every game against its real rules: `docs/games/audit.md`.
+- **SVG in Preact:** write SVG attributes in dashed form (`stroke-width`, `text-anchor`, `dominant-baseline`, `font-size`). Preact v10 passes camelCase SVG props through unchanged, and the browser ignores them. Center text with `text-anchor="middle"` + `dominant-baseline="central"` on each `<text>`.
 - **Research before building:** every game gets a brief in `docs/games/<id>.md` (real rules with sources, what makes it feel right, reference apps, our design, tests) before any code. Each game must be clearly its own game, not a reskin of another.
 - **Nothing ships unless it's green:** one CI pipeline (`.github/workflows/ci.yml`): typecheck + unit tests + build → Playwright e2e on a phone browser (every game opened and played; any console error fails) → deploy web. Phone builds (TestFlight / Play internal) go out on release tags `v*` through the same gate. Add every new game to `apps/client/e2e/smoke.spec.ts`.
 
