@@ -5,7 +5,7 @@ import { COLORS, DARK } from '../theme';
 /* Original vector art: crisp at any size, flat colors, no gradients. */
 
 const INK = COLORS.ink;
-const round = { strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+const round = { 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const;
 
 function TicTacToeArt() {
   return (
