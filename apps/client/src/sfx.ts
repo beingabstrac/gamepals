@@ -29,6 +29,13 @@ export const SFX = {
     { freq: 480, to: 280, duration: 0.04, type: 'square', volume: 0.05, delay: 0.06 },
     { freq: 340, to: 620, duration: 0.05, type: 'square', volume: 0.05, delay: 0.12 },
   ],
+  hit: [{ freq: 900, to: 520, duration: 0.05, type: 'triangle', volume: 0.16 }],
+  wall: [{ freq: 520, to: 380, duration: 0.035, type: 'triangle', volume: 0.07 }],
+  goal: [
+    { freq: 220, to: 440, duration: 0.3, type: 'sawtooth', volume: 0.08 },
+    note(659, 0.12, 0.16),
+    note(880, 0.24, 0.3),
+  ],
   capture: [
     { freq: 880, to: 220, duration: 0.22, type: 'sawtooth', volume: 0.09 },
     { freq: 660, to: 990, duration: 0.12, type: 'triangle', volume: 0.12, delay: 0.2 },

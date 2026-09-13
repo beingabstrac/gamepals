@@ -6,3 +6,4 @@ export * from './core/replay';
 export * from './games/tic-tac-toe';
 export * from './games/four-in-a-row';
 export * from './games/ludo';
+export * from './games/air-hockey';

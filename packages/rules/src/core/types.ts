@@ -36,6 +36,19 @@ export interface Bot<M> {
   chooseMove(state: GameState<M>, seat: Seat, rng: Rng): M;
 }
 
+/**
+ * Real-time games (e.g. Air Hockey) run a fixed-step simulation instead of discrete moves;
+ * their rules module exports a pure `step` function next to this definition.
+ */
+export interface RealtimeGameDefinition {
+  readonly id: string;
+  readonly name: string;
+  readonly minPlayers: number;
+  readonly maxPlayers: number;
+  readonly modes: readonly PlayMode[];
+  readonly realtime: true;
+}
+
 export interface GameDefinition<M> {
   readonly id: string;
   readonly name: string;

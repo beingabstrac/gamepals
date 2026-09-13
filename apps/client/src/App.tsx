@@ -1,24 +1,29 @@
 import { useEffect, useState } from 'preact/hooks';
 import { GameScreen } from './components/GameScreen';
+import { RealtimeGameScreen } from './components/RealtimeGameScreen';
 import { gradient, Setup } from './components/Setup';
-import { COMING_SOON, GAMES, type GameEntry } from './games/registry';
+import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 
 type Screen =
   | { name: 'home' }
-  | { name: 'setup'; entry: GameEntry }
-  | { name: 'play'; entry: GameEntry; seats: SeatController[] };
+  | { name: 'setup'; entry: AnyEntry }
+  | { name: 'play'; entry: AnyEntry; seats: SeatController[] };
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
 
   if (screen.name === 'play') {
+    const onExit = () => setScreen({ name: 'setup', entry: screen.entry });
+    if (screen.entry.kind === 'realtime') {
+      return <RealtimeGameScreen entry={screen.entry} seats={screen.seats} onExit={onExit} />;
+    }
     return (
       <GameScreen
         entry={screen.entry}
         seats={screen.seats}
-        onExit={() => setScreen({ name: 'setup', entry: screen.entry })}
+        onExit={onExit}
       />
     );
   }
@@ -64,7 +69,7 @@ function SettingsToggles() {
   );
 }
 
-function Home({ onPick }: { onPick(entry: GameEntry): void }) {
+function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
   return (
     <div class="screen">
       <header class="hero">

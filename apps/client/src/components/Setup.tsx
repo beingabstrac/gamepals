@@ -1,6 +1,6 @@
 import { BOT_TIERS, type BotTier } from '@gamepals/rules';
 import { useState } from 'preact/hooks';
-import type { GameEntry } from '../games/registry';
+import type { EntryBase } from '../games/registry';
 import type { SeatController } from '../session';
 
 export const TIER_LABEL: Record<BotTier, string> = {
@@ -47,7 +47,7 @@ function CountChips({ counts, value, onChange }: { counts: number[]; value: numb
 }
 
 interface SetupProps {
-  entry: GameEntry;
+  entry: EntryBase;
   onBack(): void;
   onStart(seats: SeatController[]): void;
 }

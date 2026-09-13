@@ -1,6 +1,5 @@
 import { useMemo } from 'preact/hooks';
-
-export type Outcome = 'win' | 'lose' | 'draw';
+import type { Outcome } from '../outcome';
 
 interface Props {
   title: string;
