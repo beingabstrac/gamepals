@@ -19,7 +19,8 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Design v2: white, flat, cute, crisp; table setup; physical motion ([12](12-catalog-and-direction.md))
 - [x] Four in a Row, Ludo (2–4, bots fill seats)
 - [x] Air Hockey (2P split-screen + bot, deterministic physics)
-- [ ] Wave 2 duels: Ping Pong, Sumo, Tug of War, Reflex Race, Penalty Kicks, Snake Battle ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
+- [x] Wave 2 duels, part 1: Ping Pong, Tug of War, Reflex Race
+- [ ] Wave 2 duels, part 2: Sumo, Penalty Kicks, Snake Battle ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
 - [ ] Bot Web Worker
 - [ ] Capacitor iOS/Android projects; Preferences + SQLite; haptics; safe areas; rotated UI for same-device seats
 - [ ] GitHub Actions Android AAB → Play internal testing; Codemagic iOS → TestFlight
