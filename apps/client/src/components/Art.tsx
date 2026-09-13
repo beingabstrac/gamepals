@@ -137,11 +137,11 @@ function SudokuArt() {
       <rect x="14" y="20" width="72" height="72" rx="12" fill={DARK.sky} />
       <rect x="14" y="14" width="72" height="72" rx="12" fill="#fff" stroke={COLORS.sky} strokeWidth="3" />
       <path d="M38 16 V84 M62 16 V84 M16 38 H84 M16 62 H84" stroke={COLORS.sky} strokeWidth="2.5" />
-      <rect x="40" y="40" width="20" height="20" rx="4" fill={COLORS.sunny} />
-      <g fontFamily="Fredoka, sans-serif" fontWeight="600" fontSize="17" textAnchor="middle" fill={INK}>
-        <text x="26" y="32">1</text>
-        <text x="50" y="56" fill={COLORS.grape}>5</text>
-        <text x="74" y="80">9</text>
+      <rect x="40.5" y="40.5" width="19" height="19" rx="4" fill={COLORS.sunny} />
+      <g fontFamily="Fredoka, sans-serif" fontWeight="600" fontSize="16" textAnchor="middle" dominantBaseline="central" fill={INK}>
+        <text x="26" y="26" dominantBaseline="central">1</text>
+        <text x="50" y="50" dominantBaseline="central" fill={COLORS.grape}>5</text>
+        <text x="74" y="74" dominantBaseline="central">9</text>
       </g>
     </svg>
   );
@@ -256,11 +256,12 @@ function Twenty48Art() {
           <rect x={16 + cx * 36} y={16 + cy * 36} width="32" height="32" rx="8" fill={fill} />
           <text
             x={32 + cx * 36}
-            y={38 + cy * 36}
+            y={32 + cy * 36}
             textAnchor="middle"
+            dominantBaseline="central"
             fontFamily="Fredoka, sans-serif"
             fontWeight="600"
-            fontSize={label.length > 1 ? 14 : 17}
+            fontSize={label.length > 1 ? 13 : 17}
             fill={label === '2' || label === '4' ? INK : '#fff'}
           >
             {label}
