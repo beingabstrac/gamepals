@@ -203,8 +203,27 @@ function SumoArt() {
   );
 }
 
+function PenaltyArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="14" fill="#8FE0A5" />
+      <rect x="8" y="50" width="84" height="20" fill="#7FD598" />
+      <rect x="20" y="14" width="60" height="16" rx="3" fill="#F4F1FF" stroke="#fff" strokeWidth="3" />
+      <path d="M26 14 V30 M34 14 V30 M42 14 V30 M50 14 V30 M58 14 V30 M66 14 V30 M74 14 V30" stroke="#C9C2E6" strokeWidth="1" />
+      <circle cx="44" cy="34" r="8" fill={COLORS.tomato} />
+      <circle cx="33" cy="32" r="4" fill="#fff" />
+      <circle cx="55" cy="32" r="4" fill="#fff" />
+      <ellipse cx="62" cy="68" rx="6" ry="3" fill={INK} opacity="0.2" />
+      <circle cx="62" cy="62" r="6.5" fill="#fff" stroke="#D9D3EA" strokeWidth="1.5" />
+      <circle cx="62" cy="62" r="2" fill={INK} />
+      <circle cx="50" cy="82" r="9" fill={COLORS.sky} />
+    </svg>
+  );
+}
+
 const ART: Record<string, () => JSX.Element> = {
   sumo: SumoArt,
+  'penalty-kicks': PenaltyArt,
   'ping-pong': PingPongArt,
   'tug-of-war': TugOfWarArt,
   'reflex-race': ReflexArt,

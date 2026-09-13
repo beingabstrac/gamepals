@@ -11,3 +11,4 @@ export * from './games/ping-pong';
 export * from './games/tug-of-war';
 export * from './games/reflex-race';
 export * from './games/sumo';
+export * from './games/penalty-kicks';

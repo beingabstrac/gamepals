@@ -3,6 +3,7 @@ import {
   COLORS_BY_PLAYERS,
   fourInARow,
   ludo,
+  penaltyKicks,
   pingPong,
   reflexRace,
   sumo,
@@ -22,6 +23,7 @@ import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
 import { DUEL_COLORS } from './duel';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
+import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
@@ -162,6 +164,16 @@ export const GAMES: readonly AnyEntry[] = [
     size: SUMO_SIZE,
     color: DARK.peach,
     createScene: (options) => new SumoScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: penaltyKicks,
+    tagline: 'Shoot, dive, five kicks each',
+    sideNames: () => ['Bottom', 'Top'],
+    sideColors: () => DUEL_COLORS,
+    size: PENALTY_SIZE,
+    color: DARK.mint,
+    createScene: (options) => new PenaltyScene(options),
   },
 ];
 

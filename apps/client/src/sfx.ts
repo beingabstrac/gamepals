@@ -36,6 +36,10 @@ export const SFX = {
     note(659, 0.12, 0.16),
     note(880, 0.24, 0.3),
   ],
+  clang: [
+    { freq: 1300, to: 1100, duration: 0.25, type: 'square', volume: 0.05 },
+    { freq: 1950, to: 1800, duration: 0.3, type: 'sine', volume: 0.07 },
+  ],
   thud: [{ freq: 140, to: 70, duration: 0.12, type: 'sine', volume: 0.3 }],
   gong: [
     { freq: 196, to: 190, duration: 0.9, type: 'sine', volume: 0.22 },
