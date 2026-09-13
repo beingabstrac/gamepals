@@ -14,13 +14,14 @@ import type { Scene } from 'phaser';
 import type { ComponentType } from 'preact';
 import type { Session } from '../session';
 import type { SoundName } from '../sfx';
+import { COLORS } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
 import { LudoControls } from './ludo/LudoControls';
 import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
-import { TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
+import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 
-/** What the home grid and setup screen need to know about any game. */
+/** What the home shelf and the table setup need to know about any game. */
 export interface EntryBase {
   readonly definition: {
     readonly id: string;
@@ -29,16 +30,15 @@ export interface EntryBase {
     readonly maxPlayers: number;
     readonly modes: readonly PlayMode[];
   };
-  readonly emoji: string;
   readonly tagline: string;
   /** Name of each seat's side for a given player count, e.g. X and O. */
   sideNames(players: number): readonly string[];
   /** CSS color of each seat's side for a given player count. */
   sideColors(players: number): readonly string[];
-  /** Logical canvas size; scaled to fit the screen. */
+  /** Logical canvas size; rendered at device pixel density and scaled to fit. */
   readonly size: { readonly width: number; readonly height: number };
-  /** Two-color gradient that identifies the game across screens. */
-  readonly colors: readonly [string, string];
+  /** The game's own flat candy color (tile, table, Play button). */
+  readonly color: string;
 }
 
 /** Turn-based game driven by a `Session`. */
@@ -72,32 +72,29 @@ const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_P
 export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ticTacToe,
-    emoji: '❌',
     tagline: 'Three in a row wins',
     sideNames: () => ['X', 'O'],
-    sideColors: () => ['#4f8cff', '#ff6b6b'],
-    size: { width: 600, height: 600 },
-    colors: ['#4f8cff', '#7b5cff'],
+    sideColors: () => [COLORS.tomato, COLORS.sky],
+    size: TIC_TAC_TOE_SIZE,
+    color: COLORS.grape,
     createScene: (session) => new TicTacToeScene(session),
   }),
   entry({
     definition: fourInARow,
-    emoji: '🟡',
     tagline: 'Drop discs, connect four',
     sideNames: () => ['Yellow', 'Red'],
-    sideColors: () => ['#ffd23f', '#ff6b6b'],
+    sideColors: () => [COLORS.sunny, COLORS.tomato],
     size: FOUR_IN_A_ROW_SIZE,
-    colors: ['#ffb627', '#ff6b6b'],
+    color: COLORS.sky,
     createScene: (session) => new FourInARowScene(session),
   }),
   entry({
     definition: ludo,
-    emoji: '🎲',
     tagline: 'Race your four tokens home',
     sideNames: (players) => ludoSides(players).map((color) => LUDO_COLOR_NAMES[color]!),
     sideColors: (players) => ludoSides(players).map((color) => LUDO_COLORS[color]!),
     size: LUDO_SIZE,
-    colors: ['#3ddc97', '#1fa2ff'],
+    color: COLORS.mint,
     botDelayMs: 1000,
     moveCue: (_before, after) => {
       const state = after as LudoState;
@@ -110,21 +107,20 @@ export const GAMES: readonly AnyEntry[] = [
   {
     kind: 'realtime',
     definition: airHockey,
-    emoji: '🏒',
     tagline: 'Fast 1-on-1, first to 7',
     sideNames: () => ['Bottom', 'Top'],
     sideColors: () => AIR_HOCKEY_COLORS,
     size: AIR_HOCKEY_SIZE,
-    colors: ['#00c6ff', '#0072ff'],
+    color: COLORS.tomato,
     createScene: (options) => new AirHockeyScene(options),
   },
 ];
 
-/** Shown on the home screen so the catalog direction is visible from day one. */
-export const COMING_SOON: readonly { name: string; emoji: string; colors: readonly [string, string] }[] = [
-  { name: 'Checkers', emoji: '⚫', colors: ['#ff8a65', '#d84315'] },
-  { name: 'Chess', emoji: '♟️', colors: ['#b388ff', '#5e35b1'] },
-  { name: 'Solitaire', emoji: '🃏', colors: ['#43e97b', '#1b8a5a'] },
-  { name: 'Sea Battle', emoji: '🚢', colors: ['#4facfe', '#1d4ed8'] },
-  { name: 'Sudoku', emoji: '🔢', colors: ['#f6d365', '#fda085'] },
+/** Shown on the home shelf so the catalog direction is visible from day one (docs/12). */
+export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [
+  { id: 'checkers', name: 'Checkers', color: COLORS.peach },
+  { id: 'chess', name: 'Chess', color: COLORS.grape },
+  { id: 'solitaire', name: 'Solitaire', color: COLORS.mint },
+  { id: 'sea-battle', name: 'Sea Battle', color: COLORS.sky },
+  { id: 'sudoku', name: 'Sudoku', color: COLORS.sunny },
 ];

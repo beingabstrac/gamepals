@@ -1,16 +1,22 @@
 import { absoluteSquare, HOME, LAST_TRACK, SAFE_SQUARES, YARD, type LudoEvent, type LudoMove, type LudoState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
+import { COLORS, DARK, toHex } from '../../theme';
+import { fitCamera } from '../crisp';
 
 const CELL = 40;
 const SIZE = 15 * CELL;
 export const LUDO_SIZE = { width: SIZE, height: SIZE };
 
-export const LUDO_COLORS = ['#ff5a5f', '#3ddc97', '#ffd23f', '#4f8cff'];
+export const LUDO_COLORS = [COLORS.tomato, COLORS.mint, COLORS.sunny, COLORS.sky];
 export const LUDO_COLOR_NAMES = ['Red', 'Green', 'Yellow', 'Blue'];
-const COLOR_HEX = [0xff5a5f, 0x3ddc97, 0xffd23f, 0x4f8cff];
+const COLOR_HEX = LUDO_COLORS.map(toHex);
+const DARK_HEX = [DARK.tomato, DARK.mint, DARK.sunny, DARK.sky].map(toHex);
+const CELL_LINE = 0xe9e4f5;
+const STAR = 0xd9d2f0;
 const TOKEN_RADIUS = CELL * 0.38;
-const HOP_MS = 110;
+const HOP_MS = 120;
+const HOP_HEIGHT = 16;
 
 /** The 52 shared track squares as [col, row], clockwise from red's start square. */
 const TRACK: readonly (readonly [number, number])[] = [
@@ -94,6 +100,7 @@ export class LudoScene extends Scene {
   }
 
   create(): void {
+    fitCamera(this, SIZE, SIZE);
     this.drawBoard();
     const state = this.state;
 
@@ -101,13 +108,13 @@ export class LudoScene extends Scene {
       const color = state.colorOf(seat);
       return list.map((progress, token) => {
         const point = tokenPoint(color, progress, token);
-        const shadow = this.add.circle(0, 4, TOKEN_RADIUS, 0x000000, 0.25);
+        const shadow = this.add.circle(0, 4, TOKEN_RADIUS, 0x2b2a3a, 0.16);
         const body = this.add.circle(0, 0, TOKEN_RADIUS, COLOR_HEX[color]).setStrokeStyle(4, 0xffffff);
-        const shine = this.add.circle(-4, -5, TOKEN_RADIUS * 0.35, 0xffffff, 0.5);
+        const dot = this.add.circle(0, 0, TOKEN_RADIUS * 0.42, DARK_HEX[color]);
         body.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
           if (this.session.state.currentSeat === seat) this.session.play(token);
         });
-        return this.add.container(point.x, point.y, [shadow, body, shine]);
+        return this.add.container(point.x, point.y, [shadow, body, dot]);
       });
     });
 
@@ -136,27 +143,53 @@ export class LudoScene extends Scene {
     const mover = this.tokens[event.seat]![event.token]!;
     mover.setDepth(5);
 
-    // Hop square by square; leaving the yard is a single jump onto the start square.
+    // Hop square by square in little arcs; leaving the yard is one bigger jump.
     const steps: number[] = [];
     if (event.from === YARD) steps.push(0);
     else for (let p = event.from + 1; p <= event.to; p++) steps.push(p);
 
+    let from = { x: mover.x, y: mover.y };
     steps.forEach((progress, i) => {
-      const point = tokenPoint(color, progress, event.token);
-      this.tweens.add({ targets: mover, x: point.x, y: point.y, delay: i * HOP_MS, duration: HOP_MS - 10, ease: 'Quad.easeOut' });
-      this.tweens.add({ targets: mover, scale: 1.25, delay: i * HOP_MS, duration: (HOP_MS - 10) / 2, yoyo: true, ease: 'Sine.easeOut' });
+      const start = from;
+      const end = tokenPoint(color, progress, event.token);
+      const height = event.from === YARD ? HOP_HEIGHT * 2.5 : HOP_HEIGHT;
+      this.tweens.addCounter({
+        from: 0,
+        to: 1,
+        delay: i * HOP_MS,
+        duration: HOP_MS - 10,
+        ease: 'Sine.easeInOut',
+        onUpdate: (tween) => {
+          const t = tween.getValue() ?? 1;
+          mover.setPosition(start.x + (end.x - start.x) * t, start.y + (end.y - start.y) * t - Math.sin(Math.PI * t) * height);
+        },
+        onComplete: () => {
+          // Land with a small squash.
+          this.tweens.add({ targets: mover, scaleX: 1.14, scaleY: 0.84, duration: 55, yoyo: true, ease: 'Quad.easeOut' });
+        },
+      });
+      from = end;
     });
 
-    this.time.delayedCall(steps.length * HOP_MS, () => {
+    this.time.delayedCall(steps.length * HOP_MS + 60, () => {
       mover.setDepth(0);
       for (const capture of event.captured) {
         const victim = this.tokens[capture.seat]![capture.token]!;
         const home = tokenPoint(state.colorOf(capture.seat), YARD, capture.token);
-        this.tweens.add({ targets: victim, x: home.x, y: home.y, angle: 360, duration: 450, ease: 'Cubic.easeInOut', onComplete: () => victim.setAngle(0) });
+        victim.setDepth(6);
+        this.tweens.add({
+          targets: victim,
+          x: home.x,
+          y: home.y,
+          angle: 360,
+          duration: 520,
+          ease: 'Back.easeInOut',
+          onComplete: () => victim.setAngle(0).setDepth(0),
+        });
       }
-      if (event.captured.length > 0) this.cameras.main.shake(180, 0.008);
-      if (event.to === HOME) this.tweens.add({ targets: mover, scale: 1.4, duration: 160, yoyo: true });
-      this.time.delayedCall(event.captured.length > 0 ? 470 : 0, () => {
+      if (event.captured.length > 0) this.cameras.main.shake(180, 0.006);
+      if (event.to === HOME) this.tweens.add({ targets: mover, scale: 1.4, duration: 160, yoyo: true, ease: 'Back.easeOut' });
+      this.time.delayedCall(event.captured.length > 0 ? 540 : 0, () => {
         this.layout();
         this.updateHighlights();
       });
@@ -196,7 +229,7 @@ export class LudoScene extends Scene {
     }
   }
 
-  /** Legal tokens bounce gently while a local player chooses. */
+  /** Legal tokens bob gently while a local player chooses. */
   private updateHighlights(): void {
     this.clearHighlights();
     this.layout();
@@ -206,38 +239,42 @@ export class LudoScene extends Scene {
       if (typeof move !== 'number') continue;
       const container = this.tokens[state.currentSeat]![move]!;
       container.setDepth(4);
-      this.tweens.add({ targets: container, scale: 1.18, duration: 380, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      this.tweens.add({ targets: container, scale: 1.18, y: container.y - 4, duration: 380, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
   }
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    g.fillStyle(0xf7f5ff, 1);
-    g.fillRoundedRect(0, 0, SIZE, SIZE, 24);
+    g.fillStyle(0xffffff, 1);
+    g.fillRoundedRect(0, 0, SIZE, SIZE, 26);
+    g.lineStyle(3, CELL_LINE, 1);
+    g.strokeRoundedRect(1.5, 1.5, SIZE - 3, SIZE - 3, 26);
 
     TRACK.forEach(([col, row], index) => {
       const startColor = [0, 13, 26, 39].indexOf(index);
       g.fillStyle(startColor >= 0 ? COLOR_HEX[startColor]! : 0xffffff, 1);
-      g.fillRect(col * CELL + 1, row * CELL + 1, CELL - 2, CELL - 2);
-      g.lineStyle(2, 0xdcd7f2, 1);
-      g.strokeRect(col * CELL + 1, row * CELL + 1, CELL - 2, CELL - 2);
-      if (SAFE_SQUARES.has(index) && startColor < 0) drawStar(g, (col + 0.5) * CELL, (row + 0.5) * CELL, 12, 0xc4bcec);
+      g.fillRoundedRect(col * CELL + 2, row * CELL + 2, CELL - 4, CELL - 4, 7);
+      g.lineStyle(2, CELL_LINE, 1);
+      g.strokeRoundedRect(col * CELL + 2, row * CELL + 2, CELL - 4, CELL - 4, 7);
+      if (SAFE_SQUARES.has(index) && startColor < 0) drawStar(g, (col + 0.5) * CELL, (row + 0.5) * CELL, 12, STAR);
     });
 
     HOME_COLUMNS.forEach((cells, color) => {
-      g.fillStyle(COLOR_HEX[color]!, 0.85);
-      for (const [col, row] of cells) g.fillRect(col * CELL + 1, row * CELL + 1, CELL - 2, CELL - 2);
+      g.fillStyle(COLOR_HEX[color]!, 1);
+      for (const [col, row] of cells) g.fillRoundedRect(col * CELL + 2, row * CELL + 2, CELL - 4, CELL - 4, 7);
     });
 
     YARD_ORIGINS.forEach(([ox, oy], color) => {
+      g.fillStyle(DARK_HEX[color]!, 1);
+      g.fillRoundedRect(ox * CELL + 6, oy * CELL + 12, 6 * CELL - 12, 6 * CELL - 12, 26);
       g.fillStyle(COLOR_HEX[color]!, 1);
-      g.fillRoundedRect(ox * CELL + 4, oy * CELL + 4, 6 * CELL - 8, 6 * CELL - 8, 22);
+      g.fillRoundedRect(ox * CELL + 6, oy * CELL + 6, 6 * CELL - 12, 6 * CELL - 12, 26);
       g.fillStyle(0xffffff, 1);
-      g.fillRoundedRect((ox + 1) * CELL, (oy + 1) * CELL, 4 * CELL, 4 * CELL, 18);
+      g.fillRoundedRect((ox + 1) * CELL, (oy + 1) * CELL, 4 * CELL, 4 * CELL, 22);
       for (let token = 0; token < 4; token++) {
         const { x, y } = tokenPoint(color, YARD, token);
-        g.fillStyle(COLOR_HEX[color]!, 0.3);
-        g.fillCircle(x, y, TOKEN_RADIUS + 5);
+        g.fillStyle(COLOR_HEX[color]!, 0.25);
+        g.fillCircle(x, y, TOKEN_RADIUS + 6);
       }
     });
 

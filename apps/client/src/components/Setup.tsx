@@ -1,7 +1,8 @@
 import { BOT_TIERS, type BotTier } from '@gamepals/rules';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import type { EntryBase } from '../games/registry';
 import type { SeatController } from '../session';
+import { BackIcon, BotFace, GameArt, PersonFace } from './Art';
 
 export const TIER_LABEL: Record<BotTier, string> = {
   easy: 'Easy',
@@ -10,40 +11,64 @@ export const TIER_LABEL: Record<BotTier, string> = {
   expert: 'Expert',
 };
 
-/** A seat in "Mix & match": a person on this device, or a bot of some tier. */
-type SeatChoice = 'human' | BotTier;
-const CHOICE_CYCLE: readonly SeatChoice[] = ['human', ...BOT_TIERS];
+export const BOT_NAMES: Record<BotTier, string> = {
+  easy: 'Pip',
+  medium: 'Bo',
+  hard: 'Zed',
+  expert: 'Nova',
+};
 
-export const gradient = ([from, to]: readonly [string, string]) => ({ '--game-from': from, '--game-to': to });
+/** Each chair at the table: empty, a person on this device, or a bot of some level. */
+type SeatChoice = 'empty' | 'human' | BotTier;
+type Position = 'bottom' | 'left' | 'top' | 'right';
 
-function range(from: number, to: number): number[] {
-  return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+const VALID: readonly SeatChoice[] = ['empty', 'human', ...BOT_TIERS];
+
+/** Chairs go clockwise from the player holding the phone. */
+function positionsFor(maxPlayers: number): Position[] {
+  if (maxPlayers <= 2) return ['bottom', 'top'];
+  if (maxPlayers === 3) return ['bottom', 'left', 'right'];
+  return ['bottom', 'left', 'top', 'right'];
 }
 
-/** Turns seat choices into controllers with friendly labels ("You" when there's one person). */
-function toSeats(choices: readonly SeatChoice[]): SeatController[] {
-  const humans = choices.filter((c) => c === 'human').length;
+const storageKey = (id: string) => `gamepals.table.${id}`;
+
+function loadChoices(id: string, min: number, max: number): SeatChoice[] {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey(id)) ?? 'null') as SeatChoice[] | null;
+    if (
+      saved &&
+      saved.length === max &&
+      saved.every((choice) => VALID.includes(choice)) &&
+      saved.filter((choice) => choice !== 'empty').length >= min
+    ) {
+      return saved;
+    }
+  } catch {
+    // Ignore unreadable storage and fall back to the default table.
+  }
+  return ['human', ...Array<SeatChoice>(max - 1).fill('medium')];
+}
+
+/** Tapping a chair cycles: person → each bot level → (empty, if the game still has enough players) → person. */
+function nextChoice(choice: SeatChoice, canLeave: boolean): SeatChoice {
+  if (choice === 'empty') return 'human';
+  const order: SeatChoice[] = ['human', ...BOT_TIERS];
+  if (canLeave) order.push('empty');
+  return order[(order.indexOf(choice) + 1) % order.length]!;
+}
+
+export function toSeats(choices: readonly SeatChoice[]): SeatController[] {
+  const occupied = choices.filter((choice): choice is Exclude<SeatChoice, 'empty'> => choice !== 'empty');
+  const humans = occupied.filter((choice) => choice === 'human').length;
   let person = 0;
-  return choices.map((choice) => {
+  return occupied.map((choice) => {
     if (choice === 'human') {
       person++;
       return { kind: 'human', label: humans === 1 ? 'You' : `Player ${person}` };
     }
-    return { kind: 'bot', tier: choice, label: `${TIER_LABEL[choice]} bot` };
+    return { kind: 'bot', tier: choice, label: BOT_NAMES[choice] };
   });
-}
-
-function CountChips({ counts, value, onChange }: { counts: number[]; value: number; onChange(n: number): void }) {
-  if (counts.length < 2) return null;
-  return (
-    <div class="chips" role="radiogroup" aria-label="Number of players">
-      {counts.map((n) => (
-        <button key={n} class={n === value ? 'chip selected' : 'chip'} role="radio" aria-checked={n === value} onClick={() => onChange(n)}>
-          {n} players
-        </button>
-      ))}
-    </div>
-  );
 }
 
 interface SetupProps {
@@ -52,91 +77,87 @@ interface SetupProps {
   onStart(seats: SeatController[]): void;
 }
 
+/** Game setup as a table: tap the chairs to seat people and bots, then Play. No forms. */
 export function Setup({ entry, onBack, onStart }: SetupProps) {
-  const { modes, name, minPlayers, maxPlayers } = entry.definition;
-  const counts = range(minPlayers, maxPlayers);
-  const [tier, setTier] = useState<BotTier>('medium');
-  const [botGameSize, setBotGameSize] = useState(maxPlayers);
-  const [localSize, setLocalSize] = useState(minPlayers);
-  const [mix, setMix] = useState<SeatChoice[]>(() => ['human', ...Array<SeatChoice>(maxPlayers - 1).fill('medium')]);
+  const { id, name, minPlayers, maxPlayers } = entry.definition;
+  const [choices, setChoices] = useState(() => loadChoices(id, minPlayers, maxPlayers));
 
-  const sideNames = entry.sideNames(mix.length);
-  const sideColors = entry.sideColors(mix.length);
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey(id), JSON.stringify(choices));
+    } catch {
+      // Remembering the table is a convenience; ignore storage failures.
+    }
+  }, [id, choices]);
 
-  const resizeMix = (n: number) =>
-    setMix((current) => (n <= current.length ? current.slice(0, n) : [...current, ...Array<SeatChoice>(n - current.length).fill('medium')]));
-  const cycleSeat = (index: number) =>
-    setMix((current) =>
-      current.map((choice, i) => (i === index ? CHOICE_CYCLE[(CHOICE_CYCLE.indexOf(choice) + 1) % CHOICE_CYCLE.length]! : choice)),
-    );
+  const positions = positionsFor(maxPlayers);
+  const seats = toSeats(choices);
+  const sideNames = entry.sideNames(seats.length);
+  const sideColors = entry.sideColors(seats.length);
+
+  const tap = (index: number) =>
+    setChoices((current) => {
+      const occupied = current.filter((choice) => choice !== 'empty').length;
+      return current.map((choice, i) => (i === index ? nextChoice(choice, occupied > minPlayers) : choice));
+    });
+
+  let occupiedIndex = -1;
 
   return (
-    <div class="screen" style={gradient(entry.colors)}>
+    <div class="screen setup" style={{ '--game': entry.color }}>
       <header class="topbar">
-        <button class="ghost" onClick={onBack}>
-          ← Games
+        <button class="round-btn" onClick={onBack} aria-label="Back to games">
+          <BackIcon />
         </button>
         <h1>{name}</h1>
         <span />
       </header>
 
-      <div class="setup-hero">
-        <span class="emoji big">{entry.emoji}</span>
-        <p class="muted">{entry.tagline}</p>
+      <div class="table">
+        <div class="table-top">
+          <GameArt id={id} />
+        </div>
+        {positions.map((position, index) => {
+          const choice = choices[index] ?? 'empty';
+          if (choice === 'empty') {
+            return (
+              <button key={position} class="seat" data-pos={position} onClick={() => tap(index)} aria-label="Add a player here">
+                <span class="avatar empty">+</span>
+                <span class="who muted">Add</span>
+              </button>
+            );
+          }
+          occupiedIndex++;
+          const seat = seats[occupiedIndex]!;
+          const side = sideColors[occupiedIndex] ?? '#9B7BFF';
+          const sideName = sideNames[occupiedIndex] ?? '';
+          return (
+            <button
+              key={position}
+              class="seat"
+              data-pos={position}
+              style={{ '--side': side }}
+              onClick={() => tap(index)}
+              aria-label={`${seat.label}, ${sideName}. Tap to change.`}
+            >
+              {/* Keyed on the choice so the avatar springs in each time it changes. */}
+              <span class="avatar" key={choice}>
+                {choice === 'human' ? <PersonFace color={side} /> : <BotFace tier={choice} />}
+              </span>
+              <span class="who">{seat.label}</span>
+              <span class="level">{choice === 'human' ? sideName : `${TIER_LABEL[choice]} · ${sideName}`}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {modes.includes('bot') && (
-        <section class="card">
-          <h2>🤖 Play vs {maxPlayers > 2 ? 'Bots' : 'Bot'}</h2>
-          <div class="chips" role="radiogroup" aria-label="Bot difficulty">
-            {BOT_TIERS.map((t) => (
-              <button key={t} class={t === tier ? 'chip selected' : 'chip'} role="radio" aria-checked={t === tier} onClick={() => setTier(t)}>
-                {TIER_LABEL[t]}
-              </button>
-            ))}
-          </div>
-          <CountChips counts={counts} value={botGameSize} onChange={setBotGameSize} />
-          <button class="btn primary" onClick={() => onStart(toSeats(['human', ...Array<SeatChoice>(botGameSize - 1).fill(tier)]))}>
-            Play
-          </button>
-        </section>
-      )}
+      <p class="hint">Tap a chair to switch between a person and a bot.</p>
 
-      {modes.includes('sameDevice') && (
-        <section class="card">
-          <h2>👫 Same device</h2>
-          <p class="muted">Take turns on this phone or tablet.</p>
-          <CountChips counts={counts} value={localSize} onChange={setLocalSize} />
-          <button class="btn primary" onClick={() => onStart(toSeats(Array<SeatChoice>(localSize).fill('human')))}>
-            Play
-          </button>
-        </section>
-      )}
+      <button class="play-bubble" onClick={() => onStart(seats)}>
+        Play
+      </button>
 
-      {modes.includes('bot') && modes.includes('sameDevice') && (
-        <section class="card">
-          <h2>🎛️ Mix & match</h2>
-          <p class="muted">Tap a seat to switch between a person and each bot level.</p>
-          <CountChips counts={counts} value={mix.length} onChange={resizeMix} />
-          <div class="seats">
-            {mix.map((choice, i) => (
-              <button key={i} class="seat-chip" onClick={() => cycleSeat(i)}>
-                <span class="swatch" style={{ background: sideColors[i] }} />
-                <span class="seat-side">{sideNames[i]}</span>
-                <span class="seat-who">{choice === 'human' ? '🙂 Person' : `🤖 ${TIER_LABEL[choice]}`}</span>
-              </button>
-            ))}
-          </div>
-          <button class="btn primary" onClick={() => onStart(toSeats(mix))}>
-            Play
-          </button>
-        </section>
-      )}
-
-      <section class="card soon" aria-disabled="true">
-        <h2>🌍 Online</h2>
-        <p class="muted">Play friends, family and people worldwide. Coming soon.</p>
-      </section>
+      <p class="soon-pill">🌍 Online with friends is coming soon</p>
     </div>
   );
 }

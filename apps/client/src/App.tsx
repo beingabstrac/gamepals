@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'preact/hooks';
+import { GameArt, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
 import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
-import { gradient, Setup } from './components/Setup';
+import { Setup } from './components/Setup';
 import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
@@ -19,13 +20,7 @@ export function App() {
     if (screen.entry.kind === 'realtime') {
       return <RealtimeGameScreen entry={screen.entry} seats={screen.seats} onExit={onExit} />;
     }
-    return (
-      <GameScreen
-        entry={screen.entry}
-        seats={screen.seats}
-        onExit={onExit}
-      />
-    );
+    return <GameScreen entry={screen.entry} seats={screen.seats} onExit={onExit} />;
   }
   if (screen.name === 'setup') {
     return (
@@ -50,20 +45,20 @@ function SettingsToggles() {
   return (
     <div class="toggles">
       <button
-        class="icon-btn"
+        class="round-btn"
         aria-pressed={sound}
         aria-label={sound ? 'Sound on' : 'Sound off'}
         onClick={() => settings.set({ sound: !sound })}
       >
-        {sound ? '🔊' : '🔇'}
+        <SpeakerIcon on={sound} />
       </button>
       <button
-        class="icon-btn"
+        class="round-btn"
         aria-pressed={haptics}
         aria-label={haptics ? 'Vibration on' : 'Vibration off'}
         onClick={() => settings.set({ haptics: !haptics })}
       >
-        {haptics ? '📳' : '📴'}
+        <VibrateIcon on={haptics} />
       </button>
     </div>
   );
@@ -73,33 +68,43 @@ function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
   return (
     <div class="screen">
       <header class="hero">
+        <span class="mascot">
+          <Mascot />
+        </span>
         <div>
-          <h1 class="logo">Game Pals</h1>
-          <p class="muted">Every game. Every way to play.</p>
+          <h1 class="logo">
+            Game <span>Pals</span>
+          </h1>
+          <p class="tagline">Every game. Every way to play.</p>
         </div>
         <SettingsToggles />
       </header>
+
       <div class="grid">
         {GAMES.map((entry, i) => (
           <button
             key={entry.definition.id}
-            class="game-card"
-            style={{ ...gradient(entry.colors), animationDelay: `${i * 40}ms` }}
+            class="tile"
+            style={{ '--c': entry.color, animationDelay: `${i * 50}ms` }}
             onClick={() => onPick(entry)}
           >
-            <span class="emoji">{entry.emoji}</span>
+            <span class="art">
+              <GameArt id={entry.definition.id} />
+            </span>
             <span class="title">{entry.definition.name}</span>
             <span class="small">{entry.tagline}</span>
           </button>
         ))}
         {COMING_SOON.map((game, i) => (
           <div
-            key={game.name}
-            class="game-card soon"
+            key={game.id}
+            class="tile soon"
             aria-disabled="true"
-            style={{ ...gradient(game.colors), animationDelay: `${(GAMES.length + i) * 40}ms` }}
+            style={{ '--c': game.color, animationDelay: `${(GAMES.length + i) * 50}ms` }}
           >
-            <span class="emoji">{game.emoji}</span>
+            <span class="art">
+              <GameArt id={game.id} />
+            </span>
             <span class="title">{game.name}</span>
             <span class="small">Coming soon</span>
           </div>

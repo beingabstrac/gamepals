@@ -20,6 +20,8 @@ import {
 import { Scene, type GameObjects } from 'phaser';
 import type { SeatController } from '../../session';
 import type { SoundName } from '../../sfx';
+import { COLORS, DARK, toHex } from '../../theme';
+import { fitCamera } from '../crisp';
 
 export interface RealtimeSceneOptions {
   readonly seats: readonly SeatController[];
@@ -30,11 +32,15 @@ export interface RealtimeSceneOptions {
 }
 
 export const AIR_HOCKEY_SIZE = { width: TABLE.width, height: TABLE.height };
-export const AIR_HOCKEY_COLORS = ['#4f8cff', '#ff6b6b'];
+export const AIR_HOCKEY_COLORS = [COLORS.sky, COLORS.tomato];
 
-const SEAT_HEX = [0x4f8cff, 0xff6b6b];
-const NEON = 0x6fe3ff;
-const PUCK_GLOW = 0xffe066;
+const SEAT_HEX = AIR_HOCKEY_COLORS.map(toHex);
+const SEAT_DARK = [toHex(DARK.sky), toHex(DARK.tomato)];
+const RAIL = toHex(DARK.sky);
+const ICE = 0xeef7ff;
+const MARKINGS = 0xbfdcff;
+const PUCK_COLOR = toHex(COLORS.ink);
+const PUCK_GLOW = toHex(COLORS.sunny);
 const HUMAN_SPEED = 3200;
 const TRAIL_LENGTH = 12;
 const HISTORY_SECONDS = 0.4;
@@ -63,6 +69,7 @@ export class AirHockeyScene extends Scene {
   }
 
   create(): void {
+    fitCamera(this, TABLE.width, TABLE.height);
     this.input.addPointer(3);
     this.drawTable();
 
@@ -85,18 +92,18 @@ export class AirHockeyScene extends Scene {
     this.mallets = [0, 1].map((seat) => {
       const color = SEAT_HEX[seat]!;
       return this.add.container(0, 0, [
-        this.add.circle(0, 6, MALLET_RADIUS, 0x000000, 0.3),
-        this.add.circle(0, 0, MALLET_RADIUS, color).setStrokeStyle(5, 0xffffff, 0.9),
-        this.add.circle(0, 0, MALLET_RADIUS * 0.62, 0xffffff, 0.2),
-        this.add.circle(0, 0, MALLET_RADIUS * 0.38, color).setStrokeStyle(3, 0xffffff, 0.8),
+        this.add.circle(0, 6, MALLET_RADIUS, 0x2b2a3a, 0.12),
+        this.add.circle(0, 0, MALLET_RADIUS, color).setStrokeStyle(5, 0xffffff, 1),
+        this.add.circle(0, 0, MALLET_RADIUS * 0.62, SEAT_DARK[seat] ?? color),
+        this.add.circle(0, 0, MALLET_RADIUS * 0.34, 0xffffff),
       ]);
     });
 
     this.puckGlow = this.add.circle(0, 0, PUCK_RADIUS + 12, PUCK_GLOW, 0.22);
     this.puck = this.add.container(0, 0, [
       this.puckGlow,
-      this.add.circle(0, 0, PUCK_RADIUS, 0x10131f).setStrokeStyle(5, PUCK_GLOW, 1),
-      this.add.circle(0, 0, PUCK_RADIUS * 0.45, PUCK_GLOW, 0.8),
+      this.add.circle(0, 0, PUCK_RADIUS, PUCK_COLOR).setStrokeStyle(5, PUCK_GLOW, 1),
+      this.add.circle(0, 0, PUCK_RADIUS * 0.4, PUCK_GLOW),
     ]);
 
     this.syncObjects();
@@ -236,24 +243,17 @@ export class AirHockeyScene extends Scene {
     const g = this.add.graphics();
     const { width: w, height: h } = TABLE;
 
-    g.fillStyle(0x0d1838, 1);
+    // Light ice with a solid rail: flat colors, no glow gradients.
+    g.fillStyle(ICE, 1);
     g.fillRoundedRect(0, 0, w, h, 48);
+    g.lineStyle(10, RAIL, 1);
+    g.strokeRoundedRect(5, 5, w - 10, h - 10, 44);
 
-    // Neon rail: wide faint strokes under a thin bright one read as a glow.
-    for (const [width, alpha] of [
-      [22, 0.12],
-      [12, 0.25],
-      [5, 1],
-    ] as const) {
-      g.lineStyle(width, NEON, alpha);
-      g.strokeRoundedRect(6, 6, w - 12, h - 12, 44);
-    }
-
-    g.lineStyle(4, NEON, 0.45);
+    g.lineStyle(5, MARKINGS, 1);
     g.lineBetween(24, h / 2, w - 24, h / 2);
     g.strokeCircle(w / 2, h / 2, 80);
-    g.fillStyle(NEON, 0.6);
-    g.fillCircle(w / 2, h / 2, 8);
+    g.fillStyle(MARKINGS, 1);
+    g.fillCircle(w / 2, h / 2, 9);
 
     // Goal creases and mouths in each player's color.
     g.lineStyle(4, SEAT_HEX[1]!, 0.7);

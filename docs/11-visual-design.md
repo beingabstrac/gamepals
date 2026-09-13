@@ -1,5 +1,7 @@
 # 11 — Visual design & game feel
 
+> **Style superseded by [12 Part 3](12-catalog-and-direction.md#part-3--design-direction-v2-cute-soft-bubbly-crisp)** (2026-09-13): light app, flat candy colors, no gradients, cute bubbly UI, table setup. The feedback/motion principles below still apply.
+
 Goal: Game Pals should look bright and toy-like and **feel** good on every tap, so short sessions are satisfying and reviews stay high. Researched 2026-09-12.
 
 ## 1. Principles

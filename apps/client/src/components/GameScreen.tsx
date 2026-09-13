@@ -1,9 +1,11 @@
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { cue } from '../feedback';
+import { DPR } from '../games/crisp';
 import type { GameEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
 import { Session, type SeatController } from '../session';
+import { BackIcon } from './Art';
 import { ResultSheet } from './ResultSheet';
 
 interface Props {
@@ -37,9 +39,11 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
     const game = new Game({
       type: AUTO,
       parent: host.current!,
-      width: entry.size.width,
-      height: entry.size.height,
+      // Rendered at the screen's pixel density; scenes zoom their camera to match (games/crisp.ts).
+      width: entry.size.width * DPR,
+      height: entry.size.height * DPR,
       transparent: true,
+      antialias: true,
       scale: { mode: Scale.FIT, autoCenter: Scale.CENTER_BOTH },
       scene: [entry.createScene(session)],
     });
@@ -54,7 +58,6 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
   const names = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
   const sideName = (seat: number) => `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
-  const [from, to] = entry.colors;
   const Controls = entry.Controls;
   const thinking = seats[state.currentSeat]?.kind === 'bot';
 
@@ -65,20 +68,22 @@ export function GameScreen({ entry, seats: initialSeats, onExit }: Props) {
   };
 
   return (
-    <div class="screen game-screen" style={{ '--game-from': from, '--game-to': to }}>
+    <div class="screen game-screen" style={{ '--game': entry.color }}>
       <header class="topbar">
-        <button class="ghost" onClick={onExit}>
-          ← Back
+        <button class="round-btn" onClick={onExit} aria-label="Back to the table">
+          <BackIcon />
         </button>
         <h1>{entry.definition.name}</h1>
         <span />
       </header>
-      {!state.result && (
-        <p class="status" aria-live="polite">
-          <span class="turn-dot" style={{ background: sideColors[state.currentSeat] ?? '#fff' }} />
-          {sideName(state.currentSeat)} {thinking ? 'is thinking…' : 'to move'}
-        </p>
-      )}
+      <p class="status" aria-live="polite">
+        {!state.result && (
+          <span class="turn-pill">
+            <span class="turn-dot" style={{ background: sideColors[state.currentSeat] ?? '#9B7BFF' }} />
+            {sideName(state.currentSeat)} {thinking ? 'is thinking…' : 'to move'}
+          </span>
+        )}
+      </p>
       <div class="board" ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
       {Controls && <Controls session={session} />}
       {state.result && (

@@ -1,29 +1,55 @@
 import { winningLine, type Cell, type TicTacToeMove, type TicTacToeState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
+import { COLORS, toHex } from '../../theme';
+import { fitCamera } from '../crisp';
 
 const SIZE = 600;
+export const TIC_TAC_TOE_SIZE = { width: SIZE, height: SIZE };
+
 const CELL = SIZE / 3;
-const PAD = 36;
-const GRID_COLOR = 0x6b72b8;
-const SEAT_COLORS = [0x4f8cff, 0xff6b6b];
-const MARK_RADIUS = CELL / 2 - 42;
-const MARK_WIDTH = 18;
+const PAD = 40;
+const GRID_COLOR = 0xe0d8f4;
+const SEAT_COLORS = [toHex(COLORS.tomato), toHex(COLORS.sky)];
+const INK = toHex(COLORS.ink);
+const MARK_RADIUS = CELL / 2 - 46;
+const MARK_WIDTH = 20;
 
 const cellCenter = (index: number) => ({
   x: (index % 3) * CELL + CELL / 2,
   y: Math.floor(index / 3) * CELL + CELL / 2,
 });
 
-function drawMark(g: GameObjects.Graphics, seat: number, x: number, y: number): void {
+/** A stroke with round caps, drawn `t` (0–1) of the way from a to b — like a pen. */
+function penLine(g: GameObjects.Graphics, ax: number, ay: number, bx: number, by: number, t: number, width: number, color: number): void {
+  if (t <= 0) return;
+  const ex = ax + (bx - ax) * t;
+  const ey = ay + (by - ay) * t;
+  g.lineStyle(width, color, 1);
+  g.lineBetween(ax, ay, ex, ey);
+  g.fillStyle(color, 1);
+  g.fillCircle(ax, ay, width / 2);
+  g.fillCircle(ex, ey, width / 2);
+}
+
+/** X is two strokes, O is one loop; `t` animates the drawing. */
+function drawMark(g: GameObjects.Graphics, seat: number, x: number, y: number, t = 1): void {
   const r = MARK_RADIUS;
-  g.lineStyle(MARK_WIDTH, SEAT_COLORS[seat] ?? 0xffffff, 1);
+  const color = SEAT_COLORS[seat] ?? INK;
   if (seat === 0) {
-    g.lineBetween(x - r, y - r, x + r, y + r);
-    g.lineBetween(x + r, y - r, x - r, y + r);
-  } else {
-    g.strokeCircle(x, y, r);
+    penLine(g, x - r, y - r, x + r, y + r, Math.min(t * 2, 1), MARK_WIDTH, color);
+    penLine(g, x + r, y - r, x - r, y + r, Math.max((t - 0.5) * 2, 0), MARK_WIDTH, color);
+    return;
   }
+  const start = -Math.PI / 2;
+  const end = start + Math.PI * 2 * t;
+  g.lineStyle(MARK_WIDTH, color, 1);
+  g.beginPath();
+  g.arc(x, y, r, start, end, false);
+  g.strokePath();
+  g.fillStyle(color, 1);
+  g.fillCircle(x + Math.cos(start) * r, y + Math.sin(start) * r, MARK_WIDTH / 2);
+  g.fillCircle(x + Math.cos(end) * r, y + Math.sin(end) * r, MARK_WIDTH / 2);
 }
 
 export class TicTacToeScene extends Scene {
@@ -36,14 +62,16 @@ export class TicTacToeScene extends Scene {
   }
 
   create(): void {
+    fitCamera(this, SIZE, SIZE);
+
     const grid = this.add.graphics();
     grid.fillStyle(GRID_COLOR, 1);
     for (let i = 1; i < 3; i++) {
-      grid.fillRoundedRect(i * CELL - 5, PAD, 10, SIZE - 2 * PAD, 5);
-      grid.fillRoundedRect(PAD, i * CELL - 5, SIZE - 2 * PAD, 10, 5);
+      grid.fillRoundedRect(i * CELL - 6, PAD, 12, SIZE - 2 * PAD, 6);
+      grid.fillRoundedRect(PAD, i * CELL - 6, SIZE - 2 * PAD, 12, 6);
     }
-    grid.setAlpha(0);
-    this.tweens.add({ targets: grid, alpha: 1, duration: 250 });
+    grid.setAlpha(0).setY(12);
+    this.tweens.add({ targets: grid, alpha: 1, y: 0, duration: 420, ease: 'Back.easeOut' });
 
     this.marks = this.add.graphics();
 
@@ -71,27 +99,39 @@ export class TicTacToeScene extends Scene {
     const last = moves[moves.length - 1]!;
     this.draw(last);
 
-    // Pop the newest mark in with a little overshoot, then bake it into the board.
     const seat = (this.session.state as TicTacToeState).board[last];
     if (seat === null || seat === undefined) return;
     const { x, y } = cellCenter(last);
-    const pop = this.add.graphics().setPosition(x, y);
-    drawMark(pop, seat, 0, 0);
-    pop.setScale(0.2).setAlpha(0.6);
-    this.tweens.add({
-      targets: pop,
-      scale: 1,
-      alpha: 1,
-      duration: 220,
-      ease: 'Back.easeOut',
+
+    // Draw the new mark like a pen stroke, then give it a little squash as it "lands".
+    const pen = this.add.graphics().setPosition(x, y);
+    this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: seat === 0 ? 300 : 280,
+      ease: 'Sine.easeInOut',
+      onUpdate: (tween) => {
+        pen.clear();
+        drawMark(pen, seat, 0, 0, tween.getValue() ?? 1);
+      },
       onComplete: () => {
-        pop.destroy();
-        this.draw(null);
+        this.tweens.add({
+          targets: pen,
+          scaleX: 1.1,
+          scaleY: 0.9,
+          duration: 70,
+          yoyo: true,
+          ease: 'Quad.easeOut',
+          onComplete: () => {
+            pen.destroy();
+            this.draw(null);
+          },
+        });
       },
     });
   }
 
-  /** Draws every mark; `hideCell` stays empty while its mark animates in. */
+  /** Draws every settled mark; `hideCell` stays empty while its mark is being drawn. */
   private draw(hideCell: number | null): void {
     const { board } = this.session.state as TicTacToeState;
     const g = this.marks;
@@ -112,21 +152,16 @@ export class TicTacToeScene extends Scene {
     const from = cellCenter(line[0]);
     const to = cellCenter(line[2]);
     const strike = this.add.graphics();
-    const progress = { t: 0 };
-    this.tweens.add({
-      targets: progress,
-      t: 1,
-      duration: 280,
+    this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: 320,
       ease: 'Cubic.easeOut',
-      onUpdate: () => {
+      onUpdate: (tween) => {
         strike.clear();
-        strike.lineStyle(14, 0xffffff, 0.95);
-        strike.lineBetween(from.x, from.y, from.x + (to.x - from.x) * progress.t, from.y + (to.y - from.y) * progress.t);
+        penLine(strike, from.x, from.y, to.x, to.y, tween.getValue() ?? 1, 14, INK);
       },
-      onComplete: () => {
-        this.cameras.main.shake(160, 0.006);
-        this.tweens.add({ targets: strike, alpha: 0.45, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-      },
+      onComplete: () => this.cameras.main.shake(140, 0.004),
     });
   }
 }

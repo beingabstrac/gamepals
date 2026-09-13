@@ -1,23 +1,40 @@
 import { cellIndex, COLS, ROWS, type FourInARowMove, type FourInARowState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
+import { COLORS, DARK, toHex } from '../../theme';
+import { fitCamera } from '../crisp';
 
 const CELL = 100;
-export const FOUR_IN_A_ROW_SIZE = { width: COLS * CELL, height: ROWS * CELL };
+const FACE_HEIGHT = ROWS * CELL;
+const LIP = 16;
+export const FOUR_IN_A_ROW_SIZE = { width: COLS * CELL, height: FACE_HEIGHT + LIP };
 
-const BOARD_COLOR = 0x3552c9;
-const HOLE_COLOR = 0x171a3a;
-const SEAT_COLORS = [0xffd23f, 0xff6b6b];
-const RADIUS = CELL / 2 - 10;
+const BOARD = toHex(COLORS.sky);
+const BOARD_LIP = toHex(DARK.sky);
+const HOLE = 0xeaf3ff;
+const DISC = [toHex(COLORS.sunny), toHex(COLORS.tomato)];
+const DISC_RING = [toHex(DARK.sunny), toHex(DARK.tomato)];
+const RADIUS = CELL / 2 - 11;
+
+/** Real falling: gravity in logical px/s², and how much speed survives each bounce. */
+const GRAVITY = 5200;
+const RESTITUTION = 0.3;
+const SETTLE_SPEED = 260;
 
 const cellCenter = (col: number, row: number) => ({
   x: col * CELL + CELL / 2,
   y: (ROWS - 1 - row) * CELL + CELL / 2,
 });
 
+interface Drop {
+  readonly disc: GameObjects.Container;
+  readonly targetY: number;
+  vy: number;
+}
+
 export class FourInARowScene extends Scene {
   private board!: GameObjects.Graphics;
-  private falling: GameObjects.Arc | null = null;
+  private drop: Drop | null = null;
   private winRings: GameObjects.Graphics | null = null;
   private shownMoves = 0;
 
@@ -26,11 +43,12 @@ export class FourInARowScene extends Scene {
   }
 
   create(): void {
+    fitCamera(this, FOUR_IN_A_ROW_SIZE.width, FOUR_IN_A_ROW_SIZE.height);
     this.board = this.add.graphics();
 
     for (let col = 0; col < COLS; col++) {
       this.add
-        .zone(col * CELL + CELL / 2, (ROWS * CELL) / 2, CELL, ROWS * CELL)
+        .zone(col * CELL + CELL / 2, FACE_HEIGHT / 2, CELL, FACE_HEIGHT)
         .setInteractive({ useHandCursor: true })
         .on('pointerdown', () => this.session.play(col));
     }
@@ -39,6 +57,34 @@ export class FourInARowScene extends Scene {
     const unsubscribe = this.session.subscribe(() => this.onChange());
     this.events.once('shutdown', unsubscribe);
     this.draw(null);
+  }
+
+  update(_time: number, delta: number): void {
+    const drop = this.drop;
+    if (!drop) return;
+    const dt = Math.min(delta, 50) / 1000;
+    drop.vy += GRAVITY * dt;
+    drop.disc.y += drop.vy * dt;
+    if (drop.disc.y < drop.targetY) return;
+
+    drop.disc.y = drop.targetY;
+    if (drop.vy > SETTLE_SPEED) {
+      // Bounce: lose most of the speed and squash on impact (volume kept: wider as it gets shorter).
+      const squash = Math.min(drop.vy / 3000, 0.25);
+      this.tweens.add({ targets: drop.disc, scaleX: 1 + squash, scaleY: 1 - squash, duration: 60, yoyo: true, ease: 'Quad.easeOut' });
+      drop.vy = -drop.vy * RESTITUTION;
+      return;
+    }
+    this.drop = null;
+    drop.disc.destroy();
+    this.draw(null);
+  }
+
+  private makeDisc(seat: number, x: number, y: number): GameObjects.Container {
+    return this.add.container(x, y, [
+      this.add.circle(0, 0, RADIUS, DISC[seat]),
+      this.add.circle(0, 0, RADIUS - 13, DISC[seat]).setStrokeStyle(6, DISC_RING[seat] ?? 0x000000),
+    ]);
   }
 
   private onChange(): void {
@@ -50,28 +96,18 @@ export class FourInARowScene extends Scene {
       return;
     }
 
-    // Animate the newest disc falling into place, then draw it for real.
+    // Finish any disc still bouncing, then drop the new one from above the board.
+    if (this.drop) {
+      this.drop.disc.destroy();
+      this.drop = null;
+    }
     const col = state.lastMove;
     const row = (state.heights[col] ?? 1) - 1;
     const seat = state.board[cellIndex(col, row)] ?? 0;
     this.draw(cellIndex(col, row));
 
-    this.falling?.destroy();
     const target = cellCenter(col, row);
-    const disc = this.add.circle(target.x, -CELL / 2, RADIUS, SEAT_COLORS[seat]);
-    this.children.moveBelow(disc, this.board);
-    this.falling = disc;
-    this.tweens.add({
-      targets: disc,
-      y: target.y,
-      duration: 120 + (ROWS - row) * 45,
-      ease: 'Bounce.easeOut',
-      onComplete: () => {
-        disc.destroy();
-        if (this.falling === disc) this.falling = null;
-        this.draw(null);
-      },
-    });
+    this.drop = { disc: this.makeDisc(seat, target.x, -RADIUS), targetY: target.y, vy: 0 };
   }
 
   /** Draws the board; `hideCell` stays empty while its disc is still falling. */
@@ -80,22 +116,25 @@ export class FourInARowScene extends Scene {
     const g = this.board;
     g.clear();
 
-    // Board face with holes: discs show as colored circles, empty holes as background.
-    g.fillStyle(BOARD_COLOR, 1);
-    g.fillRoundedRect(0, 0, COLS * CELL, ROWS * CELL, 28);
+    g.fillStyle(BOARD_LIP, 1);
+    g.fillRoundedRect(0, LIP, COLS * CELL, FACE_HEIGHT, 30);
+    g.fillStyle(BOARD, 1);
+    g.fillRoundedRect(0, 0, COLS * CELL, FACE_HEIGHT, 30);
 
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
         const index = cellIndex(col, row);
         const disc = index === hideCell ? null : state.board[index];
         const { x, y } = cellCenter(col, row);
-        g.fillStyle(disc === null || disc === undefined ? HOLE_COLOR : (SEAT_COLORS[disc] ?? 0xffffff), 1);
-        g.fillCircle(x, y, RADIUS);
-        if (disc !== null && disc !== undefined) {
-          // Inner ring gives each disc a little depth.
-          g.lineStyle(5, 0x000000, 0.12);
-          g.strokeCircle(x, y, RADIUS - 12);
+        if (disc === null || disc === undefined) {
+          g.fillStyle(HOLE, 1);
+          g.fillCircle(x, y, RADIUS);
+          continue;
         }
+        g.fillStyle(DISC[disc] ?? HOLE, 1);
+        g.fillCircle(x, y, RADIUS);
+        g.lineStyle(6, DISC_RING[disc] ?? 0x000000, 1);
+        g.strokeCircle(x, y, RADIUS - 13);
       }
     }
 
@@ -105,13 +144,13 @@ export class FourInARowScene extends Scene {
   private showWin(line: readonly number[]): void {
     if (this.winRings) return;
     const rings = this.add.graphics();
-    rings.lineStyle(9, 0xffffff, 1);
+    rings.lineStyle(8, 0xffffff, 1);
     for (const index of line) {
       const { x, y } = cellCenter(index % COLS, Math.floor(index / COLS));
-      rings.strokeCircle(x, y, RADIUS - 3);
+      rings.strokeCircle(x, y, RADIUS - 2);
     }
     this.winRings = rings;
-    this.cameras.main.shake(180, 0.006);
-    this.tweens.add({ targets: rings, alpha: 0.25, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.cameras.main.shake(160, 0.005);
+    this.tweens.add({ targets: rings, alpha: 0.2, duration: 480, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
 }

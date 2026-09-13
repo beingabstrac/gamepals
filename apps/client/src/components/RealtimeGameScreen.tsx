@@ -2,9 +2,11 @@ import type { GameResult } from '@gamepals/rules';
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { cue } from '../feedback';
+import { DPR } from '../games/crisp';
 import type { RealtimeEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
 import type { SeatController } from '../session';
+import { BackIcon } from './Art';
 import { ResultSheet } from './ResultSheet';
 
 interface Props {
@@ -27,9 +29,10 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
     const game = new Game({
       type: AUTO,
       parent: host.current!,
-      width: entry.size.width,
-      height: entry.size.height,
+      width: entry.size.width * DPR,
+      height: entry.size.height * DPR,
       transparent: true,
+      antialias: true,
       scale: { mode: Scale.FIT, autoCenter: Scale.CENTER_BOTH },
       scene: [
         entry.createScene({
@@ -50,22 +53,24 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
   const names = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
   const sideName = (seat: number) => `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
-  const [from, to] = entry.colors;
 
   return (
-    <div class="screen game-screen" style={{ '--game-from': from, '--game-to': to }}>
+    <div class="screen game-screen" style={{ '--game': entry.color }}>
       <header class="topbar">
-        <button class="ghost" onClick={onExit}>
-          ← Back
+        <button class="round-btn" onClick={onExit} aria-label="Back to the table">
+          <BackIcon />
         </button>
         <h1>{entry.definition.name}</h1>
         <span />
       </header>
       <div class="scoreboard" aria-live="polite">
         {seats.map((seat, i) => (
-          <div key={i} class="score" style={{ '--side': sideColors[i] ?? '#fff' }}>
+          <div key={i} class="score" style={{ '--side': sideColors[i] ?? '#9B7BFF' }}>
+            <span class="score-dot" />
             <span class="score-name">{seat.label}</span>
-            <span class="score-value">{scores[i] ?? 0}</span>
+            <span class="score-value" key={scores[i]}>
+              {scores[i] ?? 0}
+            </span>
           </div>
         ))}
       </div>

@@ -8,7 +8,7 @@ interface Props {
   onChangeMode(): void;
 }
 
-const CONFETTI_COLORS = ['#4f8cff', '#ff6b6b', '#ffd23f', '#3ddc97', '#b388ff'];
+const CONFETTI_COLORS = ['#4DA8FF', '#FF6B6B', '#FFC93C', '#3DDC97', '#9B7BFF', '#FF8CC6'];
 
 function Confetti() {
   const pieces = useMemo(
