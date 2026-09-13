@@ -22,14 +22,14 @@ export type Turn = -1 | 1;
 const DX = [0, 1, 0, -1];
 const DY = [-1, 0, 1, 0];
 
-export interface Cell {
+export interface GridCell {
   readonly x: number;
   readonly y: number;
 }
 
 export interface Snake {
   /** Head first. */
-  readonly body: readonly Cell[];
+  readonly body: readonly GridCell[];
   readonly dir: Dir;
   readonly queue: readonly Turn[];
 }
@@ -41,8 +41,8 @@ export interface SnakeState {
   readonly seed: number;
   readonly snakes: readonly [Snake, Snake];
   /** Bodies before the last tick, so views can glide between cells. */
-  readonly previous: readonly [readonly Cell[], readonly Cell[]];
-  readonly fruit: Cell;
+  readonly previous: readonly [readonly GridCell[], readonly GridCell[]];
+  readonly fruit: GridCell;
   readonly fruitCount: number;
   readonly phase: SnakePhase;
   readonly timer: number;
@@ -60,9 +60,9 @@ export interface SnakeEvents {
   roundOver: boolean;
 }
 
-const same = (a: Cell, b: Cell) => a.x === b.x && a.y === b.y;
-const inBounds = (c: Cell) => c.x >= 0 && c.x < GRID.cols && c.y >= 0 && c.y < GRID.rows;
-const step = (c: Cell, dir: Dir): Cell => ({ x: c.x + DX[dir]!, y: c.y + DY[dir]! });
+const same = (a: GridCell, b: GridCell) => a.x === b.x && a.y === b.y;
+const inBounds = (c: GridCell) => c.x >= 0 && c.x < GRID.cols && c.y >= 0 && c.y < GRID.rows;
+const step = (c: GridCell, dir: Dir): GridCell => ({ x: c.x + DX[dir]!, y: c.y + DY[dir]! });
 export const turned = (dir: Dir, turn: Turn | 0): Dir => (((dir + turn) % 4) + 4) % 4 as Dir;
 
 function startSnakes(): readonly [Snake, Snake] {
@@ -74,9 +74,9 @@ function startSnakes(): readonly [Snake, Snake] {
 }
 
 /** New fruit on an empty cell, chosen from the seed so games replay the same everywhere. */
-function placeFruit(seed: number, count: number, bodies: readonly (readonly Cell[])[]): Cell {
+function placeFruit(seed: number, count: number, bodies: readonly (readonly GridCell[])[]): GridCell {
   const taken = new Set(bodies.flat().map((c) => `${c.x},${c.y}`));
-  const empty: Cell[] = [];
+  const empty: GridCell[] = [];
   for (let y = 0; y < GRID.rows; y++) {
     for (let x = 0; x < GRID.cols; x++) if (!taken.has(`${x},${y}`)) empty.push({ x, y });
   }
@@ -144,7 +144,7 @@ function tick(state: SnakeState, events: SnakeEvents): SnakeState {
     { body: bodies[0]!, dir: moves[0]!.dir, queue: moves[0]!.queue },
     { body: bodies[1]!, dir: moves[1]!.dir, queue: moves[1]!.queue },
   ];
-  const previous: [readonly Cell[], readonly Cell[]] = [a.body, b.body];
+  const previous: [readonly GridCell[], readonly GridCell[]] = [a.body, b.body];
 
   if (crashed[0] || crashed[1]) {
     events.roundOver = true;
@@ -201,9 +201,9 @@ export const SNAKE_TIERS: Record<BotTier, SnakeTier> = {
   expert: { mistake: 0, floodFill: true, trap: 0.5, greed: 1 },
 };
 
-const key = (c: Cell) => c.y * GRID.cols + c.x;
+const key = (c: GridCell) => c.y * GRID.cols + c.x;
 
-function reachable(from: Cell, blocked: Set<number>, limit: number): number {
+function reachable(from: GridCell, blocked: Set<number>, limit: number): number {
   const seen = new Set<number>([key(from)]);
   const queue = [from];
   while (queue.length > 0 && seen.size < limit) {

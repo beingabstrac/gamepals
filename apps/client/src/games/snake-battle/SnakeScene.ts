@@ -7,7 +7,7 @@ import {
   snakeBotTurn,
   snakeTurn,
   stepSnake,
-  type Cell,
+  type GridCell,
   type Dir,
   type Rng,
   type Seat,
@@ -33,7 +33,7 @@ const SEAT_DARK = [toHex(DARK.sky), toHex(DARK.tomato)];
 const BUTTON_RADIUS = 40;
 
 /** Center of a grid cell in canvas pixels. */
-const px = (c: Cell) => ({ x: BOARD_X + (c.x + 0.5) * CELL, y: BOARD_Y + (c.y + 0.5) * CELL });
+const px = (c: GridCell) => ({ x: BOARD_X + (c.x + 0.5) * CELL, y: BOARD_Y + (c.y + 0.5) * CELL });
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
 interface TurnButton {

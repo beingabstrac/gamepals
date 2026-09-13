@@ -9,7 +9,7 @@ import {
   snakeBotTurn,
   snakeTurn,
   stepSnake,
-  type Cell,
+  type GridCell,
   type Snake,
   type SnakeEvents,
   type SnakeState,
@@ -28,7 +28,7 @@ function nextTick(state: SnakeState): { state: SnakeState; events: SnakeEvents }
   throw new Error('No tick happened');
 }
 
-const withSnakes = (state: SnakeState, snakes: [Snake, Snake], fruit: Cell = { x: 0, y: 0 }): SnakeState => ({ ...state, snakes, fruit });
+const withSnakes = (state: SnakeState, snakes: [Snake, Snake], fruit: GridCell = { x: 0, y: 0 }): SnakeState => ({ ...state, snakes, fruit });
 
 function match(tiers: [BotTier, BotTier], seed: number): SnakeState {
   const rng = createRng(seed);
