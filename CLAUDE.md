@@ -36,4 +36,4 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 3. `apps/client/src/games/<id>/<Name>Scene.ts` + registry entry.
 
 ## Status
-M1 in progress (2026-09-12). Live at https://beingabstrac.github.io/gamepals/ (GitHub Pages, deploys on push to main). Done: Tic-Tac-Toe, Four in a Row, Ludo (2–4), seat picker, visual pass. Next: Air Hockey, bot Web Worker, Capacitor iOS/Android + cloud builds, Playwright smoke test.
+M1 in progress (2026-09-13). Live at https://beingabstrac.github.io/gamepals/ (deployed only from a green CI run on main). 10 games: Tic-Tac-Toe, Four in a Row, Ludo, Air Hockey, Ping Pong (table tennis), Tug of War, Reflex Race, Sumo, Penalty Kicks, Snake Battle. Next: wave 3 puzzles (brief first), bot Web Worker, Capacitor iOS/Android + release-tag phone builds (needs App Store Connect API key from the owner).

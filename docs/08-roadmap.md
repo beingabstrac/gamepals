@@ -22,7 +22,8 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Wave 2 duels, part 1: Ping Pong, Tug of War, Reflex Race
 - [x] Gated pipeline (unit + phone e2e before deploy); tap-to-pick seat picker; game briefs ([games/](games/README.md))
 - [x] Ping Pong rebuilt as real table tennis; Sumo; Penalty Kicks
-- [ ] Snake Battle ([brief](games/snake-battle.md))
+- [x] Snake Battle ([brief](games/snake-battle.md)) — wave 2 complete
+- [ ] Wave 3 puzzles (brief each first): 2048, Sudoku, Solitaire, Snake (solo), Simon, Sliding Puzzle, Memory, Color Sort, Nuts & Bolts ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
 - [ ] Bot Web Worker
 - [ ] Capacitor iOS/Android projects; Preferences + SQLite; haptics; safe areas; rotated UI for same-device seats
 - [ ] GitHub Actions Android AAB → Play internal testing; Codemagic iOS → TestFlight
