@@ -187,7 +187,24 @@ function ReflexArt() {
   );
 }
 
+function SumoArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="53" r="42" fill="#E9B98B" />
+      <circle cx="50" cy="50" r="42" fill="#F6D2AD" />
+      <circle cx="50" cy="50" r="36" fill="none" stroke="#D6B273" strokeWidth="5" />
+      <circle cx="40" cy="60" r="14" fill="#FFE0C2" stroke={COLORS.sky} strokeWidth="4" />
+      <circle cx="36" cy="58" r="1.8" fill={INK} />
+      <circle cx="44" cy="58" r="1.8" fill={INK} />
+      <circle cx="60" cy="40" r="14" fill="#FFE0C2" stroke={COLORS.tomato} strokeWidth="4" />
+      <circle cx="56" cy="38" r="1.8" fill={INK} />
+      <circle cx="64" cy="38" r="1.8" fill={INK} />
+    </svg>
+  );
+}
+
 const ART: Record<string, () => JSX.Element> = {
+  sumo: SumoArt,
   'ping-pong': PingPongArt,
   'tug-of-war': TugOfWarArt,
   'reflex-race': ReflexArt,

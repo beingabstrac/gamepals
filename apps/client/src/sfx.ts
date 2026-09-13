@@ -36,6 +36,11 @@ export const SFX = {
     note(659, 0.12, 0.16),
     note(880, 0.24, 0.3),
   ],
+  thud: [{ freq: 140, to: 70, duration: 0.12, type: 'sine', volume: 0.3 }],
+  gong: [
+    { freq: 196, to: 190, duration: 0.9, type: 'sine', volume: 0.22 },
+    { freq: 392, to: 380, duration: 0.7, type: 'sine', volume: 0.08 },
+  ],
   pull: [{ freq: 240, to: 180, duration: 0.05, type: 'triangle', volume: 0.12 }],
   go: [{ freq: 880, duration: 0.12, type: 'square', volume: 0.07 }, note(1175, 0.1, 0.16)],
   buzz: [

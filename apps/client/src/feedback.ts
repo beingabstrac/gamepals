@@ -10,6 +10,8 @@ const HAPTICS: Partial<Record<SoundName, number | number[]>> = {
   roll: 10,
   hit: 8,
   pull: 6,
+  thud: 25,
+  gong: [50, 40, 80],
   go: 20,
   buzz: [60, 40, 60],
   goal: [40, 60, 40],

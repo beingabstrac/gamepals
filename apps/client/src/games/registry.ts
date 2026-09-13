@@ -5,6 +5,7 @@ import {
   ludo,
   pingPong,
   reflexRace,
+  sumo,
   ticTacToe,
   tugOfWar,
   type GameDefinition,
@@ -17,12 +18,13 @@ import type { Scene } from 'phaser';
 import type { ComponentType } from 'preact';
 import type { Session } from '../session';
 import type { SoundName } from '../sfx';
-import { COLORS } from '../theme';
+import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
 import { DUEL_COLORS } from './duel';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
+import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { LudoControls } from './ludo/LudoControls';
 import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
@@ -150,6 +152,16 @@ export const GAMES: readonly AnyEntry[] = [
     size: REFLEX_RACE_SIZE,
     color: COLORS.grape,
     createScene: (options) => new ReflexRaceScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: sumo,
+    tagline: 'Shove them out of the ring',
+    sideNames: () => ['Bottom', 'Top'],
+    sideColors: () => DUEL_COLORS,
+    size: SUMO_SIZE,
+    color: DARK.peach,
+    createScene: (options) => new SumoScene(options),
   },
 ];
 
