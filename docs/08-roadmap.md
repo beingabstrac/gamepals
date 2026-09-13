@@ -24,9 +24,14 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Ping Pong rebuilt as real table tennis; Sumo; Penalty Kicks
 - [x] Snake Battle ([brief](games/snake-battle.md)) — wave 2 complete
 - [ ] Wave 3 puzzles (brief each first): 2048, Sudoku, Solitaire, Snake (solo), Simon, Sliding Puzzle, Memory, Color Sort, Nuts & Bolts ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
+- [x] Every-surface test matrix: 8 Playwright screen types, layout and offline checks ([13](13-platforms-and-testing.md))
+- [ ] Layouts for landscape tablets and desktop windows (board fits height; controls beside the board when wide)
+- [ ] PWA: installable on Mac, Windows, Linux, Chromebook; service worker so the web app opens with no connection
 - [ ] Bot Web Worker
 - [ ] Capacitor iOS/Android projects; Preferences + SQLite; haptics; safe areas; rotated UI for same-device seats
 - [ ] GitHub Actions Android AAB → Play internal testing; Codemagic iOS → TestFlight
+- [ ] iPad universal build; opt in to "iPad app on Mac"; Android large-screen and Chromebook support
+- [ ] Firebase Test Lab Robo run on tags (Android phones and tablets); Xcode Cloud simulator smoke test (iPhone, iPad)
 - [ ] Start Play 12-tester closed test if the account requires it ([10 §1](10-zero-budget-plan.md#1-store-accounts))
 - [ ] **Exit:** plane test passes on a real iPhone and Android phone
 
@@ -47,6 +52,7 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [ ] Async turn-based + push notifications
 - [ ] Leaderboards: global/country/friends/family × daily/weekly/all-time; Glicko-2
 - [ ] Invite & challenge deep links
+- [ ] Online test suite: 2 to 4 browser contexts per match against a local Worker, network drop and reconnect, bot fallback, leaderboard filters; bot-client load test
 
 ## M4 — Depth (weeks 20–27)
 - [ ] Race & Challenge (seeded) modes for solo games; Daily Challenge boards

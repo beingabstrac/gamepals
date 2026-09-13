@@ -1,6 +1,6 @@
 # Game Pals — project context
 
-All-in-one casual games app (board, card, party, puzzle, reflex) for iOS, iPadOS, Android and Web.
+All-in-one casual games app (board, card, party, puzzle, reflex) for **every surface**: iPhone, iPad, Mac (iPad app on Apple silicon + PWA), Android phones, tablets and Chromebooks, Windows/Linux (PWA), web and game portals. Surfaces, modes and the test matrix: `docs/13-platforms-and-testing.md`. Every game must fit portrait and landscape, work with touch, mouse and keyboard, and pass e2e on all 8 Playwright screen types.
 Every game supports as many of these as make sense: solo, vs bot (Easy/Medium/Hard/Expert), same-device 2–4 players, online random, online friends/family, async turn-based. Everything except online works offline.
 
 Read `README.md` and `docs/` first — decisions are recorded there. Update the relevant doc when a decision changes. Full build plan: `docs/08-roadmap.md` + `docs/04-tech-architecture.md`.

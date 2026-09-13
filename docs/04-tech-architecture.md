@@ -88,7 +88,8 @@ interface GameState<M> {
 - Bots ≤ 1 s think time on low-end phones.
 
 ## 9. Testing
+Full matrix of surfaces, modes and free test tools: [13](13-platforms-and-testing.md).
 - Vitest: rules, bot tier ordering (bot-vs-bot tournaments), determinism (same seed + moves ⇒ same result), replay.
-- Playwright (M1): start each game in each offline mode on the web build, finish a game vs bot.
-- Plane test on real devices before every release.
-- Server (M3): Vitest with Wrangler/Miniflare; bot-client load tests.
+- Playwright on 8 screen types (Android phone and tablet, iPhone, iPad portrait and landscape, desktop Chrome, Safari, Firefox): every game opened and played, layout fits, offline play.
+- Real devices: Firebase Test Lab (Android), Xcode Cloud and TestFlight (iPhone, iPad, Mac), plane test before every release.
+- Server (M3): Vitest with Wrangler/Miniflare; multi-player browser tests; bot-client load tests.

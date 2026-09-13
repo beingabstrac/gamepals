@@ -2,7 +2,9 @@ name: CI
 
 # One gated pipeline: nothing ships unless every stage before it passed.
 #   check  → typecheck, unit tests, web build
-#   e2e    → every game opened and played in a headless phone browser; any console error fails
+#   e2e    → every game opened and played, plus layout and offline checks, on each screen type
+#            (one job per Playwright project; core set on every push, all eight weekly and on tags;
+#            docs/13-platforms-and-testing.md); any console error fails
 #   deploy → GitHub Pages (main only)
 # Release tags (v*) run the same gate; phone builds (TestFlight / Play internal) attach
 # to tags once the Capacitor projects exist (docs/08-roadmap.md, M1).
@@ -13,6 +15,9 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+  schedule:
+    # Weekly run on every screen type (Mondays 06:00 UTC).
+    - cron: '0 6 * * 1'
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -42,6 +47,11 @@ jobs:
   e2e:
     needs: check
     runs-on: ubuntu-latest
+    name: e2e (${{ matrix.project }})
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')) && '["android-phone","iphone","ipad","ipad-landscape","android-tablet","desktop-chrome","desktop-safari","desktop-firefox"]' || '["android-phone","iphone","ipad-landscape","desktop-chrome"]') }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -56,12 +66,19 @@ jobs:
         with:
           name: web-build
           path: apps/client/dist
-      - run: pnpm --filter @gamepals/client exec playwright install --with-deps chromium
-      - run: pnpm e2e
+      - name: Install the browser engine for ${{ matrix.project }}
+        run: |
+          case "${{ matrix.project }}" in
+            iphone|ipad*|desktop-safari) engine=webkit ;;
+            desktop-firefox) engine=firefox ;;
+            *) engine=chromium ;;
+          esac
+          pnpm --filter @gamepals/client exec playwright install --with-deps "$engine"
+      - run: pnpm e2e --project ${{ matrix.project }}
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}
           path: apps/client/playwright-report
 
   deploy-web:
