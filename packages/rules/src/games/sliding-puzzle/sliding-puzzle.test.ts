@@ -68,7 +68,8 @@ describe('sliding puzzle rules', () => {
     const rng = createRng(1);
     let state = slidingPuzzle.newGame({ players: 1, variant: '4x4' }, 11) as SlidingState;
     // A few player moves first, so the bot has to deal with them too.
-    for (const cell of [state.legalMoves(0)[0]!, state.legalMoves(0)[1]!]) state = state.apply(cell);
+    // Each move is picked from the position after the one before (the space moves every time).
+    for (let i = 0; i < 2; i++) state = state.apply(state.legalMoves(0)[0]!);
     const moves: SlidingMove[] = [];
     while (!state.result) {
       const move = bot.chooseMove(state, 0, rng);
