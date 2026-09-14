@@ -23,7 +23,7 @@ import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
-import { facing, seatForY } from '../duel';
+import { facing, heldDuelKeys, onDuelKeys, seatForY } from '../duel';
 
 export const PING_PONG_SIZE = { width: PP_CANVAS.width, height: PP_CANVAS.height };
 
@@ -68,6 +68,8 @@ export class PingPongScene extends Scene {
   private drags = new Map<number, Drag>();
   private fingerX: [number | null, number | null] = [null, null];
   private ended = false;
+  /** Held Left/Right (bottom) or A/D (top) slide that player's paddle. */
+  private held: (seat: Seat) => { x: number; y: number } = () => ({ x: 0, y: 0 });
 
   private ball!: GameObjects.Container;
   private shadow!: GameObjects.Ellipse;
@@ -128,6 +130,11 @@ export class PingPongScene extends Scene {
     const release = (p: { id: number }) => this.drags.delete(p.id);
     this.input.on('pointerup', release);
     this.input.on('pointerupoutside', release);
+    // Keyboard: slide with Left/Right (bottom) or A/D (top); Space or Shift swings, aimed by the held side key.
+    this.held = heldDuelKeys(this, this.options.seats);
+    onDuelKeys(this, this.options.seats, (seat, action) => {
+      if (action === 'tap') this.swing(seat, { aim: this.held(seat).x * 0.6, power: 0.75 });
+    });
 
     this.sync();
   }
@@ -246,7 +253,11 @@ export class PingPongScene extends Scene {
       const controller = this.options.seats[seat];
       let targetX: number;
       if (controller?.kind === 'bot') targetX = isHittable(this.state, seat) || phase === 'rally' ? ball.x : W / 2;
-      else targetX = this.fingerX[seat] ?? W / 2;
+      else {
+        const slide = this.held(seat).x;
+        if (slide) this.fingerX[seat] = Math.min(Math.max((this.fingerX[seat] ?? paddle.x) + slide * 14, 60), W - 60);
+        targetX = this.fingerX[seat] ?? W / 2;
+      }
       paddle.setX(paddle.x + (Math.min(Math.max(targetX, 60), W - 60) - paddle.x) * 0.25);
     }
   }

@@ -14,7 +14,7 @@ import { COLORS, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
-import { DUEL_COLORS, drawHalves, facing, isPerson, onHalfTap } from '../duel';
+import { DUEL_COLORS, drawHalves, facing, isPerson, onDuelKeys, onHalfTap } from '../duel';
 
 const W = 600;
 const H = 900;
@@ -64,6 +64,10 @@ export class ReflexRaceScene extends Scene {
 
     onHalfTap(this, H, (seat) => {
       if (this.options.seats[seat]?.kind === 'human') this.tap(seat);
+    });
+    // Keyboard: Space for the bottom player, Shift for the top.
+    onDuelKeys(this, this.options.seats, (seat, action) => {
+      if (action === 'tap') this.tap(seat);
     });
     this.show();
     this.options.onScore([0, 0]);

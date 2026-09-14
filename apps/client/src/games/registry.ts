@@ -296,7 +296,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Fast 1-on-1, first to 7',
     howTo: {
       goal: 'Knock the puck into the other goal.',
-      controls: 'Drag your paddle around your half of the table.',
+      controls: 'Drag your paddle around your half of the table. On a keyboard: the arrow keys for the bottom player, W A S D for the top.',
       win: 'First to 7 goals wins.',
     },
     sideNames: () => ['Bottom', 'Top'],
@@ -311,7 +311,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Swipe to hit, first to 11',
     howTo: {
       goal: 'Hit the ball over the net so it bounces on the other side.',
-      controls: 'When the ball bounces on your side, swipe toward the net. Swipe faster to hit harder. Swipe to serve too.',
+      controls: 'When the ball bounces on your side, swipe toward the net. Swipe faster to hit harder. Swipe to serve too. On a keyboard: Left and Right move, Space hits (the top player uses A, D and Shift).',
       win: 'First to 11 points. You must be 2 points ahead.',
       tip: 'The ball must bounce once on each side. Hitting it long, wide or into the net loses the point.',
     },
@@ -326,7 +326,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Tap faster to pull them over',
     howTo: {
       goal: 'Pull the yellow knot over to your side.',
-      controls: 'Tap your half of the screen as fast as you can.',
+      controls: 'Tap your half of the screen as fast as you can. On a keyboard: Space for the bottom player, Shift for the top.',
       win: 'Pull the knot past your dashed line.',
     },
     ...duelSides,
@@ -340,7 +340,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Wait for green, then tap first',
     howTo: {
       goal: 'Tap faster than the other player.',
-      controls: 'Wait until the big circle turns green. Then tap your half.',
+      controls: 'Wait until the big circle turns green. Then tap your half. On a keyboard: Space for the bottom player, Shift for the top.',
       win: 'First to 3 points wins.',
       tip: 'Tap too soon and the other player gets the point.',
     },
@@ -355,7 +355,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Shove them out of the ring',
     howTo: {
       goal: 'Push the other wrestler out of the ring.',
-      controls: 'Hold and drag in your half to move. Tap to shove.',
+      controls: 'Hold and drag in your half to move. Tap to shove. On a keyboard: the arrow keys move and Space shoves (the top player uses W A S D and Shift).',
       win: 'Win 2 rounds to win the match.',
       tip: 'Stay away from the edge. A big shove that misses can carry you out.',
     },
@@ -370,7 +370,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Shoot, dive, five kicks each',
     howTo: {
       goal: 'Score more goals than the other player.',
-      controls: 'Kicking: swipe toward the goal. Saving: drag to move, then flick left or right to dive.',
+      controls: 'Kicking: swipe toward the goal. Saving: drag to move, then flick left or right to dive. On a keyboard: hold Left or Right to aim or move, and press Space to kick or dive (the top player uses A, D and Shift).',
       win: 'Five kicks each. If it is tied, keep going until one scores and the other misses.',
       tip: 'You take turns kicking and saving. A very hard kick can fly over the bar.',
     },
@@ -385,7 +385,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Trap them before they trap you',
     howTo: {
       goal: 'Make the other snake crash first.',
-      controls: 'Tap the arrow buttons to turn left or right.',
+      controls: 'Tap the arrow buttons to turn left or right. On a keyboard: the arrow keys for the bottom snake, A and D for the top.',
       win: 'Win 3 rounds to win the match.',
       draw: 'If both snakes crash into each other head first, nobody gets the round.',
       tip: 'Hitting a wall, yourself or the other snake ends the round. Eat fruit to grow longer.',

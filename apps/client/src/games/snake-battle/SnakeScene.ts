@@ -20,6 +20,7 @@ import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
+import { onDuelKeys } from '../duel';
 const W = 600;
 const H = 900;
 export const SNAKE_SIZE = { width: W, height: H };
@@ -77,11 +78,14 @@ export class SnakeScene extends Scene {
       for (const button of this.buttons) {
         if (Math.hypot(p.worldX - button.x, p.worldY - button.y) > BUTTON_RADIUS + 14) continue;
         if (this.options.seats[button.seat]?.kind !== 'human') return;
-        this.state = snakeTurn(this.state, button.seat, button.turn);
-        this.options.onCue('tap');
-        this.tweens.add({ targets: button.view, scale: 0.86, duration: 70, yoyo: true, ease: 'Quad.easeOut' });
+        this.steer(button.seat, button.turn);
         return;
       }
+    });
+    // Keyboard: the arrow keys steer the bottom snake, A and D the top one.
+    onDuelKeys(this, this.options.seats, (seat, action) => {
+      if (action === 'left') this.steer(seat, -1);
+      if (action === 'right') this.steer(seat, 1);
     });
 
     this.options.onScore([0, 0]);
@@ -233,6 +237,21 @@ export class SnakeScene extends Scene {
   }
 
   /** Two big turn buttons in each player's corners; the top player's left is the screen's right. */
+  /** Turn a snake by tap or key, and press the matching button so it's clear what happened. */
+  private steer(seat: Seat, turn: Turn): void {
+    this.state = snakeTurn(this.state, seat, turn);
+    this.options.onCue('tap');
+    const button = this.buttons.find((b) => b.seat === seat && b.turn === turn);
+    if (!button) return;
+    // Scale each axis on its own: left buttons are mirrored (scaleX -1), and tweening the combined
+    // `scale` averaged that to 0, so left buttons vanished after the first press.
+    const view = button.view;
+    const baseX = Math.sign(view.scaleX) || 1;
+    this.tweens.killTweensOf(view);
+    view.setScale(baseX, 1);
+    this.tweens.add({ targets: view, scaleX: baseX * 0.86, scaleY: 0.86, duration: 70, yoyo: true, ease: 'Quad.easeOut' });
+  }
+
   private makeButtons(): void {
     const specs: { seat: Seat; turn: Turn; x: number; y: number }[] = [
       { seat: 0, turn: -1, x: 70, y: H - 46 },

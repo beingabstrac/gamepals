@@ -23,7 +23,7 @@ import type { SoundName } from '../../sfx';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
-import { facing } from '../duel';
+import { facing, heldDuelKeys } from '../duel';
 
 export interface RealtimeSceneOptions {
   readonly seats: readonly SeatController[];
@@ -57,6 +57,8 @@ export class AirHockeyScene extends Scene {
   private noiseTimer = 0;
   private lastSound: Partial<Record<SoundName, number>> = {};
   private ended = false;
+  /** Held arrows (bottom) or WASD (top) push that player's mallet. */
+  private held: (seat: Seat) => { x: number; y: number } = () => ({ x: 0, y: 0 });
 
   private puck!: GameObjects.Container;
   private puckGlow!: GameObjects.Arc;
@@ -74,6 +76,7 @@ export class AirHockeyScene extends Scene {
     fitCamera(this, TABLE.width, TABLE.height);
     applySpeed(this);
     this.input.addPointer(3);
+    this.held = heldDuelKeys(this, this.options.seats);
     this.drawTable();
 
     const { width: w, height: h } = TABLE;
@@ -143,6 +146,13 @@ export class AirHockeyScene extends Scene {
       if (!pointer.isDown) continue;
       const seat: Seat = pointer.worldY > TABLE.height / 2 ? 0 : 1;
       if (this.options.seats[seat]?.kind === 'human') targets[seat] = { x: pointer.worldX, y: pointer.worldY };
+    }
+    // Keyboard: a held direction pulls the mallet that way (a finger on the table wins).
+    for (const seat of [0, 1] as Seat[]) {
+      if (targets[seat] || this.options.seats[seat]?.kind !== 'human') continue;
+      const dir = this.held(seat);
+      const mallet = this.state.mallets[seat];
+      if (mallet && (dir.x || dir.y)) targets[seat] = { x: mallet.x + dir.x * 140, y: mallet.y + dir.y * 140 };
     }
     return targets;
   }

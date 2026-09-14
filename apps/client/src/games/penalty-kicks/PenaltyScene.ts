@@ -29,7 +29,7 @@ import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
-import { facing, seatForY } from '../duel';
+import { facing, heldDuelKeys, onDuelKeys, seatForY } from '../duel';
 
 export const PENALTY_SIZE = { width: PK_CANVAS.width, height: PK_CANVAS.height };
 
@@ -69,6 +69,9 @@ export class PenaltyScene extends Scene {
   private botRead = 0;
   private botDelay = BOT_SHOT_DELAY;
   private drags = new Map<number, Drag>();
+  /** Held side keys aim a kick or shuffle the keeper; the keeper dives the last way they moved. */
+  private held: (seat: Seat) => { x: number; y: number } = () => ({ x: 0, y: 0 });
+  private lastKeeperDir: 1 | -1 = 1;
   private ended = false;
 
   private goals: GameObjects.Container[] = [];
@@ -112,8 +115,28 @@ export class PenaltyScene extends Scene {
     this.input.on('pointerup', release);
     this.input.on('pointerupoutside', release);
 
+    // Keyboard. Kicker: hold a side key to aim, Space (bottom) or Shift (top) to shoot.
+    // Keeper: side keys shuffle along the line, Space or Shift dives toward the last way you moved.
+    this.held = heldDuelKeys(this, this.options.seats);
+    onDuelKeys(this, this.options.seats, (seat, action) => {
+      if (action !== 'tap') return;
+      const kickIndex = this.state.kicks.length;
+      if (seat === kickerFor(kickIndex)) this.shoot(seat, { aim: this.held(seat).x * 0.7, power: 0.8, curl: 0 });
+      else if (seat === keeperFor(kickIndex)) this.state = penaltyDive(this.state, seat, this.lastKeeperDir);
+    });
+
     this.setupKick();
     this.options.onScore([0, 0]);
+  }
+
+  /** A person keeping goal with the keyboard: held side keys shuffle along the line. */
+  private keyboardKeeper(): void {
+    const keeper = keeperFor(this.state.kicks.length);
+    if (this.options.seats[keeper]?.kind !== 'human') return;
+    const dir = this.held(keeper).x;
+    if (!dir) return;
+    this.lastKeeperDir = dir > 0 ? 1 : -1;
+    this.state = penaltyKeeperTarget(this.state, keeper, this.state.keeperX + dir * 26);
   }
 
   private onMove(p: { id: number; worldX: number; worldY: number }): void {
@@ -185,6 +208,7 @@ export class PenaltyScene extends Scene {
 
   update(_time: number, delta: number): void {
     if (this.ended) return;
+    this.keyboardKeeper();
     this.accumulator += Math.min(delta, 100) * SPEED / 1000;
     while (this.accumulator >= PK_STEP) {
       this.accumulator -= PK_STEP;

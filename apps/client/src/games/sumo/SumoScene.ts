@@ -19,7 +19,7 @@ import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
-import { facing, isPerson, seatForY } from '../duel';
+import { facing, heldDuelKeys, isPerson, onDuelKeys, seatForY } from '../duel';
 
 export const SUMO_SIZE = { width: SUMO_CANVAS.width, height: SUMO_CANVAS.height };
 
@@ -55,6 +55,8 @@ export class SumoScene extends Scene {
   private touches = new Map<number, Touch>();
   private steer: [{ x: number; y: number } | null, { x: number; y: number } | null] = [null, null];
   private shoveQueued: [boolean, boolean] = [false, false];
+  /** Held arrows (bottom) or WASD (top) steer that wrestler. */
+  private held: (seat: Seat) => { x: number; y: number } = () => ({ x: 0, y: 0 });
   private lastClashSound = -1;
   private ended = false;
 
@@ -104,6 +106,11 @@ export class SumoScene extends Scene {
     };
     this.input.on('pointerup', release);
     this.input.on('pointerupoutside', release);
+    // Keyboard: Space (bottom) or Shift (top) shoves.
+    this.held = heldDuelKeys(this, this.options.seats);
+    onDuelKeys(this, this.options.seats, (seat, action) => {
+      if (action === 'tap') this.shoveQueued[seat] = true;
+    });
 
     this.sync();
     this.options.onScore([0, 0]);
@@ -185,7 +192,9 @@ export class SumoScene extends Scene {
     }
     const shove = this.shoveQueued[seat];
     this.shoveQueued[seat] = false;
-    return { steer: this.steer[seat], shove };
+    // Keyboard: held arrows (bottom) or WASD (top) steer when no finger is on the screen.
+    const key = this.held(seat);
+    return { steer: this.steer[seat] ?? (key.x || key.y ? key : null), shove };
   }
 
   private handle(events: SumoEvents): void {

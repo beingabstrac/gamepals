@@ -107,6 +107,14 @@ test('keyboard: Tic-Tac-Toe and Four in a Row play with number keys', async ({ p
     // The key played a move, so it's now the second player's turn.
     await expect(page.locator('.status')).toContainText(nextSide);
   }
+
+  // Duels: against a bot, Space pulls for the one person playing.
+  await openTable(page, 'Tug of War');
+  await page.getByRole('button', { name: /vs Bot/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+  await page.waitForTimeout(3500);
+  for (let i = 0; i < 10; i++) await page.keyboard.press(' ');
   expect(errors).toEqual([]);
 });
 
