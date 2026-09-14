@@ -91,6 +91,25 @@ test('Solitaire: draw from the deck, then undo it', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test('keyboard: Tic-Tac-Toe and Four in a Row play with number keys', async ({ page }) => {
+  const errors = watchErrors(page);
+  const cases: [string, string, string][] = [
+    ['Tic-Tac-Toe', '5', '(O)'],
+    ['Four in a Row', '4', '(Red)'],
+  ];
+  for (const [name, key, nextSide] of cases) {
+    await openTable(page, name);
+    await page.getByRole('button', { name: /Friends/ }).click();
+    await page.getByRole('button', { name: 'Play', exact: true }).click();
+    await expect(page.locator('.board canvas')).toBeVisible();
+    await page.waitForTimeout(400);
+    await page.keyboard.press(key);
+    // The key played a move, so it's now the second player's turn.
+    await expect(page.locator('.status')).toContainText(nextSide);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('a full Tic-Tac-Toe game against a bot reaches a result', async ({ page }) => {
   const errors = watchErrors(page);
   await openTable(page, 'Tic-Tac-Toe');

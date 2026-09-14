@@ -13,7 +13,10 @@
     "e2e:android": "node e2e-native/android.mjs"
   },
   "dependencies": {
+    "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.5.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/preferences": "^8.0.1",
     "@fontsource/fredoka": "^5.2.0",
     "@fontsource/nunito": "^5.2.0",
     "@gamepals/rules": "workspace:*",

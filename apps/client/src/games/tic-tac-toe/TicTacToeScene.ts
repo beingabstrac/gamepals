@@ -4,6 +4,7 @@ import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
 import { applySpeed } from '../../autoplay';
+import { arrow, focusRing, isPress, moveRing, onKeys } from '../keys';
 const SIZE = 600;
 export const TIC_TAC_TOE_SIZE = { width: SIZE, height: SIZE };
 
@@ -83,6 +84,29 @@ export class TicTacToeScene extends Scene {
         .setInteractive({ useHandCursor: true })
         .on('pointerdown', () => this.session.play(index));
     }
+
+    // Keyboard: 1–9 in reading order, or arrows to move and Enter or Space to place.
+    const ring = focusRing(this, CELL - 28, CELL - 28, 26);
+    let cursor = 4;
+    onKeys(this, (key) => {
+      const digit = Number(key);
+      if (Number.isInteger(digit) && digit >= 1 && digit <= 9) {
+        this.session.play(digit - 1);
+        return true;
+      }
+      const step = arrow(key);
+      if (step) {
+        cursor = Math.min(2, Math.max(0, Math.floor(cursor / 3) + step[1])) * 3 + Math.min(2, Math.max(0, (cursor % 3) + step[0]));
+        const { x, y } = cellCenter(cursor);
+        moveRing(this, ring, x, y);
+        return true;
+      }
+      if (isPress(key) && ring.visible) {
+        this.session.play(cursor);
+        return true;
+      }
+      return false;
+    });
 
     this.shownMoves = this.session.moves.length;
     const unsubscribe = this.session.subscribe(() => this.onChange());

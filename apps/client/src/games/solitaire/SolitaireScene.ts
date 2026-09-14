@@ -4,6 +4,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
+import { focusRing, isPress, moveRing, onKeys } from '../keys';
 import { solitaireUiFor, type SolitaireUi } from './ui';
 
 const W = 700;
@@ -86,6 +87,10 @@ export class SolitaireScene extends Scene {
   private views = new Map<number, CardView>();
   private spots = new Map<number, Spot>();
   private drag: Drag | null = null;
+  /** Keyboard focus: 0 is the waste, 1–7 are the columns; depth is where in a column's face-up run. */
+  private keyPile = 1;
+  private keyDepth: number | null = null;
+  private ring?: GameObjects.Graphics;
 
   constructor(private readonly session: Session<SolitaireMove>) {
     super('solitaire');
@@ -109,6 +114,11 @@ export class SolitaireScene extends Scene {
       if (p.isDown) this.dragTo(p.worldX, p.worldY);
     });
     this.input.on('pointerup', (p: { worldX: number; worldY: number }) => this.release(p.worldX, p.worldY));
+
+    // Keyboard: Left/Right pick a pile (the waste or a column), Up/Down pick how much of a column's run,
+    // Enter or Space makes the best move for it, D draws.
+    this.ring = focusRing(this, CW + 12, CH + 12, 16);
+    onKeys(this, (key) => this.key(key));
 
     const offSession = this.session.subscribe(() => this.sync(true));
     const offHint = this.ui.onHint((move) => this.pointAt(move));
@@ -225,6 +235,63 @@ export class SolitaireScene extends Scene {
       }
     }
     if (state.result && animate) this.celebrate();
+    else if (this.ring?.visible) this.showKeyFocus();
+  }
+
+  private key(key: string): boolean {
+    const state = this.state;
+    if (state.result) return false;
+    if (key === 'd' || key === 'D') {
+      this.session.play(DRAW_MOVE);
+      return true;
+    }
+    if (key === 'ArrowLeft' || key === 'ArrowRight') {
+      this.keyPile = (this.keyPile + (key === 'ArrowLeft' ? 7 : 1)) % 8;
+      this.keyDepth = null;
+      this.showKeyFocus();
+      return true;
+    }
+    if (key === 'ArrowUp' || key === 'ArrowDown') {
+      const column = this.keyPile > 0 ? state.tableau[this.keyPile - 1] : undefined;
+      if (column && column.cards.length > column.down) {
+        // Up takes more of the run (starts deeper), Down takes less.
+        const start = this.keyDepth ?? column.down;
+        this.keyDepth = Math.min(column.cards.length - 1, Math.max(column.down, start + (key === 'ArrowUp' ? -1 : 1)));
+      }
+      this.showKeyFocus();
+      return true;
+    }
+    if (isPress(key) && this.ring?.visible) {
+      const source = this.keySource();
+      const move = source ? bestMoveFrom(state, source) : null;
+      if (move) this.session.play(move);
+      else if (source) {
+        const box = this.views.get(state.cardsAt(source)[0]!)!.box;
+        this.tweens.add({ targets: box, angle: { from: -6, to: 6 }, duration: 60, yoyo: true, repeat: 2, onComplete: () => box.setAngle(0) });
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /** The pick-up spot under the keyboard focus, or null when that pile has nothing to give. */
+  private keySource(): string | null {
+    const state = this.state;
+    if (this.keyPile === 0) return state.waste.length ? 'w' : null;
+    const column = state.tableau[this.keyPile - 1]!;
+    if (column.cards.length <= column.down) return null;
+    const index = Math.min(column.cards.length - 1, Math.max(column.down, this.keyDepth ?? column.down));
+    return `t${this.keyPile - 1}:${index}`;
+  }
+
+  private showKeyFocus(): void {
+    if (!this.ring) return;
+    const source = this.keySource();
+    const card = source ? this.state.cardsAt(source)[0] : undefined;
+    const spot = card === undefined ? undefined : this.spots.get(card);
+    const x = spot?.x ?? (this.keyPile === 0 ? colX(1) : colX(this.keyPile - 1));
+    const y = spot?.y ?? (this.keyPile === 0 ? TOP_Y : TAB_Y);
+    moveRing(this, this.ring, x, y);
   }
 
   private hit(x: number, y: number): { card: number; spot: Spot } | null {

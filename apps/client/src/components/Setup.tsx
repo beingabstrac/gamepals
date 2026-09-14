@@ -2,6 +2,7 @@ import { BOT_TIERS, type BotTier } from '@gamepals/rules';
 import { useEffect, useState } from 'preact/hooks';
 import type { EntryBase } from '../games/registry';
 import type { SeatController } from '../session';
+import { storage } from '../platform';
 import { BackIcon, BotFace, GameArt, PersonFace } from './Art';
 
 export const TIER_LABEL: Record<BotTier, string> = {
@@ -41,7 +42,7 @@ const friends = (max: number): SeatChoice[] => Array<SeatChoice>(max).fill('huma
 
 function loadChoices(id: string, min: number, max: number): SeatChoice[] {
   try {
-    const saved = JSON.parse(localStorage.getItem(storageKey(id)) ?? 'null') as SeatChoice[] | null;
+    const saved = JSON.parse(storage.get(storageKey(id)) ?? 'null') as SeatChoice[] | null;
     if (
       saved &&
       saved.length === max &&
@@ -138,7 +139,7 @@ const levelKey = (id: string) => `gamepals.level.${id}`;
 function loadLevel(id: string, levels: EntryBase['levels']): string | undefined {
   if (!levels) return undefined;
   try {
-    const saved = localStorage.getItem(levelKey(id));
+    const saved = storage.get(levelKey(id));
     if (saved && levels.some((level) => level.id === saved)) return saved;
   } catch {
     // Ignore unreadable storage.
@@ -156,7 +157,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
   useEffect(() => {
     if (!level) return;
     try {
-      localStorage.setItem(levelKey(id), level);
+      storage.set(levelKey(id), level);
     } catch {
       // Remembering the level is a convenience; ignore storage failures.
     }
@@ -164,7 +165,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(storageKey(id), JSON.stringify(choices));
+      storage.set(storageKey(id), JSON.stringify(choices));
     } catch {
       // Remembering the table is a convenience; ignore storage failures.
     }

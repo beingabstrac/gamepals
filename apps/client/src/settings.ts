@@ -1,3 +1,5 @@
+import { storage } from './platform';
+
 export interface Settings {
   readonly sound: boolean;
   readonly haptics: boolean;
@@ -6,29 +8,26 @@ export interface Settings {
 const KEY = 'gamepals.settings';
 const DEFAULTS: Settings = { sound: true, haptics: true };
 
-// Web storage is fine for preferences on the web build; the Capacitor build
-// switches this to @capacitor/preferences (see docs/04 §1, local saves).
+// Native Preferences in the apps, localStorage on the web (platform.ts).
 function load(): Settings {
   try {
-    return { ...DEFAULTS, ...(JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<Settings>) };
+    return { ...DEFAULTS, ...(JSON.parse(storage.get(KEY) ?? '{}') as Partial<Settings>) };
   } catch {
     return DEFAULTS;
   }
 }
 
-let current = load();
+/** Loaded on first use, after storage.init() has read the saved values. */
+let current: Settings | null = null;
 const listeners = new Set<(settings: Settings) => void>();
 
 export const settings = {
-  get: (): Settings => current,
+  get: (): Settings => (current ??= load()),
   set(patch: Partial<Settings>): void {
-    current = { ...current, ...patch };
-    try {
-      localStorage.setItem(KEY, JSON.stringify(current));
-    } catch {
-      // Private mode or storage blocked: keep the in-memory value.
-    }
-    listeners.forEach((listener) => listener(current));
+    const next = { ...settings.get(), ...patch };
+    current = next;
+    storage.set(KEY, JSON.stringify(next));
+    listeners.forEach((listener) => listener(next));
   },
   subscribe(listener: (settings: Settings) => void): () => void {
     listeners.add(listener);

@@ -5,6 +5,7 @@ import '@fontsource/nunito/700.css';
 import { render } from 'preact';
 import { App } from './App';
 import { SELFTEST } from './autoplay';
+import { storage } from './platform';
 import { cue } from './feedback';
 import './styles.css';
 
@@ -14,7 +15,9 @@ document.addEventListener('pointerdown', (event) => {
   if (target?.closest?.('button:not([disabled])')) cue('tap');
 });
 
-render(<App />, document.getElementById('app')!);
-
-// Native test builds only: the app plays every game by itself and logs the result for CI.
-if (SELFTEST) void import('./selftest').then((test) => test.runSelfTest());
+// Saved settings load first (native Preferences in the apps), then the first screen renders.
+void storage.init().finally(() => {
+  render(<App />, document.getElementById('app')!);
+  // Native test builds only: the app plays every game by itself and logs the result for CI.
+  if (SELFTEST) void import('./selftest').then((test) => test.runSelfTest());
+});

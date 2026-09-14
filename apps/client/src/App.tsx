@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { GameArt, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
 import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
@@ -7,6 +7,7 @@ import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
+import { onBackButton } from './platform';
 
 type Screen =
   | { name: 'home' }
@@ -15,6 +16,21 @@ type Screen =
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
+  const current = useRef(screen);
+  current.current = screen;
+
+  // Android Back: game → table → home; on the home screen the app goes to the background.
+  useEffect(
+    () =>
+      onBackButton(() => {
+        const now = current.current;
+        if (now.name === 'play') setScreen({ name: 'setup', entry: now.entry });
+        else if (now.name === 'setup') setScreen({ name: 'home' });
+        else return false;
+        return true;
+      }),
+    [],
+  );
 
   if (screen.name === 'play') {
     const onExit = () => setScreen({ name: 'setup', entry: screen.entry });

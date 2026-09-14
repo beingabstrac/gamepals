@@ -41,6 +41,7 @@ Offline rules: everything that doesn't need other people works on a plane. Score
 | Rules and bots | Vitest | Real rules, determinism, replay, bot levels | Every push |
 | Every game on every surface | Playwright device projects (below) | Opens, plays, no console errors | Every push (core set), weekly and on tags (all) |
 | Layout | Playwright layout test | No sideways scrolling, board fits the screen, tile art stays inside its tile | Same as above |
+| Keyboard | Playwright key presses (number keys, arrows, Enter) | Games play without touch or a mouse, for desktops, Macs and Chromebooks | Every push |
 | Offline | Playwright with the network cut after load | Games start and finish with no connection | Every push |
 | Web install and cold offline start | PWA service worker (M1) + Playwright offline reload | The app opens with no connection at all | Every push, once the PWA lands |
 | Whole games on every screen type | Playwright `@full` tests with `?autoplay` (bots in every seat, sped up) | Every game reaches its result and a rematch starts, with no errors | Weekly, tags, manual runs |

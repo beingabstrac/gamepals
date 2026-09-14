@@ -4,6 +4,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
 import { applySpeed } from '../../autoplay';
+import { onKeys } from '../keys';
 const CELL = 40;
 const SIZE = 15 * CELL;
 export const LUDO_SIZE = { width: SIZE, height: SIZE };
@@ -117,6 +118,24 @@ export class LudoScene extends Scene {
         });
         return this.add.container(point.x, point.y, [shadow, body, dot]);
       });
+    });
+
+    // Keyboard: R or Space rolls, 1–4 moves that token. Space is left alone when a button has focus,
+    // so a focused Roll button doesn't roll twice.
+    onKeys(this, (key) => {
+      if (!this.session.isHumanTurn()) return false;
+      const now = this.state;
+      const onButton = document.activeElement instanceof HTMLButtonElement;
+      if (now.phase === 'roll' && (key === 'r' || key === 'R' || (key === ' ' && !onButton))) {
+        this.session.play('roll');
+        return true;
+      }
+      const digit = Number(key);
+      if (now.phase === 'move' && Number.isInteger(digit) && digit >= 1 && digit <= 4) {
+        this.session.play(digit - 1);
+        return true;
+      }
+      return false;
     });
 
     this.handledEvent = state.lastEvent;

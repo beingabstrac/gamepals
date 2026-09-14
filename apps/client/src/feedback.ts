@@ -1,5 +1,24 @@
+import { NATIVE, nativeHaptic, type HapticKind } from './platform';
 import { settings } from './settings';
 import { playSound, type SoundName } from './sfx';
+
+/** Device haptic per cue inside the apps (a win feels different from a tap). */
+const NATIVE_HAPTICS: Partial<Record<SoundName, HapticKind>> = {
+  tap: 'light',
+  place: 'light',
+  roll: 'light',
+  hit: 'light',
+  pull: 'light',
+  thud: 'medium',
+  clang: 'medium',
+  go: 'medium',
+  gong: 'heavy',
+  lose: 'heavy',
+  buzz: 'warning',
+  win: 'success',
+  goal: 'success',
+  capture: 'success',
+};
 
 /** Vibration pattern per cue, in milliseconds. */
 const HAPTICS: Partial<Record<SoundName, number | number[]>> = {
@@ -21,11 +40,16 @@ const HAPTICS: Partial<Record<SoundName, number | number[]>> = {
 
 /**
  * Plays the sound and haptic for a moment in the game, honoring the player's settings.
- * Native haptics (@capacitor/haptics) replace navigator.vibrate in the app builds.
+ * Inside the apps, device haptics (@capacitor/haptics) replace navigator.vibrate.
  */
 export function cue(name: SoundName): void {
   const { sound, haptics } = settings.get();
   if (sound) playSound(name);
+  if (NATIVE) {
+    const kind = NATIVE_HAPTICS[name];
+    if (haptics && kind) nativeHaptic(kind);
+    return;
+  }
   const pattern = HAPTICS[name];
   if (haptics && pattern !== undefined && typeof navigator.vibrate === 'function') {
     navigator.vibrate(pattern);

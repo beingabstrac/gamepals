@@ -18,7 +18,7 @@ Decided 2026-09-12: **Phaser 4 + TypeScript, developed fully in the cloud, $0.**
 | Ads (web) | CrazyGames / Poki / GameDistribution SDK builds; itch.io | Separate portal builds, no AdMob |
 | Purchases | `@revenuecat/purchases-capacitor` (official) | Free to $2.5K monthly tracked revenue |
 | Game Center / Play Games | `@openforge/capacitor-game-connect` | Check Capacitor-version support before adopting |
-| Local saves | `@capacitor/preferences` + `@capacitor-community/sqlite`; IndexedDB on web | iOS may evict WebView storage — never keep app saves there |
+| Local saves | `@capacitor/preferences` + `@capacitor-community/sqlite`; IndexedDB on web | iOS may evict WebView storage — never keep app saves there. Done for settings and remembered tables: `apps/client/src/platform.ts` `storage` (Preferences in the apps, loaded before the first screen; localStorage on the web) |
 | Haptics, share, status bar, splash | Official `@capacitor/*` plugins | Native feel (App Store guideline 4.2) |
 | Dev environment | GitHub Codespaces + devcontainer (Node 22, pnpm, Claude Code) | GitHub Pro: 180 core-hours/month (~90 h on 2 cores), 20 GB |
 | CI / builds | GitHub Actions (typecheck, test, web build, Android AAB) · Codemagic (iOS → TestFlight) | GitHub Pro: 3,000 Linux min/month · 500 macOS M2 min/month |

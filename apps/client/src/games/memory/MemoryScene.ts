@@ -4,6 +4,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
+import { arrow, focusRing, isPress, moveRing, onKeys } from '../keys';
 const W = 600;
 const H = 800;
 export const MEMORY_SIZE = { width: W, height: H };
@@ -113,6 +114,28 @@ export class MemoryScene extends Scene {
     this.refreshScores();
 
     this.input.on('pointerdown', (p: { worldX: number; worldY: number }) => this.tap(p.worldX, p.worldY));
+
+    // Keyboard: arrows move between cards, Enter or Space flips.
+    const { cols } = MEMORY_SIZES[this.state.size];
+    const ring = focusRing(this, this.cardW + 10, this.cardH + 10, 20);
+    let cursor = 0;
+    onKeys(this, (key) => {
+      const step = arrow(key);
+      if (step) {
+        const rows = this.spots.length / cols;
+        const col = Math.min(cols - 1, Math.max(0, (cursor % cols) + step[0]));
+        const row = Math.min(rows - 1, Math.max(0, Math.floor(cursor / cols) + step[1]));
+        cursor = row * cols + col;
+        const spot = this.spots[cursor]!;
+        moveRing(this, ring, spot.x, spot.y);
+        return true;
+      }
+      if (isPress(key) && ring.visible) {
+        this.pick(cursor);
+        return true;
+      }
+      return false;
+    });
     const unsubscribe = this.session.subscribe(() => this.sync());
     this.events.once('shutdown', unsubscribe);
   }
@@ -202,9 +225,13 @@ export class MemoryScene extends Scene {
   }
 
   private tap(x: number, y: number): void {
-    if (this.time.now < this.blockedUntil || !this.session.isHumanTurn()) return;
     const index = this.spots.findIndex((spot) => Math.abs(spot.x - x) <= this.cardW / 2 && Math.abs(spot.y - y) <= this.cardH / 2);
-    if (index < 0) return;
+    if (index >= 0) this.pick(index);
+  }
+
+  /** Flip a card by tap or keyboard; a card that can't be flipped gives a small shake. */
+  private pick(index: number): void {
+    if (this.time.now < this.blockedUntil || !this.session.isHumanTurn()) return;
     const move = flipMove(index);
     if (this.state.legalMoves(this.state.currentSeat).includes(move)) this.session.play(move);
     else this.tweens.add({ targets: this.cards[index]!.box, angle: { from: -4, to: 4 }, duration: 50, yoyo: true, repeat: 1, onComplete: () => this.cards[index]!.box.setAngle(0) });

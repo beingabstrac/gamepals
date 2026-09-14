@@ -4,6 +4,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
 import { applySpeed, SPEED } from '../../autoplay';
+import { focusRing, isPress, moveRing, onKeys } from '../keys';
 const CELL = 100;
 const FACE_HEIGHT = ROWS * CELL;
 const LIP = 16;
@@ -53,6 +54,27 @@ export class FourInARowScene extends Scene {
         .setInteractive({ useHandCursor: true })
         .on('pointerdown', () => this.session.play(col));
     }
+
+    // Keyboard: 1–7 drops into a column, or arrows to pick one and Enter, Space or Down to drop.
+    const ring = focusRing(this, CELL - 8, FACE_HEIGHT - 8, 40);
+    let cursor = Math.floor(COLS / 2);
+    onKeys(this, (key) => {
+      const digit = Number(key);
+      if (Number.isInteger(digit) && digit >= 1 && digit <= COLS) {
+        this.session.play(digit - 1);
+        return true;
+      }
+      if (key === 'ArrowLeft' || key === 'ArrowRight') {
+        cursor = Math.min(COLS - 1, Math.max(0, cursor + (key === 'ArrowLeft' ? -1 : 1)));
+        moveRing(this, ring, cursor * CELL + CELL / 2, FACE_HEIGHT / 2);
+        return true;
+      }
+      if ((isPress(key) || key === 'ArrowDown') && ring.visible) {
+        this.session.play(cursor);
+        return true;
+      }
+      return false;
+    });
 
     this.shownMoves = this.session.moves.length;
     const unsubscribe = this.session.subscribe(() => this.onChange());
