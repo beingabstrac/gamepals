@@ -41,7 +41,7 @@ Pop bubbles · Buttons & switches board · Newton's cradle · Bamboo chime · Po
 ### Build waves
 1. **Now:** new look (Part 3) applied to the 4 built games + table setup.
 2. **Duels:** Ping Pong, Sumo, Tug of War, Reflex Race, Penalty Kicks, Snake Battle.
-3. **Puzzles:** 2048, Sudoku, Solitaire, Snake, Simon, Sliding Puzzle, Memory, Color Sort, Nuts & Bolts.
+3. **Puzzles:** 2048, Sudoku, Solitaire, Classic Snake (solo), Echo (our name for the Simon-style game), Sliding Puzzle, Memory, Color Sort. Nuts & Bolts is dropped: it is the same sorting puzzle as Color Sort with different art, and we never ship reskins.
 4. **Board:** Checkers, Chess, Reversi, Dots & Boxes, Snakes & Ladders, Mancala, Dominoes, Ultimate TTT, Yatzy, Shut the Box, Backgammon.
 5. **Cards:** Crazy Eights, Spider, FreeCell, Hearts, Spades, Callbreak, Rummy.
 6. **Party:** Impostor, Charades, Draw & Guess, Guess the Person.

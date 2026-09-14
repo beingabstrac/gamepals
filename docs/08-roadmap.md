@@ -23,7 +23,7 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Gated pipeline (unit + phone e2e before deploy); tap-to-pick seat picker; game briefs ([games/](games/README.md))
 - [x] Ping Pong rebuilt as real table tennis; Sumo; Penalty Kicks
 - [x] Snake Battle ([brief](games/snake-battle.md)) — wave 2 complete
-- [ ] Wave 3 puzzles (brief each first): 2048, Sudoku, Solitaire, Snake (solo), Simon, Sliding Puzzle, Memory, Color Sort, Nuts & Bolts ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
+- [x] Wave 3 puzzles (brief each first): [x] 2048, [x] Sudoku, [x] Solitaire, [x] Memory, [x] Sliding Puzzle, [x] Color Sort, [x] Echo (Simon-style, own name), [x] Classic Snake (solo); Nuts & Bolts dropped as a reskin of Color Sort ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
 - [x] Every-surface test matrix: 8 Playwright screen types, layout and offline checks ([13](13-platforms-and-testing.md))
 - [ ] Layouts for landscape tablets and desktop windows (board fits height; controls beside the board when wide)
 - [ ] PWA: installable on Mac, Windows, Linux, Chromebook; service worker so the web app opens with no connection

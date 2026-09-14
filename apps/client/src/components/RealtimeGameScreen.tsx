@@ -78,7 +78,7 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
       <div class="board realtime" key={round} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
       {result && (
         <ResultSheet
-          title={resultTitle(result, seats, sideName)}
+          title={entry.resultText?.(result, scores) ?? resultTitle(result, seats, sideName)}
           outcome={outcomeOf(result, seats)}
           onRematch={() => setRound((r) => r + 1)}
           onChangeMode={onExit}

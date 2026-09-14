@@ -21,6 +21,7 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Sliding Puzzle | Yes: 15 puzzle rules, tiles slide into the one space, whole rows push together, shuffled only by real slides so always solvable, moves counted per tile | Tap, swipe or arrow keys | Tiles glide and stop, blocked swipes nudge, a pop wave on solving | Race mode, best scores |
 | Color Sort | Yes: water sort rules, pour onto the same color or an empty tube, as much as fits, every deal checked solvable by our solver | Tap a tube then another, or keys 1-9 and arrows | Tube lifts, tilts and streams the color across, corks pop on finished tubes | Race mode |
 | Echo | Yes: classic sequence game, 4 pads with a chord of tones, one step added per round, wrong press or 5 seconds ends it, goals of 8, 14, 20, 31; party mode where each player adds a step | Tap pads, keys 1-4 or arrows | Pads glow and grow with their tone, a timer ring, the board shakes on a miss | Online party |
+| Classic Snake | Yes: solo snake on a walled grid, eat to grow, walls and your own tail end it, speeds up as it grows | Swipe, arrow keys or W A S D, two turns remembered | Smooth gliding, fruit pops, crash shake, best score saved | Race mode |
 
 Look and feel rules applied to every game (2026-09-13):
 - Bright candy colors, no pastels, no gradients.

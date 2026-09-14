@@ -1,5 +1,6 @@
 import {
   airHockey,
+  classicSnake,
   COLORS_BY_PLAYERS,
   colorSort,
   echo,
@@ -20,6 +21,7 @@ import {
   tugOfWar,
   twenty48,
   type ColorSortState,
+  type GameResult,
   type EchoState,
   type GameDefinition,
   type GameState,
@@ -37,8 +39,10 @@ import type { Scene } from 'phaser';
 import type { ComponentType } from 'preact';
 import type { Session } from '../session';
 import type { SoundName } from '../sfx';
+import { storage } from '../platform';
 import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
+import { CLASSIC_SNAKE_BEST_KEY, CLASSIC_SNAKE_SIZE, ClassicSnakeScene } from './classic-snake/ClassicSnakeScene';
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
 import { DUEL_COLORS } from './duel';
@@ -114,6 +118,8 @@ export interface GameEntry<M = unknown> extends EntryBase {
 export interface RealtimeEntry extends EntryBase {
   readonly kind: 'realtime';
   readonly definition: RealtimeGameDefinition;
+  /** Replaces the result headline (e.g. a solo score); undefined keeps the default. */
+  resultText?(result: GameResult, scores: readonly number[]): string | undefined;
   createScene(options: RealtimeSceneOptions): Scene;
 }
 
@@ -493,6 +499,28 @@ export const GAMES: readonly AnyEntry[] = [
     size: SNAKE_SIZE,
     color: DARK.grape,
     createScene: (options) => new SnakeScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: classicSnake,
+    tagline: "Eat, grow, don't crash",
+    howTo: {
+      goal: 'Steer the snake to the fruit. Every fruit makes it one longer.',
+      controls: 'Swipe up, down, left or right to steer. On a keyboard: the arrow keys or W A S D.',
+      win: 'Eat as much fruit as you can. Fill the whole board to win outright.',
+      tip: 'Hitting a wall or your own tail ends the game. The snake speeds up as it grows, so turn early.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.sky],
+    size: CLASSIC_SNAKE_SIZE,
+    color: DARK.mint,
+    resultText: (result, scores) => {
+      const eaten = scores[0] ?? 0;
+      if (result.winners.length) return `You filled the board! ${eaten} fruit 🎉`;
+      const best = Number(storage.get(CLASSIC_SNAKE_BEST_KEY) ?? 0) || 0;
+      return `Game over! You ate ${eaten} fruit. Your best: ${best}.`;
+    },
+    createScene: (options) => new ClassicSnakeScene(options),
   },
 ];
 

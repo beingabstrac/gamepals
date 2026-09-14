@@ -10,7 +10,7 @@ import { _android as android } from '@playwright/test';
 
 const PKG = 'app.gamepals.game';
 const SHOTS = new URL('../native-shots/', import.meta.url).pathname;
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Classic Snake', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 /** Solitaire deals can be unwinnable; a long stretch of play with no errors is its pass mark. */
 const MAY_NOT_FINISH = new Set(['Solitaire']);
 

@@ -147,6 +147,25 @@ function SudokuArt() {
   );
 }
 
+function ClassicSnakeArt() {
+  const path = 'M24 70 H50 V40 H72';
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill="#B3EFCC" />
+      <path d={path} fill="none" stroke={DARK.sky} stroke-width="11" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 2)" />
+      <path d={path} fill="none" stroke={COLORS.sky} stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="72" cy="40" r="8" fill={COLORS.sky} />
+      <circle cx="74" cy="37" r="2.6" fill="#fff" />
+      <circle cx="74" cy="43" r="2.6" fill="#fff" />
+      <circle cx="75" cy="37" r="1.3" fill={INK} />
+      <circle cx="75" cy="43" r="1.3" fill={INK} />
+      <circle cx="68" cy="68" r="6" fill={COLORS.tomato} />
+      <ellipse cx="71" cy="61" rx="4" ry="2" fill={COLORS.mint} />
+    </svg>
+  );
+}
+
 function EchoArt() {
   const pads: [number, number, string, string][] = [
     [50, 24, COLORS.tomato, DARK.tomato],
@@ -387,6 +406,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sliding-puzzle': SlidingArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
+  'classic-snake': ClassicSnakeArt,
   memory: MemoryArt,
 };
 
