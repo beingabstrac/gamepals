@@ -272,13 +272,14 @@ h2,
 
 .seat {
   position: absolute;
-  /* A share of the table, so side chairs centered at 12% and 88% never hang off a phone screen. */
+  /* A share of the table, so side chairs never hang off a phone screen. */
   width: 24%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  transform: translate(-50%, -50%);
+  /* `translate`, not `transform`: the pop-in animation sets transform and would undo the centering while it plays. */
+  translate: -50% -50%;
   animation: pop-in 520ms var(--spring) both;
 }
 
@@ -293,15 +294,18 @@ h2,
   animation-delay: 60ms;
 }
 
+/* Side chairs are pinned to the table's edges so they can never stick out past a narrow screen. */
 .seat[data-pos='left'] {
-  left: 12%;
+  left: 0;
   top: 50%;
+  translate: 0 -50%;
   animation-delay: 30ms;
 }
 
 .seat[data-pos='right'] {
-  left: 88%;
+  right: 0;
   top: 50%;
+  translate: 0 -50%;
   animation-delay: 90ms;
 }
 
