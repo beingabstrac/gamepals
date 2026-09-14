@@ -19,6 +19,7 @@ const GAMES = [
   'Echo',
   'Classic Snake',
   'Checkers',
+  'Reversi',
   'Air Hockey',
   'Ping Pong',
   'Tug of War',

@@ -23,6 +23,7 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Echo | Yes: classic sequence game, 4 pads with a chord of tones, one step added per round, wrong press or 5 seconds ends it, goals of 8, 14, 20, 31; party mode where each player adds a step | Tap pads, keys 1-4 or arrows | Pads glow and grow with their tone, a timer ring, the board shakes on a miss | Online party |
 | Classic Snake | Yes: solo snake on a walled grid, eat to grow, walls and your own tail end it, speeds up as it grows | Swipe, arrow keys or W A S D, two turns remembered | Smooth gliding, fruit pops, crash shake, best score saved | Race mode |
 | Checkers | Yes: English draughts, men forward, required captures and multi-jumps, crowning ends a jump, kings both ways, draw after 40 quiet moves each or threefold repetition | Tap a piece then a glowing square, arrows and Enter | Slides, arcing hops, taken pieces fly off, a crown drops on new kings | Other national rules as options |
+| Reversi | Yes: modern rules, crossed start, dark first, a move must flip at least one line, all 8 directions flip, pass with no move, ends when neither can move, most discs wins, ties draw | Tap a dot, arrows and Enter, Pass button when stuck | Discs drop in, flips ripple with a squeeze turn, big flips shake | None |
 
 Look and feel rules applied to every game (2026-09-13):
 - Bright candy colors, no pastels, no gradients.

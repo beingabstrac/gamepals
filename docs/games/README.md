@@ -41,4 +41,5 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Echo](echo.md), built
 - [Classic Snake](classic-snake.md), built
 - [Checkers](checkers.md), built
+- [Reversi](reversi.md), built
 - [Solitaire (Klondike)](solitaire.md), built

@@ -11,6 +11,8 @@ import {
   penaltyKicks,
   pingPong,
   reflexRace,
+  reversi,
+  REVERSI_PASS,
   snakeBattle,
   solitaire,
   slidingPuzzle,
@@ -31,6 +33,7 @@ import {
   type MemoryState,
   type PlayMode,
   type RealtimeGameDefinition,
+  type ReversiState,
   type SlidingState,
   type SolitaireState,
   type SudokuLevel,
@@ -56,6 +59,8 @@ import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/Ludo
 import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
+import { ReversiControls } from './reversi/ReversiControls';
+import { REVERSI_SIZE, ReversiScene } from './reversi/ReversiScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
@@ -184,6 +189,41 @@ export const GAMES: readonly AnyEntry[] = [
       return event.captured.length ? 'capture' : undefined;
     },
     createScene: (session) => new CheckersScene(session),
+  }),
+  entry({
+    definition: reversi,
+    tagline: 'Trap and flip, most discs wins',
+    howTo: {
+      goal: 'Finish the game with more discs of your color on the board.',
+      controls: 'Tap a dot to place a disc. On a keyboard: arrow keys and Enter.',
+      win: 'When neither player can move, the one with more discs wins.',
+      draw: 'Equal counts at the end are a draw.',
+      tip: 'Your disc must trap a straight line of the other color between it and another of your discs. Every trapped disc flips to your color. Corners can never be flipped back. If you have no move, you pass.',
+    },
+    sideNames: () => ['Dark', 'Light'],
+    sideColors: () => [COLORS.ink, COLORS.sky],
+    size: REVERSI_SIZE,
+    color: COLORS.mint,
+    botDelayMs: 700,
+    status: (state) => {
+      const s = state as ReversiState;
+      if (s.result) return undefined;
+      const who = s.currentSeat === 0 ? 'Dark' : 'Light';
+      const counts = `Dark ${s.count(0)}, Light ${s.count(1)}`;
+      return s.legalMoves(s.currentSeat)[0] === REVERSI_PASS ? `${who} has no moves. ${counts}` : `${who} to move. ${counts}`;
+    },
+    resultText: (state) => {
+      const s = state as ReversiState;
+      return s.result?.draw ? `A draw, ${s.count(0)} to ${s.count(1)}! 🤝` : undefined;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as ReversiState).last;
+      if (!event) return undefined;
+      if (event.square === null) return 'tap';
+      return event.flipped.length >= 4 ? 'capture' : 'place';
+    },
+    Controls: ReversiControls,
+    createScene: (session) => new ReversiScene(session),
   }),
   entry({
     definition: fourInARow,

@@ -85,6 +85,30 @@ function AirHockeyArt() {
   );
 }
 
+function ReversiArt() {
+  const discs: [number, number, 'dark' | 'light'][] = [
+    [38, 38, 'light'],
+    [62, 38, 'dark'],
+    [38, 62, 'dark'],
+    [62, 62, 'light'],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill={COLORS.mint} />
+      <path d="M26 10 V90 M50 10 V90 M74 10 V90 M10 26 H90 M10 50 H90 M10 74 H90" stroke="#FFF4DC" stroke-width="2" opacity="0.8" />
+      {discs.map(([x, y, side]) => (
+        <g key={`${x}-${y}`}>
+          <circle cx={x} cy={y + 2} r="10" fill={side === 'dark' ? '#16151F' : COLORS.sky} />
+          <circle cx={x} cy={y} r="10" fill={side === 'dark' ? INK : '#fff'} />
+        </g>
+      ))}
+      {/* A disc mid-flip. */}
+      <ellipse cx="74" cy="26" rx="4" ry="10" fill={INK} />
+    </svg>
+  );
+}
+
 function CheckersArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -407,6 +431,7 @@ const ART: Record<string, () => JSX.Element> = {
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
+  reversi: ReversiArt,
   memory: MemoryArt,
 };
 
