@@ -116,7 +116,7 @@ function entry<M>(value: Omit<GameEntry<M>, 'kind'>): GameEntry {
 const LEVEL_LABEL: Record<SudokuLevel, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard', expert: 'Expert' };
 
 const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_PLAYERS[4]!;
-const duelSides = { sideNames: () => ['Bottom', 'Top'], sideColors: () => DUEL_COLORS } as const;
+const duelSides = { sideNames: () => ['Blue', 'Red'], sideColors: () => DUEL_COLORS } as const;
 
 export const GAMES: readonly AnyEntry[] = [
   entry({
@@ -124,7 +124,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Three in a row wins',
     howTo: {
       goal: 'Get three of your marks in a row.',
-      controls: 'Tap an empty square to put your mark there.',
+      controls: 'Tap an empty square to put your mark there. On a keyboard: press 1 to 9, or move with the arrow keys and press Enter.',
       win: 'Three in a row across, down, or corner to corner.',
       draw: 'If all nine squares fill up and nobody has three in a row, it is a draw.',
     },
@@ -139,7 +139,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Drop discs, connect four',
     howTo: {
       goal: 'Line up four of your discs.',
-      controls: 'Tap a column. Your disc drops to the lowest empty spot.',
+      controls: 'Tap a column. Your disc drops to the lowest empty spot. On a keyboard: press 1 to 7, or pick with the arrow keys and press Enter.',
       win: 'Four in a row across, down, or on a slant.',
       draw: 'If the board fills up first, it is a draw.',
     },
@@ -154,7 +154,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Race your four tokens home',
     howTo: {
       goal: 'Move all four of your tokens around the board and into the middle.',
-      controls: 'Tap Roll. Then tap a bouncing token to move it.',
+      controls: 'Tap Roll. Then tap a bouncing token to move it. On a keyboard: press R or Space to roll, then 1 to 4 to pick a token.',
       win: 'The first player with all four tokens home wins.',
       tip: 'You need a 6 to bring a token out. A 6 gives you another roll, but three 6s in a row ends your turn. Land on someone to send them back. Star squares are safe.',
     },
@@ -176,7 +176,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Slide, merge, reach 2048',
     howTo: {
       goal: 'Join tiles with the same number to make bigger numbers.',
-      controls: 'Swipe up, down, left or right. Every tile slides that way.',
+      controls: 'Swipe up, down, left or right. Every tile slides that way. On a keyboard: use the arrow keys.',
       win: 'Make a 2048 tile. You can keep going for a higher score.',
       tip: 'A new tile appears after every move. The game ends when nothing can move.',
     },
@@ -197,7 +197,7 @@ export const GAMES: readonly AnyEntry[] = [
     levels: SUDOKU_LEVELS.map((id) => ({ id, label: LEVEL_LABEL[id] })),
     howTo: {
       goal: 'Fill every empty square with a number from 1 to 9.',
-      controls: 'Tap a square, then tap a number. Turn on Notes to jot down small guesses.',
+      controls: 'Tap a square, then tap a number. Turn on Notes to jot down small guesses. On a keyboard: arrow keys, 1 to 9, Backspace to erase, N for notes.',
       win: 'Every row, every column and every 3 by 3 box has 1 to 9 exactly once.',
       tip: 'Each puzzle has only one answer, so you never have to guess. A repeated number turns red. Stuck? You get 3 hints.',
     },
@@ -231,7 +231,7 @@ export const GAMES: readonly AnyEntry[] = [
     ],
     howTo: {
       goal: 'Move all 52 cards onto the four piles at the top. Each pile is one suit, from Ace up to King.',
-      controls: 'Tap a card to send it to the best spot, or drag it where you want. Tap the deck to draw.',
+      controls: 'Tap a card to send it to the best spot, or drag it where you want. Tap the deck to draw. On a keyboard: arrow keys pick a card, Enter moves it, D draws.',
       win: 'You win when every card is on the four piles.',
       tip: 'In the columns, stack cards going down and switch between red and black. Only a King can go in an empty column. Draw 3 is harder than Draw 1.',
     },
@@ -265,7 +265,7 @@ export const GAMES: readonly AnyEntry[] = [
     ],
     howTo: {
       goal: 'Find the matching pairs of cards.',
-      controls: 'Tap a card to flip it over, then tap a second card.',
+      controls: 'Tap a card to flip it over, then tap a second card. On a keyboard: arrow keys and Enter.',
       win: 'Whoever finds the most pairs wins. Playing alone, clear the board in as few turns as you can.',
       draw: 'If everyone ends with the same number of pairs, it is a draw.',
       tip: 'Find a pair and you go again. Miss, and both cards flip back, so remember where they were.',
@@ -299,7 +299,7 @@ export const GAMES: readonly AnyEntry[] = [
       controls: 'Drag your paddle around your half of the table. On a keyboard: the arrow keys for the bottom player, W A S D for the top.',
       win: 'First to 7 goals wins.',
     },
-    sideNames: () => ['Bottom', 'Top'],
+    sideNames: () => ['Blue', 'Red'],
     sideColors: () => AIR_HOCKEY_COLORS,
     size: AIR_HOCKEY_SIZE,
     color: COLORS.tomato,

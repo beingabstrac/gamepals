@@ -149,7 +149,7 @@ h2,
 
 .logo {
   margin: 0;
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 8vw, 2.2rem);
   font-weight: 600;
   line-height: 1;
 }
@@ -171,7 +171,8 @@ h2,
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* Always at least two tiles per row, even on 320-wide phones. */
+  grid-template-columns: repeat(auto-fill, minmax(min(150px, calc(50% - 8px)), 1fr));
   gap: 16px;
 }
 
@@ -602,6 +603,7 @@ h2,
 
 .btn {
   padding: 14px 18px;
+  white-space: nowrap;
   border-radius: 999px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -892,11 +894,13 @@ h2,
   text-align: center;
   font-size: 1.6rem;
   font-weight: 600;
+  text-wrap: balance;
 }
 
 .result-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Side by side when they fit; stacked on narrow phones, never wrapping mid-label. */
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: 12px;
 }
 

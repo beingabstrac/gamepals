@@ -38,7 +38,7 @@ console.log(`App loaded at ${origin}`);
 await page.locator('.tile').first().waitFor({ timeout: 60_000 });
 const sideways = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 if (sideways > 1) failures.push(`Home scrolls sideways by ${sideways}px`);
-await page.screenshot({ path: `${SHOTS}android-home.png` });
+await device.screenshot({ path: `${SHOTS}android-home.png` });
 
 for (const name of GAMES) {
   errors = [];
@@ -51,13 +51,13 @@ for (const name of GAMES) {
     const result = page.locator('.result-sheet');
     if (MAY_NOT_FINISH.has(name)) await result.waitFor({ timeout: 45_000 }).catch(() => undefined);
     else await result.waitFor({ timeout: 300_000 });
-    await page.screenshot({ path: `${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}.png` });
+    await device.screenshot({ path: `${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}.png` });
     if (errors.length) failures.push(`${name}: ${errors.join(' | ')}`);
     console.log(`${errors.length ? '✗' : '✓'} ${name} (${Math.round((Date.now() - started) / 1000)}s)`);
   } catch (error) {
     failures.push(`${name}: ${error.message.split('\n')[0]}`);
     console.log(`✗ ${name}: ${error.message.split('\n')[0]}`);
-    await page.screenshot({ path: `${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}-failed.png` }).catch(() => undefined);
+    await device.screenshot({ path: `${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}-failed.png` }).catch(() => undefined);
   }
 }
 
