@@ -22,7 +22,8 @@
     "@fontsource/nunito": "^5.2.0",
     "@gamepals/rules": "workspace:*",
     "phaser": "^4.1.0",
-    "preact": "^10.26.0"
+    "preact": "^10.26.0",
+    "workbox-window": "^7.4.1"
   },
   "devDependencies": {
     "@capacitor/android": "^8.5.2",
