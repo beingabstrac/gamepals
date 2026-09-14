@@ -1,5 +1,6 @@
 import { useMemo } from 'preact/hooks';
 import type { Outcome } from '../outcome';
+import { COLORS } from '../theme';
 
 interface Props {
   title: string;
@@ -8,7 +9,7 @@ interface Props {
   onChangeMode(): void;
 }
 
-const CONFETTI_COLORS = ['#4DA8FF', '#FF6B6B', '#FFC93C', '#3DDC97', '#9B7BFF', '#FF8CC6'];
+const CONFETTI_COLORS = [COLORS.sky, COLORS.tomato, COLORS.sunny, COLORS.mint, COLORS.grape, COLORS.bubblegum];
 
 function Confetti() {
   const pieces = useMemo(

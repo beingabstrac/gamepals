@@ -8,6 +8,7 @@ export function SolitaireControls({ session }: { session: Session<SolitaireMove>
   const ui = solitaireUiFor(session);
   const state = session.state as SolitaireState;
   const [message, setMessage] = useState<string | null>(null);
+  const [finishing, setFinishing] = useState(false);
   useEffect(() => setMessage(null), [state]);
   if (state.result) return null;
 
@@ -22,6 +23,8 @@ export function SolitaireControls({ session }: { session: Session<SolitaireMove>
   };
 
   const finish = () => {
+    // One auto-play at a time; the button hides while it runs.
+    setFinishing(true);
     const step = () => {
       const current = session.state as SolitaireState;
       const move = current.result ? null : suggestMove(current);
@@ -42,7 +45,7 @@ export function SolitaireControls({ session }: { session: Session<SolitaireMove>
         <button class="tool" onClick={hint}>
           Hint
         </button>
-        {state.canFinish() && (
+        {state.canFinish() && !finishing && (
           <button class="tool on" onClick={finish}>
             Finish
           </button>

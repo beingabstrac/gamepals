@@ -8,9 +8,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "cap:android": "cap add android && cap sync android",
+    "e2e:android": "node e2e-native/android.mjs"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.2",
     "@fontsource/fredoka": "^5.2.0",
     "@fontsource/nunito": "^5.2.0",
     "@gamepals/rules": "workspace:*",
@@ -18,6 +21,9 @@
     "preact": "^10.26.0"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/ios": "^8.5.2",
     "@playwright/test": "^1.55.0",
     "@preact/preset-vite": "^2.10.0",
     "@types/node": "^22.15.0",

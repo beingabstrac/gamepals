@@ -88,7 +88,9 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
           </span>
         )}
       </p>
-      <div class="board" ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
+      {/* A fresh container per game: Phaser destroys the old game on its next frame, and on some
+          devices (iPad) that frame comes late, so reusing the container briefly showed two boards. */}
+      <div class="board" key={seed} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
       {Controls && <Controls session={session} />}
       {state.result && (
         <ResultSheet

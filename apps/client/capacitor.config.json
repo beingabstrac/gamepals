@@ -1,0 +1,12 @@
+{
+  "appId": "app.gamepals.game",
+  "appName": "Game Pals",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#fffdf8"
+  },
+  "ios": {
+    "backgroundColor": "#fffdf8",
+    "contentInset": "never"
+  }
+}

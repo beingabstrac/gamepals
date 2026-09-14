@@ -9,3 +9,6 @@ coverage/
 .wrangler/
 playwright-report/
 test-results/
+apps/client/android/
+apps/client/ios/
+apps/client/native-shots/

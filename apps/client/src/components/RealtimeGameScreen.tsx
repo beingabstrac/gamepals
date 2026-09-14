@@ -74,7 +74,8 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
           </div>
         ))}
       </div>
-      <div class="board realtime" ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
+      {/* A fresh container per round so the old game's canvas leaves immediately on rematch (see GameScreen). */}
+      <div class="board realtime" key={round} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
       {result && (
         <ResultSheet
           title={resultTitle(result, seats, sideName)}

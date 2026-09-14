@@ -43,6 +43,8 @@ Offline rules: everything that doesn't need other people works on a plane. Score
 | Layout | Playwright layout test | No sideways scrolling, board fits the screen, tile art stays inside its tile | Same as above |
 | Offline | Playwright with the network cut after load | Games start and finish with no connection | Every push |
 | Web install and cold offline start | PWA service worker (M1) + Playwright offline reload | The app opens with no connection at all | Every push, once the PWA lands |
+| Whole games on every screen type | Playwright `@full` tests with `?autoplay` (bots in every seat, sped up) | Every game reaches its result and a rematch starts, with no errors | Weekly, tags, manual runs |
+| The real Android app | Capacitor APK built in CI, Android 14 emulator, Playwright attached to the app's own WebView (`apps/client/e2e-native/android.mjs`) | Installs, launches, fits the screen, every game plays to the end inside the app; screenshots saved | Weekly, tags, manual runs |
 | Android app on real phones and tablets | Firebase Test Lab (free Spark: 5 physical + 10 virtual device runs a day), Robo test of the AAB | Launches, no crashes, on many devices | Release tags |
 | iOS and iPad app | Xcode Cloud (25 free hours a month with the Apple Developer Program) simulators, plus TestFlight on the owner's devices | Launches, safe areas, rotation | Release tags |
 | Mac | The iPad build on an Apple silicon Mac through TestFlight | Window resizing, mouse, keyboard | Release tags |
