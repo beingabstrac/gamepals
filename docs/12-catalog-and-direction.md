@@ -54,7 +54,7 @@ Naming rule stays ([03 §4](03-game-catalog.md#4-trademark-safe-naming)): Parche
 ### Look
 - **Light app.** Warm white background `#FFFDF8`, cards `#FFFFFF`, ink text `#2B2A3A`, soft ink `#7A7890`.
 - **Flat colors only — no gradients anywhere.** Depth comes from a solid, slightly darker "bottom lip" under each bubble (like a toy button) and one soft shadow, never from color ramps.
-- **Candy palette (flat):** tomato `#FF6B6B`, sunny `#FFC93C`, mint `#3DDC97`, sky `#4DA8FF`, grape `#9B7BFF`, peach `#FF9F6B`, bubblegum `#FF8CC6`. Each game owns one color.
+- **Candy palette (flat, bright):** tomato `#FF4F4F`, sunny `#FFC21A`, mint `#16C47F`, sky `#2E8BFF`, grape `#7B4DFF`, peach `#FF8A2B`, bubblegum `#FF4DA6` (source of truth: `apps/client/src/theme.ts`). Each game owns one color.
 - **Shapes:** everything rounded (24–32 px radius), pill buttons, circular icons. Generous white space. Big, friendly type (Fredoka for headings/numbers, Nunito for text).
 - **Games are colorful**, sitting on white "trays" with rounded edges — like real toys on a table.
 - **Illustration over emoji:** each game tile shows a tiny vector drawing of the actual game (the real board, discs, puck) so the grid looks like a toy shelf, not a generic app. Bots are cute blob characters with faces.

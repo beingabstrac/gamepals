@@ -135,11 +135,13 @@ jobs:
           arch: x86_64
           target: google_apis
           disk-size: 4096M
+          # More memory for the WebView renderer, which draws WebGL in software on the emulator.
+          ram-size: 4096M
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
           script: |
             adb install -r apps/client/android/app/build/outputs/apk/debug/app-debug.apk
-            cd apps/client && node e2e-native/android.mjs; status=$?; mkdir -p native-shots; adb exec-out screencap -p > native-shots/android-final-screen.png || true; exit $status
+            cd apps/client && node e2e-native/android.mjs; status=$?; mkdir -p native-shots; adb exec-out screencap -p > native-shots/android-final-screen.png || true; adb logcat -d -b crash > native-shots/android-crash-log.txt || true; echo "---- Android crash and process log"; adb logcat -d | grep -iE "AndroidRuntime|FATAL|render process|RenderProcessGone|chromium.*(crash|gone|oom)|lowmemorykiller|lmkd|am_crash|am_proc_died|am_anr|Force finishing" | tail -60 || true; exit $status
       - if: always()
         uses: actions/upload-artifact@v4
         with:

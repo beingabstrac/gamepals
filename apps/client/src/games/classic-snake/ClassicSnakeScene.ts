@@ -31,6 +31,8 @@ const BODY = toHex(COLORS.sky);
 const BODY_DARK = toHex(DARK.sky);
 /** A drag this long counts as a swipe; each swipe turns right away, so quick zig-zags work. */
 const SWIPE = 22;
+/** The autoplay bot stops steering after this many fruit (see runBot). */
+const AUTOPLAY_FRUIT = 25;
 const KEYS: Record<string, Heading> = { ArrowUp: 0, w: 0, ArrowRight: 1, d: 1, ArrowDown: 2, s: 2, ArrowLeft: 3, a: 3 };
 
 const px = (c: SnakeCell) => ({ x: BOARD_X + (c.x + 0.5) * CELL, y: BOARD_Y + (c.y + 0.5) * CELL });
@@ -120,9 +122,12 @@ export class ClassicSnakeScene extends Scene {
     this.draw(smooth(progress));
   }
 
-  /** Autoplay only: the bot decides right after each move. */
+  /**
+   * Autoplay only: the bot decides right after each move. Tests need a real game and a real crash, not a
+   * 100-fruit marathon, so after 25 fruit the bot stops steering and runs into a wall.
+   */
   private runBot(): void {
-    if (!this.bot || this.state.phase !== 'play') return;
+    if (!this.bot || this.state.phase !== 'play' || this.state.eaten >= AUTOPLAY_FRUIT) return;
     this.state = classicSnakeSteer(this.state, classicSnakeBotHeading(this.state));
   }
 

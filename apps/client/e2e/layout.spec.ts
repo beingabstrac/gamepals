@@ -51,6 +51,26 @@ for (const name of GAMES) {
   });
 }
 
+test('installed web app: opens and plays with no connection at all', async ({ page, context, browserName }) => {
+  test.skip(browserName !== 'chromium', 'The cold offline start is checked in Chromium, where service workers are fully supported in tests');
+  await page.goto('/');
+  await expect(page.locator('.tile').first()).toBeVisible();
+  // The service worker has stored the whole app once it is active; reload so it controls the page.
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+  await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller !== null)).toBe(true);
+
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator('.tile').first()).toBeVisible();
+  await page.getByRole('button', { name: /^Sudoku/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+  await context.setOffline(false);
+});
+
 test('offline: a game starts and plays with the network cut', async ({ page, context }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));

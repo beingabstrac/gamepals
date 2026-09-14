@@ -13,6 +13,7 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 - Ads: `@capacitor-community/admob` (MIT), rewarded-first. Purchases: RevenueCat. Portal builds (CrazyGames/Poki) use portal SDKs instead of AdMob.
 - App saves: native storage (`@capacitor/preferences` / SQLite), never localStorage/IndexedDB inside the apps (iOS can evict them). Use `storage` from `apps/client/src/platform.ts` (Preferences in the apps, localStorage on the web), never `localStorage` directly. `platform.ts` also provides device haptics and the Android Back button (game → table → home).
 - **Keyboard play is required:** every game plays with keys too, via `games/keys.ts` (`onKeys`, `focusRing`, `moveRing`): number keys where they fit, arrows + Enter/Space, a grape focus ring that hides on touch.
+- **Installable web app (PWA):** `vite-plugin-pwa` precaches the whole build so the web app installs and opens offline. The service worker is registered in `main.tsx` on the web only, never inside the native apps or self-test builds. App icons come from `apps/client/scripts/make-icons.mjs` (`pnpm --filter @gamepals/client icons`).
 - **Test mode:** `?autoplay` (web) or `VITE_SELFTEST=1` builds (native) put bots in every seat and speed games up; `e2e/full.spec.ts` (@full) and the native jobs use it to play every game to the end.
 - No GPL code in shipped apps (e.g. no Stockfish). No trademarked game names (see docs/03). CC0/permissive assets only, logged in `docs/licenses.md`.
 - No free-text chat — emotes/preset phrases only. Bots never cheat.

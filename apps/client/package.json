@@ -10,7 +10,8 @@
     "typecheck": "tsc -p tsconfig.json",
     "e2e": "playwright test",
     "cap:android": "cap add android && cap sync android",
-    "e2e:android": "node e2e-native/android.mjs"
+    "e2e:android": "node e2e-native/android.mjs",
+    "icons": "node scripts/make-icons.mjs"
   },
   "dependencies": {
     "@capacitor/app": "^8.1.1",
@@ -31,6 +32,7 @@
     "@preact/preset-vite": "^2.10.0",
     "@types/node": "^22.15.0",
     "typescript": "^5.8.0",
-    "vite": "^6.3.0"
+    "vite": "^6.3.0",
+    "vite-plugin-pwa": "^1.3.0"
   }
 }

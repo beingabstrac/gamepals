@@ -6,6 +6,10 @@ Every third-party asset, font, sound, word list and code dependency with a licen
 |---|---|---|---|---|
 | Phaser | npm `phaser` | MIT | client | 2026-09-12 |
 | Preact | npm `preact` | MIT | client | 2026-09-12 |
+| Capacitor core, CLI, Android, iOS | npm `@capacitor/*` | MIT | native apps | 2026-09-14 |
+| Capacitor App, Preferences, Haptics | npm `@capacitor/app`, `@capacitor/preferences`, `@capacitor/haptics` | MIT | native apps | 2026-09-14 |
+| vite-plugin-pwa (with Workbox) | npm `vite-plugin-pwa`, `workbox-*` | MIT | web build (installable, offline) | 2026-09-14 |
+| App icons and favicon | Our own mascot, drawn by `apps/client/scripts/make-icons.mjs` | Ours | web and apps | 2026-09-14 |
 
 ## To verify before use
 - `chess.js` (rules) — confirm license is permissive.

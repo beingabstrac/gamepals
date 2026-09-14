@@ -26,7 +26,7 @@ Solo developer + Claude Code, working in GitHub Codespaces. Weeks are estimates;
 - [x] Wave 3 puzzles (brief each first): [x] 2048, [x] Sudoku, [x] Solitaire, [x] Memory, [x] Sliding Puzzle, [x] Color Sort, [x] Echo (Simon-style, own name), [x] Classic Snake (solo); Nuts & Bolts dropped as a reskin of Color Sort ([12 Part 2](12-catalog-and-direction.md#part-2--master-catalog-everything-he-has-plus-more))
 - [x] Every-surface test matrix: 8 Playwright screen types, layout and offline checks ([13](13-platforms-and-testing.md))
 - [ ] Layouts for landscape tablets and desktop windows (board fits height; controls beside the board when wide)
-- [ ] PWA: installable on Mac, Windows, Linux, Chromebook; service worker so the web app opens with no connection
+- [x] PWA: installable on Mac, Windows, Linux, Chromebook; service worker so the web app opens with no connection
 - [ ] Bot Web Worker
 - [ ] Capacitor iOS/Android projects; Preferences + SQLite; haptics; safe areas; rotated UI for same-device seats
 - [ ] GitHub Actions Android AAB → Play internal testing; Codemagic iOS → TestFlight
