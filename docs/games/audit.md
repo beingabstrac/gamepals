@@ -17,6 +17,7 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Snake Battle | Yes: grid snake, crashes lose, head-on draw | Turn buttons | Snakes glide between cells | None |
 | Sudoku | Yes: 9×9, one answer, levels by solving tricks, notes, mirrored clues | Tap a square, tap a number | Numbers pop in, repeats shake, finished lines sparkle | Race mode is planned |
 | Solitaire | Yes: Klondike, alternating colors down, King to empty column, foundations by suit, draw 1 or 3, unlimited redeals, standard scoring | Tap to auto-move, drag, tap the deck | Cards fly with ease-out, flip with a squeeze, lean while dragged, bounce down on a win | Winnable-deal solver, Race |
+| Memory | Yes: Concentration rules, a match keeps your turn, most pairs wins, ties possible, solo counts turns | Tap two cards | Cards flip with a squeeze, pairs fly to the scorer, misses shake then flip back | Online play (M3) |
 
 Look and feel rules applied to every game (2026-09-13):
 - Bright candy colors, no pastels, no gradients.

@@ -182,6 +182,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
   const quickStarts = [
     { label: maxPlayers > 2 ? '🤖 vs Bots' : '🤖 vs Bot', choices: vsBots(maxPlayers, botTier) },
     { label: '👫 Friends', choices: friends(maxPlayers) },
+    ...(minPlayers === 1 ? [{ label: '🙂 Solo', choices: ['human', ...Array<SeatChoice>(maxPlayers - 1).fill('empty')] as SeatChoice[] }] : []),
   ];
   const same = (a: readonly SeatChoice[], b: readonly SeatChoice[]) => a.every((choice, i) => choice === b[i]);
 

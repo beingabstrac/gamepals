@@ -3,6 +3,7 @@ import {
   COLORS_BY_PLAYERS,
   fourInARow,
   ludo,
+  memory,
   penaltyKicks,
   pingPong,
   reflexRace,
@@ -18,6 +19,7 @@ import {
   type GameDefinition,
   type GameState,
   type LudoState,
+  type MemoryState,
   type PlayMode,
   type RealtimeGameDefinition,
   type SolitaireState,
@@ -39,6 +41,7 @@ import { PENALTY_SIZE, PenaltyScene } from './penalty-kicks/PenaltyScene';
 import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
+import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
 import { SOLITAIRE_SIZE, SolitaireScene } from './solitaire/SolitaireScene';
 import { SudokuControls } from './sudoku/SudokuControls';
@@ -90,10 +93,10 @@ export interface GameEntry<M = unknown> extends EntryBase {
   moveCue?(before: GameState<M>, after: GameState<M>): SoundName | undefined;
   /** Extra controls rendered under the board (e.g. dice). */
   readonly Controls?: ComponentType<{ session: Session<M> }>;
-  /** Replaces "X to move" (e.g. a score for solo puzzles). */
-  status?(state: GameState<M>): string;
-  /** Replaces the result headline (e.g. "No more moves. 2,340 points"). */
-  resultText?(state: GameState<M>): string;
+  /** Replaces "X to move" (e.g. a score for solo puzzles); undefined keeps the default. */
+  status?(state: GameState<M>): string | undefined;
+  /** Replaces the result headline (e.g. "No more moves. 2,340 points"); undefined keeps the default. */
+  resultText?(state: GameState<M>): string | undefined;
   createScene(session: Session<M>): Scene;
 }
 
@@ -251,6 +254,41 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: SolitaireControls,
     createScene: (session) => new SolitaireScene(session),
+  }),
+  entry({
+    definition: memory,
+    tagline: 'Flip two, find the pairs',
+    levels: [
+      { id: 'small', label: '12 cards' },
+      { id: 'medium', label: '20 cards' },
+      { id: 'large', label: '30 cards' },
+    ],
+    howTo: {
+      goal: 'Find the matching pairs of cards.',
+      controls: 'Tap a card to flip it over, then tap a second card.',
+      win: 'Whoever finds the most pairs wins. Playing alone, clear the board in as few turns as you can.',
+      draw: 'If everyone ends with the same number of pairs, it is a draw.',
+      tip: 'Find a pair and you go again. Miss, and both cards flip back, so remember where they were.',
+    },
+    sideNames: (players) => MEMORY_NAMES.slice(0, players),
+    sideColors: (players) => MEMORY_COLORS.slice(0, players),
+    size: MEMORY_SIZE,
+    color: DARK.bubblegum,
+    botDelayMs: 1100,
+    status: (state) => {
+      const s = state as MemoryState;
+      return s.players === 1 ? `Turns ${s.turns}` : undefined;
+    },
+    resultText: (state) => {
+      const s = state as MemoryState;
+      return s.players === 1 ? `All pairs found in ${s.turns} turns!` : undefined;
+    },
+    moveCue: (before, after) => {
+      const event = (after as MemoryState).last;
+      if (!event || event === (before as MemoryState).last) return 'tap';
+      return event.match ? 'capture' : 'thud';
+    },
+    createScene: (session) => new MemoryScene(session),
   }),
   {
     kind: 'realtime',

@@ -35,4 +35,5 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Snake Battle](snake-battle.md) — built
 - [2048](2048.md) — building
 - [Sudoku](sudoku.md), built
-- [Solitaire (Klondike)](solitaire.md)
+- [Memory](memory.md), built
+- [Solitaire (Klondike)](solitaire.md), built

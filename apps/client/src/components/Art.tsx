@@ -147,6 +147,32 @@ function SudokuArt() {
   );
 }
 
+function MemoryArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {[
+        [14, 14, 'back'],
+        [52, 14, 'heart'],
+        [14, 52, 'heart'],
+        [52, 52, 'back'],
+      ].map(([x, y, kind]) => (
+        <g key={`${x}-${y}`}>
+          <rect x={x as number} y={(y as number) + 4} width="34" height="34" rx="8" fill={kind === 'back' ? DARK.bubblegum : '#E6E0F4'} />
+          <rect x={x as number} y={y as number} width="34" height="34" rx="8" fill={kind === 'back' ? COLORS.bubblegum : '#fff'} />
+          {kind === 'back' ? (
+            <rect x={(x as number) + 6} y={(y as number) + 6} width="22" height="22" rx="5" fill="none" stroke="#fff" stroke-width="2.5" />
+          ) : (
+            <path
+              d={`M${(x as number) + 17} ${(y as number) + 27} l-9 -9 a5 5 0 0 1 9 -6 a5 5 0 0 1 9 6 z`}
+              fill={COLORS.tomato}
+            />
+          )}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 function PingPongArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -289,6 +315,7 @@ const ART: Record<string, () => JSX.Element> = {
   solitaire: SolitaireArt,
   'sea-battle': SeaBattleArt,
   sudoku: SudokuArt,
+  memory: MemoryArt,
 };
 
 export function GameArt({ id }: { id: string }) {
