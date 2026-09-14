@@ -68,6 +68,8 @@ export class LudoState implements GameState<LudoMove> {
     readonly lastEvent: LudoEvent | null,
     /** Sixes rolled in a row this turn; a third one ends the turn (standard Ludo rule). */
     readonly sixes = 0,
+    /** True right after a third six in a row ended the turn, so views can say why. */
+    readonly threeSixes = false,
   ) {}
 
   colorOf(seat: Seat): number {
@@ -106,7 +108,7 @@ export class LudoState implements GameState<LudoMove> {
     const sixes = value === 6 ? this.sixes + 1 : 0;
     // Three sixes in a row: the turn ends without moving.
     if (sixes === 3) {
-      return new LudoState(this.players, this.seed, this.tokens, this.nextSeat(), 'roll', value, this.rollCount + 1, null, null, 0);
+      return new LudoState(this.players, this.seed, this.tokens, this.nextSeat(), 'roll', value, this.rollCount + 1, null, null, 0, true);
     }
     const canMove = this.movableTokens(this.currentSeat, value).length > 0;
     return new LudoState(

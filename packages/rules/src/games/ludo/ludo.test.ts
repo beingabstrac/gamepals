@@ -101,6 +101,9 @@ describe('ludo rules', () => {
     expect(after.currentSeat).toBe(1);
     expect(after.phase).toBe('roll');
     expect(after.tokens[0]).toEqual([0, Y, Y, Y]);
+    expect(after.threeSixes).toBe(true);
+    // The next roll clears the flag.
+    expect(after.apply('roll').threeSixes).toBe(false);
   });
 
   it('rejects out-of-turn and illegal actions', () => {

@@ -4,6 +4,7 @@ import '@fontsource/nunito/400.css';
 import '@fontsource/nunito/700.css';
 import { render } from 'preact';
 import { App } from './App';
+import { SELFTEST } from './autoplay';
 import { cue } from './feedback';
 import './styles.css';
 
@@ -14,3 +15,6 @@ document.addEventListener('pointerdown', (event) => {
 });
 
 render(<App />, document.getElementById('app')!);
+
+// Native test builds only: the app plays every game by itself and logs the result for CI.
+if (SELFTEST) void import('./selftest').then((test) => test.runSelfTest());

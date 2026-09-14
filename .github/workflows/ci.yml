@@ -15,6 +15,11 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      ios:
+        description: 'Also test the real iOS app on iPhone and iPad simulators (macOS minutes count 10x)'
+        type: boolean
+        default: false
   schedule:
     # Weekly run on every screen type (Mondays 06:00 UTC).
     - cron: '0 6 * * 1'
@@ -132,6 +137,42 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-screenshots
+          path: apps/client/native-shots
+          if-no-files-found: ignore
+
+  # The real iOS app on iPhone and iPad simulators. A self-test build (VITE_SELFTEST=1) plays every
+  # game to the end inside the app and logs SELFTEST lines. macOS minutes count 10x on private repos,
+  # so this runs on release tags, or on manual runs with "ios" ticked.
+  ios:
+    needs: check
+    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.ios)
+    runs-on: macos-15
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build the self-test web app
+        run: VITE_SELFTEST=1 pnpm build
+      - name: Create the iOS project and build it for the simulator
+        working-directory: apps/client
+        run: |
+          pnpm exec cap add ios
+          pnpm exec cap sync ios
+          if [ -d ios/App/App.xcworkspace ]; then target="-workspace ios/App/App.xcworkspace"; else target="-project ios/App/App.xcodeproj"; fi
+          xcodebuild $target -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build | tail -25
+      - name: Self-test on iPhone and iPad simulators
+        run: bash apps/client/e2e-native/ios-selftest.sh
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-screenshots
           path: apps/client/native-shots
           if-no-files-found: ignore
 

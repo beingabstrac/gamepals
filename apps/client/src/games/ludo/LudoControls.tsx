@@ -33,12 +33,19 @@ export function LudoControls({ session }: { session: Session<LudoMove> }) {
   else if (myTurn) label = 'Tap a glowing token';
 
   return (
-    <div class="ludo-controls">
-      {/* Keying on the roll count replays the tumble animation for every roll. */}
-      <Die key={state.rollCount} value={state.dice} />
-      <button class="btn primary roll-btn" disabled={!canRoll} onClick={() => session.play('roll')}>
-        {label}
-      </button>
+    <div class="sudoku-controls">
+      {state.threeSixes && (
+        <p class="hint-bubble" key={state.rollCount}>
+          🎲 Three 6s in a row. Turn over!
+        </p>
+      )}
+      <div class="ludo-controls">
+        {/* Keying on the roll count replays the tumble animation for every roll. */}
+        <Die key={state.rollCount} value={state.dice} />
+        <button class="btn primary roll-btn" disabled={!canRoll} onClick={() => session.play('roll')}>
+          {label}
+        </button>
+      </div>
     </div>
   );
 }

@@ -7,8 +7,10 @@ import type { SeatController } from './session';
  * faster, so end-to-end tests can play whole games on every device. Players never see it.
  */
 const params = new URLSearchParams(typeof location === 'undefined' ? '' : location.search);
-export const AUTOPLAY = params.has('autoplay');
-export const SPEED = AUTOPLAY ? Math.max(1, Math.min(10, Number(params.get('autoplay')) || 5)) : 1;
+/** Native test builds (`VITE_SELFTEST=1`) play every game by themselves; see selftest.ts. */
+export const SELFTEST = import.meta.env.VITE_SELFTEST === '1';
+export const AUTOPLAY = params.has('autoplay') || SELFTEST;
+export const SPEED = AUTOPLAY ? Math.max(1, Math.min(10, Number(params.get('autoplay')) || 6)) : 1;
 /** Bot pause between turns in test mode. */
 export const AUTOPLAY_BOT_DELAY_MS = 40;
 
