@@ -120,8 +120,9 @@ jobs:
           cd android && ./gradlew assembleDebug --no-daemon
       - name: Free disk space for the emulator
         # The runner ships toolchains we never use; the emulator needs several GB for its data disk.
+        # Keep the tool cache: Java and Node set up above live there, and the SDK tools need that Java.
         run: |
-          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" /usr/local/lib/android/sdk/ndk
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /usr/local/lib/android/sdk/ndk
           df -h /
       - name: Enable KVM for the emulator
         run: |
