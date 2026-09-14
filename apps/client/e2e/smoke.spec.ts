@@ -97,8 +97,17 @@ test('keyboard: Tic-Tac-Toe and Four in a Row play with number keys', async ({ p
     ['Tic-Tac-Toe', '5', '(O)'],
     ['Four in a Row', '4', '(Red)'],
   ];
+  await page.goto('/');
+  // Move between games with the app's own Back buttons, like a player, not a page reload mid-game
+  // (Firefox logs "Navigated away from page" for work a game had in flight when the page reloads).
+  const leaveGame = async () => {
+    await page.getByRole('button', { name: 'Back to the table' }).click();
+    await page.getByRole('button', { name: 'Back to games' }).click();
+  };
+  const pick = (name: string) => page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
+
   for (const [name, key, nextSide] of cases) {
-    await openTable(page, name);
+    await pick(name);
     await page.getByRole('button', { name: /Friends/ }).click();
     await page.getByRole('button', { name: 'Play', exact: true }).click();
     await expect(page.locator('.board canvas')).toBeVisible();
@@ -106,10 +115,11 @@ test('keyboard: Tic-Tac-Toe and Four in a Row play with number keys', async ({ p
     await page.keyboard.press(key);
     // The key played a move, so it's now the second player's turn.
     await expect(page.locator('.status')).toContainText(nextSide);
+    await leaveGame();
   }
 
   // Duels: against a bot, Space pulls for the one person playing.
-  await openTable(page, 'Tug of War');
+  await pick('Tug of War');
   await page.getByRole('button', { name: /vs Bot/ }).click();
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect(page.locator('.board canvas')).toBeVisible();
