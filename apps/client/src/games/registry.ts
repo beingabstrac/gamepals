@@ -9,6 +9,7 @@ import {
   reflexRace,
   snakeBattle,
   solitaire,
+  slidingPuzzle,
   sudoku,
   SUDOKU_HINTS,
   SUDOKU_LEVELS,
@@ -22,6 +23,7 @@ import {
   type MemoryState,
   type PlayMode,
   type RealtimeGameDefinition,
+  type SlidingState,
   type SolitaireState,
   type SudokuLevel,
   type SudokuState,
@@ -42,6 +44,7 @@ import { PING_PONG_SIZE, PingPongScene } from './ping-pong/PingPongScene';
 import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
+import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
 import { SOLITAIRE_SIZE, SolitaireScene } from './solitaire/SolitaireScene';
 import { SudokuControls } from './sudoku/SudokuControls';
@@ -254,6 +257,28 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: SolitaireControls,
     createScene: (session) => new SolitaireScene(session),
+  }),
+  entry({
+    definition: slidingPuzzle,
+    tagline: 'Slide the tiles back in order',
+    levels: [
+      { id: '3x3', label: '3 by 3' },
+      { id: '4x4', label: '4 by 4' },
+      { id: '5x5', label: '5 by 5' },
+    ],
+    howTo: {
+      goal: 'Put the tiles back in order: 1 in the top left, and the empty space in the bottom right.',
+      controls: 'Tap a tile in the same row or column as the empty space to slide it. Tiles in between slide too. You can also swipe. On a keyboard: the arrow keys slide a tile.',
+      win: 'Every tile is back in its place. Try to use as few moves as you can.',
+      tip: 'Finish the top row first, then the next row. Each color shows which row a tile belongs in. Every puzzle here can be solved.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.tomato],
+    size: SLIDING_SIZE,
+    color: DARK.tomato,
+    status: (state) => `Moves ${(state as SlidingState).moves}`,
+    resultText: (state) => `Solved in ${(state as SlidingState).moves} moves!`,
+    createScene: (session) => new SlidingScene(session),
   }),
   entry({
     definition: memory,

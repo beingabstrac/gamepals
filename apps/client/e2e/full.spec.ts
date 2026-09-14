@@ -14,6 +14,7 @@ const GAMES = [
   'Sudoku',
   'Solitaire',
   'Memory',
+  'Sliding Puzzle',
   'Air Hockey',
   'Ping Pong',
   'Tug of War',

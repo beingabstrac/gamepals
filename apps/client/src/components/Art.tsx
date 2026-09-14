@@ -147,6 +147,30 @@ function SudokuArt() {
   );
 }
 
+function SlidingArt() {
+  const rowColor = [COLORS.tomato, COLORS.peach, COLORS.sunny];
+  const tiles = [1, 2, 3, 4, 5, 6, 7, 8];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="14" fill="#fff" />
+      {tiles.map((tile, i) => {
+        const x = 15 + (i % 3) * 24;
+        const y = 15 + Math.floor(i / 3) * 24;
+        const color = rowColor[Math.floor(i / 3)]!;
+        return (
+          <g key={tile}>
+            <rect x={x} y={y} width="22" height="22" rx="6" fill={color} />
+            <text x={x + 11} y={y + 11} text-anchor="middle" dominant-baseline="central" font-family="Fredoka, sans-serif" font-weight="600" font-size="12" fill={i >= 6 ? INK : '#fff'}>
+              {tile}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 function MemoryArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -315,6 +339,7 @@ const ART: Record<string, () => JSX.Element> = {
   solitaire: SolitaireArt,
   'sea-battle': SeaBattleArt,
   sudoku: SudokuArt,
+  'sliding-puzzle': SlidingArt,
   memory: MemoryArt,
 };
 

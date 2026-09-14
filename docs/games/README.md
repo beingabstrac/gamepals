@@ -36,4 +36,5 @@ Rules unit tests, bot-tier test, e2e steps.
 - [2048](2048.md) — building
 - [Sudoku](sudoku.md), built
 - [Memory](memory.md), built
+- [Sliding Puzzle](sliding-puzzle.md), built
 - [Solitaire (Klondike)](solitaire.md), built

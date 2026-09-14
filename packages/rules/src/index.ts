@@ -17,3 +17,4 @@ export * from './games/twenty48';
 export * from './games/sudoku';
 export * from './games/solitaire';
 export * from './games/memory';
+export * from './games/sliding-puzzle';
