@@ -5,12 +5,12 @@
  *
  * Run after `adb install app-debug.apk`:  node e2e-native/android.mjs
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import { _android as android } from '@playwright/test';
 
 const PKG = 'app.gamepals.game';
 const SHOTS = new URL('../native-shots/', import.meta.url).pathname;
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 /** Solitaire deals can be unwinnable; a long stretch of play with no errors is its pass mark. */
 const MAY_NOT_FINISH = new Set(['Solitaire']);
 
@@ -22,11 +22,11 @@ console.log(`Device: ${device.model()} (${device.serial()})`);
 
 await device.shell(`am force-stop ${PKG}`);
 await device.shell(`monkey -p ${PKG} -c android.intent.category.LAUNCHER 1`);
-/** Screenshot straight from the screen with adb (device.screenshot sent the app to the background). */
-const shot = async (path) => writeFileSync(path, await device.shell('screencap -p'));
-
 const webView = await device.webView({ pkg: PKG }, { timeout: 90_000 });
 const page = await webView.page();
+// Page screenshots only: pulling full-screen captures through the same device connection (device.screenshot,
+// adb screencap) dropped the connection to the app's WebView. CI takes one real screen capture afterwards.
+const shot = (path) => page.screenshot({ path });
 
 let errors = [];
 page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));

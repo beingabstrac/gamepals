@@ -147,6 +147,28 @@ function SudokuArt() {
   );
 }
 
+function EchoArt() {
+  const pads: [number, number, string, string][] = [
+    [50, 24, COLORS.tomato, DARK.tomato],
+    [76, 50, COLORS.sky, DARK.sky],
+    [50, 76, COLORS.sunny, DARK.sunny],
+    [24, 50, COLORS.mint, DARK.mint],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="#F1EDFA" />
+      {pads.map(([x, y, color, dark]) => (
+        <g key={color}>
+          <circle cx={x} cy={y + 2.5} r="17" fill={dark} />
+          <circle cx={x} cy={y} r="17" fill={color} />
+        </g>
+      ))}
+      <circle cx="50" cy="24" r="17" fill="#fff" opacity="0.45" />
+      <circle cx="50" cy="50" r="10" fill="#fff" stroke="#E6E0F4" stroke-width="2.5" />
+    </svg>
+  );
+}
+
 function ColorSortArt() {
   const tubes: string[][] = [
     [COLORS.sky, COLORS.tomato, COLORS.sky],
@@ -364,6 +386,7 @@ const ART: Record<string, () => JSX.Element> = {
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
   'color-sort': ColorSortArt,
+  echo: EchoArt,
   memory: MemoryArt,
 };
 

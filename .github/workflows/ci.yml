@@ -139,7 +139,7 @@ jobs:
           disable-animations: true
           script: |
             adb install -r apps/client/android/app/build/outputs/apk/debug/app-debug.apk
-            cd apps/client && node e2e-native/android.mjs
+            cd apps/client && node e2e-native/android.mjs; status=$?; mkdir -p native-shots; adb exec-out screencap -p > native-shots/android-final-screen.png || true; exit $status
       - if: always()
         uses: actions/upload-artifact@v4
         with:

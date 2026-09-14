@@ -2,6 +2,7 @@ import {
   airHockey,
   COLORS_BY_PLAYERS,
   colorSort,
+  echo,
   fourInARow,
   ludo,
   memory,
@@ -19,6 +20,7 @@ import {
   tugOfWar,
   twenty48,
   type ColorSortState,
+  type EchoState,
   type GameDefinition,
   type GameState,
   type LudoState,
@@ -40,6 +42,7 @@ import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneO
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
 import { DUEL_COLORS } from './duel';
+import { ECHO_SIDE_COLORS, ECHO_SIDE_NAMES, ECHO_SIZE, EchoScene } from './echo/EchoScene';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
 import { LudoControls } from './ludo/LudoControls';
 import { LUDO_COLOR_NAMES, LUDO_COLORS, LUDO_SIZE, LudoScene } from './ludo/LudoScene';
@@ -312,6 +315,44 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: ColorSortControls,
     createScene: (session) => new ColorSortScene(session),
+  }),
+  entry({
+    definition: echo,
+    tagline: 'Watch, listen, repeat',
+    levels: [
+      { id: 'short', label: 'Short (8)' },
+      { id: 'classic', label: 'Classic (14)' },
+      { id: 'long', label: 'Long (20)' },
+      { id: 'marathon', label: 'Marathon (31)' },
+    ],
+    howTo: {
+      goal: 'Remember the pads as they light up and play them back in the same order.',
+      controls: 'Watch and listen, then tap the pads. On a keyboard: press 1 to 4, or the arrow keys.',
+      win: 'Alone: repeat the whole sequence up to the level goal. With friends: take turns, repeat the sequence, then add one step of your own. Miss and you are out; the last player in wins.',
+      tip: 'Every round adds one more step. You have 5 seconds for each press, and the ring shows the time left. Humming the tune helps!',
+    },
+    sideNames: (players) => ECHO_SIDE_NAMES.slice(0, players),
+    sideColors: (players) => ECHO_SIDE_COLORS.slice(0, players),
+    size: ECHO_SIZE,
+    color: DARK.grape,
+    botDelayMs: 650,
+    status: (state) => {
+      const s = state as EchoState;
+      if (!s.party) return `Round ${s.sequence.length}`;
+      return s.phase === 'add' ? 'Add a step of your own' : undefined;
+    },
+    resultText: (state) => {
+      const s = state as EchoState;
+      if (s.party) return undefined;
+      return s.result?.winners.length ? `You echoed all ${s.sequence.length} steps! 🎉` : `You repeated ${s.sequence.length - 1} steps in a row.`;
+    },
+    moveCue: (_before, after) => {
+      const press = (after as EchoState).last;
+      if (!press) return undefined;
+      if (!press.correct) return 'buzz';
+      return press.pad === null ? undefined : (`echo${press.pad}` as SoundName);
+    },
+    createScene: (session) => new EchoScene(session),
   }),
   entry({
     definition: memory,

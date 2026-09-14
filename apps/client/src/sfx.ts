@@ -55,6 +55,11 @@ export const SFX = {
     { freq: 880, to: 220, duration: 0.22, type: 'sawtooth', volume: 0.09 },
     { freq: 660, to: 990, duration: 0.12, type: 'triangle', volume: 0.12, delay: 0.2 },
   ],
+  // Echo's four pads: an A major chord (A, C sharp, E, high A), so any sequence sounds like a tune.
+  echo0: [{ freq: 440, duration: 0.34, type: 'sine', volume: 0.22 }, { freq: 880, duration: 0.2, type: 'triangle', volume: 0.04 }],
+  echo1: [{ freq: 554.37, duration: 0.34, type: 'sine', volume: 0.22 }, { freq: 1108.73, duration: 0.2, type: 'triangle', volume: 0.04 }],
+  echo2: [{ freq: 659.25, duration: 0.34, type: 'sine', volume: 0.22 }, { freq: 1318.51, duration: 0.2, type: 'triangle', volume: 0.04 }],
+  echo3: [{ freq: 880, duration: 0.34, type: 'sine', volume: 0.2 }, { freq: 1760, duration: 0.2, type: 'triangle', volume: 0.04 }],
 } satisfies Record<string, readonly Tone[]>;
 
 export type SoundName = keyof typeof SFX;
