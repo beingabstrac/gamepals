@@ -56,7 +56,7 @@ describe('checkers rules', () => {
 
   it('men only move forward; kings move both ways', () => {
     const man = checkersFrom(board([[4, 3, P.blackMan], [0, 1, P.redMan]]), 0);
-    expect(man.legalMoves(0).sort()).toEqual([`${sq(4, 3)}-${sq(3, 2)}`, `${sq(4, 3)}-${sq(3, 4)}`].sort());
+    expect([...man.legalMoves(0)].sort()).toEqual([`${sq(4, 3)}-${sq(3, 2)}`, `${sq(4, 3)}-${sq(3, 4)}`].sort());
     const king = checkersFrom(board([[4, 3, P.blackKing], [0, 1, P.redMan]]), 0);
     expect(king.legalMoves(0)).toHaveLength(4);
   });

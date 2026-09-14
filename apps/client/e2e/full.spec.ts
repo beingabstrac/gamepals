@@ -18,6 +18,7 @@ const GAMES = [
   'Color Sort',
   'Echo',
   'Classic Snake',
+  'Checkers',
   'Air Hockey',
   'Ping Pong',
   'Tug of War',

@@ -40,4 +40,5 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Color Sort](color-sort.md), built
 - [Echo](echo.md), built
 - [Classic Snake](classic-snake.md), built
+- [Checkers](checkers.md), built
 - [Solitaire (Klondike)](solitaire.md), built

@@ -1,5 +1,6 @@
 import {
   airHockey,
+  checkers,
   classicSnake,
   COLORS_BY_PLAYERS,
   colorSort,
@@ -20,6 +21,7 @@ import {
   ticTacToe,
   tugOfWar,
   twenty48,
+  type CheckersState,
   type ColorSortState,
   type GameResult,
   type EchoState,
@@ -42,6 +44,7 @@ import type { SoundName } from '../sfx';
 import { storage } from '../platform';
 import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
+import { CHECKERS_SIZE, CheckersScene } from './checkers/CheckersScene';
 import { CLASSIC_SNAKE_BEST_KEY, CLASSIC_SNAKE_SIZE, ClassicSnakeScene } from './classic-snake/ClassicSnakeScene';
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
@@ -149,6 +152,38 @@ export const GAMES: readonly AnyEntry[] = [
     size: TIC_TAC_TOE_SIZE,
     color: COLORS.grape,
     createScene: (session) => new TicTacToeScene(session),
+  }),
+  entry({
+    definition: checkers,
+    tagline: 'Jump, capture, crown a king',
+    howTo: {
+      goal: "Take all of the other player's pieces, or leave them with no move.",
+      controls: 'Tap one of your pieces, then tap a glowing square. On a keyboard: arrow keys and Enter.',
+      win: 'The other side has no pieces left, or no piece can move.',
+      draw: 'If 40 moves each go by with no capture and no plain piece moving, or the same position comes up three times, it is a draw.',
+      tip: 'Pieces move diagonally forward. If you can jump, you must, and you keep jumping while you can. Reach the far row to become a king that moves both ways.',
+    },
+    sideNames: () => ['Black', 'Red'],
+    sideColors: () => [COLORS.ink, COLORS.tomato],
+    size: CHECKERS_SIZE,
+    color: COLORS.peach,
+    botDelayMs: 700,
+    status: (state) => {
+      const s = state as CheckersState;
+      if (s.result) return undefined;
+      const jump = s.legalMoves(s.currentSeat).some((m) => {
+        const [a, b] = m.split('-').map(Number) as [number, number];
+        return Math.abs(Math.floor(a / 8) - Math.floor(b / 8)) === 2;
+      });
+      return jump ? `${s.currentSeat === 0 ? 'Black' : 'Red'} must jump` : undefined;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as CheckersState).last;
+      if (!event) return undefined;
+      if (event.crowned) return 'go';
+      return event.captured.length ? 'capture' : undefined;
+    },
+    createScene: (session) => new CheckersScene(session),
   }),
   entry({
     definition: fourInARow,
@@ -526,7 +561,6 @@ export const GAMES: readonly AnyEntry[] = [
 
 /** Shown on the home shelf so the catalog direction is visible from day one (docs/12). */
 export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [
-  { id: 'checkers', name: 'Checkers', color: COLORS.peach },
   { id: 'chess', name: 'Chess', color: COLORS.grape },
   { id: 'sea-battle', name: 'Sea Battle', color: COLORS.sky },
 ];

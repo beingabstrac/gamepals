@@ -1,6 +1,6 @@
 # Checkers
 
-Status: brief (2026-09-14). Rules: English draughts, the American checkers most players know. Other national rules (flying kings, men capturing backward) can come later as options.
+Status: built (2026-09-14). Rules: English draughts, the American checkers most players know. Other national rules (flying kings, men capturing backward) can come later as options.
 
 ## The real game
 - 8×8 board, played on the dark squares. Each side starts with 12 pieces on its three nearest rows. The darker side moves first.
