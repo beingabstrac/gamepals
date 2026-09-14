@@ -14,6 +14,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
+import { applySpeed, SPEED } from '../../autoplay';
 import { drawHalves, facing, isPerson, onHalfTap } from '../duel';
 
 const W = 600;
@@ -50,6 +51,7 @@ export class TugOfWarScene extends Scene {
 
   create(): void {
     fitCamera(this, W, H);
+    applySpeed(this);
     drawHalves(this, W, H, TINTS);
 
     const lines = this.add.graphics();
@@ -132,7 +134,7 @@ export class TugOfWarScene extends Scene {
 
   update(_time: number, delta: number): void {
     if (this.ended) return;
-    this.accumulator += Math.min(delta, 100) / 1000;
+    this.accumulator += Math.min(delta, 100) * SPEED / 1000;
     const wasCounting = this.state.countdown > 0;
 
     while (this.accumulator >= TUG_STEP) {

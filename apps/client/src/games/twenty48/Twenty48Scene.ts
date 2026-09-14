@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
-
+import { applySpeed } from '../../autoplay';
 const SIZE = 600;
 export const TWENTY48_SIZE = { width: SIZE, height: SIZE };
 
@@ -47,6 +47,7 @@ export class Twenty48Scene extends Scene {
 
   create(): void {
     fitCamera(this, SIZE, SIZE);
+    applySpeed(this);
     this.drawBoard();
     for (const tile of this.state.tiles) this.addTile(tile, true);
 

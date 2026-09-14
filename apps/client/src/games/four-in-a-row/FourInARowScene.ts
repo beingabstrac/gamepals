@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
-
+import { applySpeed, SPEED } from '../../autoplay';
 const CELL = 100;
 const FACE_HEIGHT = ROWS * CELL;
 const LIP = 16;
@@ -44,6 +44,7 @@ export class FourInARowScene extends Scene {
 
   create(): void {
     fitCamera(this, FOUR_IN_A_ROW_SIZE.width, FOUR_IN_A_ROW_SIZE.height);
+    applySpeed(this);
     this.board = this.add.graphics();
 
     for (let col = 0; col < COLS; col++) {
@@ -62,7 +63,7 @@ export class FourInARowScene extends Scene {
   update(_time: number, delta: number): void {
     const drop = this.drop;
     if (!drop) return;
-    const dt = Math.min(delta, 50) / 1000;
+    const dt = Math.min(delta, 50) * SPEED / 1000;
     drop.vy += GRAVITY * dt;
     drop.disc.y += drop.vy * dt;
     if (drop.disc.y < drop.targetY) return;

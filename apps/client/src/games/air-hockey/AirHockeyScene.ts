@@ -22,6 +22,7 @@ import type { SeatController } from '../../session';
 import type { SoundName } from '../../sfx';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
+import { applySpeed, SPEED } from '../../autoplay';
 import { facing } from '../duel';
 
 export interface RealtimeSceneOptions {
@@ -71,6 +72,7 @@ export class AirHockeyScene extends Scene {
 
   create(): void {
     fitCamera(this, TABLE.width, TABLE.height);
+    applySpeed(this);
     this.input.addPointer(3);
     this.drawTable();
 
@@ -106,7 +108,7 @@ export class AirHockeyScene extends Scene {
   update(_time: number, delta: number): void {
     if (this.ended) return;
     // Cap the frame time so a tab switch doesn't fast-forward the match.
-    const dt = Math.min(delta, 100) / 1000;
+    const dt = Math.min(delta, 100) * SPEED / 1000;
     this.accumulator += dt;
 
     this.noiseTimer -= dt;

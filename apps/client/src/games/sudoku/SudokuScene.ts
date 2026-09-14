@@ -3,6 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
+import { applySpeed } from '../../autoplay';
 import { uiFor, type SudokuUi } from './ui';
 
 const SIZE = 720;
@@ -39,6 +40,7 @@ export class SudokuScene extends Scene {
 
   create(): void {
     fitCamera(this, SIZE, SIZE);
+    applySpeed(this);
     const paper = this.add.graphics();
     paper.fillStyle(0x2b2a3a, 0.08);
     paper.fillRoundedRect(4, 10, SIZE - 8, SIZE - 10, 28);

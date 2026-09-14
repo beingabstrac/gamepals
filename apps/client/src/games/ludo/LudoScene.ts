@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
-
+import { applySpeed } from '../../autoplay';
 const CELL = 40;
 const SIZE = 15 * CELL;
 export const LUDO_SIZE = { width: SIZE, height: SIZE };
@@ -101,6 +101,7 @@ export class LudoScene extends Scene {
 
   create(): void {
     fitCamera(this, SIZE, SIZE);
+    applySpeed(this);
     this.drawBoard();
     const state = this.state;
 

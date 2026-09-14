@@ -3,6 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
+import { applySpeed } from '../../autoplay';
 import { solitaireUiFor, type SolitaireUi } from './ui';
 
 const W = 700;
@@ -97,6 +98,7 @@ export class SolitaireScene extends Scene {
 
   create(): void {
     fitCamera(this, W, H);
+    applySpeed(this);
     this.drawTable();
     for (let card = 0; card < 52; card++) this.views.set(card, this.makeCard(card));
     // Deal: every card starts on the deck and flies out to its place.

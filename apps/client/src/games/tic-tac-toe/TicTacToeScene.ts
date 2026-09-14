@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
-
+import { applySpeed } from '../../autoplay';
 const SIZE = 600;
 export const TIC_TAC_TOE_SIZE = { width: SIZE, height: SIZE };
 
@@ -63,6 +63,7 @@ export class TicTacToeScene extends Scene {
 
   create(): void {
     fitCamera(this, SIZE, SIZE);
+    applySpeed(this);
 
     const grid = this.add.graphics();
     grid.fillStyle(GRID_COLOR, 1);

@@ -74,7 +74,8 @@ jobs:
             *) engine=chromium ;;
           esac
           pnpm --filter @gamepals/client exec playwright install --with-deps "$engine"
-      - run: pnpm e2e --project ${{ matrix.project }}
+      # Whole-game playthroughs (@full) are slow: weekly, tags and manual runs only.
+      - run: pnpm e2e --project ${{ matrix.project }} ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')) && '--workers=2' || '--grep-invert @full' }}
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

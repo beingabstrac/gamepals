@@ -13,6 +13,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
+import { applySpeed, SPEED } from '../../autoplay';
 import { DUEL_COLORS, drawHalves, facing, isPerson, onHalfTap } from '../duel';
 
 const W = 600;
@@ -43,6 +44,7 @@ export class ReflexRaceScene extends Scene {
 
   create(): void {
     fitCamera(this, W, H);
+    applySpeed(this);
     drawHalves(this, W, H, TINTS);
 
     const seats = this.options.seats;
@@ -76,7 +78,7 @@ export class ReflexRaceScene extends Scene {
   update(_time: number, delta: number): void {
     if (this.ended) return;
     const before = this.state;
-    this.state = stepReflex(this.state, Math.min(delta, 50));
+    this.state = stepReflex(this.state, Math.min(delta, 50) * SPEED);
     if (this.state.phase !== before.phase) this.onPhaseChange(before);
 
     if (this.state.phase === 'go') {

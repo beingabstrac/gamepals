@@ -19,7 +19,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
-
+import { applySpeed, SPEED } from '../../autoplay';
 const W = 600;
 const H = 900;
 export const SNAKE_SIZE = { width: W, height: H };
@@ -64,6 +64,7 @@ export class SnakeScene extends Scene {
 
   create(): void {
     fitCamera(this, W, H);
+    applySpeed(this);
     this.input.addPointer(3);
     this.drawBoard();
     this.snakes = this.add.graphics().setDepth(3);
@@ -89,7 +90,7 @@ export class SnakeScene extends Scene {
 
   update(_time: number, delta: number): void {
     if (this.ended) return;
-    this.accumulator += Math.min(delta, 100) / 1000;
+    this.accumulator += Math.min(delta, 100) * SPEED / 1000;
     while (this.accumulator >= SNAKE_STEP) {
       this.accumulator -= SNAKE_STEP;
       const before = this.state;

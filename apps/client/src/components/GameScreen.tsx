@@ -1,5 +1,6 @@
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS } from '../autoplay';
 import { cue } from '../feedback';
 import { DPR } from '../games/crisp';
 import type { GameEntry } from '../games/registry';
@@ -25,7 +26,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
   const host = useRef<HTMLDivElement>(null);
 
   const session = useMemo(
-    () => new Session(entry.definition, seats, seed, entry.botDelayMs, variant),
+    () => new Session(entry.definition, seats, seed, AUTOPLAY ? AUTOPLAY_BOT_DELAY_MS : entry.botDelayMs, variant),
     [entry, seats, seed, variant],
   );
 

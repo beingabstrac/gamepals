@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
-
+import { applySpeed } from '../../autoplay';
 const W = 600;
 const H = 800;
 export const MEMORY_SIZE = { width: W, height: H };
@@ -100,6 +100,7 @@ export class MemoryScene extends Scene {
 
   create(): void {
     fitCamera(this, W, H);
+    applySpeed(this);
     this.layout();
     this.makeScoreboard();
     this.state.symbols.forEach((symbol, i) => {

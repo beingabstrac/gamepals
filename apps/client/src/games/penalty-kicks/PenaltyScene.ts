@@ -28,6 +28,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
+import { applySpeed, SPEED } from '../../autoplay';
 import { facing, seatForY } from '../duel';
 
 export const PENALTY_SIZE = { width: PK_CANVAS.width, height: PK_CANVAS.height };
@@ -86,6 +87,7 @@ export class PenaltyScene extends Scene {
 
   create(): void {
     fitCamera(this, W, H);
+    applySpeed(this);
     this.input.addPointer(3);
     this.drawPitch();
     this.goals = [0, 1].map((seat) => this.makeGoal(seat as Seat));
@@ -183,7 +185,7 @@ export class PenaltyScene extends Scene {
 
   update(_time: number, delta: number): void {
     if (this.ended) return;
-    this.accumulator += Math.min(delta, 100) / 1000;
+    this.accumulator += Math.min(delta, 100) * SPEED / 1000;
     while (this.accumulator >= PK_STEP) {
       this.accumulator -= PK_STEP;
       this.clock += PK_STEP;

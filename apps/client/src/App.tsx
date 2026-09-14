@@ -6,6 +6,7 @@ import { Setup } from './components/Setup';
 import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
+import { AUTOPLAY, autoplaySeats } from './autoplay';
 
 type Screen =
   | { name: 'home' }
@@ -27,7 +28,7 @@ export function App() {
       <Setup
         entry={screen.entry}
         onBack={() => setScreen({ name: 'home' })}
-        onStart={(seats, variant) => setScreen({ name: 'play', entry: screen.entry, seats, variant })}
+        onStart={(seats, variant) => setScreen({ name: 'play', entry: screen.entry, seats: AUTOPLAY ? autoplaySeats(seats.length) : seats, variant })}
       />
     );
   }
