@@ -37,4 +37,5 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Sudoku](sudoku.md), built
 - [Memory](memory.md), built
 - [Sliding Puzzle](sliding-puzzle.md), built
+- [Color Sort](color-sort.md), built
 - [Solitaire (Klondike)](solitaire.md), built

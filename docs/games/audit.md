@@ -19,6 +19,7 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Solitaire | Yes: Klondike, alternating colors down, King to empty column, foundations by suit, draw 1 or 3, unlimited redeals, standard scoring | Tap to auto-move, drag, tap the deck | Cards fly with ease-out, flip with a squeeze, lean while dragged, bounce down on a win | Winnable-deal solver, Race |
 | Memory | Yes: Concentration rules, a match keeps your turn, most pairs wins, ties possible, solo counts turns | Tap two cards | Cards flip with a squeeze, pairs fly to the scorer, misses shake then flip back | Online play (M3) |
 | Sliding Puzzle | Yes: 15 puzzle rules, tiles slide into the one space, whole rows push together, shuffled only by real slides so always solvable, moves counted per tile | Tap, swipe or arrow keys | Tiles glide and stop, blocked swipes nudge, a pop wave on solving | Race mode, best scores |
+| Color Sort | Yes: water sort rules, pour onto the same color or an empty tube, as much as fits, every deal checked solvable by our solver | Tap a tube then another, or keys 1-9 and arrows | Tube lifts, tilts and streams the color across, corks pop on finished tubes | Race mode |
 
 Look and feel rules applied to every game (2026-09-13):
 - Bright candy colors, no pastels, no gradients.

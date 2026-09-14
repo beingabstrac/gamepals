@@ -147,6 +147,29 @@ function SudokuArt() {
   );
 }
 
+function ColorSortArt() {
+  const tubes: string[][] = [
+    [COLORS.sky, COLORS.tomato, COLORS.sky],
+    [COLORS.tomato, COLORS.sky, COLORS.tomato, COLORS.sunny],
+    [COLORS.sunny, COLORS.sunny],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {tubes.map((layers, t) => {
+        const x = 16 + t * 26;
+        return (
+          <g key={t}>
+            <rect x={x} y="16" width="18" height="70" rx="9" fill="#fff" stroke="#CFC6EC" stroke-width="3" />
+            {layers.map((color, k) => (
+              <rect key={k} x={x + 3} y={69 - k * 16} width="12" height="14" rx={k === 0 ? 6 : 3} fill={color} />
+            ))}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 function SlidingArt() {
   const rowColor = [COLORS.tomato, COLORS.peach, COLORS.sunny];
   const tiles = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -340,6 +363,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sea-battle': SeaBattleArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
+  'color-sort': ColorSortArt,
   memory: MemoryArt,
 };
 

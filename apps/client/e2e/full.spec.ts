@@ -15,6 +15,7 @@ const GAMES = [
   'Solitaire',
   'Memory',
   'Sliding Puzzle',
+  'Color Sort',
   'Air Hockey',
   'Ping Pong',
   'Tug of War',

@@ -4,7 +4,7 @@
  * to its end by itself (bots in every seat, sped up), checks the layout and rematch, and prints
  * `SELFTEST` lines to the app log. CI reads them from the simulator or emulator.
  */
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 /** Solitaire deals can be unwinnable, so for it a stretch of play with no errors is the pass mark. */
 const MAY_NOT_FINISH = new Set(['Solitaire']);
 

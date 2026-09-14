@@ -5,12 +5,12 @@
  *
  * Run after `adb install app-debug.apk`:  node e2e-native/android.mjs
  */
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { _android as android } from '@playwright/test';
 
 const PKG = 'app.gamepals.game';
 const SHOTS = new URL('../native-shots/', import.meta.url).pathname;
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 /** Solitaire deals can be unwinnable; a long stretch of play with no errors is its pass mark. */
 const MAY_NOT_FINISH = new Set(['Solitaire']);
 
@@ -22,6 +22,9 @@ console.log(`Device: ${device.model()} (${device.serial()})`);
 
 await device.shell(`am force-stop ${PKG}`);
 await device.shell(`monkey -p ${PKG} -c android.intent.category.LAUNCHER 1`);
+/** Screenshot straight from the screen with adb (device.screenshot sent the app to the background). */
+const shot = async (path) => writeFileSync(path, await device.shell('screencap -p'));
+
 const webView = await device.webView({ pkg: PKG }, { timeout: 90_000 });
 const page = await webView.page();
 
@@ -38,7 +41,7 @@ console.log(`App loaded at ${origin}`);
 await page.locator('.tile').first().waitFor({ timeout: 60_000 });
 const sideways = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 if (sideways > 1) failures.push(`Home scrolls sideways by ${sideways}px`);
-await device.screenshot({ path: `${SHOTS}android-home.png` });
+await shot(`${SHOTS}android-home.png`);
 
 for (const name of GAMES) {
   errors = [];
@@ -51,13 +54,13 @@ for (const name of GAMES) {
     const result = page.locator('.result-sheet');
     if (MAY_NOT_FINISH.has(name)) await result.waitFor({ timeout: 45_000 }).catch(() => undefined);
     else await result.waitFor({ timeout: 300_000 });
-    await device.screenshot({ path: `${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}.png` });
+    await shot(`${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}.png`);
     if (errors.length) failures.push(`${name}: ${errors.join(' | ')}`);
     console.log(`${errors.length ? '✗' : '✓'} ${name} (${Math.round((Date.now() - started) / 1000)}s)`);
   } catch (error) {
     failures.push(`${name}: ${error.message.split('\n')[0]}`);
     console.log(`✗ ${name}: ${error.message.split('\n')[0]}`);
-    await device.screenshot({ path: `${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}-failed.png` }).catch(() => undefined);
+    await shot(`${SHOTS}android-${name.toLowerCase().replace(/\W+/g, '-')}-failed.png`).catch(() => undefined);
   }
 }
 

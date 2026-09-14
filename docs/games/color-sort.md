@@ -1,6 +1,6 @@
 # Color Sort
 
-Status: brief (2026-09-14). Our name for the "water sort" / "ball sort" puzzle genre (generic genre; we use our own name and art).
+Status: built (2026-09-14). Our name for the "water sort" / "ball sort" puzzle genre (generic genre; we use our own name and art).
 
 ## The real game
 - Tubes hold up to 4 layers of colored water. Tap a tube, then another: the top color pours across, **only onto an empty tube or onto the same color**, and as much of that color as fits moves at once.

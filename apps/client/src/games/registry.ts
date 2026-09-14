@@ -1,6 +1,7 @@
 import {
   airHockey,
   COLORS_BY_PLAYERS,
+  colorSort,
   fourInARow,
   ludo,
   memory,
@@ -17,6 +18,7 @@ import {
   ticTacToe,
   tugOfWar,
   twenty48,
+  type ColorSortState,
   type GameDefinition,
   type GameState,
   type LudoState,
@@ -35,6 +37,8 @@ import type { Session } from '../session';
 import type { SoundName } from '../sfx';
 import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
+import { ColorSortControls } from './color-sort/ColorSortControls';
+import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
 import { DUEL_COLORS } from './duel';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
 import { LudoControls } from './ludo/LudoControls';
@@ -279,6 +283,35 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state) => `Moves ${(state as SlidingState).moves}`,
     resultText: (state) => `Solved in ${(state as SlidingState).moves} moves!`,
     createScene: (session) => new SlidingScene(session),
+  }),
+  entry({
+    definition: colorSort,
+    tagline: 'Pour until every tube is one color',
+    levels: [
+      { id: 'easy', label: 'Easy' },
+      { id: 'medium', label: 'Medium' },
+      { id: 'hard', label: 'Hard' },
+    ],
+    howTo: {
+      goal: 'Sort the colors so each tube holds just one color.',
+      controls: 'Tap a tube to lift it, then tap another tube to pour. On a keyboard: press 1 to 9 (0 for the tenth tube), or use the arrow keys and Enter.',
+      win: 'Every tube is full of one color, or empty.',
+      tip: 'You can only pour onto the same color or into an empty tube. Use the empty tubes to make room. Undo as much as you like. Every puzzle here can be solved.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.sky],
+    size: COLOR_SORT_SIZE,
+    color: DARK.sky,
+    status: (state) => `Pours ${(state as ColorSortState).moves}`,
+    resultText: (state) => `Sorted in ${(state as ColorSortState).moves} pours!`,
+    moveCue: (before, after) => {
+      const pour = (after as ColorSortState).last;
+      if (!pour) return 'tap';
+      const tube = (after as ColorSortState).tubes[pour.to]!;
+      return tube.length === 4 && tube.every((c) => c === tube[0]) && (before as ColorSortState).tubes[pour.to]!.length < 4 ? 'capture' : 'pull';
+    },
+    Controls: ColorSortControls,
+    createScene: (session) => new ColorSortScene(session),
   }),
   entry({
     definition: memory,
