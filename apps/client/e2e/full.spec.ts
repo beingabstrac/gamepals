@@ -22,6 +22,8 @@ const GAMES = [
   'Reversi',
   'Dots & Boxes',
   'Mancala',
+  'Snakes & Ladders',
+  'Ultimate Tic-Tac-Toe',
   'Air Hockey',
   'Ping Pong',
   'Tug of War',

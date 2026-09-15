@@ -11,7 +11,7 @@ const PIPS: Record<number, readonly number[]> = {
   6: [0, 2, 3, 5, 6, 8],
 };
 
-function Die({ value }: { value: number | null }) {
+export function Die({ value }: { value: number | null }) {
   const pips = value ? (PIPS[value] ?? []) : [];
   return (
     <div class={value ? 'die rolled' : 'die'} aria-label={value ? `Rolled ${value}` : 'Not rolled yet'}>

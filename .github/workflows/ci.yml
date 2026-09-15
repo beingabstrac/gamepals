@@ -130,6 +130,8 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - uses: reactivecircus/android-emulator-runner@v2
+        # A stuck emulator boot once burned the whole 90 minute job; fail fast instead.
+        timeout-minutes: 45
         with:
           api-level: 34
           arch: x86_64

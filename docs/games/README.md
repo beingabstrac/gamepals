@@ -44,4 +44,6 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Reversi](reversi.md), built
 - [Dots & Boxes](dots-and-boxes.md), built
 - [Mancala](mancala.md), built
+- [Snakes & Ladders](snakes-and-ladders.md), built
+- [Ultimate Tic-Tac-Toe](ultimate-ttt.md), built
 - [Solitaire (Klondike)](solitaire.md), built

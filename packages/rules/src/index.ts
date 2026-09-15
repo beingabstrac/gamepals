@@ -26,3 +26,4 @@ export * from './games/reversi';
 export * from './games/dots-and-boxes';
 export * from './games/mancala';
 export * from './games/snakes-and-ladders';
+export * from './games/ultimate-ttt';

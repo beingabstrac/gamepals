@@ -1,6 +1,6 @@
 # Snakes & Ladders
 
-Status: brief (2026-09-14). Rules: the classic 100-square race game, in the common modern form.
+Status: built (2026-09-15). Rules: the classic 100-square race game, in the common modern form.
 
 ## The real game
 - A 10 by 10 board numbered 1 to 100. The numbers wind back and forth: 1 to 10 left to right on the bottom row, 11 to 20 right to left on the next row, and so on up to 100 at the top.

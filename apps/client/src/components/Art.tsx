@@ -109,6 +109,58 @@ function MancalaArt() {
   );
 }
 
+function SnakesArt() {
+  const rungs = [0.2, 0.4, 0.6, 0.8];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="16" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill="#fff" />
+      {[0, 1, 2].map((row) =>
+        [0, 1, 2].map((col) =>
+          (row + col) % 2 ? null : <rect key={`${row}-${col}`} x={14 + col * 24} y={14 + row * 24} width="24" height="24" rx="6" fill="#FFF1DC" />,
+        ),
+      )}
+      <g stroke={DARK.sunny} stroke-width="4" stroke-linecap="round">
+        <line x1="24" y1="80" x2="44" y2="24" />
+        <line x1="36" y1="84" x2="56" y2="28" />
+        {rungs.map((t) => (
+          <line key={t} x1={24 + 20 * t} y1={80 - 56 * t} x2={36 + 20 * t} y2={84 - 56 * t} />
+        ))}
+      </g>
+      <path d="M70 26 C 88 40, 52 50, 70 62 S 66 84, 80 84" fill="none" stroke={COLORS.grape} stroke-width="8" stroke-linecap="round" />
+      <circle cx="70" cy="26" r="8" fill={COLORS.grape} />
+      <circle cx="67" cy="24" r="2" fill="#fff" />
+      <circle cx="73" cy="24" r="2" fill="#fff" />
+    </svg>
+  );
+}
+
+function UltimateArt() {
+  const at = [14, 38, 62];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="12" width="84" height="84" rx="16" fill="#E6E0F4" />
+      <rect x="8" y="8" width="84" height="84" rx="16" fill="#fff" />
+      {at.map((y, row) =>
+        at.map((x, col) => {
+          const live = row === 1 && col === 2;
+          return (
+            <rect key={`${row}-${col}`} x={x} y={y} width="24" height="24" rx="6" fill={live ? '#FFF3C4' : '#F3EFFB'} stroke={live ? COLORS.sunny : 'none'} stroke-width="2" />
+          );
+        }),
+      )}
+      <g stroke={COLORS.tomato} stroke-width="4" stroke-linecap="round">
+        <line x1="21" y1="21" x2="31" y2="31" />
+        <line x1="31" y1="21" x2="21" y2="31" />
+        <line x1="45" y1="45" x2="55" y2="55" />
+        <line x1="55" y1="45" x2="45" y2="55" />
+      </g>
+      <circle cx="74" cy="26" r="5.5" fill="none" stroke={COLORS.sky} stroke-width="4" />
+      <circle cx="26" cy="74" r="5.5" fill="none" stroke={COLORS.sky} stroke-width="4" />
+    </svg>
+  );
+}
+
 function DotsArt() {
   const dots = [22, 50, 78];
   return (
@@ -478,6 +530,8 @@ const ART: Record<string, () => JSX.Element> = {
   reversi: ReversiArt,
   'dots-and-boxes': DotsArt,
   mancala: MancalaArt,
+  'snakes-and-ladders': SnakesArt,
+  'ultimate-ttt': UltimateArt,
   memory: MemoryArt,
 };
 

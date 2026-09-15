@@ -9,6 +9,10 @@ import {
   fourInARow,
   ludo,
   mancala,
+  snakesAndLadders,
+  type SnakesState,
+  ultimateTtt,
+  type UltimateState,
   memory,
   penaltyKicks,
   pingPong,
@@ -68,6 +72,9 @@ import { ReversiControls } from './reversi/ReversiControls';
 import { REVERSI_SIZE, ReversiScene } from './reversi/ReversiScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
 import { MANCALA_SIZE, MancalaScene } from './mancala/MancalaScene';
+import { SnakesControls } from './snakes-and-ladders/SnakesControls';
+import { SNAKES_SEAT_COLORS, SNAKES_SEAT_NAMES, SNAKES_SIZE, SnakesScene } from './snakes-and-ladders/SnakesScene';
+import { BOARD_NAMES, ULTIMATE_SIZE, UltimateScene } from './ultimate-ttt/UltimateScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
@@ -290,6 +297,68 @@ export const GAMES: readonly AnyEntry[] = [
       return event.extraTurn ? 'go' : 'place';
     },
     createScene: (session) => new MancalaScene(session),
+  }),
+  entry({
+    definition: snakesAndLadders,
+    tagline: 'Climb ladders, dodge snakes',
+    levels: [
+      { id: 'classic', label: 'Exact roll to 100' },
+      { id: 'quick', label: 'Quick finish' },
+    ],
+    howTo: {
+      goal: 'Be the first to reach square 100.',
+      controls: 'Tap Roll, or tap the board. Your token moves by itself. On a keyboard: press Space, Enter or R.',
+      win: 'The first token on square 100 wins.',
+      tip: "Land at the foot of a ladder to climb it. Land on a snake's head and you slide down. A 6 rolls again, but three 6s in a row end your turn. With Exact roll to 100, a roll that is too big bounces you back. It is all luck, so every bot plays the same.",
+    },
+    sideNames: (players) => SNAKES_SEAT_NAMES.slice(0, players),
+    sideColors: (players) => SNAKES_SEAT_COLORS.slice(0, players),
+    size: SNAKES_SIZE,
+    color: COLORS.grape,
+    botDelayMs: 900,
+    status: (state) => {
+      const s = state as SnakesState;
+      if (s.result) return undefined;
+      const spots = s.positions.map((square, seat) => `${SNAKES_SEAT_NAMES[seat]} ${square === 0 ? 'at start' : `on ${square}`}`);
+      return `${SNAKES_SEAT_NAMES[s.currentSeat]} to roll. ${spots.join(', ')}`;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as SnakesState).last;
+      if (!event?.jump) return 'roll';
+      return event.jump.kind === 'snake' ? 'thud' : 'go';
+    },
+    Controls: SnakesControls,
+    createScene: (session) => new SnakesScene(session),
+  }),
+  entry({
+    definition: ultimateTtt,
+    tagline: 'Nine boards, one big game',
+    howTo: {
+      goal: 'Win three small boards in a row on the big board.',
+      controls: 'Tap a square in a glowing board. On a keyboard: move with the arrow keys and press Enter.',
+      win: 'Three in a row inside a small board wins it. Win three small boards in a row to win the game.',
+      draw: 'If every small board is won or full and nobody has three in a row, it is a draw.',
+      tip: 'The square you pick sends the other player to the board in the same spot. If that board is already won or full, they may play in any open board.',
+    },
+    sideNames: () => ['X', 'O'],
+    sideColors: () => [COLORS.tomato, COLORS.sky],
+    size: ULTIMATE_SIZE,
+    color: COLORS.sky,
+    status: (state) => {
+      const s = state as UltimateState;
+      if (s.result) return undefined;
+      const who = s.currentSeat === 0 ? 'X' : 'O';
+      if (s.active !== null) return `${who}: play in the ${BOARD_NAMES[s.active]} board`;
+      return s.last === null ? `${who}: play anywhere` : `${who}: that board is closed, play in any open board`;
+    },
+    moveCue: (before, after) => {
+      const b = before as UltimateState;
+      const a = after as UltimateState;
+      if (a.last === null) return undefined;
+      const board = Math.floor(a.last / 9);
+      return b.boards[board] === null && typeof a.boards[board] === 'number' ? 'capture' : 'place';
+    },
+    createScene: (session) => new UltimateScene(session),
   }),
   entry({
     definition: fourInARow,
