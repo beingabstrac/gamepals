@@ -161,6 +161,76 @@ function UltimateArt() {
   );
 }
 
+function YatzyArt() {
+  const five: [number, number][] = [[24, 46], [44, 46], [34, 56], [24, 66], [44, 66]];
+  const three: [number, number][] = [[56, 34], [66, 44], [76, 54]];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <g transform="rotate(-12 34 56)">
+        <rect x="14" y="40" width="40" height="40" rx="10" fill="#DCD6EE" />
+        <rect x="14" y="36" width="40" height="40" rx="10" fill="#fff" />
+        {five.map(([x, y]) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r="4" fill={INK} />
+        ))}
+      </g>
+      <g transform="rotate(10 66 44)">
+        <rect x="46" y="28" width="40" height="40" rx="10" fill={DARK.tomato} />
+        <rect x="46" y="24" width="40" height="40" rx="10" fill={COLORS.tomato} />
+        {three.map(([x, y]) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r="4" fill="#fff" />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+function ShutArt() {
+  const tiles = [1, 2, 3, 4, 5];
+  const shut = new Set([2, 4]);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="24" width="88" height="60" rx="16" fill={DARK.peach} />
+      <rect x="6" y="20" width="88" height="60" rx="16" fill={COLORS.peach} />
+      <rect x="12" y="28" width="76" height="40" rx="10" fill="#FFE9CF" />
+      {tiles.map((n, i) =>
+        shut.has(n) ? (
+          <rect key={n} x={15 + i * 14.6} y="58" width="12" height="7" rx="3" fill={DARK.peach} />
+        ) : (
+          <g key={n}>
+            <rect x={15 + i * 14.6} y="32" width="12" height="32" rx="4" fill="#fff" />
+            <text x={21 + i * 14.6} y="48" text-anchor="middle" dominant-baseline="central" font-family="Fredoka, sans-serif" font-weight="600" font-size="10" fill={INK}>
+              {n}
+            </text>
+          </g>
+        ),
+      )}
+    </svg>
+  );
+}
+
+function DominoArt() {
+  const pips = (cx: number, cy: number, spots: [number, number][], color: string) =>
+    spots.map(([dx, dy]) => <circle key={`${cx}-${cy}-${dx}-${dy}`} cx={cx + dx * 6} cy={cy + dy * 6} r="3.2" fill={color} />);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <g transform="rotate(-14 36 52)">
+        <rect x="22" y="20" width="28" height="60" rx="8" fill="#E3DCCD" />
+        <rect x="22" y="16" width="28" height="60" rx="8" fill="#FFFAF0" />
+        <rect x="26" y="45" width="20" height="3" rx="1.5" fill="#E3DCCD" />
+        {pips(36, 31, [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], COLORS.bubblegum)}
+        {pips(36, 61, [[-1, -1], [1, 1]], COLORS.sky)}
+      </g>
+      <g transform="rotate(12 66 50)">
+        <rect x="52" y="24" width="28" height="60" rx="8" fill="#E3DCCD" />
+        <rect x="52" y="20" width="28" height="60" rx="8" fill="#FFFAF0" />
+        <rect x="56" y="49" width="20" height="3" rx="1.5" fill="#E3DCCD" />
+        {pips(66, 35, [[-1, -1], [1, 1]], COLORS.sky)}
+        {pips(66, 65, [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]], COLORS.peach)}
+      </g>
+    </svg>
+  );
+}
+
 function DotsArt() {
   const dots = [22, 50, 78];
   return (
@@ -532,6 +602,9 @@ const ART: Record<string, () => JSX.Element> = {
   mancala: MancalaArt,
   'snakes-and-ladders': SnakesArt,
   'ultimate-ttt': UltimateArt,
+  yatzy: YatzyArt,
+  'shut-the-box': ShutArt,
+  dominoes: DominoArt,
   memory: MemoryArt,
 };
 

@@ -46,4 +46,7 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Mancala](mancala.md), built
 - [Snakes & Ladders](snakes-and-ladders.md), built
 - [Ultimate Tic-Tac-Toe](ultimate-ttt.md), built
+- [Yatzy](yatzy.md), built
+- [Shut the Box](shut-the-box.md), built
+- [Dominoes](dominoes.md), built
 - [Solitaire (Klondike)](solitaire.md), built

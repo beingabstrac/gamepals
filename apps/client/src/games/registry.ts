@@ -13,6 +13,12 @@ import {
   type SnakesState,
   ultimateTtt,
   type UltimateState,
+  yatzy,
+  type YatzyState,
+  shutTheBox,
+  type ShutState,
+  dominoes,
+  type DominoState,
   memory,
   penaltyKicks,
   pingPong,
@@ -75,6 +81,13 @@ import { MANCALA_SIZE, MancalaScene } from './mancala/MancalaScene';
 import { SnakesControls } from './snakes-and-ladders/SnakesControls';
 import { SNAKES_SEAT_COLORS, SNAKES_SEAT_NAMES, SNAKES_SIZE, SnakesScene } from './snakes-and-ladders/SnakesScene';
 import { BOARD_NAMES, ULTIMATE_SIZE, UltimateScene } from './ultimate-ttt/UltimateScene';
+import { yatzyColors, yatzyNames } from './yatzy/table';
+import { YatzyControls } from './yatzy/YatzyControls';
+import { YATZY_SIZE, YatzyScene } from './yatzy/YatzyScene';
+import { ShutControls } from './shut-the-box/ShutControls';
+import { SHUT_SIZE, ShutScene } from './shut-the-box/ShutScene';
+import { DominoControls } from './dominoes/DominoControls';
+import { DOMINO_COLORS, DOMINO_NAMES, DOMINO_SIZE, DominoScene } from './dominoes/DominoScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
@@ -359,6 +372,126 @@ export const GAMES: readonly AnyEntry[] = [
       return b.boards[board] === null && typeof a.boards[board] === 'number' ? 'capture' : 'place';
     },
     createScene: (session) => new UltimateScene(session),
+  }),
+  entry({
+    definition: yatzy,
+    tagline: 'Roll five dice, fill your card',
+    howTo: {
+      goal: 'Score the most points by filling all 15 boxes on your card.',
+      controls: 'Tap Roll. Tap dice to keep them, then roll the rest again, up to 3 rolls. Then tap a box to score it. On a keyboard: Space or R rolls, 1 to 5 keep dice, Tab to a box and press Enter.',
+      win: 'After 15 turns each, the highest total wins.',
+      draw: 'Equal totals share the win.',
+      tip: 'Every box is used once, even if it scores 0. Score 63 or more in Ones to Sixes (three of each) for a bonus of 50. Five the same is a Yatzy: 50 points.',
+    },
+    sideNames: yatzyNames,
+    sideColors: yatzyColors,
+    size: YATZY_SIZE,
+    color: COLORS.tomato,
+    botDelayMs: 700,
+    status: (state) => {
+      const s = state as YatzyState;
+      if (s.result) return undefined;
+      const who = s.players === 1 ? '' : `${yatzyNames(s.players)[s.currentSeat]}: `;
+      const left = 3 - s.rollsUsed;
+      if (s.rollsUsed === 0) return `${who}roll the dice`;
+      return left > 0 ? `${who}${left} ${left === 1 ? 'roll' : 'rolls'} left, or pick a box` : `${who}pick a box to score`;
+    },
+    resultText: (state) => {
+      const s = state as YatzyState;
+      return s.players === 1 ? `You scored ${s.total(0)} points` : undefined;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as YatzyState).last;
+      if (!event) return undefined;
+      if (event.kind === 'roll') return 'roll';
+      if (event.bonus || (event.box === 'yatzy' && event.points > 0)) return 'capture';
+      return event.points > 0 ? 'place' : 'tap';
+    },
+    Controls: YatzyControls,
+    createScene: (session) => new YatzyScene(session),
+  }),
+  entry({
+    definition: shutTheBox,
+    tagline: 'Roll, then flip the tiles down',
+    levels: [
+      { id: 'nine', label: '9 tiles' },
+      { id: 'twelve', label: '12 tiles' },
+    ],
+    howTo: {
+      goal: 'Shut as many tiles as you can. Your score is the tiles left open, and low is good.',
+      controls: 'Tap Roll. Then tap open tiles that add up to the roll; they shut when the sum is right. On a keyboard: Space or R rolls, number keys pick tiles (0, - and = for 10, 11 and 12), Backspace clears.',
+      win: 'Shut every tile to win at once. Otherwise the lowest score wins.',
+      draw: 'Equal lowest scores share the win.',
+      tip: "Your turn goes on until you roll a number you can't make. Once 7 and up are all shut you may roll just 1 die (press 1). Keep small tiles open: they are the easiest to use later.",
+    },
+    sideNames: yatzyNames,
+    sideColors: yatzyColors,
+    size: SHUT_SIZE,
+    color: COLORS.peach,
+    botDelayMs: 800,
+    status: (state) => {
+      const s = state as ShutState;
+      if (s.result) return undefined;
+      const names = yatzyNames(s.scores.length);
+      const who = s.scores.length === 1 ? '' : `${names[s.currentSeat]}: `;
+      const done = s.scores.flatMap((score, seat) => (score === null ? [] : [`${names[seat]} ${score}`]));
+      const now = s.phase === 'roll' ? `${who}roll the dice` : `${who}pick tiles that add up to ${s.roll}`;
+      return done.length ? `${now}. Scores: ${done.join(', ')}` : now;
+    },
+    resultText: (state) => {
+      const s = state as ShutState;
+      const names = yatzyNames(s.scores.length);
+      if (s.last?.kind === 'shut' && s.last.shutBox) return s.scores.length === 1 ? 'You shut the box!' : `${names[s.last.seat]} shut the box!`;
+      return s.scores.length === 1 ? `You finished with ${s.scores[0]} points` : undefined;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as ShutState).last;
+      if (!event) return undefined;
+      if (event.kind === 'roll') return event.stuck ? 'buzz' : 'roll';
+      return event.shutBox ? 'capture' : 'thud';
+    },
+    Controls: ShutControls,
+    createScene: (session) => new ShutScene(session),
+  }),
+  entry({
+    definition: dominoes,
+    tagline: 'Match the ends, go out first',
+    levels: [
+      { id: 'draw-100', label: 'Draw, to 100' },
+      { id: 'draw-50', label: 'Draw, to 50' },
+      { id: 'block-100', label: 'Block, to 100' },
+      { id: 'block-50', label: 'Block, to 50' },
+    ],
+    howTo: {
+      goal: 'Play all your tiles first. Win hands to score points.',
+      controls: 'Tap a glowing tile to play it. If it fits both ends, tap the end you want. On a keyboard: arrows pick a tile, Up and Down switch the end, Enter plays.',
+      win: 'Going out scores the pips left in everyone else\'s hands. The first to the target score wins the match.',
+      draw: 'If nobody can play, the fewest pips wins the hand. A tie scores nothing.',
+      tip: 'Your tile must match the number at one end of the line. In the Draw game you draw when stuck; in the Block game you pass. Watch which numbers the others pass on.',
+    },
+    sideNames: (players) => DOMINO_NAMES.slice(0, players),
+    sideColors: (players) => DOMINO_COLORS.slice(0, players),
+    size: DOMINO_SIZE,
+    color: COLORS.sky,
+    botDelayMs: 900,
+    status: (state) => {
+      const s = state as DominoState;
+      if (s.result) return undefined;
+      const name = DOMINO_NAMES[s.currentSeat];
+      const now = s.phase === 'handOver' ? `${name} deals the next hand` : `${name} to play`;
+      const pile = s.drawGame && s.phase === 'play' ? `. Boneyard ${s.boneyard.length}` : '';
+      return `${now}${pile}. To ${s.target}`;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as DominoState).last;
+      if (!event) return undefined;
+      if (event.kind === 'play') return 'place';
+      if (event.kind === 'pass') return 'buzz';
+      if (event.kind === 'handEnd') return 'capture';
+      return event.kind === 'deal' ? 'roll' : 'tap';
+    },
+    Controls: DominoControls,
+    createScene: (session) => new DominoScene(session),
   }),
   entry({
     definition: fourInARow,
