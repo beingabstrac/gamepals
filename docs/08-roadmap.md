@@ -29,8 +29,8 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [x] Waves 1–3 and most of wave 4: 27 games (see `CLAUDE.md` status)
 
 ## Stage 1: the whole offline game, polished (web + PWA)
-- [ ] **M1 Land wave 4 part 2:** Yatzy, Shut the Box, Dominoes green on every screen type (built, waiting for CI)
-- [ ] **M2 Bot worker:** all turn-based bots think off the main thread, with a small "thinking" cue; heavy bots (Reversi, Ultimate, Dominoes, Chess next) never freeze the screen
+- [x] **M1 Land wave 4 part 2:** Yatzy, Shut the Box, Dominoes green on every screen type (2026-09-16)
+- [ ] **M2 Bot worker:** all turn-based bots think off the main thread, with a small "thinking" cue; heavy bots (Reversi, Ultimate, Dominoes, Chess next) never freeze the screen; also find why the Android WebView page is sometimes lost on the first game (the e2e relaunch hides it)
 - [ ] **M3 Chess:** own engine (castling, en passant, promotion, check, mate, stalemate, 50-move and threefold draws), 4 bot levels, move hints, no GPL code
 - [ ] **M4 Backgammon + Sea Battle:** wave 4 complete
 - [ ] **M5 Quality pass A (first 15 games):** screenshots of every game in portrait and landscape on phone, tablet and desktop; juice checklist; fix layout, motion and feel issues; landscape layouts (board beside controls)
