@@ -23,3 +23,6 @@ export * from './games/echo';
 export * from './games/classic-snake';
 export * from './games/checkers';
 export * from './games/reversi';
+export * from './games/dots-and-boxes';
+export * from './games/mancala';
+export * from './games/snakes-and-ladders';

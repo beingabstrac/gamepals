@@ -85,6 +85,50 @@ function AirHockeyArt() {
   );
 }
 
+function MancalaArt() {
+  const pits = [30, 50, 70];
+  const seeds = [COLORS.tomato, COLORS.sky, COLORS.mint, COLORS.sunny];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="28" width="88" height="52" rx="22" fill={DARK.peach} />
+      <rect x="6" y="24" width="88" height="52" rx="22" fill={COLORS.peach} />
+      <rect x="10" y="32" width="12" height="36" rx="6" fill="#fff" />
+      <rect x="78" y="32" width="12" height="36" rx="6" fill="#fff" />
+      {[38, 62].map((y) =>
+        pits.map((x, i) => (
+          <g key={`${x}-${y}`}>
+            <circle cx={x} cy={y} r="8" fill="#fff" />
+            <circle cx={x - 2} cy={y - 1} r="2.6" fill={seeds[(i + y) % 4]} />
+            <circle cx={x + 2.5} cy={y + 1.5} r="2.6" fill={seeds[(i + y + 1) % 4]} />
+          </g>
+        )),
+      )}
+      <circle cx="84" cy="46" r="2.6" fill={COLORS.grape} />
+      <circle cx="84" cy="53" r="2.6" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
+function DotsArt() {
+  const dots = [22, 50, 78];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="16" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill="#fff" />
+      <rect x="25" y="25" width="22" height="22" rx="4" fill={COLORS.sky} opacity="0.35" />
+      <text x="36" y="36" text-anchor="middle" dominant-baseline="central" font-family="Fredoka, sans-serif" font-weight="600" font-size="14" fill={COLORS.sky}>
+        B
+      </text>
+      <g stroke-width="5" stroke-linecap="round">
+        <path d="M22 22 H50 M22 22 V50 M50 22 V50 M22 50 H50" stroke={COLORS.sky} />
+        <path d="M50 50 H78 M78 50 V78" stroke={COLORS.tomato} />
+        <path d="M22 78 H50" stroke="#E6E0F4" />
+      </g>
+      {dots.map((y) => dots.map((x) => <circle key={`${x}-${y}`} cx={x} cy={y} r="4.5" fill={INK} />))}
+    </svg>
+  );
+}
+
 function ReversiArt() {
   const discs: [number, number, 'dark' | 'light'][] = [
     [38, 38, 'light'],
@@ -432,6 +476,8 @@ const ART: Record<string, () => JSX.Element> = {
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
   reversi: ReversiArt,
+  'dots-and-boxes': DotsArt,
+  mancala: MancalaArt,
   memory: MemoryArt,
 };
 

@@ -24,6 +24,8 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Classic Snake | Yes: solo snake on a walled grid, eat to grow, walls and your own tail end it, speeds up as it grows | Swipe, arrow keys or W A S D, two turns remembered | Smooth gliding, fruit pops, crash shake, best score saved | Race mode |
 | Checkers | Yes: English draughts, men forward, required captures and multi-jumps, crowning ends a jump, kings both ways, draw after 40 quiet moves each or threefold repetition | Tap a piece then a glowing square, arrows and Enter | Slides, arcing hops, taken pieces fly off, a crown drops on new kings | Other national rules as options |
 | Reversi | Yes: modern rules, crossed start, dark first, a move must flip at least one line, all 8 directions flip, pass with no move, ends when neither can move, most discs wins, ties draw | Tap a dot, arrows and Enter, Pass button when stuck | Discs drop in, flips ripple with a squeeze turn, big flips shake | None |
+| Dots & Boxes | Yes: draw one line, closing a box claims it and you go again, one line can close two, most boxes wins, ties possible, 2 to 4 players | Tap between two dots, arrows and Enter | Pencil-drawn lines, boxes pop with an initial, chips light for the active player | Nova long-chain control in the middle game |
+| Mancala | Yes: Kalah, 6 houses and a store each, counter-clockwise sowing that skips the other store, extra turn in your store, capture from an empty own house with seeds across, sweep when a side is empty | Tap a glowing pit, keys 1-6 or arrows and Enter | A pebble hops pit to pit as counts rise, captures slide into the store, plain banners | None |
 
 Look and feel rules applied to every game (2026-09-13):
 - Bright candy colors, no pastels, no gradients.

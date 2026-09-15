@@ -20,6 +20,8 @@ const GAMES = [
   'Classic Snake',
   'Checkers',
   'Reversi',
+  'Dots & Boxes',
+  'Mancala',
   'Air Hockey',
   'Ping Pong',
   'Tug of War',

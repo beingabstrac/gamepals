@@ -4,9 +4,11 @@ import {
   classicSnake,
   COLORS_BY_PLAYERS,
   colorSort,
+  dotsAndBoxes,
   echo,
   fourInARow,
   ludo,
+  mancala,
   memory,
   penaltyKicks,
   pingPong,
@@ -25,11 +27,13 @@ import {
   twenty48,
   type CheckersState,
   type ColorSortState,
+  type DotsState,
   type GameResult,
   type EchoState,
   type GameDefinition,
   type GameState,
   type LudoState,
+  type MancalaState,
   type MemoryState,
   type PlayMode,
   type RealtimeGameDefinition,
@@ -51,6 +55,7 @@ import { CHECKERS_SIZE, CheckersScene } from './checkers/CheckersScene';
 import { CLASSIC_SNAKE_BEST_KEY, CLASSIC_SNAKE_SIZE, ClassicSnakeScene } from './classic-snake/ClassicSnakeScene';
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
+import { DOTS_COLORS, DOTS_NAMES, DOTS_SIZE, DotsScene } from './dots-and-boxes/DotsScene';
 import { DUEL_COLORS } from './duel';
 import { ECHO_SIDE_COLORS, ECHO_SIDE_NAMES, ECHO_SIZE, EchoScene } from './echo/EchoScene';
 import { FOUR_IN_A_ROW_SIZE, FourInARowScene } from './four-in-a-row/FourInARowScene';
@@ -62,6 +67,7 @@ import { REFLEX_RACE_SIZE, ReflexRaceScene } from './reflex-race/ReflexRaceScene
 import { ReversiControls } from './reversi/ReversiControls';
 import { REVERSI_SIZE, ReversiScene } from './reversi/ReversiScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
+import { MANCALA_SIZE, MancalaScene } from './mancala/MancalaScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
@@ -224,6 +230,66 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: ReversiControls,
     createScene: (session) => new ReversiScene(session),
+  }),
+  entry({
+    definition: dotsAndBoxes,
+    tagline: 'Close a box, take another turn',
+    levels: [
+      { id: 'small', label: '3 by 3' },
+      { id: 'medium', label: '4 by 4' },
+      { id: 'large', label: '5 by 5' },
+    ],
+    howTo: {
+      goal: 'Claim more boxes than anyone else.',
+      controls: 'Tap between two dots to draw a line. On a keyboard: arrow keys move between line spots, Enter draws.',
+      win: 'When every line is drawn, the player with the most boxes wins.',
+      draw: 'If everyone ends with the same number of boxes, it is a draw.',
+      tip: 'Close the fourth side of a box to claim it, and you go again. Try not to draw the third side of a box, because the next player gets it.',
+    },
+    sideNames: (players) => DOTS_NAMES.slice(0, players),
+    sideColors: (players) => DOTS_COLORS.slice(0, players),
+    size: DOTS_SIZE,
+    color: COLORS.sky,
+    botDelayMs: 500,
+    moveCue: (_before, after) => {
+      const event = (after as DotsState).last;
+      if (!event) return undefined;
+      return event.completed.length ? 'capture' : 'tap';
+    },
+    createScene: (session) => new DotsScene(session),
+  }),
+  entry({
+    definition: mancala,
+    tagline: 'Sow seeds, fill your store',
+    levels: [
+      { id: 'four', label: '4 seeds (classic)' },
+      { id: 'three', label: '3 seeds' },
+      { id: 'six', label: '6 seeds' },
+    ],
+    howTo: {
+      goal: 'Get more seeds into your store than the other player.',
+      controls: 'Tap one of your glowing pits to sow its seeds. On a keyboard: press 1 to 6, or arrows and Enter.',
+      win: 'When one side runs out of seeds, each player adds the seeds left on their side to their store. Most seeds wins.',
+      draw: 'Equal stores at the end are a draw.',
+      tip: 'Seeds go one by one to the right, into your own store but never the other store. Land your last seed in your store to go again. Land it in an empty pit on your side to take the seeds across from it.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => DUEL_COLORS,
+    size: MANCALA_SIZE,
+    color: DARK.peach,
+    botDelayMs: 800,
+    status: (state) => {
+      const s = state as MancalaState;
+      if (s.result) return undefined;
+      return `${s.currentSeat === 0 ? 'Blue' : 'Red'} to move. Blue ${s.store(0)}, Red ${s.store(1)}`;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as MancalaState).last;
+      if (!event) return undefined;
+      if (event.capture) return 'capture';
+      return event.extraTurn ? 'go' : 'place';
+    },
+    createScene: (session) => new MancalaScene(session),
   }),
   entry({
     definition: fourInARow,
