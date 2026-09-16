@@ -3,9 +3,12 @@
  * Playwright connects to the app's own WebView, so this runs inside the installed app, not a browser.
  * Every game is played to its result with `?autoplay`, and a screenshot of each is saved.
  *
- * If the app's page is lost mid-run (the emulator's software GPU can take the WebView down), the app is
- * relaunched and that game is tried once more. Every relaunch is reported by name; CI prints the Android
- * crash log afterwards so the cause is visible.
+ * There is exactly one page load per app launch (to switch autoplay on); games are then opened and left
+ * with the app's own Back buttons. Reloading the page for every game sometimes detached the WebView from
+ * Playwright ("Target page ... has been closed") with no crash in the Android log.
+ *
+ * If the app's page is still lost mid-run, the app is relaunched and that game is tried once more. Every
+ * relaunch is reported by name; CI prints the Android crash log afterwards so the cause is visible.
  *
  * Run after `adb install app-debug.apk`:  node e2e-native/android.mjs
  */
@@ -44,7 +47,18 @@ async function connect() {
     if (message.type() === 'error') errors.push(`console: ${message.text()}`);
   });
   origin = new URL(page.url()).origin;
+  // The only navigation of the run: bots in every seat, games sped up.
+  await page.goto(`${origin}/?autoplay=6`);
   await page.locator('.tile').first().waitFor({ timeout: 60_000 });
+}
+
+/** Back to the game shelf using the app's own buttons, from wherever we are. */
+async function goHome() {
+  for (const label of ['Back to the table', 'Back to games']) {
+    const button = page.getByRole('button', { name: label });
+    if (await button.count()) await button.click();
+  }
+  await page.locator('.tile').first().waitFor({ timeout: 30_000 });
 }
 
 // Page screenshots only: pulling full-screen captures through the same device connection (device.screenshot,
@@ -61,7 +75,7 @@ await shot(`${SHOTS}android-home.png`);
 
 async function play(name) {
   errors = [];
-  await page.goto(`${origin}/?autoplay=6`);
+  await goHome();
   await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.locator('.board canvas').waitFor({ timeout: 30_000 });

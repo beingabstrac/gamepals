@@ -63,7 +63,8 @@ interface GameState<M> {
 ## 4. Client
 - `Session` holds definition, seats (`human | bot`; `remote` in M16) and state; bots move after a short delay, and their move is fetched asynchronously so a slow search never blocks input. Every mode combination runs through it.
 - Scenes render `session.state` and call `session.play(move)`; Preact renders status, rematch, menus.
-- Bots run in a Web Worker (`src/bot/worker.ts`, driven by `src/bot/runner.ts`). The request is just `{ log, seat, tier, rngSeed }`, and `chooseBotMove` (rules `games/catalog.ts`) replays the log there, so no game state has to be serialized. The runner falls back to the main thread when a worker cannot start, when the worker errors, or after an 8 s budget. Per-decision seeds keep both paths in step.
+- Bots that can take time (rules `HEAVY_BOTS`: deep search or playouts) run in a Web Worker (`src/bot/worker.ts`, driven by `src/bot/runner.ts`). The request is just `{ log, seat, tier, rngSeed }`, and `chooseBotMove` (rules `games/catalog.ts`) rebuilds the game there — it keeps the last few games in progress, so a move costs one `apply` instead of a full replay. The runner falls back to the main thread when a worker cannot start, when it errors, or after an 8 s budget.
+- Quick bots (everything else) decide inline from the live state: their thinking is under a millisecond, so a message round trip would cost more than it saves. Measured: routing every move of 2048 (about a thousand moves a game) through the worker made whole-game tests time out. Both paths seed from the game seed + move number, so they pick the same move.
 - One Phaser `Game` per match, sized 600×600 logical units with `Scale.FIT`.
 
 ## 5. Server (M3)

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { toMoveLog, type MoveLog } from '../core/replay';
 import { BOT_TIERS } from '../core/types';
-import { chooseBotMove, TURN_GAMES } from './catalog';
+import { chooseBotMove, HEAVY_BOTS, TURN_GAMES } from './catalog';
 
 const logFor = (id: string, players: number, seed: number): MoveLog => ({ gameId: id, seed, config: { players }, moves: [] });
 
@@ -11,6 +11,10 @@ describe('turn game catalog', () => {
     expect(ids.length).toBe(19);
     for (const [id, game] of Object.entries(TURN_GAMES)) expect(game.id).toBe(id);
     expect(TURN_GAMES['chess']).toBeUndefined();
+  });
+
+  it('names only real games as heavy-bot games', () => {
+    for (const id of HEAVY_BOTS) expect(TURN_GAMES[id], id).toBeDefined();
   });
 
   it('picks a legal move for every game, from the move log alone', () => {
@@ -44,6 +48,29 @@ describe('turn game catalog', () => {
       state = state.apply(move);
     }
     expect(state.result).not.toBeNull();
+  });
+
+  it('keeps a long game going without replaying it from the start each time', () => {
+    // 2048 runs to hundreds of moves: this is the path that must stay cheap.
+    const game = TURN_GAMES['2048']!;
+    let state = game.newGame({ players: 1 }, 4);
+    const moves: unknown[] = [];
+    const started = Date.now();
+    while (!state.result && moves.length < 120) {
+      const log = toMoveLog(game, { players: 1 }, 4, moves);
+      const key = chooseBotMove({ log, seat: 0, tier: 'medium', rngSeed: moves.length + 1 });
+      const move = state.legalMoves(0).find((m) => game.encodeMove(m) === key);
+      expect(move, `move ${moves.length}`).toBeDefined();
+      moves.push(move);
+      state = state.apply(move!);
+    }
+    expect(moves.length).toBeGreaterThan(20);
+    // A fresh request for the same position (nothing kept to continue from) still agrees.
+    const log = toMoveLog(game, { players: 1 }, 4, moves);
+    const direct = chooseBotMove({ log, seat: 0, tier: 'medium', rngSeed: 5 });
+    for (let i = 0; i < 6; i++) chooseBotMove({ log: toMoveLog(game, { players: 1 }, 9 + i, []), seat: 0, tier: 'easy', rngSeed: 1 });
+    expect(chooseBotMove({ log, seat: 0, tier: 'medium', rngSeed: 5 })).toBe(direct);
+    expect(Date.now() - started).toBeLessThan(20_000);
   });
 
   it('throws for a game it does not know', () => {

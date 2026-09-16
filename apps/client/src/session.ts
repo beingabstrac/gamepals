@@ -1,4 +1,4 @@
-import { toMoveLog, type BotTier, type GameDefinition, type GameState } from '@gamepals/rules';
+import { createRng, HEAVY_BOTS, type Bot, type BotTier, type GameDefinition, type GameState, type MoveLog } from '@gamepals/rules';
 import { requestBotMove } from './bot/runner';
 
 /** Who controls a seat. Online seats (`remote`) arrive in milestone M16. */
@@ -24,6 +24,10 @@ export class Session<M> {
   readonly moves: M[] = [];
   /** The seat whose bot is thinking right now, if any. */
   thinkingSeat: number | null = null;
+  /** The same moves in their string form, kept as we go so bot requests are cheap to build. */
+  private readonly encoded: string[] = [];
+  /** Bots for the quick games, which think here rather than in the worker. */
+  private readonly bots: (Bot<M> | undefined)[] = [];
   private readonly listeners = new Set<() => void>();
   private botTimer: ReturnType<typeof setTimeout> | undefined;
   private disposed = false;
@@ -72,6 +76,7 @@ export class Session<M> {
   private commit(move: M): void {
     this.state = this.state.apply(move);
     this.moves.push(move);
+    this.encoded.push(this.definition.encodeMove(move));
     this.announce();
     this.scheduleBot();
   }
@@ -85,12 +90,24 @@ export class Session<M> {
   }
 
   private async playBot(seat: number, tier: BotTier, ply: number): Promise<void> {
+    const rngSeed = botSeed(this.seed, ply);
+    // Quick bots decide here, from the live game: sending a message would cost more than the thinking.
+    if (!HEAVY_BOTS.has(this.definition.id)) {
+      const bot = (this.bots[seat] ??= this.definition.createBot(tier));
+      this.commit(bot.chooseMove(this.state, seat, createRng(rngSeed)));
+      return;
+    }
     this.thinkingSeat = seat;
     this.announce();
-    const log = toMoveLog(this.definition, { players: this.seats.length, variant: this.variant }, this.seed, this.moves);
+    const log: MoveLog = {
+      gameId: this.definition.id,
+      seed: this.seed,
+      config: { players: this.seats.length, variant: this.variant },
+      moves: [...this.encoded],
+    };
     let key: string;
     try {
-      key = await requestBotMove({ log, seat, tier, rngSeed: botSeed(this.seed, ply) });
+      key = await requestBotMove({ log, seat, tier, rngSeed });
     } catch (error) {
       console.error('The bot could not pick a move', error);
       this.thinkingSeat = null;
