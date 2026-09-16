@@ -30,7 +30,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 
 ## Stage 1: the whole offline game, polished (web + PWA)
 - [x] **M1 Land wave 4 part 2:** Yatzy, Shut the Box, Dominoes green on every screen type (2026-09-16)
-- [ ] **M2 Bot worker:** the bots that can take time (deep search or playouts: Checkers, Reversi, Ultimate, Mancala, Dominoes, Yatzy, Shut the Box, and Chess next) think in a Web Worker with a "thinking" cue, so the board never freezes; quick bots stay inline because a message costs more than their thinking; also find why the Android WebView page is sometimes lost on the first game (the e2e relaunch hides it)
+- [x] **M2 Bot worker (2026-09-16):** the bots that can take time (deep search or playouts: Checkers, Reversi, Ultimate, Mancala, Dominoes, Yatzy, Shut the Box, and Chess next) think in a Web Worker with a "thinking" cue, so the board never freezes; quick bots stay inline because a message costs more than their thinking; also find why the Android WebView page is sometimes lost on the first game (the e2e relaunch hides it)
 - [ ] **M3 Chess:** own engine (castling, en passant, promotion, check, mate, stalemate, 50-move and threefold draws), 4 bot levels, move hints, no GPL code
 - [ ] **M4 Backgammon + Sea Battle:** wave 4 complete
 - [ ] **M5 Quality pass A (first 15 games):** screenshots of every game in portrait and landscape on phone, tablet and desktop; juice checklist; fix layout, motion and feel issues; landscape layouts (board beside controls)
