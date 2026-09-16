@@ -61,9 +61,9 @@ interface GameState<M> {
 - Hidden-information games will add `viewFor(seat)` so servers only send each player what they may see.
 
 ## 4. Client
-- `Session` holds definition, seats (`human | bot`; `remote` in M3) and state; bots move after a short delay. Every mode combination runs through it.
+- `Session` holds definition, seats (`human | bot`; `remote` in M16) and state; bots move after a short delay, and their move is fetched asynchronously so a slow search never blocks input. Every mode combination runs through it.
 - Scenes render `session.state` and call `session.play(move)`; Preact renders status, rematch, menus.
-- Heavy bots (Chess, cards) will run in a Web Worker (`src/workers/bot.worker.ts`) with a time budget.
+- Bots run in a Web Worker (`src/bot/worker.ts`, driven by `src/bot/runner.ts`). The request is just `{ log, seat, tier, rngSeed }`, and `chooseBotMove` (rules `games/catalog.ts`) replays the log there, so no game state has to be serialized. The runner falls back to the main thread when a worker cannot start, when the worker errors, or after an 8 s budget. Per-decision seeds keep both paths in step.
 - One Phaser `Game` per match, sized 600×600 logical units with `Scale.FIT`.
 
 ## 5. Server (M3)

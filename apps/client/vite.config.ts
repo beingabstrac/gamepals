@@ -36,6 +36,8 @@ export default defineConfig({
   ],
   // Relative asset paths so the same build works on the web, in portals and inside Capacitor.
   base: './',
+  // The bot worker is a module worker (src/bot/worker.ts); keep that format in the build too.
+  worker: { format: 'es' },
   server: {
     host: true,
     port: 5173,

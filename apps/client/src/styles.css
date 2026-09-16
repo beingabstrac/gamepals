@@ -1034,3 +1034,20 @@ h2,
 .yatzy-card tr.total .yatzy-cell {
   font-size: 1.1rem;
 }
+
+/* A bot is thinking: its dot breathes so the wait looks alive. */
+.turn-pill.thinking .turn-dot {
+  animation: breathe 900ms ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.55;
+  }
+}

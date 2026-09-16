@@ -62,7 +62,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
   const sideColors = entry.sideColors(seats.length);
   const sideName = (seat: number) => `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
   const Controls = entry.Controls;
-  const thinking = seats[state.currentSeat]?.kind === 'bot';
+  const thinking = session.thinkingSeat !== null || seats[state.currentSeat]?.kind === 'bot';
   const custom = entry.status?.(state);
 
   const rematch = () => {
@@ -82,7 +82,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       </header>
       <p class="status" aria-live="polite">
         {!state.result && (
-          <span class="turn-pill" key={custom}>
+          <span class={thinking ? 'turn-pill thinking' : 'turn-pill'} key={custom}>
             <span class="turn-dot" style={{ background: sideColors[state.currentSeat] ?? '#9B7BFF' }} />
             {custom ?? `${sideName(state.currentSeat)} ${thinking ? 'is thinking…' : 'to move'}`}
           </span>
