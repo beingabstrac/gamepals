@@ -1,0 +1,462 @@
+import {
+  BISHOP,
+  colorOf,
+  KING,
+  KNIGHT,
+  PAWN,
+  QUEEN,
+  readMove,
+  ROOK,
+  squareName,
+  typeOf,
+  type ChessEvent,
+  type ChessMove,
+  type ChessState,
+} from '@gamepals/rules';
+import { Scene, type GameObjects } from 'phaser';
+import type { Session } from '../../session';
+import { COLORS, toHex } from '../../theme';
+import { fitCamera, sharpText } from '../crisp';
+import { applySpeed } from '../../autoplay';
+import { arrow, isPress, onKeys } from '../keys';
+
+const W = 600;
+const H = 600;
+const PAD = 12;
+const CELL = (W - PAD * 2) / 8;
+export const CHESS_SIZE = { width: W, height: H };
+
+const LIGHT = 0xfff1dc;
+const DARK_SQUARE = 0xc9b6f5;
+const INK = toHex(COLORS.ink);
+const SUNNY = toHex(COLORS.sunny);
+const TOMATO = toHex(COLORS.tomato);
+const WHITE_PIECE = 0xfffdf8;
+const BLACK_PIECE = 0x3b3a4a;
+const PROMOTIONS: readonly number[] = [QUEEN, ROOK, BISHOP, KNIGHT];
+const PROMO_LETTER: Record<number, string> = { [QUEEN]: 'q', [ROOK]: 'r', [BISHOP]: 'b', [KNIGHT]: 'n' };
+
+type Point = { x: number; y: number };
+
+/**
+ * Our own piece shapes, drawn flat in a 60 by 60 box: no chess font, no borrowed art.
+ * Every piece stands on the same base so the set reads as one family.
+ */
+function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
+  const white = colorOf(piece) === 0;
+  const fill = white ? WHITE_PIECE : BLACK_PIECE;
+  const line = white ? INK : 0xffffff;
+  const s = scale;
+  const body = (topWidth: number, topY: number) => {
+    g.fillStyle(fill, 1);
+    g.fillRoundedRect(-11 * s, topY * s, 22 * s, (20 - topY) * s, 5 * s);
+    g.fillTriangle(-topWidth * s, topY * s, topWidth * s, topY * s, 0, (topY - 2) * s);
+    g.fillRoundedRect(-15 * s, 18 * s, 30 * s, 8 * s, 4 * s);
+    g.lineStyle(2.5 * s, line, 1);
+    g.strokeRoundedRect(-15 * s, 18 * s, 30 * s, 8 * s, 4 * s);
+  };
+
+  g.lineStyle(2.5 * s, line, 1);
+  switch (typeOf(piece)) {
+    case PAWN:
+      body(9, -2);
+      g.fillStyle(fill, 1);
+      g.fillCircle(0, -10 * s, 8 * s);
+      g.strokeCircle(0, -10 * s, 8 * s);
+      break;
+    case ROOK: {
+      body(12, -4);
+      g.fillStyle(fill, 1);
+      g.fillRoundedRect(-14 * s, -20 * s, 28 * s, 16 * s, 3 * s);
+      g.strokeRoundedRect(-14 * s, -20 * s, 28 * s, 16 * s, 3 * s);
+      // Battlements: two notches cut out of the top.
+      g.fillStyle(white ? DARK_SQUARE : INK, 1);
+      for (const x of [-6, 6]) g.fillRoundedRect((x - 3) * s, -21 * s, 6 * s, 7 * s, 2 * s);
+      break;
+    }
+    case BISHOP:
+      body(9, -4);
+      g.fillStyle(fill, 1);
+      g.fillCircle(0, -12 * s, 9 * s);
+      g.fillTriangle(-7 * s, -8 * s, 7 * s, -8 * s, 0, -24 * s);
+      g.strokeCircle(0, -12 * s, 9 * s);
+      g.lineStyle(2.5 * s, line, 1);
+      g.lineBetween(-3 * s, -16 * s, 4 * s, -10 * s);
+      break;
+    case KNIGHT: {
+      body(10, 0);
+      g.fillStyle(fill, 1);
+      g.beginPath();
+      g.moveTo(-10 * s, 2 * s);
+      g.lineTo(-8 * s, -10 * s);
+      g.lineTo(-2 * s, -20 * s);
+      g.lineTo(6 * s, -22 * s);
+      g.lineTo(12 * s, -14 * s);
+      g.lineTo(9 * s, -4 * s);
+      g.lineTo(11 * s, 2 * s);
+      g.closePath();
+      g.fillPath();
+      g.strokePath();
+      g.fillStyle(line, 1);
+      g.fillCircle(5 * s, -15 * s, 1.8 * s);
+      break;
+    }
+    case QUEEN: {
+      body(11, -2);
+      g.fillStyle(fill, 1);
+      g.beginPath();
+      g.moveTo(-13 * s, -4 * s);
+      for (const [x, y] of [[-13, -20], [-6.5, -10], [0, -23], [6.5, -10], [13, -20], [13, -4]] as const) g.lineTo(x * s, y * s);
+      g.closePath();
+      g.fillPath();
+      g.strokePath();
+      for (const x of [-13, 0, 13]) {
+        g.fillStyle(fill, 1);
+        g.fillCircle(x * s, (x === 0 ? -25 : -22) * s, 3.5 * s);
+        g.strokeCircle(x * s, (x === 0 ? -25 : -22) * s, 3.5 * s);
+      }
+      break;
+    }
+    case KING: {
+      body(11, -2);
+      g.fillStyle(fill, 1);
+      g.fillRoundedRect(-12 * s, -18 * s, 24 * s, 14 * s, 4 * s);
+      g.strokeRoundedRect(-12 * s, -18 * s, 24 * s, 14 * s, 4 * s);
+      g.fillStyle(fill, 1);
+      g.fillRoundedRect(-3 * s, -30 * s, 6 * s, 14 * s, 2 * s);
+      g.fillRoundedRect(-8 * s, -25 * s, 16 * s, 6 * s, 2 * s);
+      g.lineStyle(2.5 * s, line, 1);
+      g.strokeRoundedRect(-3 * s, -30 * s, 6 * s, 14 * s, 2 * s);
+      break;
+    }
+  }
+}
+
+export class ChessScene extends Scene {
+  private boardG!: GameObjects.Graphics;
+  private piecesG!: GameObjects.Graphics;
+  private hintsG!: GameObjects.Graphics;
+  private promoG!: GameObjects.Graphics;
+  private ringG!: GameObjects.Graphics;
+  private banner!: GameObjects.Text;
+  private flipped = false;
+  private selected: number | null = null;
+  private cursor = 4;
+  private ringVisible = false;
+  /** A pawn is on the last row and the player is choosing what it becomes. */
+  private promoting: { from: number; to: number } | null = null;
+  private seen: ChessEvent | null = null;
+  private busy = false;
+
+  constructor(private readonly session: Session<ChessMove>) {
+    super('chess');
+  }
+
+  private get state(): ChessState {
+    return this.session.state as ChessState;
+  }
+
+  create(): void {
+    fitCamera(this, W, H);
+    applySpeed(this);
+    // Against a bot, the person's pieces sit at the bottom.
+    const people = this.session.seats.flatMap((seat, i) => (seat.kind === 'human' ? [i] : []));
+    this.flipped = people.length === 1 && people[0] === 1;
+    this.seen = this.state.last;
+    this.boardG = this.add.graphics();
+    this.hintsG = this.add.graphics().setDepth(2);
+    this.piecesG = this.add.graphics().setDepth(3);
+    this.ringG = this.add.graphics().setDepth(4);
+    this.promoG = this.add.graphics().setDepth(6);
+    this.banner = sharpText(this, W / 2, H / 2, '', 34, COLORS.ink).setDepth(10).setAlpha(0).setStroke('#ffffff', 10);
+
+    this.input.on('pointerdown', (p: { worldX: number; worldY: number }) => this.tap(p.worldX, p.worldY));
+    onKeys(this, (key) => this.key(key));
+
+    const unsubscribe = this.session.subscribe(() => this.onChange());
+    this.events.once('shutdown', unsubscribe);
+    this.drawBoard();
+    this.drawPieces();
+  }
+
+  private center(square: number): Point {
+    const file = square & 7;
+    const rank = square >> 3;
+    const col = this.flipped ? 7 - file : file;
+    const row = this.flipped ? rank : 7 - rank;
+    return { x: PAD + (col + 0.5) * CELL, y: PAD + (row + 0.5) * CELL };
+  }
+
+  private squareAt(x: number, y: number): number {
+    const col = Math.floor((x - PAD) / CELL);
+    const row = Math.floor((y - PAD) / CELL);
+    if (col < 0 || col > 7 || row < 0 || row > 7) return -1;
+    const file = this.flipped ? 7 - col : col;
+    const rank = this.flipped ? row : 7 - row;
+    return rank * 8 + file;
+  }
+
+  private myTurn(): boolean {
+    return !this.busy && !this.state.result && this.session.isHumanTurn();
+  }
+
+  /** Legal moves from a square, as [target square, promotion letter]. */
+  private movesFrom(from: number): { to: number; promotion?: string }[] {
+    const state = this.state;
+    return state
+      .legalMoves(state.currentSeat)
+      .filter((move) => readMove(move).from === from)
+      .map((move) => ({ to: readMove(move).to, ...(move.length > 4 ? { promotion: move[4]! } : {}) }));
+  }
+
+  private drawBoard(): void {
+    const g = this.boardG.clear();
+    g.fillStyle(0xe9e4f5, 1);
+    g.fillRoundedRect(0, 6, W, H - 12, 22);
+    g.fillStyle(0xffffff, 1);
+    g.fillRoundedRect(0, 0, W, H - 12, 22);
+    for (let square = 0; square < 64; square++) {
+      const { x, y } = this.center(square);
+      const dark = (((square >> 3) + (square & 7)) & 1) === 0;
+      g.fillStyle(dark ? DARK_SQUARE : LIGHT, 1);
+      g.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL);
+    }
+    // The last move, so you can see what just happened.
+    const last = this.state.last;
+    if (last) {
+      for (const square of [last.move.from, last.move.to]) {
+        const { x, y } = this.center(square);
+        g.fillStyle(SUNNY, 0.45);
+        g.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL);
+      }
+    }
+  }
+
+  /** All pieces, leaving out `skip` while its piece is sliding. */
+  private drawPieces(skip = -1): void {
+    const g = this.piecesG.clear();
+    this.state.board.forEach((piece, square) => {
+      if (piece === 0 || square === skip) return;
+      const { x, y } = this.center(square);
+      g.save();
+      g.translateCanvas(x, y);
+      drawPiece(g, piece, CELL / 64);
+      g.restore();
+    });
+    this.drawHints();
+  }
+
+  /** Dots for quiet moves, rings for captures, and a ring around the piece you picked up. */
+  private drawHints(): void {
+    const g = this.hintsG.clear();
+    const state = this.state;
+    if (state.result) return;
+    if (this.selected !== null) {
+      const from = this.center(this.selected);
+      g.lineStyle(5, SUNNY, 1);
+      g.strokeRoundedRect(from.x - CELL / 2 + 3, from.y - CELL / 2 + 3, CELL - 6, CELL - 6, 8);
+      for (const move of this.movesFrom(this.selected)) {
+        const { x, y } = this.center(move.to);
+        if (state.board[move.to] !== 0) {
+          g.lineStyle(6, SUNNY, 0.95);
+          g.strokeCircle(x, y, CELL / 2 - 6);
+        } else {
+          g.fillStyle(SUNNY, 0.9);
+          g.fillCircle(x, y, 10);
+        }
+      }
+    }
+    if (this.ringVisible) {
+      const { x, y } = this.center(this.cursor);
+      this.ringG.clear();
+      this.ringG.lineStyle(4, toHex(COLORS.grape), 1);
+      this.ringG.strokeRoundedRect(x - CELL / 2 + 2, y - CELL / 2 + 2, CELL - 4, CELL - 4, 8);
+    } else {
+      this.ringG.clear();
+    }
+  }
+
+  /** Four big buttons over the board when a pawn reaches the last row. */
+  private drawPromotion(): void {
+    const g = this.promoG.clear();
+    if (!this.promoting) return;
+    const color = this.state.currentSeat;
+    const top = H / 2 - CELL / 2;
+    const left = W / 2 - CELL * 2;
+    g.fillStyle(0x2b2a3a, 0.35);
+    g.fillRect(0, 0, W, H);
+    g.fillStyle(0xffffff, 1);
+    g.fillRoundedRect(left - 10, top - 18, CELL * 4 + 20, CELL + 36, 18);
+    PROMOTIONS.forEach((type, i) => {
+      const x = left + (i + 0.5) * CELL;
+      g.fillStyle(0xfff1dc, 1);
+      g.fillRoundedRect(x - CELL / 2 + 4, top + 4, CELL - 8, CELL - 8, 12);
+      g.save();
+      g.translateCanvas(x, top + CELL / 2);
+      drawPiece(g, type | (color === 1 ? 8 : 0), CELL / 68);
+      g.restore();
+    });
+  }
+
+  private promotionAt(x: number, y: number): number | null {
+    if (!this.promoting) return null;
+    const top = H / 2 - CELL / 2;
+    const left = W / 2 - CELL * 2;
+    if (y < top || y > top + CELL) return null;
+    const index = Math.floor((x - left) / CELL);
+    return index >= 0 && index < 4 ? PROMOTIONS[index]! : null;
+  }
+
+  private tap(x: number, y: number): void {
+    if (this.promoting) {
+      const piece = this.promotionAt(x, y);
+      if (piece !== null) {
+        const { from, to } = this.promoting;
+        this.promoting = null;
+        this.drawPromotion();
+        this.play(`${squareName(from)}${squareName(to)}${PROMO_LETTER[piece]}`);
+      } else {
+        this.promoting = null;
+        this.drawPromotion();
+        this.drawHints();
+      }
+      return;
+    }
+    const square = this.squareAt(x, y);
+    if (square < 0) return;
+    this.pick(square);
+  }
+
+  /** Tap a piece to pick it up, tap a dot to move there, tap it again to put it down. */
+  private pick(square: number): void {
+    if (!this.myTurn()) return;
+    const state = this.state;
+    if (this.selected !== null) {
+      const moves = this.movesFrom(this.selected).filter((m) => m.to === square);
+      if (moves.length > 1 || moves[0]?.promotion) {
+        this.promoting = { from: this.selected, to: square };
+        this.selected = null;
+        this.drawHints();
+        this.drawPromotion();
+        return;
+      }
+      if (moves.length === 1) {
+        const from = this.selected;
+        this.selected = null;
+        this.play(`${squareName(from)}${squareName(square)}`);
+        return;
+      }
+    }
+    const piece = state.board[square]!;
+    this.selected = piece !== 0 && colorOf(piece) === state.currentSeat && this.movesFrom(square).length > 0 ? square : null;
+    this.drawHints();
+  }
+
+  private play(move: ChessMove): void {
+    this.selected = null;
+    this.session.play(move);
+  }
+
+  private key(key: string): boolean {
+    if (!this.myTurn()) return false;
+    const step = arrow(key);
+    if (step) {
+      const file = Math.min(7, Math.max(0, (this.cursor & 7) + (this.flipped ? -step[0] : step[0])));
+      const rank = Math.min(7, Math.max(0, (this.cursor >> 3) + (this.flipped ? step[1] : -step[1])));
+      this.cursor = rank * 8 + file;
+      this.ringVisible = true;
+      this.drawHints();
+      return true;
+    }
+    if (isPress(key)) {
+      this.ringVisible = true;
+      this.pick(this.cursor);
+      return true;
+    }
+    if (key === 'Escape' && this.selected !== null) {
+      this.selected = null;
+      this.drawHints();
+      return true;
+    }
+    return false;
+  }
+
+  private shout(text: string): void {
+    this.tweens.killTweensOf(this.banner);
+    this.banner.setText(text).setAlpha(1).setScale(0.7);
+    this.tweens.add({ targets: this.banner, scale: 1, duration: 220, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: this.banner, alpha: 0, delay: 700, duration: 260 });
+  }
+
+  private onChange(): void {
+    const event = this.state.last;
+    if (!event || event === this.seen) {
+      this.drawBoard();
+      this.drawPieces();
+      return;
+    }
+    this.seen = event;
+    this.selected = null;
+    this.promoting = null;
+    this.drawPromotion();
+    this.animate(event);
+  }
+
+  /** The piece slides over with a little arc; captures pop, castling slides the rook too. */
+  private animate(event: ChessEvent): void {
+    this.busy = true;
+    const from = this.center(event.move.from);
+    const to = this.center(event.move.to);
+    this.drawBoard();
+    this.drawPieces(event.move.from);
+
+    if (event.captured !== 0) {
+      const taken = this.center(event.capturedSquare);
+      const pop = this.add.graphics().setPosition(taken.x, taken.y).setDepth(2);
+      drawPiece(pop, event.captured, CELL / 64);
+      this.tweens.add({ targets: pop, scale: 0.2, alpha: 0, angle: 30, duration: 220, ease: 'Back.easeIn', onComplete: () => pop.destroy() });
+    }
+
+    const mover = this.add.graphics().setPosition(from.x, from.y).setDepth(5);
+    drawPiece(mover, event.piece, CELL / 64);
+    this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: 240,
+      ease: 'Sine.easeInOut',
+      onUpdate: (tween) => {
+        const t = tween.getValue() ?? 1;
+        mover.setPosition(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t - Math.sin(Math.PI * t) * 16);
+      },
+      onComplete: () => {
+        mover.destroy();
+        this.busy = false;
+        this.drawBoard();
+        this.drawPieces();
+        if (event.check) this.flashCheck();
+      },
+    });
+
+    if (event.castleRook) {
+      const rookFrom = this.center(event.castleRook.from);
+      const rookTo = this.center(event.castleRook.to);
+      const rook = this.add.graphics().setPosition(rookFrom.x, rookFrom.y).setDepth(4);
+      drawPiece(rook, this.state.board[event.castleRook.to] ?? 4, CELL / 64);
+      this.tweens.add({ targets: rook, x: rookTo.x, y: rookTo.y, duration: 260, ease: 'Sine.easeInOut', onComplete: () => rook.destroy() });
+    }
+  }
+
+  /** The checked king's square flashes and shakes. */
+  private flashCheck(): void {
+    const state = this.state;
+    const king = state.board.findIndex((p) => typeOf(p) === KING && colorOf(p) === state.currentSeat);
+    if (king < 0) return;
+    const { x, y } = this.center(king);
+    const flash = this.add.graphics().setDepth(1);
+    flash.fillStyle(TOMATO, 0.55);
+    flash.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL);
+    this.tweens.add({ targets: flash, alpha: 0, duration: 700, ease: 'Sine.easeOut', onComplete: () => flash.destroy() });
+    this.cameras.main.shake(140, 0.004);
+    this.shout(state.result ? 'Checkmate!' : 'Check!');
+  }
+}

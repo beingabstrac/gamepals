@@ -1,6 +1,8 @@
 import {
   airHockey,
   checkers,
+  chess,
+  type ChessState,
   classicSnake,
   COLORS_BY_PLAYERS,
   colorSort,
@@ -62,6 +64,7 @@ import { storage } from '../platform';
 import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
 import { CHECKERS_SIZE, CheckersScene } from './checkers/CheckersScene';
+import { CHESS_SIZE, ChessScene } from './chess/ChessScene';
 import { CLASSIC_SNAKE_BEST_KEY, CLASSIC_SNAKE_SIZE, ClassicSnakeScene } from './classic-snake/ClassicSnakeScene';
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
@@ -215,6 +218,37 @@ export const GAMES: readonly AnyEntry[] = [
       return event.captured.length ? 'capture' : undefined;
     },
     createScene: (session) => new CheckersScene(session),
+  }),
+  entry({
+    definition: chess,
+    tagline: 'The classic. Trap the king',
+    howTo: {
+      goal: 'Trap the other king so that it cannot get out of attack: checkmate.',
+      controls: 'Tap a piece, then tap a dot. Tap it again to put it down. On a keyboard: arrows move the ring, Enter picks up and puts down. A pawn reaching the far row asks what it becomes.',
+      win: 'Checkmate: the king is attacked and has no legal move left.',
+      draw: 'Stalemate (no legal move but not in check), the same position three times, 50 moves each with no capture or pawn move, or too few pieces left to mate.',
+      tip: 'You may never leave your own king attacked. Castling moves the king two squares towards a rook that has not moved, if the squares between are empty and the king is safe all the way.',
+    },
+    sideNames: () => ['White', 'Black'],
+    sideColors: () => [COLORS.sunny, DARK.grape],
+    size: CHESS_SIZE,
+    color: DARK.grape,
+    botDelayMs: 350,
+    status: (state) => {
+      const s = state as ChessState;
+      if (s.result) return undefined;
+      const who = s.currentSeat === 0 ? 'White' : 'Black';
+      return s.check ? `${who} to move. Check!` : `${who} to move`;
+    },
+    resultText: (state) => (state as ChessState).ending ?? undefined,
+    moveCue: (_before, after) => {
+      const event = (after as ChessState).last;
+      if (!event) return undefined;
+      if (event.captured !== 0) return 'capture';
+      if (event.castleRook) return 'go';
+      return event.check ? 'clang' : 'place';
+    },
+    createScene: (session) => new ChessScene(session),
   }),
   entry({
     definition: reversi,

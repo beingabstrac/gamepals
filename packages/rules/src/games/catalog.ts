@@ -2,6 +2,7 @@ import type { MoveLog } from '../core/replay';
 import { createRng } from '../core/rng';
 import type { BotTier, GameDefinition, GameState, Seat } from '../core/types';
 import { checkers } from './checkers';
+import { chess } from './chess';
 import { colorSort } from './color-sort';
 import { dominoes } from './dominoes';
 import { dotsAndBoxes } from './dots-and-boxes';
@@ -39,6 +40,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       colorSort,
       echo,
       checkers,
+      chess,
       reversi,
       dotsAndBoxes,
       mancala,
@@ -56,7 +58,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
  * These are the ones worth handing to a worker; the rest decide in well under a millisecond,
  * where a message round trip would cost far more than the thinking it saves.
  */
-export const HEAVY_BOTS: ReadonlySet<string> = new Set(['checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box']);
+export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box']);
 
 /**
  * Everything a bot needs to pick a move away from the screen (in a Web Worker, or on a server).

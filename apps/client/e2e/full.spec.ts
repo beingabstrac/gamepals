@@ -19,6 +19,7 @@ const GAMES = [
   'Echo',
   'Classic Snake',
   'Checkers',
+  'Chess',
   'Reversi',
   'Dots & Boxes',
   'Mancala',

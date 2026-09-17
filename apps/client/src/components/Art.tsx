@@ -231,6 +231,27 @@ function DominoArt() {
   );
 }
 
+function ChessArt() {
+  const squares = [0, 1, 2, 3].flatMap((row) => [0, 1, 2, 3].map((col) => ({ row, col })));
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="14" fill="#FFF1DC" />
+      {squares.map(({ row, col }) =>
+        (row + col) % 2 ? <rect key={`${row}-${col}`} x={14 + col * 18} y={14 + row * 18} width="18" height="18" fill="#C9B6F5" /> : null,
+      )}
+      <g>
+        <ellipse cx="50" cy="74" rx="15" ry="5" fill={INK} opacity="0.12" />
+        <rect x="41" y="46" width="18" height="26" rx="6" fill="#fff" stroke={INK} stroke-width="3" />
+        <rect x="33" y="70" width="34" height="8" rx="4" fill="#fff" stroke={INK} stroke-width="3" />
+        <rect x="38" y="32" width="24" height="16" rx="5" fill="#fff" stroke={INK} stroke-width="3" />
+        <rect x="47" y="18" width="6" height="16" rx="2" fill="#fff" stroke={INK} stroke-width="3" />
+        <rect x="42" y="23" width="16" height="6" rx="2" fill="#fff" stroke={INK} stroke-width="3" />
+      </g>
+    </svg>
+  );
+}
+
 function DotsArt() {
   const dots = [22, 50, 78];
   return (
@@ -605,6 +626,7 @@ const ART: Record<string, () => JSX.Element> = {
   yatzy: YatzyArt,
   'shut-the-box': ShutArt,
   dominoes: DominoArt,
+  chess: ChessArt,
   memory: MemoryArt,
 };
 
