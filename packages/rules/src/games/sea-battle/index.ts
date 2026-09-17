@@ -17,11 +17,11 @@ export const FLEET: readonly { readonly id: string; readonly name: string; reado
 export const FLEET_CELLS = FLEET.reduce((sum, ship) => sum + ship.size, 0);
 
 export type SeaMove = string;
-export const placeMove = (row: number, col: number, horizontal: boolean): SeaMove => `p${row}${col}${horizontal ? 'H' : 'V'}`;
+export const placeShip = (row: number, col: number, horizontal: boolean): SeaMove => `p${row}${col}${horizontal ? 'H' : 'V'}`;
 export const fireMove = (row: number, col: number): SeaMove => `f${row}${col}`;
 export const cellOf = (row: number, col: number): number => row * SEA_SIZE + col;
-export const rowOf = (cell: number): number => Math.floor(cell / SEA_SIZE);
-export const colOf = (cell: number): number => cell % SEA_SIZE;
+export const seaRow = (cell: number): number => Math.floor(cell / SEA_SIZE);
+export const seaCol = (cell: number): number => cell % SEA_SIZE;
 
 export interface Placement {
   readonly ship: number;
@@ -94,7 +94,7 @@ export class SeaBattleState implements GameState<SeaMove> {
           if (horizontal ? col + size > SEA_SIZE : row + size > SEA_SIZE) continue;
           const cells = cellsOf({ ship: next, row, col, horizontal });
           if (cells.some((cell) => taken.has(cell))) continue;
-          moves.push(placeMove(row, col, horizontal));
+          moves.push(placeShip(row, col, horizontal));
         }
       }
     }
@@ -105,7 +105,7 @@ export class SeaBattleState implements GameState<SeaMove> {
     const shots = this.shots[this.currentSeat]!;
     const moves: SeaMove[] = [];
     for (let cell = 0; cell < SEA_SIZE * SEA_SIZE; cell++) {
-      if (shots[cell] === UNKNOWN) moves.push(fireMove(rowOf(cell), colOf(cell)));
+      if (shots[cell] === UNKNOWN) moves.push(fireMove(seaRow(cell), seaCol(cell)));
     }
     return moves;
   }
@@ -145,8 +145,8 @@ export function newSeaBattle(): SeaBattleState {
 
 /** Cells next to a cell, for finishing off a wounded ship. */
 function neighbours(cell: number): number[] {
-  const row = rowOf(cell);
-  const col = colOf(cell);
+  const row = seaRow(cell);
+  const col = seaCol(cell);
   const list: number[] = [];
   if (row > 0) list.push(cellOf(row - 1, col));
   if (row < SEA_SIZE - 1) list.push(cellOf(row + 1, col));
@@ -209,7 +209,7 @@ function createSeaBot(style: SeaStyle): Bot<SeaMove> {
       // Placing: anywhere legal. Nobody can see it, so random is as good as it gets.
       if (state.phase === 'place') return rng.pick(moves);
       const open = new Set(moves);
-      const pick = (cell: number) => fireMove(rowOf(cell), colOf(cell));
+      const pick = (cell: number) => fireMove(seaRow(cell), seaCol(cell));
       if (style === 'density') {
         const counts = density(state, seat);
         const best = Math.max(...counts.map((count, cell) => (open.has(pick(cell)) ? count : -1)));

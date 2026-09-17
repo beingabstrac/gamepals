@@ -1,4 +1,4 @@
-import { cellsOf, colOf, FLEET, fireMove, HIT, MISS, placeMove, rowOf, SEA_SIZE, type Placement, type SeaEvent, type SeaMove, type SeaBattleState } from '@gamepals/rules';
+import { cellsOf, seaCol, FLEET, fireMove, HIT, MISS, placeShip, seaRow, SEA_SIZE, type Placement, type SeaEvent, type SeaMove, type SeaBattleState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
@@ -97,8 +97,8 @@ export class SeaScene extends Scene {
 
   private gridTop = (grid: Grid) => (grid === 'theirs' ? THEIRS_Y : MINE_Y);
   private cellCenter = (grid: Grid, cell: number) => ({
-    x: LEFT + (colOf(cell) + 0.5) * CELL,
-    y: this.gridTop(grid) + (rowOf(cell) + 0.5) * CELL,
+    x: LEFT + (seaCol(cell) + 0.5) * CELL,
+    y: this.gridTop(grid) + (seaRow(cell) + 0.5) * CELL,
   });
 
   private cellAt(x: number, y: number): { grid: Grid; cell: number } | null {
@@ -136,12 +136,12 @@ export class SeaScene extends Scene {
       return;
     }
     if (found.grid !== 'theirs') return;
-    const move = fireMove(rowOf(found.cell), colOf(found.cell));
+    const move = fireMove(seaRow(found.cell), seaCol(found.cell));
     if (state.legalMoves(state.currentSeat).includes(move)) this.session.play(move);
   }
 
   private place(cell: number): void {
-    const move = placeMove(rowOf(cell), colOf(cell), this.table.horizontal);
+    const move = placeShip(seaRow(cell), seaCol(cell), this.table.horizontal);
     if (this.state.legalMoves(this.state.currentSeat).includes(move)) {
       this.session.play(move);
       return;
@@ -162,8 +162,8 @@ export class SeaScene extends Scene {
     }
     const step = arrow(key);
     if (step) {
-      const col = Math.min(SEA_SIZE - 1, Math.max(0, colOf(this.cursor) + step[0]));
-      const row = Math.min(SEA_SIZE - 1, Math.max(0, rowOf(this.cursor) + step[1]));
+      const col = Math.min(SEA_SIZE - 1, Math.max(0, seaCol(this.cursor) + step[0]));
+      const row = Math.min(SEA_SIZE - 1, Math.max(0, seaRow(this.cursor) + step[1]));
       this.cursor = row * SEA_SIZE + col;
       this.ringVisible = true;
       this.draw();
@@ -173,7 +173,7 @@ export class SeaScene extends Scene {
       this.ringVisible = true;
       if (this.state.phase === 'place') this.place(this.cursor);
       else {
-        const move = fireMove(rowOf(this.cursor), colOf(this.cursor));
+        const move = fireMove(seaRow(this.cursor), seaCol(this.cursor));
         if (this.state.legalMoves(this.state.currentSeat).includes(move)) this.session.play(move);
       }
       return true;
@@ -261,12 +261,12 @@ export class SeaScene extends Scene {
       // The ship waiting to go down, shown where it would land.
       const pending = this.pending();
       if (pending !== null && this.myTurn()) {
-        const preview: Placement = { ship: pending, row: rowOf(this.cursor), col: colOf(this.cursor), horizontal: this.table.horizontal };
-        const fits = state.legalMoves(seat).includes(placeMove(preview.row, preview.col, this.table.horizontal));
+        const preview: Placement = { ship: pending, row: seaRow(this.cursor), col: seaCol(this.cursor), horizontal: this.table.horizontal };
+        const fits = state.legalMoves(seat).includes(placeShip(preview.row, preview.col, this.table.horizontal));
         marks.fillStyle(fits ? SUNNY : TOMATO, 0.45);
         for (const cell of cellsOf(preview)) {
           if (cell < 0 || cell >= SEA_SIZE * SEA_SIZE) continue;
-          if (preview.horizontal && rowOf(cell) !== preview.row) continue;
+          if (preview.horizontal && seaRow(cell) !== preview.row) continue;
           const { x, y } = this.cellCenter('mine', cell);
           marks.fillRect(x - CELL / 2 + 2, y - CELL / 2 + 2, CELL - 4, CELL - 4);
         }

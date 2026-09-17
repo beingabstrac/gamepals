@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { replay, toMoveLog } from '../../core/replay';
 import { createRng } from '../../core/rng';
-import type { BotTier, Seat } from '../../core/types';
+import type { BotTier } from '../../core/types';
 import {
   cellOf,
   cellsOf,
@@ -11,11 +11,10 @@ import {
   HIT,
   MISS,
   newSeaBattle,
-  placeMove,
+  placeShip,
   SEA_SIZE,
   seaBattle,
   SeaBattleState,
-  UNKNOWN,
   type Placement,
   type SeaMove,
 } from './index';
@@ -25,7 +24,7 @@ function ready(): SeaBattleState {
   let state = newSeaBattle();
   for (const seat of [0, 1]) {
     FLEET.forEach((_, ship) => {
-      state = state.apply(placeMove(seat === 0 ? ship : ship + 5, 0, true));
+      state = state.apply(placeShip(seat === 0 ? ship : ship + 5, 0, true));
     });
   }
   expect(state.phase).toBe('fire');
@@ -42,10 +41,10 @@ describe('sea battle setup', () => {
     let state = newSeaBattle();
     expect(state.currentSeat).toBe(0);
     expect(state.legalMoves(1)).toEqual([]);
-    for (let ship = 0; ship < 5; ship++) state = state.apply(placeMove(ship, 0, true));
+    for (let ship = 0; ship < 5; ship++) state = state.apply(placeShip(ship, 0, true));
     expect(state.phase).toBe('place');
     expect(state.currentSeat).toBe(1);
-    for (let ship = 0; ship < 5; ship++) state = state.apply(placeMove(ship, 0, true));
+    for (let ship = 0; ship < 5; ship++) state = state.apply(placeShip(ship, 0, true));
     expect(state.phase).toBe('fire');
     expect(state.currentSeat).toBe(0);
   });
@@ -53,12 +52,12 @@ describe('sea battle setup', () => {
   it('keeps ships on the grid and never overlapping', () => {
     const state = newSeaBattle();
     // The carrier is 5 long, so column 6 across would hang off the edge.
-    expect(state.legalMoves(0)).not.toContain(placeMove(0, 6, true));
-    expect(state.legalMoves(0)).toContain(placeMove(0, 5, true));
-    const after = state.apply(placeMove(0, 0, true));
-    expect(after.legalMoves(0)).not.toContain(placeMove(0, 0, true));
-    expect(after.legalMoves(0)).toContain(placeMove(1, 0, true));
-    expect(() => after.apply(placeMove(0, 3, true))).toThrow();
+    expect(state.legalMoves(0)).not.toContain(placeShip(0, 6, true));
+    expect(state.legalMoves(0)).toContain(placeShip(0, 5, true));
+    const after = state.apply(placeShip(0, 0, true));
+    expect(after.legalMoves(0)).not.toContain(placeShip(0, 0, true));
+    expect(after.legalMoves(0)).toContain(placeShip(1, 0, true));
+    expect(() => after.apply(placeShip(0, 3, true))).toThrow();
   });
 });
 
