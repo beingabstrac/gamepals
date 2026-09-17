@@ -3,6 +3,8 @@ import {
   checkers,
   chess,
   type ChessState,
+  backgammon,
+  type BackgammonState,
   classicSnake,
   COLORS_BY_PLAYERS,
   colorSort,
@@ -65,6 +67,8 @@ import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
 import { CHECKERS_SIZE, CheckersScene } from './checkers/CheckersScene';
 import { CHESS_SIZE, ChessScene } from './chess/ChessScene';
+import { BackgammonControls } from './backgammon/BackgammonControls';
+import { BACKGAMMON_COLORS, BACKGAMMON_NAMES, BACKGAMMON_SIZE, BackgammonScene } from './backgammon/BackgammonScene';
 import { CLASSIC_SNAKE_BEST_KEY, CLASSIC_SNAKE_SIZE, ClassicSnakeScene } from './classic-snake/ClassicSnakeScene';
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
@@ -249,6 +253,38 @@ export const GAMES: readonly AnyEntry[] = [
       return event.check ? 'clang' : 'place';
     },
     createScene: (session) => new ChessScene(session),
+  }),
+  entry({
+    definition: backgammon,
+    tagline: 'Race your checkers home',
+    howTo: {
+      goal: 'Bring all 15 of your checkers home, then take them off before the other player does.',
+      controls: 'Tap Roll, then tap a checker and tap where it goes. On a keyboard: Space or Enter rolls, arrows pick a point, Enter moves.',
+      win: 'The first player to take off all 15 checkers wins.',
+      tip: 'Play both dice if you can, and the higher one if only one fits. Doubles give four moves. Landing on a lone checker sends it to the bar, and it must come back in before that player does anything else. No doubling cube here.',
+    },
+    sideNames: () => BACKGAMMON_NAMES,
+    sideColors: () => BACKGAMMON_COLORS,
+    size: BACKGAMMON_SIZE,
+    color: COLORS.mint,
+    botDelayMs: 600,
+    status: (state) => {
+      const s = state as BackgammonState;
+      if (s.result) return undefined;
+      const name = BACKGAMMON_NAMES[s.currentSeat];
+      if (s.phase === 'roll') return `${name} to roll`;
+      if (s.board.bar[s.currentSeat]! > 0) return `${name} must come in from the bar`;
+      return `${name} to move: ${s.dice.join(' and ')}`;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as BackgammonState).last;
+      if (!event) return undefined;
+      if (event.kind === 'roll') return 'roll';
+      if (event.kind === 'pass') return 'buzz';
+      return event.hit ? 'capture' : 'place';
+    },
+    Controls: BackgammonControls,
+    createScene: (session) => new BackgammonScene(session),
   }),
   entry({
     definition: reversi,

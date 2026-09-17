@@ -252,6 +252,28 @@ function ChessArt() {
   );
 }
 
+function BackgammonArt() {
+  const cols = [0, 1, 2, 3, 4, 5];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="16" width="88" height="72" rx="12" fill={DARK.peach} />
+      <rect x="6" y="12" width="88" height="72" rx="12" fill={COLORS.peach} />
+      <rect x="10" y="16" width="80" height="64" fill="#FFF6EA" />
+      <rect x="47" y="16" width="6" height="64" fill={DARK.peach} />
+      {cols.map((c) => (
+        <g key={c}>
+          <path d={`M${12 + c * 13} 16 L${22 + c * 13} 16 L${17 + c * 13} 44 Z`} fill={c % 2 ? '#C9B6F5' : '#FFE9CF'} />
+          <path d={`M${12 + c * 13} 80 L${22 + c * 13} 80 L${17 + c * 13} 52 Z`} fill={c % 2 ? '#FFE9CF' : '#C9B6F5'} />
+        </g>
+      ))}
+      <circle cx="17" cy="74" r="6" fill={COLORS.sky} />
+      <circle cx="17" cy="63" r="6" fill={COLORS.sky} />
+      <circle cx="82" cy="22" r="6" fill={COLORS.tomato} />
+      <circle cx="82" cy="33" r="6" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function DotsArt() {
   const dots = [22, 50, 78];
   return (
@@ -601,6 +623,7 @@ const ART: Record<string, () => JSX.Element> = {
   'air-hockey': AirHockeyArt,
   checkers: CheckersArt,
   chess: ChessArt,
+  backgammon: BackgammonArt,
   solitaire: SolitaireArt,
   'sea-battle': SeaBattleArt,
   sudoku: SudokuArt,

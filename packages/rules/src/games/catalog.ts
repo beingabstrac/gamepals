@@ -1,6 +1,7 @@
 import type { MoveLog } from '../core/replay';
 import { createRng } from '../core/rng';
 import type { BotTier, GameDefinition, GameState, Seat } from '../core/types';
+import { backgammon } from './backgammon';
 import { checkers } from './checkers';
 import { chess } from './chess';
 import { colorSort } from './color-sort';
@@ -41,6 +42,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       echo,
       checkers,
       chess,
+      backgammon,
       reversi,
       dotsAndBoxes,
       mancala,

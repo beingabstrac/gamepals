@@ -20,6 +20,7 @@ const GAMES = [
   'Classic Snake',
   'Checkers',
   'Chess',
+  'Backgammon',
   'Reversi',
   'Dots & Boxes',
   'Mancala',
