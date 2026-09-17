@@ -31,7 +31,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 ## Stage 1: the whole offline game, polished (web + PWA)
 - [x] **M1 Land wave 4 part 2:** Yatzy, Shut the Box, Dominoes green on every screen type (2026-09-16)
 - [x] **M2 Bot worker (2026-09-16):** the bots that can take time (deep search or playouts: Checkers, Reversi, Ultimate, Mancala, Dominoes, Yatzy, Shut the Box, and Chess next) think in a Web Worker with a "thinking" cue, so the board never freezes; quick bots stay inline because a message costs more than their thinking; found the Android WebView page loss is not a crash (no crash log) and cut it down by loading the page once per run instead of per game, but it still happens now and then, so the relaunch-and-retry stays; a real fix is still open
-- [ ] **M3 Chess:** own engine (castling, en passant, promotion, check, mate, stalemate, 50-move and threefold draws), 4 bot levels, move hints, no GPL code
+- [x] **M3 Chess (2026-09-17):** own engine (castling, en passant, promotion, check, mate, stalemate, 50-move and threefold draws), 4 bot levels, move hints, no GPL code
 - [ ] **M4 Backgammon + Sea Battle:** wave 4 complete
 - [ ] **M5 Quality pass A (first 15 games):** screenshots of every game in portrait and landscape on phone, tablet and desktop; juice checklist; fix layout, motion and feel issues; landscape layouts (board beside controls)
   - Found by hand on 2026-09-17 (phone, live site): Dominoes hand tiles are about 24px wide on a 375px phone (too small to tap; Apple asks for 44), and the table above them is mostly empty, so the line should scale up to fill it.
