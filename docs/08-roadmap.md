@@ -40,6 +40,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - Shut the Box, Backgammon and Sea Battle each show a big disabled button that is really an instruction ("Pick tiles that add up to 3", "Tap a checker", "Fire at their waters") while the status line already says it. Pick one place for instructions and use it everywhere.
   - Sea Battle ships are plain grey blocks; give them a hull shape so they read as ships.
   - Backgammon point columns are about 25px wide on a 375px phone: widen the tap area (the whole triangle plus its checkers) even if the art stays the same.
+  - Wide boards (Mancala, Dominoes, Backgammon, Yatzy) fill the width and leave the bottom third of a phone empty. Centring the board in that space was tried on 2026-09-18 and looked worse (a big gap under the title), so the real fix is a portrait layout per wide game, or landscape support. Not a CSS one-liner.
   - Yatzy dice are blank white before the first roll, which reads as broken; show faded pips or a "Tap Roll" hint.
 - [ ] **M6 Quality pass B (the rest)**
 - [ ] **M7 Cards A:** Spider, FreeCell, Pyramid, TriPeaks (cheap to build, top of the charts)
