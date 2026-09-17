@@ -1,11 +1,4 @@
-import {
-  bearOffMove,
-  enterMove,
-  stepMove,
-  type BackgammonEvent,
-  type BackgammonMove,
-  type BackgammonState,
-} from '@gamepals/rules';
+import type { BackgammonEvent, BackgammonMove, BackgammonState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
