@@ -499,8 +499,8 @@ export const GAMES: readonly AnyEntry[] = [
       if (s.result) return undefined;
       const who = s.players === 1 ? '' : `${yatzyNames(s.players)[s.currentSeat]}: `;
       const left = 3 - s.rollsUsed;
-      if (s.rollsUsed === 0) return `${who}roll the dice`;
-      return left > 0 ? `${who}${left} ${left === 1 ? 'roll' : 'rolls'} left, or pick a box` : `${who}pick a box to score`;
+      const now = s.rollsUsed === 0 ? 'roll the dice' : left > 0 ? `${left} ${left === 1 ? 'roll' : 'rolls'} left, or pick a box` : 'pick a box to score';
+      return who ? `${who}${now}` : `${now[0]!.toUpperCase()}${now.slice(1)}`;
     },
     resultText: (state) => {
       const s = state as YatzyState;
@@ -541,7 +541,8 @@ export const GAMES: readonly AnyEntry[] = [
       const names = yatzyNames(s.scores.length);
       const who = s.scores.length === 1 ? '' : `${names[s.currentSeat]}: `;
       const done = s.scores.flatMap((score, seat) => (score === null ? [] : [`${names[seat]} ${score}`]));
-      const now = s.phase === 'roll' ? `${who}roll the dice` : `${who}pick tiles that add up to ${s.roll}`;
+      const what = s.phase === 'roll' ? 'roll the dice' : `pick tiles that add up to ${s.roll}`;
+      const now = who ? `${who}${what}` : `${what[0]!.toUpperCase()}${what.slice(1)}`;
       return done.length ? `${now}. Scores: ${done.join(', ')}` : now;
     },
     resultText: (state) => {

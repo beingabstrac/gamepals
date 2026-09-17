@@ -1,6 +1,7 @@
 import { FLEET, type SeaMove, type SeaBattleState } from '@gamepals/rules';
 import type { Session } from '../../session';
 import { tableFor, turnShip } from './table';
+import { TurnHint } from '../hint';
 
 export function SeaControls({ session }: { session: Session<SeaMove> }) {
   const state = session.state as SeaBattleState;
@@ -24,11 +25,7 @@ export function SeaControls({ session }: { session: Session<SeaMove> }) {
   if (!myTurn) {
     return (
       <div class="sudoku-controls">
-        <div class="ludo-controls">
-          <button class="btn primary roll-btn" disabled>
-            Waiting…
-          </button>
-        </div>
+        <TurnHint>Waiting for the other player</TurnHint>
       </div>
     );
   }
@@ -46,9 +43,7 @@ export function SeaControls({ session }: { session: Session<SeaMove> }) {
             </button>
           </>
         ) : (
-          <button class="btn primary roll-btn" disabled>
-            Fire at their waters
-          </button>
+          <TurnHint>Tap a square in their waters to fire</TurnHint>
         )}
       </div>
     </div>

@@ -194,7 +194,7 @@ export class SeaScene extends Scene {
     }
   }
 
-  /** A ship as one rounded block across its squares. */
+  /** A ship: a hull with a pointed bow and a deck line, so it reads as a ship and not a block. */
   private drawShip(g: GameObjects.Graphics, grid: Grid, placement: Placement, down: boolean): void {
     const top = this.gridTop(grid);
     const size = FLEET[placement.ship]!.size;
@@ -202,8 +202,19 @@ export class SeaScene extends Scene {
     const y = top + placement.row * CELL + 4;
     const w = (placement.horizontal ? size * CELL : CELL) - 8;
     const h = (placement.horizontal ? CELL : size * CELL) - 8;
+    const bow = Math.min(CELL * 0.55, (placement.horizontal ? w : h) / 2);
     g.fillStyle(down ? SHIP_DOWN : SHIP, 1);
-    g.fillRoundedRect(x, y, w, h, 9);
+    if (placement.horizontal) {
+      g.fillRoundedRect(x, y, w - bow / 2, h, 8);
+      g.fillTriangle(x + w - bow, y, x + w - bow, y + h, x + w, y + h / 2);
+    } else {
+      g.fillRoundedRect(x, y + bow / 2, w, h - bow / 2, 8);
+      g.fillTriangle(x, y + bow, x + w, y + bow, x + w / 2, y);
+    }
+    // A deck line down the middle.
+    g.fillStyle(0xffffff, down ? 0.18 : 0.3);
+    if (placement.horizontal) g.fillRect(x + 6, y + h / 2 - 1.5, w - bow - 4, 3);
+    else g.fillRect(x + w / 2 - 1.5, y + bow + 4, 3, h - bow - 10);
   }
 
   private draw(): void {

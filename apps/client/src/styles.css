@@ -1051,3 +1051,10 @@ h2,
     opacity: 0.55;
   }
 }
+
+/* What to do next, when there is no button to press. */
+.turn-hint {
+  margin: 0 auto;
+  max-width: 380px;
+  background: color-mix(in srgb, var(--game) 16%, white);
+}

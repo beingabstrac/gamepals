@@ -19,9 +19,9 @@ const ROW_H = 74;
 const TW = 58;
 const TH = 29;
 const LINE_GAP = 4;
-const HAND_Y = 566;
-const HW = 46;
-const HH = 92;
+const HAND_Y = 556;
+const HW = 62;
+const HH = 124;
 const IVORY = 0xfffaf0;
 const LIP = 0xe3dccd;
 const INK = toHex(COLORS.ink);
@@ -325,7 +325,8 @@ export class DominoScene extends Scene {
         }
       }
     }
-    for (const [tile, spot] of this.handSpots) {
+    // Later tiles are drawn on top, so check them first when the hand is fanned.
+    for (const [tile, spot] of [...this.handSpots].reverse()) {
       if (Math.abs(x - spot.x) < HW / 2 + 3 && Math.abs(y - spot.y) < HH / 2 + 24) {
         this.choose(tile);
         return;

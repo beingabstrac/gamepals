@@ -1,5 +1,6 @@
 import type { ShutMove, ShutState } from '@gamepals/rules';
 import type { Session } from '../../session';
+import { TurnHint } from '../hint';
 
 export function ShutControls({ session }: { session: Session<ShutMove> }) {
   const state = session.state as ShutState;
@@ -22,9 +23,7 @@ export function ShutControls({ session }: { session: Session<ShutMove> }) {
             )}
           </>
         ) : (
-          <button class="btn primary roll-btn" disabled>
-            {myTurn ? `Pick tiles that add up to ${state.roll}` : 'Waiting…'}
-          </button>
+          <TurnHint>{myTurn ? `Pick tiles that add up to ${state.roll}` : 'Waiting for the other player'}</TurnHint>
         )}
       </div>
     </div>

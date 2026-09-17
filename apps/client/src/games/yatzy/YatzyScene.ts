@@ -42,8 +42,9 @@ function drawFace(g: GameObjects.Graphics, value: number, kept: boolean): void {
     g.lineStyle(6, SUNNY, 1);
     g.strokeRoundedRect(-DIE / 2, -DIE / 2, DIE, DIE, 22);
   }
-  g.fillStyle(INK, 1);
-  for (const [x, y] of PIPS[value] ?? []) g.fillCircle(x * 24, y * 24, 9);
+  // Before the first roll there is no value yet: show a faint five so the tray reads as dice.
+  g.fillStyle(INK, value === 0 ? 0.12 : 1);
+  for (const [x, y] of PIPS[value === 0 ? 5 : value] ?? []) g.fillCircle(x * 24, y * 24, 9);
 }
 
 export class YatzyScene extends Scene {
