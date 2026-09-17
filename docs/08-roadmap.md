@@ -34,6 +34,10 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M3 Chess:** own engine (castling, en passant, promotion, check, mate, stalemate, 50-move and threefold draws), 4 bot levels, move hints, no GPL code
 - [ ] **M4 Backgammon + Sea Battle:** wave 4 complete
 - [ ] **M5 Quality pass A (first 15 games):** screenshots of every game in portrait and landscape on phone, tablet and desktop; juice checklist; fix layout, motion and feel issues; landscape layouts (board beside controls)
+  - Found by hand on 2026-09-17 (phone, live site): Dominoes hand tiles are about 24px wide on a 375px phone (too small to tap; Apple asks for 44), and the table above them is mostly empty, so the line should scale up to fill it.
+  - Solo status text starts lowercase ("roll the dice", "pick tiles that add up to 3"); capitalize it.
+  - Shut the Box shows a big disabled button that is really an instruction ("Pick tiles that add up to 3") while the status says the same thing; drop one.
+  - Yatzy dice are blank white before the first roll, which reads as broken; show faded pips or a "Tap Roll" hint.
 - [ ] **M6 Quality pass B (the rest)**
 - [ ] **M7 Cards A:** Spider, FreeCell, Pyramid, TriPeaks (cheap to build, top of the charts)
 - [ ] **M8 Teach and rivalry:** 10-second "try it" hint on first play of each game; running score between the same players; rematch streaks

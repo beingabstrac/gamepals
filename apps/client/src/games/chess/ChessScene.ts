@@ -39,96 +39,87 @@ const PROMO_LETTER: Record<number, string> = { [QUEEN]: 'q', [ROOK]: 'r', [BISHO
 type Point = { x: number; y: number };
 
 /**
- * Our own piece shapes, drawn flat in a 60 by 60 box: no chess font, no borrowed art.
- * Every piece stands on the same base so the set reads as one family.
+ * Our own piece shapes, drawn flat: no chess font, no borrowed art. Each piece is built in a
+ * box about 44 units wide so it fills its square, and every piece stands on the same base.
  */
 function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
   const white = colorOf(piece) === 0;
   const fill = white ? WHITE_PIECE : BLACK_PIECE;
-  const line = white ? INK : 0xffffff;
+  const line = white ? INK : 0xf3efe6;
   const s = scale;
-  const body = (topWidth: number, topY: number) => {
+  const path = (points: readonly (readonly [number, number])[]) => {
+    g.beginPath();
+    points.forEach(([x, y], i) => (i === 0 ? g.moveTo(x * s, y * s) : g.lineTo(x * s, y * s)));
+    g.closePath();
+    g.fillPath();
+    g.strokePath();
+  };
+  const disc = (x: number, y: number, r: number) => {
+    g.fillCircle(x * s, y * s, r * s);
+    g.strokeCircle(x * s, y * s, r * s);
+  };
+  /** The foot every piece shares. */
+  const foot = () => {
     g.fillStyle(fill, 1);
-    g.fillRoundedRect(-11 * s, topY * s, 22 * s, (20 - topY) * s, 5 * s);
-    g.fillTriangle(-topWidth * s, topY * s, topWidth * s, topY * s, 0, (topY - 2) * s);
-    g.fillRoundedRect(-15 * s, 18 * s, 30 * s, 8 * s, 4 * s);
-    g.lineStyle(2.5 * s, line, 1);
-    g.strokeRoundedRect(-15 * s, 18 * s, 30 * s, 8 * s, 4 * s);
+    g.fillRoundedRect(-17 * s, 14 * s, 34 * s, 10 * s, 5 * s);
+    g.strokeRoundedRect(-17 * s, 14 * s, 34 * s, 10 * s, 5 * s);
   };
 
-  g.lineStyle(2.5 * s, line, 1);
+  g.fillStyle(fill, 1);
+  g.lineStyle(3 * s, line, 1);
   switch (typeOf(piece)) {
     case PAWN:
-      body(9, -2);
-      g.fillStyle(fill, 1);
-      g.fillCircle(0, -10 * s, 8 * s);
-      g.strokeCircle(0, -10 * s, 8 * s);
+      path([[-9, 14], [-5, -2], [5, -2], [9, 14]]);
+      foot();
+      disc(0, -9, 8);
       break;
-    case ROOK: {
-      body(12, -4);
+    case ROOK:
+      path([[-11, 14], [-8, -6], [8, -6], [11, 14]]);
+      foot();
       g.fillStyle(fill, 1);
-      g.fillRoundedRect(-14 * s, -20 * s, 28 * s, 16 * s, 3 * s);
-      g.strokeRoundedRect(-14 * s, -20 * s, 28 * s, 16 * s, 3 * s);
-      // Battlements: two notches cut out of the top.
-      g.fillStyle(white ? DARK_SQUARE : INK, 1);
-      for (const x of [-6, 6]) g.fillRoundedRect((x - 3) * s, -21 * s, 6 * s, 7 * s, 2 * s);
-      break;
-    }
-    case BISHOP:
-      body(9, -4);
-      g.fillStyle(fill, 1);
-      g.fillCircle(0, -12 * s, 9 * s);
-      g.fillTriangle(-7 * s, -8 * s, 7 * s, -8 * s, 0, -24 * s);
-      g.strokeCircle(0, -12 * s, 9 * s);
-      g.lineStyle(2.5 * s, line, 1);
-      g.lineBetween(-3 * s, -16 * s, 4 * s, -10 * s);
-      break;
-    case KNIGHT: {
-      body(10, 0);
-      g.fillStyle(fill, 1);
-      g.beginPath();
-      g.moveTo(-10 * s, 2 * s);
-      g.lineTo(-8 * s, -10 * s);
-      g.lineTo(-2 * s, -20 * s);
-      g.lineTo(6 * s, -22 * s);
-      g.lineTo(12 * s, -14 * s);
-      g.lineTo(9 * s, -4 * s);
-      g.lineTo(11 * s, 2 * s);
-      g.closePath();
-      g.fillPath();
-      g.strokePath();
+      g.fillRoundedRect(-15 * s, -20 * s, 30 * s, 15 * s, 3 * s);
+      g.strokeRoundedRect(-15 * s, -20 * s, 30 * s, 15 * s, 3 * s);
+      // Two battlement notches, cut in the square colour behind the piece.
       g.fillStyle(line, 1);
-      g.fillCircle(5 * s, -15 * s, 1.8 * s);
+      for (const x of [-5.5, 5.5]) g.fillRoundedRect((x - 3) * s, -21 * s, 6 * s, 8 * s, 2 * s);
       break;
-    }
-    case QUEEN: {
-      body(11, -2);
+    case BISHOP:
+      path([[-10, 14], [-6, -4], [6, -4], [10, 14]]);
+      foot();
       g.fillStyle(fill, 1);
-      g.beginPath();
-      g.moveTo(-13 * s, -4 * s);
-      for (const [x, y] of [[-13, -20], [-6.5, -10], [0, -23], [6.5, -10], [13, -20], [13, -4]] as const) g.lineTo(x * s, y * s);
-      g.closePath();
-      g.fillPath();
-      g.strokePath();
-      for (const x of [-13, 0, 13]) {
+      path([[-9, -4], [-9, -12], [0, -26], [9, -12], [9, -4]]);
+      g.lineStyle(3 * s, line, 1);
+      g.lineBetween(-4 * s, -14 * s, 4 * s, -8 * s);
+      break;
+    case KNIGHT:
+      // A horse's head facing right: jaw, muzzle, ears and mane in one silhouette.
+      path([
+        [-11, 14], [-7, 2], [-11, -4], [-8, -13], [-2, -19], [-5, -26], [2, -22],
+        [6, -26], [9, -18], [16, -9], [14, -2], [5, 0], [9, 14],
+      ]);
+      foot();
+      g.fillStyle(line, 1);
+      g.fillCircle(3 * s, -14 * s, 2 * s);
+      break;
+    case QUEEN:
+      path([[-12, 14], [-8, -2], [8, -2], [12, 14]]);
+      foot();
+      g.fillStyle(fill, 1);
+      path([[-14, -2], [-14, -18], [-7, -9], [0, -22], [7, -9], [14, -18], [14, -2]]);
+      for (const [x, y] of [[-14, -21], [0, -25], [14, -21]] as const) {
         g.fillStyle(fill, 1);
-        g.fillCircle(x * s, (x === 0 ? -25 : -22) * s, 3.5 * s);
-        g.strokeCircle(x * s, (x === 0 ? -25 : -22) * s, 3.5 * s);
+        disc(x, y, 3.5);
       }
       break;
-    }
-    case KING: {
-      body(11, -2);
+    case KING:
+      path([[-12, 14], [-8, -4], [8, -4], [12, 14]]);
+      foot();
       g.fillStyle(fill, 1);
-      g.fillRoundedRect(-12 * s, -18 * s, 24 * s, 14 * s, 4 * s);
-      g.strokeRoundedRect(-12 * s, -18 * s, 24 * s, 14 * s, 4 * s);
+      g.fillRoundedRect(-14 * s, -19 * s, 28 * s, 15 * s, 5 * s);
+      g.strokeRoundedRect(-14 * s, -19 * s, 28 * s, 15 * s, 5 * s);
       g.fillStyle(fill, 1);
-      g.fillRoundedRect(-3 * s, -30 * s, 6 * s, 14 * s, 2 * s);
-      g.fillRoundedRect(-8 * s, -25 * s, 16 * s, 6 * s, 2 * s);
-      g.lineStyle(2.5 * s, line, 1);
-      g.strokeRoundedRect(-3 * s, -30 * s, 6 * s, 14 * s, 2 * s);
+      path([[-3, -19], [-3, -25], [-8, -25], [-8, -30], [-3, -30], [-3, -35], [3, -35], [3, -30], [8, -30], [8, -25], [3, -25], [3, -19]]);
       break;
-    }
   }
 }
 
@@ -240,7 +231,7 @@ export class ChessScene extends Scene {
       const { x, y } = this.center(square);
       g.save();
       g.translateCanvas(x, y);
-      drawPiece(g, piece, CELL / 64);
+      drawPiece(g, piece, CELL / 52);
       g.restore();
     });
     this.drawHints();
@@ -293,7 +284,7 @@ export class ChessScene extends Scene {
       g.fillRoundedRect(x - CELL / 2 + 4, top + 4, CELL - 8, CELL - 8, 12);
       g.save();
       g.translateCanvas(x, top + CELL / 2);
-      drawPiece(g, type | (color === 1 ? 8 : 0), CELL / 68);
+      drawPiece(g, type | (color === 1 ? 8 : 0), CELL / 56);
       g.restore();
     });
   }
@@ -413,12 +404,12 @@ export class ChessScene extends Scene {
     if (event.captured !== 0) {
       const taken = this.center(event.capturedSquare);
       const pop = this.add.graphics().setPosition(taken.x, taken.y).setDepth(2);
-      drawPiece(pop, event.captured, CELL / 64);
+      drawPiece(pop, event.captured, CELL / 52);
       this.tweens.add({ targets: pop, scale: 0.2, alpha: 0, angle: 30, duration: 220, ease: 'Back.easeIn', onComplete: () => pop.destroy() });
     }
 
     const mover = this.add.graphics().setPosition(from.x, from.y).setDepth(5);
-    drawPiece(mover, event.piece, CELL / 64);
+    drawPiece(mover, event.piece, CELL / 52);
     this.tweens.addCounter({
       from: 0,
       to: 1,
@@ -441,7 +432,7 @@ export class ChessScene extends Scene {
       const rookFrom = this.center(event.castleRook.from);
       const rookTo = this.center(event.castleRook.to);
       const rook = this.add.graphics().setPosition(rookFrom.x, rookFrom.y).setDepth(4);
-      drawPiece(rook, this.state.board[event.castleRook.to] ?? 4, CELL / 64);
+      drawPiece(rook, this.state.board[event.castleRook.to] ?? 4, CELL / 52);
       this.tweens.add({ targets: rook, x: rookTo.x, y: rookTo.y, duration: 260, ease: 'Sine.easeInOut', onComplete: () => rook.destroy() });
     }
   }
