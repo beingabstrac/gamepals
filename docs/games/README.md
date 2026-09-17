@@ -43,6 +43,7 @@ Rules unit tests, bot-tier test, e2e steps.
 - [Checkers](checkers.md), built
 - [Chess](chess.md), built
 - [Backgammon](backgammon.md), built
+- [Sea Battle](sea-battle.md), built
 - [Reversi](reversi.md), built
 - [Dots & Boxes](dots-and-boxes.md), built
 - [Mancala](mancala.md), built

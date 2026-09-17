@@ -274,6 +274,33 @@ function BackgammonArt() {
   );
 }
 
+function SeaBattleArt() {
+  const misses: [number, number][] = [[30, 30], [58, 44], [72, 30]];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="16" width="80" height="76" rx="12" fill="#B9D9F2" />
+      <rect x="10" y="12" width="80" height="76" rx="12" fill="#DFF1FF" />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <g key={i} stroke="#B9D9F2" stroke-width="1.5">
+          <line x1={10 + i * 16} y1="12" x2={10 + i * 16} y2="88" />
+          <line x1="10" y1={12 + i * 15.2} x2="90" y2={12 + i * 15.2} />
+        </g>
+      ))}
+      <rect x="16" y="58" width="46" height="12" rx="6" fill="#8D93A8" />
+      <rect x="64" y="60" width="12" height="26" rx="6" fill="#4B4A5C" />
+      {misses.map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="3.4" fill="#fff" />
+      ))}
+      <g stroke={COLORS.tomato} stroke-width="4" stroke-linecap="round">
+        <line x1="66" y1="66" x2="74" y2="74" />
+        <line x1="74" y1="66" x2="66" y2="74" />
+        <line x1="24" y1="60" x2="32" y2="68" />
+        <line x1="32" y1="60" x2="24" y2="68" />
+      </g>
+    </svg>
+  );
+}
+
 function DotsArt() {
   const dots = [22, 50, 78];
   return (
@@ -624,6 +651,7 @@ const ART: Record<string, () => JSX.Element> = {
   checkers: CheckersArt,
   chess: ChessArt,
   backgammon: BackgammonArt,
+  'sea-battle': SeaBattleArt,
   solitaire: SolitaireArt,
   'sea-battle': SeaBattleArt,
   sudoku: SudokuArt,

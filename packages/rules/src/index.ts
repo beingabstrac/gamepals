@@ -24,6 +24,7 @@ export * from './games/echo';
 export * from './games/classic-snake';
 export * from './games/checkers';
 export * from './games/backgammon';
+export * from './games/sea-battle';
 export * from './games/chess';
 export * from './games/reversi';
 export * from './games/dots-and-boxes';

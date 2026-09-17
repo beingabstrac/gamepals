@@ -5,6 +5,8 @@ import {
   type ChessState,
   backgammon,
   type BackgammonState,
+  seaBattle,
+  type SeaBattleState,
   classicSnake,
   COLORS_BY_PLAYERS,
   colorSort,
@@ -69,6 +71,8 @@ import { CHECKERS_SIZE, CheckersScene } from './checkers/CheckersScene';
 import { CHESS_SIZE, ChessScene } from './chess/ChessScene';
 import { BackgammonControls } from './backgammon/BackgammonControls';
 import { BACKGAMMON_COLORS, BACKGAMMON_NAMES, BACKGAMMON_SIZE, BackgammonScene } from './backgammon/BackgammonScene';
+import { SeaControls } from './sea-battle/SeaControls';
+import { SEA_BATTLE_SIZE, SEA_COLORS, SEA_NAMES, SeaScene } from './sea-battle/SeaScene';
 import { CLASSIC_SNAKE_BEST_KEY, CLASSIC_SNAKE_SIZE, ClassicSnakeScene } from './classic-snake/ClassicSnakeScene';
 import { ColorSortControls } from './color-sort/ColorSortControls';
 import { COLOR_SORT_SIZE, ColorSortScene } from './color-sort/ColorSortScene';
@@ -285,6 +289,38 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: BackgammonControls,
     createScene: (session) => new BackgammonScene(session),
+  }),
+  entry({
+    definition: seaBattle,
+    tagline: 'Hide your fleet, sink theirs',
+    howTo: {
+      goal: 'Find and sink all five of the other fleet before they sink yours.',
+      controls: 'Place your ships on your own grid: tap a square to drop one, Turn to change its direction, or let us place them for you. Then tap a square on their waters to fire. On a keyboard: arrows move, Enter drops or fires, R turns.',
+      win: 'Sink all five ships: seventeen squares in all.',
+      tip: 'A miss shows a white dot, a hit shows a red burst, and you are told which ship went down. Ships may touch here, and a hit does not give you another shot.',
+    },
+    sideNames: () => SEA_NAMES,
+    sideColors: () => SEA_COLORS,
+    size: SEA_BATTLE_SIZE,
+    color: COLORS.sky,
+    botDelayMs: 500,
+    status: (state) => {
+      const s = state as SeaBattleState;
+      if (s.result) return undefined;
+      const name = SEA_NAMES[s.currentSeat];
+      if (s.phase === 'place') return `${name} is placing their fleet`;
+      const left = 5 - s.sunkShips(s.currentSeat === 0 ? 1 : 0).length;
+      return `${name} to fire. ${left} of their ships left`;
+    },
+    moveCue: (_before, after) => {
+      const event = (after as SeaBattleState).last;
+      if (!event) return undefined;
+      if (event.kind === 'place') return 'tap';
+      if (event.sunk !== undefined) return 'capture';
+      return event.hit ? 'hit' : 'wall';
+    },
+    Controls: SeaControls,
+    createScene: (session) => new SeaScene(session),
   }),
   entry({
     definition: reversi,
@@ -938,6 +974,4 @@ export const GAMES: readonly AnyEntry[] = [
 ];
 
 /** Shown on the home shelf so the catalog direction is visible from day one (docs/12). */
-export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [
-  { id: 'sea-battle', name: 'Sea Battle', color: COLORS.sky },
-];
+export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [];

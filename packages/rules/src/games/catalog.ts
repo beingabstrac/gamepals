@@ -13,6 +13,7 @@ import { ludo } from './ludo';
 import { mancala } from './mancala';
 import { memory } from './memory';
 import { reversi } from './reversi';
+import { seaBattle } from './sea-battle';
 import { shutTheBox } from './shut-the-box';
 import { slidingPuzzle } from './sliding-puzzle';
 import { snakesAndLadders } from './snakes-and-ladders';
@@ -43,6 +44,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       checkers,
       chess,
       backgammon,
+      seaBattle,
       reversi,
       dotsAndBoxes,
       mancala,

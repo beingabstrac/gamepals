@@ -21,6 +21,7 @@ const GAMES = [
   'Checkers',
   'Chess',
   'Backgammon',
+  'Sea Battle',
   'Reversi',
   'Dots & Boxes',
   'Mancala',
