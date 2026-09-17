@@ -1,13 +1,13 @@
-import type { GameResult } from '@gamepals/rules';
-import { AUTO, Game, Scale } from 'phaser';
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { cue } from '../feedback';
-import { DPR } from '../games/crisp';
-import type { RealtimeEntry } from '../games/registry';
-import { outcomeOf, resultTitle } from '../outcome';
-import type { SeatController } from '../session';
-import { BackIcon } from './Art';
-import { ResultSheet } from './ResultSheet';
+import type { GameResult } from "@gamepals/rules";
+import { AUTO, Game, Scale } from "phaser";
+import { useEffect, useRef, useState } from "preact/hooks";
+import { cue } from "../feedback";
+import { DPR } from "../games/crisp";
+import type { RealtimeEntry } from "../games/registry";
+import { outcomeOf, resultTitle } from "../outcome";
+import type { SeatController } from "../session";
+import { BackIcon } from "./Art";
+import { ResultSheet } from "./ResultSheet";
 
 interface Props {
   entry: RealtimeEntry;
@@ -52,33 +52,52 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
 
   const names = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
-  const sideName = (seat: number) => `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
+  const sideName = (seat: number) =>
+    `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
 
   return (
-    <div class="screen game-screen" style={{ '--game': entry.color }}>
+    <div class="screen game-screen" style={{ "--game": entry.color }}>
       <header class="topbar">
-        <button class="round-btn" onClick={onExit} aria-label="Back to the table">
+        <button
+          class="round-btn"
+          onClick={onExit}
+          aria-label="Back to the table"
+        >
           <BackIcon />
         </button>
         <h1>{entry.definition.name}</h1>
         <span />
       </header>
-      <div class="scoreboard" aria-live="polite">
-        {seats.map((seat, i) => (
-          <div key={i} class="score" style={{ '--side': sideColors[i] ?? '#9B7BFF' }}>
-            <span class="score-dot" />
-            <span class="score-name">{seat.label}</span>
-            <span class="score-value" key={scores[i]}>
-              {scores[i] ?? 0}
-            </span>
-          </div>
-        ))}
+      <div class="play-area">
+        <div class="scoreboard" aria-live="polite">
+          {seats.map((seat, i) => (
+            <div
+              key={i}
+              class="score"
+              style={{ "--side": sideColors[i] ?? "#9B7BFF" }}
+            >
+              <span class="score-dot" />
+              <span class="score-name">{seat.label}</span>
+              <span class="score-value" key={scores[i]}>
+                {scores[i] ?? 0}
+              </span>
+            </div>
+          ))}
+        </div>
+        {/* A fresh container per round so the old game's canvas leaves immediately on rematch (see GameScreen). */}
+        <div
+          class="board realtime"
+          key={round}
+          ref={host}
+          style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }}
+        />
       </div>
-      {/* A fresh container per round so the old game's canvas leaves immediately on rematch (see GameScreen). */}
-      <div class="board realtime" key={round} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
       {result && (
         <ResultSheet
-          title={entry.resultText?.(result, scores) ?? resultTitle(result, seats, sideName)}
+          title={
+            entry.resultText?.(result, scores) ??
+            resultTitle(result, seats, sideName)
+          }
           outcome={outcomeOf(result, seats)}
           onRematch={() => setRound((r) => r + 1)}
           onChangeMode={onExit}

@@ -12,9 +12,10 @@ const PIPS: Record<number, readonly number[]> = {
 };
 
 export function Die({ value }: { value: number | null }) {
-  const pips = value ? (PIPS[value] ?? []) : [];
+  // Before the first roll there is no value: show a faint five, so it still reads as a die.
+  const pips = PIPS[value ?? 5] ?? [];
   return (
-    <div class={value ? 'die rolled' : 'die'} aria-label={value ? `Rolled ${value}` : 'Not rolled yet'}>
+    <div class={value ? 'die rolled' : 'die waiting'} aria-label={value ? `Rolled ${value}` : 'Not rolled yet'}>
       {Array.from({ length: 9 }, (_, i) => (
         <span key={i} class={pips.includes(i) ? 'pip on' : 'pip'} />
       ))}

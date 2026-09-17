@@ -1,13 +1,13 @@
-import { AUTO, Game, Scale } from 'phaser';
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS } from '../autoplay';
-import { cue } from '../feedback';
-import { DPR } from '../games/crisp';
-import type { GameEntry } from '../games/registry';
-import { outcomeOf, resultTitle } from '../outcome';
-import { Session, type SeatController } from '../session';
-import { BackIcon } from './Art';
-import { ResultSheet } from './ResultSheet';
+import { AUTO, Game, Scale } from "phaser";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS } from "../autoplay";
+import { cue } from "../feedback";
+import { DPR } from "../games/crisp";
+import type { GameEntry } from "../games/registry";
+import { outcomeOf, resultTitle } from "../outcome";
+import { Session, type SeatController } from "../session";
+import { BackIcon } from "./Art";
+import { ResultSheet } from "./ResultSheet";
 
 interface Props {
   entry: GameEntry;
@@ -19,14 +19,26 @@ interface Props {
 
 const newSeed = () => Math.floor(Math.random() * 0xffffffff);
 
-export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Props) {
+export function GameScreen({
+  entry,
+  seats: initialSeats,
+  variant,
+  onExit,
+}: Props) {
   const [seats, setSeats] = useState(initialSeats);
   const [seed, setSeed] = useState(newSeed);
   const [, setTick] = useState(0);
   const host = useRef<HTMLDivElement>(null);
 
   const session = useMemo(
-    () => new Session(entry.definition, seats, seed, AUTOPLAY ? AUTOPLAY_BOT_DELAY_MS : entry.botDelayMs, variant),
+    () =>
+      new Session(
+        entry.definition,
+        seats,
+        seed,
+        AUTOPLAY ? AUTOPLAY_BOT_DELAY_MS : entry.botDelayMs,
+        variant,
+      ),
     [entry, seats, seed, variant],
   );
 
@@ -36,7 +48,11 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       setTick((t) => t + 1);
       const after = session.state;
       if (after.result) cue(outcomeOf(after.result, seats));
-      else cue(entry.moveCue?.(before, after) ?? (seats[before.currentSeat]?.kind === 'bot' ? 'botPlace' : 'place'));
+      else
+        cue(
+          entry.moveCue?.(before, after) ??
+            (seats[before.currentSeat]?.kind === "bot" ? "botPlace" : "place"),
+        );
       before = after;
     });
     const game = new Game({
@@ -60,9 +76,11 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
   const { state } = session;
   const names = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
-  const sideName = (seat: number) => `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
+  const sideName = (seat: number) =>
+    `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
   const Controls = entry.Controls;
-  const thinking = session.thinkingSeat !== null || seats[state.currentSeat]?.kind === 'bot';
+  const thinking =
+    session.thinkingSeat !== null || seats[state.currentSeat]?.kind === "bot";
   const custom = entry.status?.(state);
 
   const rematch = () => {
@@ -72,29 +90,52 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
   };
 
   return (
-    <div class="screen game-screen" style={{ '--game': entry.color }}>
+    <div class="screen game-screen" style={{ "--game": entry.color }}>
       <header class="topbar">
-        <button class="round-btn" onClick={onExit} aria-label="Back to the table">
+        <button
+          class="round-btn"
+          onClick={onExit}
+          aria-label="Back to the table"
+        >
           <BackIcon />
         </button>
         <h1>{entry.definition.name}</h1>
         <span />
       </header>
-      <p class="status" aria-live="polite">
-        {!state.result && (
-          <span class={thinking ? 'turn-pill thinking' : 'turn-pill'} key={custom}>
-            <span class="turn-dot" style={{ background: sideColors[state.currentSeat] ?? '#9B7BFF' }} />
-            {custom ?? `${sideName(state.currentSeat)} ${thinking ? 'is thinking…' : 'to move'}`}
-          </span>
-        )}
-      </p>
-      {/* A fresh container per game: Phaser destroys the old game on its next frame, and on some
+      <div class="play-area">
+        <p class="status" aria-live="polite">
+          {!state.result && (
+            <span
+              class={thinking ? "turn-pill thinking" : "turn-pill"}
+              key={custom}
+            >
+              <span
+                class="turn-dot"
+                style={{
+                  background: sideColors[state.currentSeat] ?? "#9B7BFF",
+                }}
+              />
+              {custom ??
+                `${sideName(state.currentSeat)} ${thinking ? "is thinking…" : "to move"}`}
+            </span>
+          )}
+        </p>
+        {/* A fresh container per game: Phaser destroys the old game on its next frame, and on some
           devices (iPad) that frame comes late, so reusing the container briefly showed two boards. */}
-      <div class="board" key={seed} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
-      {Controls && <Controls session={session} />}
+        <div
+          class="board"
+          key={seed}
+          ref={host}
+          style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }}
+        />
+        {Controls && <Controls session={session} />}
+      </div>
       {state.result && (
         <ResultSheet
-          title={entry.resultText?.(state) ?? resultTitle(state.result, seats, sideName)}
+          title={
+            entry.resultText?.(state) ??
+            resultTitle(state.result, seats, sideName)
+          }
           outcome={outcomeOf(state.result, seats)}
           onRematch={rematch}
           onChangeMode={onExit}

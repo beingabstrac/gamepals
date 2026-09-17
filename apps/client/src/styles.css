@@ -1058,3 +1058,21 @@ h2,
   max-width: 380px;
   background: color-mix(in srgb, var(--game) 16%, white);
 }
+
+/* Fill the phone: the board and its controls sit in the middle of the space left over,
+   instead of hugging the top with a third of the screen empty under them. */
+.game-screen {
+  min-height: 100dvh;
+}
+
+.play-area {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: auto 0;
+}
+
+/* A die that has not been rolled yet: the pips are there, just faint. */
+.die.waiting .pip.on {
+  background: color-mix(in srgb, var(--ink) 16%, transparent);
+}

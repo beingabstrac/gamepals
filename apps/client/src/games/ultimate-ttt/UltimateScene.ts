@@ -191,7 +191,11 @@ export class UltimateScene extends Scene {
   private draw(): void {
     const state = this.state;
     const g = this.layer.clear();
-    const live = new Set(state.liveBoards);
+    // When every open board is live ("play anywhere"), highlighting them all says nothing,
+    // so the glow is kept for when your choice is actually narrowed down.
+    const open = state.boards.filter((mark) => mark === null).length;
+    const anywhere = state.liveBoards.length >= open;
+    const live = new Set(anywhere ? [] : state.liveBoards);
 
     for (let board = 0; board < 9; board++) {
       const o = boardOrigin(board);
@@ -230,7 +234,7 @@ export class UltimateScene extends Scene {
           const c = boardCenter(board);
           drawMark(g, mark, c.x, c.y, BIG * 0.3, 20);
         }
-      } else if (!live.has(board) && !state.result) {
+      } else if (!anywhere && !live.has(board) && !state.result) {
         g.fillStyle(0xffffff, 0.35);
         g.fillRoundedRect(o.x + 6, o.y + 6, BIG - 12, BIG - 12, 20);
       }

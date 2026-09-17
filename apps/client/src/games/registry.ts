@@ -438,8 +438,10 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state) => {
       const s = state as SnakesState;
       if (s.result) return undefined;
-      const spots = s.positions.map((square, seat) => `${SNAKES_SEAT_NAMES[seat]} ${square === 0 ? 'at start' : `on ${square}`}`);
-      return `${SNAKES_SEAT_NAMES[s.currentSeat]} to roll. ${spots.join(', ')}`;
+      // Only mention tokens that have actually set off, so a fresh game reads "Red to roll".
+      const moved = s.positions.flatMap((square, seat) => (square > 0 ? [`${SNAKES_SEAT_NAMES[seat]} ${square}`] : []));
+      const lead = moved.slice(-2).join(', ');
+      return lead ? `${SNAKES_SEAT_NAMES[s.currentSeat]} to roll. ${lead}` : `${SNAKES_SEAT_NAMES[s.currentSeat]} to roll`;
     },
     moveCue: (_before, after) => {
       const event = (after as SnakesState).last;
