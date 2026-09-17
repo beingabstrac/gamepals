@@ -37,7 +37,8 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M5 Quality pass A (first 15 games):** screenshots of every game in portrait and landscape on phone, tablet and desktop; juice checklist; fix layout, motion and feel issues; landscape layouts (board beside controls)
   - Found by hand on 2026-09-17 (phone, live site): Dominoes hand tiles are about 24px wide on a 375px phone (too small to tap; Apple asks for 44), and the table above them is mostly empty, so the line should scale up to fill it.
   - Solo status text starts lowercase ("roll the dice", "pick tiles that add up to 3"); capitalize it.
-  - Shut the Box and Backgammon show a big disabled button that is really an instruction ("Pick tiles that add up to 3", "Tap a checker") while the status says the same thing; drop one.
+  - Shut the Box, Backgammon and Sea Battle each show a big disabled button that is really an instruction ("Pick tiles that add up to 3", "Tap a checker", "Fire at their waters") while the status line already says it. Pick one place for instructions and use it everywhere.
+  - Sea Battle ships are plain grey blocks; give them a hull shape so they read as ships.
   - Backgammon point columns are about 25px wide on a 375px phone: widen the tap area (the whole triangle plus its checkers) even if the art stays the same.
   - Yatzy dice are blank white before the first roll, which reads as broken; show faded pips or a "Tap Roll" hint.
 - [ ] **M6 Quality pass B (the rest)**
