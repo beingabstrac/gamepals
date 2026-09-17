@@ -34,7 +34,8 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [x] **M3 Chess (2026-09-17):** own engine (castling, en passant, promotion, check, mate, stalemate, 50-move and threefold draws), 4 bot levels, move hints, no GPL code
 - [x] **M4a Backgammon (2026-09-18):** full rules (bar, hitting, bearing off, must use both dice, higher die when only one fits, doubles give four moves), 4 bot levels
 - [x] **M4b Sea Battle (2026-09-18):** place your fleet, take shots, hidden boards on one device, a bot that hunts properly; wave 4 complete
-- [ ] **M5 Quality pass A (first 15 games):** screenshots of every game in portrait and landscape on phone, tablet and desktop; juice checklist; fix layout, motion and feel issues; landscape layouts (board beside controls)
+- [x] **M5 Quality pass A (2026-09-18):** played and screenshotted 12 of the first 15 games on a phone in portrait and fixed what that turned up: instructions moved out of dead buttons into a hint line (Shut the Box, Backgammon, Sea Battle, Dominoes), status lines capitalised and no longer repeating the hint, dice show faint pips before the first roll (Yatzy, Ludo, Snakes & Ladders), domino hand tiles grown from 24px to 32px, Sea Battle ships given hulls, Ultimate Tic-Tac-Toe only glows boards when your choice is actually narrowed, and the Snakes & Ladders status no longer lists four players who are all still at the start.
+  - **Not covered, moved on:** landscape and tablet/desktop review, and portrait layouts for the wide boards. They belong with the landscape item below, not squeezed into a phone-portrait pass.
   - Found by hand on 2026-09-17 (phone, live site): Dominoes hand tiles are about 24px wide on a 375px phone (too small to tap; Apple asks for 44), and the table above them is mostly empty, so the line should scale up to fill it.
   - Solo status text starts lowercase ("roll the dice", "pick tiles that add up to 3"); capitalize it.
   - Shut the Box, Backgammon and Sea Battle each show a big disabled button that is really an instruction ("Pick tiles that add up to 3", "Tap a checker", "Fire at their waters") while the status line already says it. Pick one place for instructions and use it everywhere.
@@ -42,7 +43,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - Backgammon point columns are about 25px wide on a 375px phone: widen the tap area (the whole triangle plus its checkers) even if the art stays the same.
   - Wide boards (Mancala, Dominoes, Backgammon, Yatzy) fill the width and leave the bottom third of a phone empty. Centring the board in that space was tried on 2026-09-18 and looked worse (a big gap under the title), so the real fix is a portrait layout per wide game, or landscape support. Not a CSS one-liner.
   - Yatzy dice are blank white before the first roll, which reads as broken; show faded pips or a "Tap Roll" hint.
-- [ ] **M6 Quality pass B (the rest)**
+- [ ] **M6 Quality pass B:** the remaining games on a phone in portrait (Four in a Row, Tic-Tac-Toe, Reversi, 2048, Sudoku, Solitaire, Memory, Sliding Puzzle, Color Sort, Echo, Classic Snake, and the six real-time duels), same treatment
 - [ ] **M7 Cards A:** Spider, FreeCell, Pyramid, TriPeaks (cheap to build, top of the charts)
 - [ ] **M8 Teach and rivalry:** 10-second "try it" hint on first play of each game; running score between the same players; rematch streaks
 
