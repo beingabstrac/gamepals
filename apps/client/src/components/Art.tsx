@@ -311,16 +311,6 @@ function CheckersArt() {
   );
 }
 
-function ChessArt() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="30" r="11" fill={COLORS.grape} />
-      <path d="M37 72 Q50 38 63 72 Z" fill={COLORS.grape} />
-      <rect x="30" y="70" width="40" height="12" rx="6" fill={DARK.grape} />
-    </svg>
-  );
-}
-
 function SolitaireArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -626,7 +616,6 @@ const ART: Record<string, () => JSX.Element> = {
   yatzy: YatzyArt,
   'shut-the-box': ShutArt,
   dominoes: DominoArt,
-  chess: ChessArt,
   memory: MemoryArt,
 };
 

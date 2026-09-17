@@ -903,6 +903,5 @@ export const GAMES: readonly AnyEntry[] = [
 
 /** Shown on the home shelf so the catalog direction is visible from day one (docs/12). */
 export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [
-  { id: 'chess', name: 'Chess', color: COLORS.grape },
   { id: 'sea-battle', name: 'Sea Battle', color: COLORS.sky },
 ];
