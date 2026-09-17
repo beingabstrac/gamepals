@@ -1,0 +1,55 @@
+#!/bin/bash
+# The checks that can run without node_modules, for the mistakes CI keeps catching:
+# duplicate rules exports, duplicate art functions or tile keys, games missing from a test
+# list, and the rules tests. Run before pushing.
+# Usage: scripts/precheck.sh [rules test paths ...]
+HERE="$(cd "$(dirname "$0")" && pwd)"
+REPO="$(cd "$HERE/.." && pwd)"
+fail=0
+
+echo "== duplicate exports in packages/rules"
+dupes=$(cd "$REPO/packages/rules/src" && grep -rhoE "^export (const|function|class|type|interface|enum) [A-Za-z0-9_]+" games core | awk '{print $3}' | sort | uniq -d)
+if [ -n "$dupes" ]; then echo "  DUPLICATE: $dupes"; fail=1; else echo "  ok"; fi
+
+echo "== duplicate art functions and tile map keys"
+REPO="$REPO" node -e '
+const fs = require("fs");
+const s = fs.readFileSync(process.env.REPO + "/apps/client/src/components/Art.tsx", "utf8");
+const names = [...s.matchAll(/^function ([A-Za-z]+Art)/gm)].map((m) => m[1]);
+const keys = [...s.matchAll(/^  .?([a-z0-9-]+).?: ([A-Za-z]+)Art,$/gm)].map((m) => m[1]);
+const dn = names.filter((n, i) => names.indexOf(n) !== i);
+const dk = keys.filter((k, i) => keys.indexOf(k) !== i);
+if (dn.length || dk.length) { console.log("  DUPLICATE functions:", dn, "keys:", dk); process.exit(1); }
+console.log("  ok:", names.length, "art functions,", keys.length, "tiles");
+' || fail=1
+
+echo "== every game present in all five test lists"
+REPO="$REPO" node -e '
+const fs = require("fs"), path = require("path");
+const dir = process.env.REPO + "/packages/rules/src/games";
+const names = [];
+for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+  if (!entry.isDirectory()) continue;
+  const file = path.join(dir, entry.name, "index.ts");
+  if (!fs.existsSync(file)) continue;
+  const m = fs.readFileSync(file, "utf8").match(/^  name: .([^\x27]+).,$/m);
+  if (m) names.push(m[1]);
+}
+const files = ["e2e/smoke.spec.ts", "e2e/layout.spec.ts", "e2e/full.spec.ts", "e2e-native/android.mjs", "src/selftest.ts"];
+let bad = 0;
+for (const f of files) {
+  const text = fs.readFileSync(process.env.REPO + "/apps/client/" + f, "utf8");
+  const missing = names.filter((n) => !text.includes("\x27" + n + "\x27"));
+  if (missing.length) { console.log("  MISSING in " + f + ":", missing.join(", ")); bad = 1; }
+}
+if (!bad) console.log("  ok: " + names.length + " games in every list");
+process.exit(bad);
+' || fail=1
+
+echo "== rules tests"
+out=$("$HERE/run-rules-tests.sh" "$@" 2>&1)
+echo "$out" | grep -E "^✗|^== |passed [0-9]+, failed [0-9]+" | sed 's/^/  /'
+echo "$out" | grep -qE "failed [1-9]" && fail=1
+
+[ $fail -eq 0 ] && echo "ALL LOCAL CHECKS PASSED" || echo "LOCAL CHECKS FAILED"
+exit $fail

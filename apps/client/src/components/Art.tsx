@@ -370,16 +370,6 @@ function SolitaireArt() {
   );
 }
 
-function SeaBattleArt() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <path d="M12 78 q9 -6 19 0 t19 0 t19 0 t19 0" fill="none" stroke={COLORS.sky} stroke-width="5" {...round} />
-      <path d="M22 60 L78 60 L68 72 L32 72 Z" fill={DARK.sky} />
-      <line x1="50" y1="24" x2="50" y2="60" stroke={INK} stroke-width="3" {...round} />
-      <path d="M52 26 L72 56 L52 56 Z" fill={COLORS.tomato} />
-    </svg>
-  );
-}
 
 function SudokuArt() {
   return (
@@ -653,7 +643,6 @@ const ART: Record<string, () => JSX.Element> = {
   backgammon: BackgammonArt,
   'sea-battle': SeaBattleArt,
   solitaire: SolitaireArt,
-  'sea-battle': SeaBattleArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
   'color-sort': ColorSortArt,
