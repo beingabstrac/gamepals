@@ -522,10 +522,12 @@ interface ChessTier {
 }
 
 const TIERS: Record<BotTier, ChessTier> = {
-  easy: { depth: 1, randomMoveRate: 0.35, quiescence: false, nodes: 30_000 },
-  medium: { depth: 2, randomMoveRate: 0.08, quiescence: false, nodes: 80_000 },
-  hard: { depth: 3, randomMoveRate: 0.02, quiescence: true, nodes: 250_000 },
-  expert: { depth: 4, randomMoveRate: 0, quiescence: true, nodes: 700_000 },
+  easy: { depth: 1, randomMoveRate: 0.35, quiescence: false, nodes: 20_000 },
+  medium: { depth: 2, randomMoveRate: 0.08, quiescence: false, nodes: 50_000 },
+  // Budgets keep a move well under a second even on a slow phone: a whole bot-vs-bot game
+  // ran 245s of a 300s limit on the Android emulator before these came down.
+  hard: { depth: 3, randomMoveRate: 0.02, quiescence: true, nodes: 120_000 },
+  expert: { depth: 4, randomMoveRate: 0, quiescence: true, nodes: 300_000 },
 };
 
 /** Scores every legal move at this tier; the scene uses it for hints too. */

@@ -65,6 +65,8 @@ function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
     g.strokeRoundedRect(-17 * s, 14 * s, 34 * s, 10 * s, 5 * s);
   };
 
+  g.save();
+  g.translateCanvas(0, 3 * s);
   g.fillStyle(fill, 1);
   g.lineStyle(3 * s, line, 1);
   switch (typeOf(piece)) {
@@ -118,9 +120,10 @@ function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
       g.fillRoundedRect(-14 * s, -19 * s, 28 * s, 15 * s, 5 * s);
       g.strokeRoundedRect(-14 * s, -19 * s, 28 * s, 15 * s, 5 * s);
       g.fillStyle(fill, 1);
-      path([[-3, -19], [-3, -25], [-8, -25], [-8, -30], [-3, -30], [-3, -35], [3, -35], [3, -30], [8, -30], [8, -25], [3, -25], [3, -19]]);
+      path([[-3, -19], [-3, -24], [-7, -24], [-7, -28], [-3, -28], [-3, -32], [3, -32], [3, -28], [7, -28], [7, -24], [3, -24], [3, -19]]);
       break;
   }
+  g.restore();
 }
 
 export class ChessScene extends Scene {
@@ -231,7 +234,7 @@ export class ChessScene extends Scene {
       const { x, y } = this.center(square);
       g.save();
       g.translateCanvas(x, y);
-      drawPiece(g, piece, CELL / 52);
+      drawPiece(g, piece, CELL / 57);
       g.restore();
     });
     this.drawHints();
@@ -284,7 +287,7 @@ export class ChessScene extends Scene {
       g.fillRoundedRect(x - CELL / 2 + 4, top + 4, CELL - 8, CELL - 8, 12);
       g.save();
       g.translateCanvas(x, top + CELL / 2);
-      drawPiece(g, type | (color === 1 ? 8 : 0), CELL / 56);
+      drawPiece(g, type | (color === 1 ? 8 : 0), CELL / 60);
       g.restore();
     });
   }
@@ -404,12 +407,12 @@ export class ChessScene extends Scene {
     if (event.captured !== 0) {
       const taken = this.center(event.capturedSquare);
       const pop = this.add.graphics().setPosition(taken.x, taken.y).setDepth(2);
-      drawPiece(pop, event.captured, CELL / 52);
+      drawPiece(pop, event.captured, CELL / 57);
       this.tweens.add({ targets: pop, scale: 0.2, alpha: 0, angle: 30, duration: 220, ease: 'Back.easeIn', onComplete: () => pop.destroy() });
     }
 
     const mover = this.add.graphics().setPosition(from.x, from.y).setDepth(5);
-    drawPiece(mover, event.piece, CELL / 52);
+    drawPiece(mover, event.piece, CELL / 57);
     this.tweens.addCounter({
       from: 0,
       to: 1,
@@ -432,7 +435,7 @@ export class ChessScene extends Scene {
       const rookFrom = this.center(event.castleRook.from);
       const rookTo = this.center(event.castleRook.to);
       const rook = this.add.graphics().setPosition(rookFrom.x, rookFrom.y).setDepth(4);
-      drawPiece(rook, this.state.board[event.castleRook.to] ?? 4, CELL / 52);
+      drawPiece(rook, this.state.board[event.castleRook.to] ?? 4, CELL / 57);
       this.tweens.add({ targets: rook, x: rookTo.x, y: rookTo.y, duration: 260, ease: 'Sine.easeInOut', onComplete: () => rook.destroy() });
     }
   }
