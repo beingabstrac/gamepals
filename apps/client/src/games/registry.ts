@@ -541,9 +541,10 @@ export const GAMES: readonly AnyEntry[] = [
       const s = state as ShutState;
       if (s.result) return undefined;
       const names = yatzyNames(s.scores.length);
-      const who = s.scores.length === 1 ? '' : `${names[s.currentSeat]}: `;
+      const who = s.scores.length === 1 ? '' : `${names[s.currentSeat]} `;
       const done = s.scores.flatMap((score, seat) => (score === null ? [] : [`${names[seat]} ${score}`]));
-      const what = s.phase === 'roll' ? 'roll the dice' : `pick tiles that add up to ${s.roll}`;
+      // The hint under the board says what to do, so the status says what just happened.
+      const what = s.phase === 'roll' ? 'to roll' : `rolled ${s.dice.join(' and ')}`;
       const now = who ? `${who}${what}` : `${what[0]!.toUpperCase()}${what.slice(1)}`;
       return done.length ? `${now}. Scores: ${done.join(', ')}` : now;
     },
