@@ -3,8 +3,11 @@ name: CI
 # One gated pipeline: nothing ships unless every stage before it passed.
 #   check  → typecheck, unit tests, web build
 #   e2e    → every game opened and played, plus layout and offline checks, on each screen type
-#            (one job per Playwright project; core set on every push, all eight weekly and on tags;
-#            docs/13-platforms-and-testing.md); any console error fails
+#            (one job per Playwright project). Actions minutes are finite, so a push runs two
+#            engines (desktop-chrome and iphone: one Chromium, one WebKit) and all eight run
+#            weekly, on tags and on manual runs (docs/13-platforms-and-testing.md). Any console
+#            error fails. Browser engines are cached; the Android emulator and iOS simulators
+#            are opt-in because they are the expensive jobs.
 #   deploy → GitHub Pages (main only)
 # Release tags (v*) run the same gate; phone builds (TestFlight / Play internal) attach
 # to tags once the Capacitor projects exist (docs/08-roadmap.md, M1).
@@ -60,7 +63,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')) && '["android-phone","iphone","ipad","ipad-landscape","android-tablet","desktop-chrome","desktop-safari","desktop-firefox"]' || '["android-phone","iphone","ipad-landscape","desktop-chrome"]') }}
+        project: ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')) && '["android-phone","iphone","ipad","ipad-landscape","android-tablet","desktop-chrome","desktop-safari","desktop-firefox"]' || '["desktop-chrome","iphone"]') }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -75,14 +78,26 @@ jobs:
         with:
           name: web-build
           path: apps/client/dist
-      - name: Install the browser engine for ${{ matrix.project }}
+      - name: Which browser engine this screen type needs
+        id: engine
         run: |
           case "${{ matrix.project }}" in
             iphone|ipad*|desktop-safari) engine=webkit ;;
             desktop-firefox) engine=firefox ;;
             *) engine=chromium ;;
           esac
-          pnpm --filter @gamepals/client exec playwright install --with-deps "$engine"
+          echo "name=$engine" >> "$GITHUB_OUTPUT"
+      # Downloading a browser in every job was minutes we paid for on every run.
+      - uses: actions/cache@v4
+        id: browser-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.engine.outputs.name }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: System libraries for ${{ steps.engine.outputs.name }}
+        run: pnpm --filter @gamepals/client exec playwright install-deps ${{ steps.engine.outputs.name }}
+      - name: Download ${{ steps.engine.outputs.name }} (only when it is not cached)
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter @gamepals/client exec playwright install ${{ steps.engine.outputs.name }}
       # Whole-game playthroughs (@full) are slow: weekly, tags and manual runs only.
       - run: pnpm e2e --project ${{ matrix.project }} ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')) && '--workers=2' || '--grep-invert @full' }}
       - if: failure()

@@ -11,8 +11,9 @@ Solo owner + Claude Code. Rewritten 2026-09-16 as a list of **loop-sized milesto
 6. Too big for one loop? Split it here **before** starting. Never leave a milestone half done.
 
 ## CI costs real minutes
-A private repo includes 2,000 Actions minutes a month, and on 2026-09-18 we ran out: 31 runs in a day, many of them full runs. Every job that starts after that is rejected with "recent account payments have failed or your spending limit needs to be increased", which looks like a broken build but is billing. How we keep it cheap:
-- **One full run per milestone**, at the end. Between fixes, the quick run on a push (4 screen types, no whole-game tests) is the gate.
+GitHub Pro includes 3,000 Actions minutes a month for private repos, and on 2026-09-18 we used all of them: about 3,300 job-minutes on this repo alone (53% of the account's usage across six repos), from roughly 30 runs in a day. Past the allowance jobs are refused with "recent account payments have failed or your spending limit needs to be increased", which reads like a broken build but is billing. **Public repos get Actions free and unlimited**, which is the permanent fix if the owner is happy for the code to be readable. How we keep it cheap meanwhile:
+- **One full run per milestone**, at the end. Between fixes the push gate runs two engines only: `desktop-chrome` (Chromium) and `iphone` (WebKit), no whole-game tests.
+- **Browser engines are cached** (`~/.cache/ms-playwright`), so jobs stop re-downloading them.
 - **The Android emulator job is opt-in** on manual runs (tick `android`), and runs by itself weekly and on release tags. It is about 25 minutes a go, the most expensive thing we have.
 - **iOS stays off** except release tags and an explicit tick: macOS minutes count 10x.
 - `scripts/precheck.sh` runs the whole rules suite and the duplicate scans on the owner's Mac with no `node_modules`, so most mistakes are caught before a run is spent.
