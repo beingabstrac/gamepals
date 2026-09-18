@@ -152,6 +152,9 @@ export interface GameEntry<M = unknown> extends EntryBase {
   moveCue?(before: GameState<M>, after: GameState<M>): SoundName | undefined;
   /** Extra controls rendered under the board (e.g. dice). */
   readonly Controls?: ComponentType<{ session: Session<M> }>;
+  /** How to play in one short line, shown under the board until the first move. For games
+   *  where the controls are not obvious from looking (swipe, drag) and there are no buttons. */
+  readonly hint?: string;
   /** Replaces "X to move" (e.g. a score for solo puzzles); undefined keeps the default. */
   status?(state: GameState<M>): string | undefined;
   /** Replaces the result headline (e.g. "No more moves. 2,340 points"); undefined keeps the default. */
@@ -643,6 +646,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: twenty48,
     tagline: 'Slide, merge, reach 2048',
+    hint: 'Swipe to slide the tiles',
     howTo: {
       goal: 'Join tiles with the same number to make bigger numbers.',
       controls: 'Swipe up, down, left or right. Every tile slides that way. On a keyboard: use the arrow keys.',
@@ -727,6 +731,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: slidingPuzzle,
     tagline: 'Slide the tiles back in order',
+    hint: 'Tap a tile next to the gap',
     levels: [
       { id: '3x3', label: '3 by 3' },
       { id: '4x4', label: '4 by 4' },
@@ -778,6 +783,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: echo,
     tagline: 'Watch, listen, repeat',
+    hint: 'Watch the pads, then tap them back in order',
     levels: [
       { id: 'short', label: 'Short (8)' },
       { id: 'classic', label: 'Classic (14)' },
@@ -816,6 +822,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: memory,
     tagline: 'Flip two, find the pairs',
+    hint: 'Tap two cards to find a pair',
     levels: [
       { id: 'small', label: '12 cards' },
       { id: 'medium', label: '20 cards' },
@@ -957,6 +964,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: classicSnake,
     tagline: "Eat, grow, don't crash",
+    hint: 'Swipe to steer the snake',
     howTo: {
       goal: 'Steer the snake to the fruit. Every fruit makes it one longer.',
       controls: 'Swipe up, down, left or right to steer. On a keyboard: the arrow keys or W A S D.',

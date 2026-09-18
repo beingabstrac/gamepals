@@ -99,7 +99,8 @@ export class PenaltyScene extends Scene {
     this.keeper = this.add.container(0, 0).setDepth(4);
     this.kicker = this.add.container(0, 0).setDepth(3);
     this.ball = this.add.container(0, 0, this.makeBall()).setDepth(6);
-    this.callout = sharpText(this, W / 2, H / 2, '', 64, COLORS.ink).setDepth(10).setAlpha(0);
+    // Clear of the centre: the ball sits on the penalty spot in the middle of the pitch.
+    this.callout = sharpText(this, W / 2, H / 2 - 92, '', 64, COLORS.ink).setDepth(10).setAlpha(0);
     this.hints = [0, 1].map((seat) =>
       sharpText(this, W / 2, seat === 0 ? H - 30 : 30, '', 24, COLORS.ink).setAlpha(0.75).setAngle(facing(this.options.seats, seat as Seat)),
     );

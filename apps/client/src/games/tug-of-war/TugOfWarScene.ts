@@ -69,7 +69,9 @@ export class TugOfWarScene extends Scene {
         .setAngle(facing(this.options.seats, seat as Seat))
         .setAlpha(0.85)
         .setDepth(2)
-        .setVisible(isPerson(this.options.seats, seat as Seat)),
+        // Hidden until "Pull!": telling someone to tap while the countdown says "Ready…" is
+        // two instructions at once.
+        .setVisible(false),
     );
     this.tweens.add({ targets: this.hints, alpha: 0.35, duration: 500, yoyo: true, repeat: -1 });
     this.knot = this.add.container(W / 2, H / 2, [
@@ -158,6 +160,7 @@ export class TugOfWarScene extends Scene {
 
     if (wasCounting && this.state.countdown === 0) {
       this.banner.setText('Pull!');
+      this.hints.forEach((hint, seat) => hint.setVisible(isPerson(this.options.seats, seat as Seat)));
       this.options.onCue('go');
       this.tweens.add({ targets: this.banner, scale: 1.6, alpha: 0, duration: 600, ease: 'Cubic.easeOut' });
     }

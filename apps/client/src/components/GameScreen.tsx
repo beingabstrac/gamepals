@@ -6,6 +6,7 @@ import { DPR } from '../games/crisp';
 import type { GameEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
 import { Session, type SeatController } from '../session';
+import { TurnHint } from '../games/hint';
 import { BackIcon } from './Art';
 import { ResultSheet } from './ResultSheet';
 
@@ -93,6 +94,8 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
             devices (iPad) that frame comes late, so reusing the container briefly showed two boards. */}
         <div class="board" key={seed} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
         {Controls && <Controls session={session} />}
+        {/* How to play, until you have played: games with buttons say it there instead. */}
+        {entry.hint && !Controls && !state.result && session.moves.length === 0 && <TurnHint>{entry.hint}</TurnHint>}
       </div>
       {state.result && (
         <ResultSheet
