@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
-import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
+import { drawSlot, flipTo, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 import { solitaireUiFor, type SolitaireUi } from './ui';
 
@@ -149,19 +149,8 @@ export class SolitaireScene extends Scene {
       const moving = Math.abs(box.x - spot.x) > 0.5 || Math.abs(box.y - spot.y) > 0.5;
       const delay = deal && spot.depth >= 300 ? order++ * 28 : 0;
       if (spot.up !== view.up) {
-        if (animate) {
-          // Flip: squeeze to an edge, swap faces, open back up.
-          this.tweens.add({
-            targets: box,
-            scaleX: 0,
-            duration: 90,
-            delay: delay + (moving ? MOVE_MS * 0.5 : 0),
-            onComplete: () => {
-              setFace(view, spot.up);
-              this.tweens.add({ targets: box, scaleX: 1, duration: 110, ease: 'Back.easeOut' });
-            },
-          });
-        } else setFace(view, spot.up);
+        if (animate) flipTo(this, view, spot.up, delay + (moving ? MOVE_MS * 0.5 : 0));
+        else setFace(view, spot.up);
       } else box.setScale(1);
       if (moving && animate) slideTo(this, view, spot.x, spot.y, spot.depth, { duration: MOVE_MS, delay });
       else placeAt(view, spot.x, spot.y, spot.depth);

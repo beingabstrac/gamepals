@@ -15,6 +15,8 @@ export interface CardView {
   tx?: number;
   ty?: number;
   sliding?: boolean;
+  /** The face this card is turning to, so a second look does not start the turn again. */
+  flipTarget?: boolean;
 }
 
 /**
@@ -103,8 +105,25 @@ export function makeCard(scene: Scene, card: number, cw: number, ch: number): Ca
 
 export function setFace(view: CardView, up: boolean): void {
   view.up = up;
+  view.flipTarget = up;
   view.front.setVisible(up);
   view.back.setVisible(!up);
+}
+
+/**
+ * Turns a card over: squeeze to an edge, swap the face, open back up. The swap runs on a timer
+ * rather than at the end of the squeeze, because a slide starting in the same breath clears the
+ * tweens on the card, and a face that only turns at the end of a tween would never turn at all.
+ */
+export function flipTo(scene: Scene, view: CardView, up: boolean, delay = 0): void {
+  if ((view.flipTarget ?? view.up) === up) return;
+  view.flipTarget = up;
+  scene.tweens.add({ targets: view.box, scaleX: 0, duration: 80, delay, ease: 'Sine.easeIn' });
+  scene.time.delayedCall(delay + 80, () => {
+    setFace(view, up);
+    view.box.setScale(1);
+    scene.tweens.add({ targets: view.box, scaleX: { from: 0, to: 1 }, duration: 100, ease: 'Back.easeOut' });
+  });
 }
 
 /** An empty place on the table: where a card may go. */

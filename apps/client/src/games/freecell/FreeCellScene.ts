@@ -17,7 +17,7 @@ import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
 const W = 760;
-const H = 1040;
+const H = 790;
 export const FREECELL_SIZE = { width: W, height: H };
 
 const CW = 80;
