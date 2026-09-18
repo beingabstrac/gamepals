@@ -1,4 +1,12 @@
-import { FREECELL_CELLS as CELLS, FREECELL_COLUMNS as COLUMNS, freeCellMoveFrom, SUIT_SYMBOLS, type FreeCellMove, type FreeCellState } from '@gamepals/rules';
+import {
+  FREECELL_CELLS as CELLS,
+  FREECELL_COLUMNS as COLUMNS,
+  freeCellMoveFrom,
+  freeCellSafeMove,
+  SUIT_SYMBOLS,
+  type FreeCellMove,
+  type FreeCellState,
+} from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
@@ -31,6 +39,8 @@ interface Spot {
   readonly depth: number;
   /** Where this card can be picked up from, or null when it can't be. */
   readonly source: string | null;
+  /** In a run, but further up it than the free cells can carry. */
+  readonly blocked?: boolean;
 }
 
 interface Drag {
@@ -61,10 +71,12 @@ function layout(state: FreeCellState): Map<number, Spot> {
     const total = Math.max(0, cards.length - 1) * STEP;
     const room = H - 14 - CH / 2 - TAB_Y;
     const squeeze = total > room ? room / total : 1;
+    const inRun = state.runLength(c);
     cards.forEach((card, i) => {
-      // Only the run at the bottom of a column can be picked up.
+      // Only the run at the bottom of a column can be picked up, and only as far as the cells carry.
       const movable = i >= cards.length - run;
-      spots.set(card, { x: spotX(c), y: TAB_Y + i * STEP * squeeze, depth: 300 + c * 30 + i, source: movable ? `t${c}:${i}` : null });
+      const blocked = !movable && i >= cards.length - inRun;
+      spots.set(card, { x: spotX(c), y: TAB_Y + i * STEP * squeeze, depth: 300 + c * 30 + i, source: movable ? `t${c}:${i}` : null, blocked });
     });
   });
   return spots;
@@ -87,6 +99,9 @@ export class FreeCellScene extends Scene {
   private keyPile = 0;
   private keyDepth: number | null = null;
   private ring?: GameObjects.Graphics;
+  private banner?: GameObjects.Text;
+  /** Set while a card that nothing can need is on its way home. */
+  private sending?: ReturnType<Scene['time']['delayedCall']>;
 
   constructor(private readonly session: Session<FreeCellMove>) {
     super('freecell');
@@ -119,9 +134,11 @@ export class FreeCellScene extends Scene {
     this.ring = focusRing(this, CW + 12, CH + 12, 16);
     onKeys(this, (key) => this.key(key));
 
+    this.sendHome();
     const offSession = this.session.subscribe(() => this.sync(true));
     const offHint = this.bus.onHint((move) => this.pointAt(move));
     this.events.once('shutdown', () => {
+      this.sending?.remove();
       offSession();
       offHint();
     });
@@ -140,10 +157,31 @@ export class FreeCellScene extends Scene {
       sharpText(this, spotX(CELLS + suit), TOP_Y, SUIT_SYMBOLS[suit]!, 42, '#6aa4e0');
     }
     for (let c = 0; c < COLUMNS; c++) drawSlot(g, spotX(c), TAB_Y, CW, CH, SLOT);
+    this.banner = sharpText(this, W / 2, TAB_Y - 17, '', 24, '#3d7cc0').setVisible(false).setDepth(4000);
+  }
+
+  private say(text: string): void {
+    if (!this.banner) return;
+    this.banner.setText(text).setVisible(true).setAlpha(1);
+    this.tweens.add({ targets: this.banner, alpha: 0.3, duration: 220, yoyo: true, repeat: 2 });
+  }
+
+  /** Cards nothing can need go home by themselves, one every so often so the eye can follow. */
+  private sendHome(): void {
+    this.sending?.remove();
+    if (this.state.result || this.drag) return;
+    const move = freeCellSafeMove(this.state);
+    if (!move) return;
+    this.sending = this.time.delayedCall(220, () => {
+      if (this.state.result || this.drag) return;
+      const again = freeCellSafeMove(this.state);
+      if (again) this.session.play(again);
+    });
   }
 
   /** Moves every card to where the state says it belongs. */
   private sync(animate: boolean, deal = false): void {
+    this.banner?.setVisible(false);
     this.spots = layout(this.state);
     let order = 0;
     for (const [card, spot] of [...this.spots].sort((a, b) => a[1].depth - b[1].depth)) {
@@ -165,7 +203,10 @@ export class FreeCellScene extends Scene {
       } else box.setPosition(spot.x, spot.y).setDepth(spot.depth);
     }
     if (this.state.result && animate) this.celebrate();
-    else if (this.ring?.visible) this.showKeyFocus();
+    else {
+      if (this.ring?.visible) this.showKeyFocus();
+      if (animate) this.sendHome();
+    }
   }
 
   private key(key: string): boolean {
@@ -235,6 +276,10 @@ export class FreeCellScene extends Scene {
   private press(x: number, y: number): void {
     if (this.state.result) return;
     const found = this.hit(x, y);
+    if (found?.spot.blocked) {
+      this.say('Not enough free cells for that many');
+      return;
+    }
     if (!found?.spot.source) return;
     const source = found.spot.source;
     const cards = cardsAt(this.state, source);

@@ -78,6 +78,7 @@ export class SpiderScene extends Scene {
   private keyDepth: number | null = null;
   private ring?: GameObjects.Graphics;
   private banner?: GameObjects.Text;
+  private dealsLeft?: GameObjects.Text;
 
   constructor(private readonly session: Session<SpiderMove>) {
     super('spider');
@@ -124,9 +125,11 @@ export class SpiderScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     for (let c = 0; c < SPIDER_COLUMNS; c++) drawSlot(g, colX(c), TAB_Y, CW, CH, SLOT);
     drawSlot(g, W - CW / 2 - 16, FOOT_Y, CW, CH, SLOT);
+    // How many rows are still in the deck, on the deck itself.
+    this.dealsLeft = sharpText(this, W - CW / 2 - 16, FOOT_Y - CH / 2 - 16, '', 24, '#b3672a').setDepth(4000);
     drawSlot(g, 16 + CW / 2, FOOT_Y, CW, CH, SLOT);
     sharpText(this, 16 + CW / 2, FOOT_Y, '★', 34, '#d99450');
-    this.banner = sharpText(this, W / 2, FOOT_Y, 'Tap the deck for a new row', 26, '#b3672a');
+    this.banner = sharpText(this, W / 2, FOOT_Y, 'Tap the deck for a new row', 26, '#b3672a').setDepth(4000);
   }
 
   /** Cards in the state that we have not made a view for yet never happens: the deal makes them all. */
@@ -182,6 +185,9 @@ export class SpiderScene extends Scene {
       } else box.setPosition(spot.x, spot.y).setDepth(spot.depth);
     }
     this.banner?.setVisible(!state.result && state.stock.length > 0);
+    const deals = Math.ceil(state.stock.length / SPIDER_COLUMNS);
+    this.dealsLeft?.setText(deals ? `${deals} left` : '');
+    if (state.last?.kind === 'run') this.sweepRun();
     if (state.result && animate) this.celebrate();
     else if (this.ring?.visible) this.showKeyFocus();
   }
@@ -254,7 +260,11 @@ export class SpiderScene extends Scene {
     const onStock = Math.abs(x - (W - CW / 2 - 16)) <= CW / 2 + 12 && Math.abs(y - FOOT_Y) <= CH / 2;
     if (onStock) {
       if (state.legalMoves(0).includes(SPIDER_DEAL)) this.session.play(SPIDER_DEAL);
-      else if (state.stock.length) this.say('Fill every empty column before dealing');
+      else if (state.stock.length) {
+        this.say('Fill the empty column before dealing');
+        const top = state.stock[state.stock.length - 1];
+        if (top !== undefined) this.shake(top);
+      }
       return;
     }
     const spot = this.hit(x, y);
@@ -311,6 +321,16 @@ export class SpiderScene extends Scene {
   private shake(card: number): void {
     const box = this.viewOf(card).box;
     this.tweens.add({ targets: box, angle: { from: -6, to: 6 }, duration: 60, yoyo: true, repeat: 2, onComplete: () => box.setAngle(0) });
+  }
+
+  /** A finished run leaves the board with a flourish on its way to the tray. */
+  private sweepRun(): void {
+    this.done.slice(-13).forEach((card, i) => {
+      const box = this.viewOf(card).box;
+      box.setDepth(4000 + i);
+      this.tweens.add({ targets: box, angle: 360, duration: 520, delay: i * 26, ease: 'Cubic.easeOut', onComplete: () => box.setAngle(0) });
+      this.tweens.add({ targets: box, scale: { from: 1.18, to: 1 }, duration: 520, delay: i * 26, ease: 'Back.easeOut' });
+    });
   }
 
   private say(text: string): void {

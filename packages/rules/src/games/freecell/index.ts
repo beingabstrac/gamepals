@@ -219,3 +219,31 @@ export function freeCellHint(state: FreeCellState): FreeCellMove | null {
   const best = [...moves].sort((a, b) => score(a) - score(b))[0]!;
   return score(best) >= NOT_WORTH ? null : best;
 }
+
+/**
+ * A card nothing can need any more: it goes home on its own, the way every FreeCell app does it.
+ * Aces and twos are always safe; above that, a card is safe once both foundations of the other
+ * colour are within one rank of it, and its own colour's other suit within two.
+ */
+export function freeCellSafeMove(state: FreeCellState): FreeCellMove | null {
+  const topOf = (place: string): number | null => {
+    const index = Number(place.slice(1));
+    if (place[0] === 'f') return state.cells[index] ?? null;
+    const cards = state.columns[index]!;
+    return cards.length ? cards[cards.length - 1]! : null;
+  };
+  for (const play of state.legalMoves(0)) {
+    const [from, to] = play.slice(1).split('.') as [string, string];
+    if (to[0] !== 'h' || play.split('.')[2]) continue;
+    const card = topOf(from);
+    if (card === null) continue;
+    const rank = rankOf(card);
+    if (rank <= 2) return play;
+    const suit = suitOf(card);
+    const others = [0, 1, 2, 3].filter((s) => s !== suit);
+    const opposite = others.filter((s) => isRed(s * 13) !== isRed(card));
+    const sameColour = others.find((s) => isRed(s * 13) === isRed(card))!;
+    if (opposite.every((s) => state.foundations[s]! >= rank - 1) && state.foundations[sameColour]! >= rank - 2) return play;
+  }
+  return null;
+}

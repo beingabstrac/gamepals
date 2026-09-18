@@ -8,6 +8,7 @@ import {
   freeCellHint,
   freeCellMoveFrom,
   freeCellPlay,
+  freeCellSafeMove,
   FreeCellState,
   FREECELL_UNDO,
   newFreeCell,
@@ -157,5 +158,26 @@ describe('freecell help', () => {
     const black = [13, 12, 11, 10, 9, 8, 7, 6].map((rank) => [card(rank, 0)]);
     const stuck = at(black);
     expect(freeCellHint(stuck)).toBe(null);
+  });
+});
+
+describe('freecell cards that go home on their own', () => {
+  it('always sends an Ace and a two', () => {
+    const state = at([[card(1, 0)], [card(13, 1)], [], [], [], [], [], []]);
+    expect(freeCellSafeMove(state)).toBe(freeCellPlay('t0', 'h0'));
+  });
+
+  it('holds a card back while the other colour still needs it', () => {
+    // The black 5 waits: a red 4 out on the board may still want to sit on it.
+    const foundations = [4, 3, 3, 4];
+    const held = at([[card(5, 0)], [], [], [], [], [], [], []], [null, null, null, null], foundations);
+    expect(freeCellSafeMove(held)).toBe(null);
+    // Once both red foundations are on the 4, nothing needs the black 5 any more.
+    const free = at([[card(5, 0)], [], [], [], [], [], [], []], [null, null, null, null], [4, 4, 4, 4]);
+    expect(freeCellSafeMove(free)).toBe(freeCellPlay('t0', 'h0'));
+  });
+
+  it('sends nothing when no card can go home', () => {
+    expect(freeCellSafeMove(at([[card(9, 0)], [card(4, 1)], [], [], [], [], [], []]))).toBe(null);
   });
 });
