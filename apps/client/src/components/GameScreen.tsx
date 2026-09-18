@@ -71,9 +71,12 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       scale: { mode: Scale.FIT, autoCenter: Scale.CENTER_BOTH },
       scene: [entry.createScene(session)],
     });
+    // Test mode only: lets e2e ask a scene whether what it has drawn still matches the rules.
+    if (AUTOPLAY) (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame = game;
     return () => {
       unsubscribe();
       session.dispose();
+      if (AUTOPLAY) delete (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame;
       game.destroy(true);
     };
   }, [session, entry, seats, rivalryKey]);

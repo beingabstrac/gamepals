@@ -36,6 +36,8 @@ const cellPos = (index: number) => ({
 export class Twenty48Scene extends Scene {
   private views = new Map<number, GameObjects.Container>();
   private start: { x: number; y: number } | null = null;
+  /** The half of a move that waits for the glide: merged tiles and the new one. */
+  private landing?: { timer: ReturnType<Scene['time']['delayedCall']>; run: () => void };
 
   constructor(private readonly session: Session<Slide>) {
     super('2048');
@@ -84,6 +86,10 @@ export class Twenty48Scene extends Scene {
   }
 
   private animate(): void {
+    // A second move before the last one has landed: land it now. The tiles a merge makes only
+    // exist once it lands, and the next move looks them up by name, so a move that overtakes
+    // one leaves tiles that never arrive and tiles that never move again.
+    this.land();
     const change = this.state.lastChange;
     if (!change) return;
     // 1. Every tile glides to its new cell.
@@ -93,11 +99,15 @@ export class Twenty48Scene extends Scene {
       const to = cellPos(move.to);
       this.tweens.add({ targets: view, x: to.x, y: to.y, duration: SLIDE_MS, ease: 'Quad.easeOut' });
     }
-    this.time.delayedCall(SLIDE_MS, () => {
+    const run = () => {
       // 2. Merged pairs become one bigger tile that pops.
       for (const merge of change.merged) {
         for (const id of merge.from) {
-          this.views.get(id)?.destroy();
+          const old = this.views.get(id);
+          if (old) {
+            this.tweens.killTweensOf(old);
+            old.destroy();
+          }
           this.views.delete(id);
         }
         const view = this.addTile({ id: merge.id, value: merge.value, index: merge.at }, false);
@@ -111,7 +121,27 @@ export class Twenty48Scene extends Scene {
         this.tweens.add({ targets: view, scale: 1, duration: 260, ease: 'Back.easeOut' });
       }
       if (change.merged.length > 0 && change.merged.some((m) => m.value >= 128)) this.cameras.main.shake(90, 0.003);
-    });
+    };
+    this.landing = { timer: this.time.delayedCall(SLIDE_MS, () => this.land()), run };
+  }
+
+  /** Finishes the move that is still gliding, whether its time is up or a new move is here. */
+  private land(): void {
+    const landing = this.landing;
+    if (!landing) return;
+    this.landing = undefined;
+    landing.timer.remove();
+    landing.run();
+  }
+
+  /**
+   * Test mode only: what is on the screen against what the rules say is on the board.
+   * A screen that has drifted from the state is the bug this game had, and a picture alone
+   * cannot tell you it is back.
+   */
+  tileCheck(): { drawn: number; real: number } {
+    this.land();
+    return { drawn: this.views.size, real: this.state.tiles.length };
   }
 
   private addTile(tile: Tile, instant: boolean): GameObjects.Container {
