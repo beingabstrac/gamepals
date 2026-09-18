@@ -24,6 +24,9 @@ const CW = 80;
 const CH = 113;
 const GAP = (W - COLUMNS * CW) / (COLUMNS + 1);
 const spotX = (slot: number) => GAP + slot * (CW + GAP) + CW / 2;
+/** The top row splits in two: cells lean left, foundations lean right, with a gap between them. */
+const LEAN = 12;
+const topX = (slot: number) => spotX(slot) + (slot < CELLS ? -LEAN : LEAN);
 const TOP_Y = 14 + CH / 2;
 const TAB_Y = TOP_Y + CH + 30;
 const STEP = 36;
@@ -62,10 +65,10 @@ const grabbable = (state: FreeCellState, column: number): number => Math.min(sta
 function layout(state: FreeCellState): Map<number, Spot> {
   const spots = new Map<number, Spot>();
   state.cells.forEach((card, i) => {
-    if (card !== null) spots.set(card, { x: spotX(i), y: TOP_Y, depth: 100 + i, source: `f${i}` });
+    if (card !== null) spots.set(card, { x: topX(i), y: TOP_Y, depth: 100 + i, source: `f${i}` });
   });
   state.foundations.forEach((top, suit) => {
-    for (let rank = 1; rank <= top; rank++) spots.set(suit * 13 + rank - 1, { x: spotX(CELLS + suit), y: TOP_Y, depth: 200 + rank, source: null });
+    for (let rank = 1; rank <= top; rank++) spots.set(suit * 13 + rank - 1, { x: topX(CELLS + suit), y: TOP_Y, depth: 200 + rank, source: null });
   });
   state.columns.forEach((cards, c) => {
     const run = grabbable(state, c);
@@ -153,13 +156,17 @@ export class FreeCellScene extends Scene {
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
     for (let i = 0; i < CELLS; i++) {
-      drawSlot(g, spotX(i), TOP_Y, CW, CH, SLOT);
-      sharpText(this, spotX(i), TOP_Y, 'free', 22, '#6aa4e0');
+      drawSlot(g, topX(i), TOP_Y, CW, CH, SLOT);
+      sharpText(this, topX(i), TOP_Y, 'free', 22, '#6aa4e0');
     }
     for (let suit = 0; suit < 4; suit++) {
-      drawSlot(g, spotX(CELLS + suit), TOP_Y, CW, CH, SLOT);
-      sharpText(this, spotX(CELLS + suit), TOP_Y, SUIT_SYMBOLS[suit]!, 42, '#6aa4e0');
+      // Home piles sit on a paler patch, so the four cells and the four homes never read as one row.
+      g.fillStyle(0xdceeff, 1);
+      g.fillRoundedRect(topX(CELLS + suit) - CW / 2, TOP_Y - CH / 2, CW, CH, 12);
+      drawSlot(g, topX(CELLS + suit), TOP_Y, CW, CH, SLOT);
+      sharpText(this, topX(CELLS + suit), TOP_Y, SUIT_SYMBOLS[suit]!, 42, '#6aa4e0');
     }
+    sharpText(this, (topX(CELLS - 1) + topX(CELLS)) / 2, TOP_Y, '›', 30, '#a9cdf0');
     for (let c = 0; c < COLUMNS; c++) drawSlot(g, spotX(c), TAB_Y, CW, CH, SLOT);
     this.banner = sharpText(this, W / 2, TAB_Y - 17, '', 24, '#3d7cc0').setVisible(false).setDepth(4000);
   }
@@ -252,7 +259,7 @@ export class FreeCellScene extends Scene {
     if (!this.ring) return;
     const source = this.keySource();
     const spot = source ? this.spots.get(cardsAt(this.state, source)[0]!) : undefined;
-    const x = spot?.x ?? (this.keyPile < COLUMNS ? spotX(this.keyPile) : spotX(this.keyPile - COLUMNS));
+    const x = spot?.x ?? (this.keyPile < COLUMNS ? spotX(this.keyPile) : topX(this.keyPile - COLUMNS));
     const y = spot?.y ?? (this.keyPile < COLUMNS ? TAB_Y : TOP_Y);
     moveRing(this, this.ring, x, y);
   }
@@ -331,8 +338,10 @@ export class FreeCellScene extends Scene {
 
   /** The move a drop asks for: the place under the finger takes the run. */
   private dropMove(drag: Drag, x: number, y: number): FreeCellMove | null {
-    const slot = Math.max(0, Math.min(COLUMNS - 1, Math.round((x - GAP - CW / 2) / (CW + GAP))));
     const top = y < TOP_Y + CH / 2 + 16;
+    // The top row leans away from the middle, so aim at where those places actually sit.
+    const lean = top ? (x < W / 2 ? LEAN : -LEAN) : 0;
+    const slot = Math.max(0, Math.min(COLUMNS - 1, Math.round((x + lean - GAP - CW / 2) / (CW + GAP))));
     const to = top ? (slot < CELLS ? `f${slot}` : `h${slot - CELLS}`) : `t${slot}`;
     if (to === drag.from) return null;
     return drag.count === 1 ? `c${drag.from}.${to}` : `c${drag.from}.${to}.${drag.count}`;
