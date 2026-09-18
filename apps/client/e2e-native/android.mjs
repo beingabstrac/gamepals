@@ -79,6 +79,10 @@ async function play(name) {
   await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.locator('.board canvas').waitFor({ timeout: 30_000 });
+  // A shot of the game actually being played: the final one is mostly result sheet and confetti,
+  // which is no use for checking how a game looks.
+  await page.waitForTimeout(3000);
+  await shot(`${SHOTS}android-${slug(name)}-play.png`);
   const result = page.locator('.result-sheet');
   if (MAY_NOT_FINISH.has(name)) await result.waitFor({ timeout: 45_000 }).catch(() => undefined);
   else await result.waitFor({ timeout: 300_000 });
