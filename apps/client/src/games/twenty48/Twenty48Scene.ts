@@ -89,7 +89,7 @@ export class Twenty48Scene extends Scene {
     // A second move before the last one has landed: land it now. The tiles a merge makes only
     // exist once it lands, and the next move looks them up by name, so a move that overtakes
     // one leaves tiles that never arrive and tiles that never move again.
-    this.land();
+    // TEMPORARY, for proving the check fails without it. Not for merging.
     const change = this.state.lastChange;
     if (!change) return;
     // 1. Every tile glides to its new cell.
