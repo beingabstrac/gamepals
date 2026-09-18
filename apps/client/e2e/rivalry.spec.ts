@@ -62,6 +62,26 @@ test('the running score follows the same players from game to game', async ({ pa
   expect(errors).toEqual([]);
 });
 
+test('a picture of both, for looking over @full', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'iphone', 'One screen type is enough for a picture');
+  const dir = `screenshots/${testInfo.project.name}`;
+  // The coaching line, on a game nobody has played before.
+  await page.goto('/');
+  await play(page, 'Four in a Row');
+  await expect(page.locator('.coach')).toBeVisible();
+  await page.screenshot({ path: `${dir}/coach-line.png` });
+
+  // The running score, after two games between the same players.
+  await page.goto('/?autoplay=6');
+  await play(page, 'Tic-Tac-Toe');
+  const sheet = page.locator('.result-sheet');
+  await expect(sheet).toBeVisible({ timeout: 60_000 });
+  await sheet.getByRole('button', { name: 'Rematch' }).click();
+  await expect(sheet).toBeHidden();
+  await expect(sheet).toBeVisible({ timeout: 60_000 });
+  await page.screenshot({ path: `${dir}/running-score.png` });
+});
+
 test('a solo game keeps no score, because there is nobody to keep it against', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /^2048/ }).click();
