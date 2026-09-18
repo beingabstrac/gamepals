@@ -62,16 +62,6 @@ export class FreeCellState implements GameState<FreeCellMove> {
     return toEmptyColumn ? Math.max(1, Math.floor(most / 2)) : most;
   }
 
-  private cardAt(place: string): number | null {
-    const index = Number(place.slice(1));
-    if (place[0] === 't') {
-      const cards = this.columns[index]!;
-      return cards.length ? cards[cards.length - 1]! : null;
-    }
-    if (place[0] === 'f') return this.cells[index]!;
-    return null;
-  }
-
   /** Can `card` go here, ignoring how many cards travel with it? */
   private accepts(place: string, card: number): boolean {
     const index = Number(place.slice(1));

@@ -1,7 +1,7 @@
 import type { Rng } from '../../core/rng';
 import { createRng } from '../../core/rng';
 import type { Bot, BotTier, GameDefinition, GameResult, GameState, Seat } from '../../core/types';
-import { isRed, rankOf, suitOf, SUIT_SYMBOLS } from '../cards';
+import { isRed, rankOf, suitOf } from '../cards';
 
 /**
  * Klondike solitaire (docs/games/solitaire.md).

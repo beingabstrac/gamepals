@@ -1,7 +1,7 @@
 #!/bin/bash
 # The checks that can run without node_modules, for the mistakes CI keeps catching:
-# duplicate rules exports, duplicate art functions or tile keys, games missing from a test
-# list, and the rules tests. Run before pushing.
+# duplicate rules exports, duplicate art functions or tile keys, imports nothing uses,
+# games missing from a test list, and the rules tests. Run before pushing.
 # Usage: scripts/precheck.sh [rules test paths ...]
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$HERE/.." && pwd)"
@@ -24,6 +24,31 @@ const dk = keys.filter((k, i) => keys.indexOf(k) !== i);
 if (dn.length || dk.length) { console.log("  DUPLICATE functions:", dn, "keys:", dk); process.exit(1); }
 console.log("  ok:", names.length, "art functions,", keys.length, "tiles");
 ' || fail=1
+
+echo "== imports that nothing uses (CI fails on these)"
+REPO="$REPO" python3 - <<'PYEOF' || fail=1
+import os, re, sys
+repo = os.environ['REPO']
+bad = []
+for base in ('packages/rules/src', 'apps/client/src'):
+    for root, _, files in os.walk(os.path.join(repo, base)):
+        for name in files:
+            if not name.endswith(('.ts', '.tsx')): continue
+            path = os.path.join(root, name)
+            text = open(path).read()
+            for block in re.finditer(r"import\s*(?:type\s*)?\{([^}]*)\}\s*from\s*'[^']+';", text):
+                rest = text[:block.start()] + text[block.end():]
+                for part in block.group(1).split(','):
+                    part = part.strip().removeprefix('type ').strip()
+                    if not part: continue
+                    used = part.split(' as ')[-1].strip()
+                    if not re.search(r'\b%s\b' % re.escape(used), rest):
+                        bad.append('%s: %s' % (os.path.relpath(path, repo), used))
+if bad:
+    print('  UNUSED: ' + ', '.join(bad))
+    sys.exit(1)
+print('  ok')
+PYEOF
 
 echo "== every game present in all five test lists"
 REPO="$REPO" node -e '

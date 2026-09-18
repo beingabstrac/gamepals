@@ -1,15 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { replay, toMoveLog } from '../../core/replay';
 import { createRng } from '../../core/rng';
+import { rankOf, suitOf } from '../cards';
 import {
   bestMoveFrom,
   DRAW_MOVE,
   newSolitaire,
-  rankOf,
   solitaire,
   SolitaireState,
   suggestMove,
-  suitOf,
   UNDO_CARD_MOVE,
   type Column,
   type SolitaireMove,
