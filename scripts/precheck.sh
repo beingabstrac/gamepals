@@ -50,7 +50,7 @@ if bad:
 print('  ok')
 PYEOF
 
-echo "== every game present in all five test lists"
+echo "== every game present in all six test lists"
 REPO="$REPO" node -e '
 const fs = require("fs"), path = require("path");
 const dir = process.env.REPO + "/packages/rules/src/games";
@@ -62,7 +62,7 @@ for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
   const m = fs.readFileSync(file, "utf8").match(/^  name: .([^\x27]+).,$/m);
   if (m) names.push(m[1]);
 }
-const files = ["e2e/smoke.spec.ts", "e2e/layout.spec.ts", "e2e/full.spec.ts", "e2e-native/android.mjs", "src/selftest.ts"];
+const files = ["e2e/smoke.spec.ts", "e2e/layout.spec.ts", "e2e/full.spec.ts", "e2e/gallery.spec.ts", "e2e-native/android.mjs", "src/selftest.ts"];
 let bad = 0;
 for (const f of files) {
   const text = fs.readFileSync(process.env.REPO + "/apps/client/" + f, "utf8");

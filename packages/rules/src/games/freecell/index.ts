@@ -163,11 +163,17 @@ export const freecell: GameDefinition<FreeCellMove> = {
   realtime: false,
   newGame: (_config, seed) => newFreeCell(seed),
   createBot: () => ({
-    chooseMove: (state) => {
-      const moves = state.legalMoves(0).filter((m) => m !== FREECELL_UNDO);
+    // Autoplay only: send a card home when one can go, otherwise try something, and when the
+    // deal is stuck take the last move back and try another way. Picks are seeded, so games
+    // still replay exactly; the seed moves on with each play, so it does not repeat itself.
+    chooseMove: (state, _seat, rng) => {
+      const moves = state.legalMoves(0);
+      const home = moves.filter((play) => play.split('.')[1]?.[0] === 'h');
+      if (home.length) return rng.pick(home);
+      const forward = moves.filter((play) => play !== FREECELL_UNDO);
+      if (forward.length) return rng.pick(forward);
       if (!moves.length) throw new Error('No legal moves');
-      // Autoplay only: prefer sending a card home, so a test game makes progress.
-      return moves.find((m) => m.includes('.h')) ?? moves[0]!;
+      return FREECELL_UNDO;
     },
   }),
   encodeMove: (m) => m,

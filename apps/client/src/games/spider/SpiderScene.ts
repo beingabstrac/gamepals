@@ -1,4 +1,4 @@
-import { SPIDER_COLUMNS, SPIDER_DEAL, spiderMoveFrom, type SpiderMove, type SpiderState } from '@gamepals/rules';
+import { SPIDER_COLUMNS, SPIDER_DEAL, spiderMoveFrom, SPIDER_UNDO, type SpiderMove, type SpiderState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
@@ -365,6 +365,7 @@ export class SpiderScene extends Scene {
 }
 
 export const spiderStatus = (state: SpiderState): string => {
+  if (!state.result && state.legalMoves(0).every((play) => play === SPIDER_UNDO)) return 'No moves left. Undo, or start a new deal.';
   const deals = Math.ceil(state.stock.length / SPIDER_COLUMNS);
   return `${state.done} of 8 runs · ${deals} ${deals === 1 ? 'deal' : 'deals'} left`;
 };

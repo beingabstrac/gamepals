@@ -191,11 +191,15 @@ export const spider: GameDefinition<SpiderMove> = {
   realtime: false,
   newGame: (config, seed) => newSpider(seed, isLevel(config.variant) ? config.variant : 'two'),
   createBot: () => ({
-    chooseMove: (state) => {
-      const moves = state.legalMoves(0).filter((m) => m !== SPIDER_UNDO);
+    // Autoplay only: move cards while it can, deal when it cannot, and take a move back when
+    // the board is stuck. Picks are seeded, so games still replay exactly.
+    chooseMove: (state, _seat, rng) => {
+      const moves = state.legalMoves(0);
+      const board = moves.filter((play) => play[0] === 'm');
+      if (board.length) return rng.pick(board);
+      if (moves.includes(SPIDER_DEAL)) return SPIDER_DEAL;
       if (!moves.length) throw new Error('No legal moves');
-      // Autoplay only: move cards while it can, and deal when it cannot.
-      return moves.find((m) => m[0] === 'm') ?? moves[0]!;
+      return SPIDER_UNDO;
     },
   }),
   encodeMove: (m) => m,

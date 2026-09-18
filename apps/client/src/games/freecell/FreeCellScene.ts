@@ -3,6 +3,7 @@ import {
   FREECELL_COLUMNS as COLUMNS,
   freeCellMoveFrom,
   freeCellSafeMove,
+  FREECELL_UNDO,
   SUIT_SYMBOLS,
   type FreeCellMove,
   type FreeCellState,
@@ -102,6 +103,9 @@ export class FreeCellScene extends Scene {
   private banner?: GameObjects.Text;
   /** Set while a card that nothing can need is on its way home. */
   private sending?: ReturnType<Scene['time']['delayedCall']>;
+  /** Move count at the last look, and whether an undo has paused the cards going home. */
+  private seenMoves = 0;
+  private holdHome = false;
 
   constructor(private readonly session: Session<FreeCellMove>) {
     super('freecell');
@@ -169,7 +173,11 @@ export class FreeCellScene extends Scene {
   /** Cards nothing can need go home by themselves, one every so often so the eye can follow. */
   private sendHome(): void {
     this.sending?.remove();
-    if (this.state.result || this.drag) return;
+    // After an undo they stay put: taking a move back and watching it happen again is maddening.
+    if (this.state.moves < this.seenMoves) this.holdHome = true;
+    else if (this.state.moves > this.seenMoves) this.holdHome = false;
+    this.seenMoves = this.state.moves;
+    if (this.holdHome || this.state.result || this.drag) return;
     const move = freeCellSafeMove(this.state);
     if (!move) return;
     this.sending = this.time.delayedCall(220, () => {
@@ -368,6 +376,7 @@ export class FreeCellScene extends Scene {
 }
 
 export const freeCellStatus = (state: FreeCellState): string => {
+  if (!state.result && state.legalMoves(0).every((play) => play === FREECELL_UNDO)) return 'No moves left. Undo, or start a new deal.';
   const home = state.foundations.reduce((sum, rank) => sum + rank, 0);
   const free = state.cells.filter((card) => card === null).length;
   return `${home} home · ${free} free ${free === 1 ? 'cell' : 'cells'}`;

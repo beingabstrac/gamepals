@@ -38,7 +38,7 @@ Read `README.md` and `docs/` first — decisions are recorded there. Update the 
 - `pnpm dev` — client on port 5173 (open the forwarded port on a phone)
 - `pnpm test` — Vitest (rules)
 - `pnpm typecheck`, `pnpm build`
-- `scripts/precheck.sh [test paths]` — the checks that run on a machine with no `node_modules` (the owner's Mac): duplicate rules exports, duplicate art functions or tile keys, every game present in all five test lists, and the rules tests through a small vitest stand-in. Run it before pushing; CI has caught each of these at least once.
+- `scripts/precheck.sh [test paths]` — the checks that run on a machine with no `node_modules` (the owner's Mac): duplicate rules exports, duplicate art functions or tile keys, imports nothing uses, every game present in all six test lists, and the rules tests through a small vitest stand-in. Run it before pushing; CI has caught each of these at least once. It cannot see unused locals or parameters, which typecheck fails on, so read a new file over once before pushing it.
 
 ## Adding a game
 1. `packages/rules/src/games/<id>/index.ts`: immutable state class, `GameDefinition`, bot tiers as data; export from `packages/rules/src/index.ts`.

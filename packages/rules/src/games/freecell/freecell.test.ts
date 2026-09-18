@@ -181,3 +181,29 @@ describe('freecell cards that go home on their own', () => {
     expect(freeCellSafeMove(at([[card(9, 0)], [card(4, 1)], [], [], [], [], [], []]))).toBe(null);
   });
 });
+
+describe('freecell when the deal is stuck', () => {
+  /** Eight black cards nobody can stack, four red cards in the cells that fit nowhere. */
+  const deadEnd = (history: FreeCellState[]) =>
+    new FreeCellState(
+      [13, 12, 11, 10, 9, 8, 7, 6].map((rank) => [card(rank, 0)]),
+      [card(2, 1), card(3, 1), card(4, 1), card(13, 2)],
+      [0, 0, 0, 0],
+      9,
+      null,
+      null,
+      history,
+    );
+
+  it('has nothing left but the move before it', () => {
+    const state = deadEnd([newFreeCell(4)]);
+    expect(state.legalMoves(0)).toEqual([FREECELL_UNDO]);
+  });
+
+  it('takes the last move back instead of giving up', () => {
+    const bot = freecell.createBot('medium');
+    const state = deadEnd([newFreeCell(4)]);
+    const rng = { next: () => 0, int: () => 0, pick: <T,>(list: readonly T[]) => list[0]! };
+    expect(bot.chooseMove(state, 0, rng)).toBe(FREECELL_UNDO);
+  });
+});
