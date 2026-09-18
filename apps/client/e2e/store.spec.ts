@@ -21,6 +21,15 @@ function storeOnly(info: TestInfo, which: 'devices' | 'feature'): void {
 /** Long enough for a board to fill up, short enough that the quick games are not over. */
 const PLAYED_IN_MS = 3000;
 
+/**
+ * The shelf deals its tiles in, one every 50ms, so a picture taken the moment the first one
+ * lands is a picture of a half-dealt shelf. Waiting for the last tile to be solid waits for
+ * all of them, however many games there are.
+ */
+async function tilesSettled(page: Page): Promise<void> {
+  await expect(page.locator('.tile').last()).toHaveCSS('opacity', '1');
+}
+
 async function playedIn(page: Page, name: string): Promise<void> {
   // Bots in every seat, so the picture is a real game rather than an empty board.
   await page.goto('/?autoplay=2');
@@ -35,6 +44,7 @@ test.describe('store screenshots @store', () => {
     storeOnly(info, 'devices');
     await page.goto('/');
     await expect(page.getByRole('button', { name: /^Chess/ })).toBeVisible();
+    await tilesSettled(page);
     await page.screenshot({ path: `${shots(info)}/01-shelf.jpg`, type: 'jpeg', quality: 92 });
   });
 
@@ -43,6 +53,7 @@ test.describe('store screenshots @store', () => {
     await page.goto('/');
     await page.getByRole('button', { name: /^Chess/ }).click();
     await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeVisible();
+    await page.waitForTimeout(700);
     await page.screenshot({ path: `${shots(info)}/02-table.jpg`, type: 'jpeg', quality: 92 });
   });
 
@@ -65,6 +76,7 @@ test.describe('store screenshots @store', () => {
     // logo, the mascot and the colours honest: they can never drift from the app.
     await page.goto('/');
     await expect(page.getByRole('button', { name: /^Chess/ })).toBeVisible();
+    await tilesSettled(page);
     await page.screenshot({ path: 'store/feature-graphic.jpg', type: 'jpeg', quality: 92 });
   });
 });
