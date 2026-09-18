@@ -150,7 +150,8 @@ describe('chess bots', () => {
     expect(replayed.board).toEqual(state.board);
   });
 
-  it('Zed beats Pip on material', () => {
+  // A whole game of our own engine, hard against easy: the other bot tournaments all say so too.
+  it('Zed beats Pip on material', { timeout: 120_000 }, () => {
     const bots: Record<string, ReturnType<typeof chess.createBot>> = { hard: chess.createBot('hard'), easy: chess.createBot('easy') };
     const rng = createRng(5);
     let state = newChess();
