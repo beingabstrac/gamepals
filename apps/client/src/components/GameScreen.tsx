@@ -47,8 +47,6 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       height: entry.size.height * DPR,
       transparent: true,
       antialias: true,
-      // Test builds keep the drawing buffer, or a WebView screenshot shows an empty canvas.
-      render: { preserveDrawingBuffer: AUTOPLAY },
       scale: { mode: Scale.FIT, autoCenter: Scale.CENTER_BOTH },
       scene: [entry.createScene(session)],
     });

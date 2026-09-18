@@ -12,3 +12,6 @@ test-results/
 apps/client/android/
 apps/client/ios/
 apps/client/native-shots/
+
+# Screenshots made by the gallery e2e spec (uploaded as CI artifacts, never committed).
+screenshots/

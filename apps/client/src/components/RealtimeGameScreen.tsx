@@ -1,7 +1,6 @@
 import type { GameResult } from '@gamepals/rules';
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { AUTOPLAY } from '../autoplay';
 import { cue } from '../feedback';
 import { DPR } from '../games/crisp';
 import type { RealtimeEntry } from '../games/registry';
@@ -34,8 +33,6 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
       height: entry.size.height * DPR,
       transparent: true,
       antialias: true,
-      // Test builds keep the drawing buffer, or a WebView screenshot shows an empty canvas.
-      render: { preserveDrawingBuffer: AUTOPLAY },
       scale: { mode: Scale.FIT, autoCenter: Scale.CENTER_BOTH },
       scene: [
         entry.createScene({

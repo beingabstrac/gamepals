@@ -86,6 +86,12 @@ jobs:
         with:
           name: playwright-report-${{ matrix.project }}
           path: apps/client/playwright-report
+      # Pictures of every game being played, for the quality passes (docs/08) and store shots later.
+      - if: always() && hashFiles('apps/client/screenshots/**') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: gallery-${{ matrix.project }}
+          path: apps/client/screenshots
 
   # The real Android app (Capacitor APK) on an Android 14 emulator: every game played to the end
   # inside the app's own WebView. Full runs only (weekly, tags, manual); the Android project is

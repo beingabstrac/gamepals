@@ -63,6 +63,9 @@ async function goHome() {
 
 // Page screenshots only: pulling full-screen captures through the same device connection (device.screenshot,
 // adb screencap) dropped the connection to the app's WebView. CI takes one real screen capture afterwards.
+// These shots show the page around the game, not the game: a WebView screenshot taken this way comes
+// back with an empty canvas (preserveDrawingBuffer makes no difference). For pictures of the games
+// themselves see e2e/gallery.spec.ts, where the browser does capture the canvas.
 const shot = (path) => page.screenshot({ path });
 
 await connect();
@@ -79,10 +82,6 @@ async function play(name) {
   await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.locator('.board canvas').waitFor({ timeout: 30_000 });
-  // A shot of the game actually being played: the final one is mostly result sheet and confetti,
-  // which is no use for checking how a game looks.
-  await page.waitForTimeout(1200);
-  await shot(`${SHOTS}android-${slug(name)}-play.png`);
   const result = page.locator('.result-sheet');
   if (MAY_NOT_FINISH.has(name)) await result.waitFor({ timeout: 45_000 }).catch(() => undefined);
   else await result.waitFor({ timeout: 300_000 });
