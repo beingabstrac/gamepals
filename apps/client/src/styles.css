@@ -993,6 +993,66 @@ h2,
   }
 }
 
+/* ---------- Big screens: use the room, instead of centring a phone layout in it ----------
+   Every screen was one width (720px), so a tablet showed a phone with empty space either side
+   and a landscape screen put the board in the middle third. The store screenshots made it
+   obvious. Phones are untouched: everything below is behind a width or an orientation. */
+@media (min-width: 840px) {
+  .screen {
+    max-width: 1040px;
+  }
+
+  /* A board no longer fighting for width can have more of the height too. */
+  .board {
+    max-height: 72vh;
+  }
+
+  .board.realtime {
+    max-height: 78vh;
+  }
+
+  .grid {
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .screen {
+    max-width: 1200px;
+  }
+}
+
+/* Landscape with room to work in: the board takes the height, and what goes with it (whose turn
+   it is, the controls, the first-time line) stands beside it rather than under it. `--ar` is the
+   board's own shape, handed over by the game screen, so the width follows from the height. */
+@media (min-width: 900px) and (orientation: landscape) {
+  .play-area {
+    display: grid;
+    /* The board column takes what is left, so the board can never push the page wider. */
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    column-gap: 28px;
+    row-gap: 14px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .play-area > * {
+    grid-column: 2;
+  }
+
+  .play-area > .board {
+    grid-column: 1;
+    grid-row: 1 / span 9;
+    justify-self: center;
+    width: min(100%, calc(82vh * var(--ar, 1)));
+    max-height: none;
+  }
+
+  .status {
+    min-height: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

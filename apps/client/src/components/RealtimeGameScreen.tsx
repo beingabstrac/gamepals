@@ -94,7 +94,12 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
           ))}
         </div>
         {/* A fresh container per round so the old game's canvas leaves immediately on rematch (see GameScreen). */}
-        <div class="board realtime" key={round} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
+        <div
+          class="board realtime"
+          key={round}
+          ref={host}
+          style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}`, '--ar': entry.size.width / entry.size.height }}
+        />
         {/* First time at this game: one line to get you going. */}
         {coach && !result && <p class="coach">{tryItLine(entry.howTo.controls, entry.tryIt)}</p>}
       </div>
