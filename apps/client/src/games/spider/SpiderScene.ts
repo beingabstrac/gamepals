@@ -295,8 +295,10 @@ export class SpiderScene extends Scene {
     if (!drag) return;
     let move: SpiderMove | null;
     if (drag.moved) {
+      // A drop has to land on the columns: the deck and the finished runs are not places to play.
+      const onColumns = y < FOOT_Y - CH / 2 - 8;
       const to = Math.max(0, Math.min(SPIDER_COLUMNS - 1, Math.round((x - GAP - CW / 2) / (CW + GAP))));
-      move = to === drag.column ? null : `m${drag.column}.${to}.${drag.count}`;
+      move = !onColumns || to === drag.column ? null : `m${drag.column}.${to}.${drag.count}`;
     } else move = spiderMoveFrom(this.state, drag.column, drag.count);
     if (move && this.state.legalMoves(0).includes(move)) {
       this.session.play(move);
