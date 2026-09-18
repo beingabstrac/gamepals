@@ -28,8 +28,10 @@ export function SudokuControls({ session }: { session: Session<SudokuMove> }) {
         <button class="tool" onClick={() => ui.erase()}>
           Erase
         </button>
+        {/* A toggle: the highlight and aria-pressed say whether notes are on, so the word "off"
+            (which read like an instruction to turn them off) is gone. */}
         <button class={ui.notes ? 'tool on' : 'tool'} aria-pressed={ui.notes} onClick={() => ui.toggleNotes()}>
-          Notes {ui.notes ? 'on' : 'off'}
+          Notes
         </button>
         <button class="tool" disabled={state.hintsLeft === 0} onClick={() => ui.hint()} aria-label={`Hint, ${state.hintsLeft} left`}>
           Hint <span class="badge">{state.hintsLeft}</span>
