@@ -51,6 +51,31 @@ for (const name of GAMES) {
   });
 }
 
+/**
+ * Big screens should use the room rather than centring a phone layout in it. The store
+ * screenshots showed the board sitting in the middle third of a landscape tablet with empty
+ * space either side, and none of the checks above said a word, because nothing overflowed.
+ */
+test('a landscape screen puts the board and its controls side by side', async ({ page }) => {
+  const viewport = page.viewportSize()!;
+  test.skip(viewport.width < 900 || viewport.width <= viewport.height, 'This is about wide landscape screens');
+  await page.goto('/');
+  await page.getByRole('button', { name: /^Chess/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+  await page.waitForTimeout(400);
+
+  const board = (await page.locator('.board').boundingBox())!;
+  const status = (await page.locator('.status').boundingBox())!;
+  // Whose turn it is stands beside the board, not above it.
+  expect(status.x, `the turn line starts at ${Math.round(status.x)} and the board ends at ${Math.round(board.x + board.width)}`).toBeGreaterThan(
+    board.x + board.width - 1,
+  );
+  // And the board takes the height it has been given.
+  const share = board.height / viewport.height;
+  expect(share, `the board is ${Math.round(share * 100)}% of a ${viewport.width}x${viewport.height} screen`).toBeGreaterThan(0.7);
+});
+
 test('installed web app: opens and plays with no connection at all', async ({ page, context, browserName }) => {
   test.skip(browserName !== 'chromium', 'The cold offline start is checked in Chromium, where service workers are fully supported in tests');
   await page.goto('/');
