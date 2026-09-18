@@ -1,16 +1,15 @@
 import type { Rng } from '../../core/rng';
 import { createRng } from '../../core/rng';
 import type { Bot, BotTier, GameDefinition, GameResult, GameState, Seat } from '../../core/types';
+import { isRed, rankOf, suitOf, SUIT_SYMBOLS } from '../cards';
 
 /**
  * Klondike solitaire (docs/games/solitaire.md).
  * Cards are 0–51: suit = floor(card / 13) (0 spades, 1 hearts, 2 diamonds, 3 clubs), rank = card % 13 + 1.
  */
 export type SolitaireDraw = 1 | 3;
-export const SUIT_SYMBOLS = ['♠', '♥', '♦', '♣'] as const;
-export const suitOf = (card: number): number => Math.floor(card / 13);
-export const rankOf = (card: number): number => (card % 13) + 1;
-export const isRed = (card: number): boolean => suitOf(card) === 1 || suitOf(card) === 2;
+// Card helpers (suits, ranks, colours) come from games/cards.ts, which every card game shares.
+// They are not re-exported here: the package index would then export the same name twice.
 
 /** Standard scoring: +10 to a foundation, +5 waste to tableau, +5 turning a card up, -15 foundation to tableau. */
 export const SOLITAIRE_POINTS = { foundation: 10, wasteToTableau: 5, turnUp: 5, fromFoundation: -15 } as const;

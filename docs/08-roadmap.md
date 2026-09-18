@@ -55,7 +55,8 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [x] **M6 Quality pass B (2026-09-18):** the remaining games looked over on a phone. Sumo, Penalty Kicks, Tug of War, Echo, Classic Snake, 2048, Sudoku, Solitaire, Reversi, Reflex Race and Color Sort all render correctly. Fixed: Tug of War no longer says "Ready…" and "Tap tap tap!" at once (the hints wait for "Pull!"); the Penalty Kicks callout sits clear of the ball instead of on top of it; Sudoku's "Notes off" toggle reads "Notes", with the pressed state carrying the meaning; and the games where looking at the board does not tell you what to do (2048, Sliding Puzzle, Memory, Echo) show a one-line controls hint that goes once you make a move, with Classic Snake saying it on the board like the other real-time games.
   - **The review tool that makes this possible:** `e2e/gallery.spec.ts` takes a picture of every game being played and uploads it as a CI artifact (`gallery-iphone`). Before it, every Android screenshot the project saved showed an empty canvas, because Playwright cannot capture that WebView's canvas layer. The same pictures become the store screenshots in M12.
   - **Watch out when reviewing in a browser pane that is hidden:** the page gets no animation frames, so one screenshot catches pop-in animations half drawn. Three false alarms came from this (Echo with one pad, Yatzy with missing dice, Color Sort with clipped tubes). Take three or four screenshots in a row before believing anything.
-- [ ] **M7 Cards A:** Spider, FreeCell, Pyramid, TriPeaks (cheap to build, top of the charts)
+- [ ] **M7a Cards, tableau pair:** FreeCell and Spider (both build on the Klondike card work; solo, so no bots)
+- [ ] **M7b Cards, pick-a-card pair:** Pyramid and TriPeaks
 - [ ] **M8 Teach and rivalry:** 10-second "try it" hint on first play of each game; running score between the same players; rematch streaks
 
 ## Stage 2: phones, stores and money

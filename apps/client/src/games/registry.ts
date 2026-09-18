@@ -33,6 +33,10 @@ import {
   REVERSI_PASS,
   snakeBattle,
   solitaire,
+  freecell,
+  type FreeCellState,
+  spider,
+  type SpiderState,
   slidingPuzzle,
   sudoku,
   SUDOKU_HINTS,
@@ -101,6 +105,10 @@ import { DominoControls } from './dominoes/DominoControls';
 import { DOMINO_COLORS, DOMINO_NAMES, DOMINO_SIZE, DominoScene } from './dominoes/DominoScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
+import { FreeCellControls } from './freecell/FreeCellControls';
+import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
+import { SpiderControls } from './spider/SpiderControls';
+import { SPIDER_SIZE, spiderStatus, SpiderScene } from './spider/SpiderScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
 import { SOLITAIRE_SIZE, SolitaireScene } from './solitaire/SolitaireScene';
 import { SudokuControls } from './sudoku/SudokuControls';
@@ -727,6 +735,52 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: SolitaireControls,
     createScene: (session) => new SolitaireScene(session),
+  }),
+  entry({
+    definition: freecell,
+    tagline: 'Every card face up, four cells to think with',
+    howTo: {
+      goal: 'Move all 52 cards onto the four piles at the top, each one suit from Ace up to King.',
+      controls: 'Tap a card to send it to the best spot, or drag it where you want. The four free cells hold one card each. On a keyboard: arrow keys pick a card, Enter moves it.',
+      win: 'You win when every card is on the four piles.',
+      tip: 'In the columns, stack cards going down and switch between red and black. The more free cells and empty columns you keep, the more cards you can move at once.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.sky],
+    size: FREECELL_SIZE,
+    color: DARK.sky,
+    status: (state) => freeCellStatus(state as FreeCellState),
+    resultText: (state) => `You won! Every card home in ${(state as FreeCellState).moves} moves.`,
+    moveCue: (before, after) => {
+      const home = (s: FreeCellState) => s.foundations.reduce((sum, rank) => sum + rank, 0);
+      return home(after as FreeCellState) > home(before as FreeCellState) ? 'go' : 'place';
+    },
+    Controls: FreeCellControls,
+    createScene: (session) => new FreeCellScene(session),
+  }),
+  entry({
+    definition: spider,
+    tagline: 'Build eight runs, King down to Ace',
+    levels: [
+      { id: 'one', label: 'One suit' },
+      { id: 'two', label: 'Two suits' },
+      { id: 'four', label: 'Four suits' },
+    ],
+    howTo: {
+      goal: 'Build eight runs from King down to Ace in one suit. Each finished run leaves the board.',
+      controls: 'Tap a card to move it, or drag it where you want. Tap the deck for a new row. On a keyboard: arrow keys pick a card, Enter moves it, D deals.',
+      win: 'You win when all eight runs are done.',
+      tip: 'Cards only travel together when they are one suit going down. Uncover the face-down cards early, and keep a column empty if you can. One suit is the gentle way in.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.peach],
+    size: SPIDER_SIZE,
+    color: DARK.peach,
+    status: (state) => spiderStatus(state as SpiderState),
+    resultText: (state) => `You won! All eight runs in ${(state as SpiderState).moves} moves.`,
+    moveCue: (before, after) => ((after as SpiderState).done > (before as SpiderState).done ? 'go' : 'place'),
+    Controls: SpiderControls,
+    createScene: (session) => new SpiderScene(session),
   }),
   entry({
     definition: slidingPuzzle,

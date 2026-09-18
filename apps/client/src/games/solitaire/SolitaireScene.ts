@@ -1,9 +1,9 @@
-import { bestMoveFrom, DRAW_MOVE, isRed, rankOf, suitOf, SUIT_SYMBOLS, type SolitaireMove, type SolitaireState } from '@gamepals/rules';
+import { bestMoveFrom, DRAW_MOVE, suitOf, SUIT_SYMBOLS, type SolitaireMove, type SolitaireState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
-import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
+import { drawSlot, jitter, makeCard, setFace, type CardView } from '../cards/view';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 import { solitaireUiFor, type SolitaireUi } from './ui';
 
@@ -21,7 +21,6 @@ const DOWN_STEP = 18;
 const UP_STEP = 38;
 const MOVE_MS = 230;
 const DRAG_MIN = 10;
-const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 const TABLE = 0xbdeed6;
 const SLOT = 0x8fdcb6;
 
@@ -32,13 +31,6 @@ interface Spot {
   readonly depth: number;
   /** Where this card can be picked up from, or null when it can't be. */
   readonly source: string | null;
-}
-
-interface CardView {
-  readonly box: GameObjects.Container;
-  readonly front: GameObjects.Container;
-  readonly back: GameObjects.Graphics;
-  up: boolean;
 }
 
 interface Drag {
@@ -79,9 +71,6 @@ function layout(state: SolitaireState): Map<number, Spot> {
   return spots;
 }
 
-/** Small repeatable wobble per card, so the win cascade looks lively without randomness. */
-const jitter = (n: number) => ((Math.imul(n + 1, 0x9e3779b1) >>> 0) % 1000) / 1000;
-
 export class SolitaireScene extends Scene {
   private readonly ui: SolitaireUi;
   private views = new Map<number, CardView>();
@@ -105,7 +94,7 @@ export class SolitaireScene extends Scene {
     fitCamera(this, W, H);
     applySpeed(this);
     this.drawTable();
-    for (let card = 0; card < 52; card++) this.views.set(card, this.makeCard(card));
+    for (let card = 0; card < 52; card++) this.views.set(card, this.newCardView(card));
     // Deal: every card starts on the deck and flies out to its place.
     this.sync(true, true);
 
@@ -132,10 +121,7 @@ export class SolitaireScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    const slot = (x: number, y: number) => {
-      g.lineStyle(3, SLOT, 1);
-      g.strokeRoundedRect(x - CW / 2, y - CH / 2, CW, CH, 12);
-    };
+    const slot = (x: number, y: number) => drawSlot(g, x, y, CW, CH, SLOT);
     slot(colX(0), TOP_Y);
     sharpText(this, colX(0), TOP_Y, '↻', 40, '#5fc796');
     for (let s = 0; s < 4; s++) {
@@ -145,51 +131,10 @@ export class SolitaireScene extends Scene {
     for (let c = 0; c < 7; c++) slot(colX(c), TAB_Y);
   }
 
-  private makeCard(card: number): CardView {
-    const shadow = this.add.graphics();
-    shadow.fillStyle(0x2b2a3a, 0.14);
-    shadow.fillRoundedRect(-CW / 2, -CH / 2 + 4, CW, CH, 12);
-
-    const back = this.add.graphics();
-    back.fillStyle(toHex(DARK.mint), 1);
-    back.fillRoundedRect(-CW / 2, -CH / 2, CW, CH, 12);
-    back.lineStyle(3, 0xffffff, 0.9);
-    back.strokeRoundedRect(-CW / 2 + 7, -CH / 2 + 7, CW - 14, CH - 14, 8);
-    back.fillStyle(0xffffff, 0.35);
-    for (let row = 0; row < 4; row++) for (let col = 0; col < 3; col++) back.fillCircle(-20 + col * 20, -36 + row * 24, 4);
-
-    const color = isRed(card) ? COLORS.tomato : COLORS.ink;
-    const rank = rankOf(card);
-    const suit = SUIT_SYMBOLS[suitOf(card)]!;
-    const face = this.add.graphics();
-    face.fillStyle(0xffffff, 1);
-    face.fillRoundedRect(-CW / 2, -CH / 2, CW, CH, 12);
-    face.lineStyle(2, 0xdcd6ee, 1);
-    face.strokeRoundedRect(-CW / 2, -CH / 2, CW, CH, 12);
-    const parts: GameObjects.GameObject[] = [
-      face,
-      sharpText(this, -CW / 2 + 17, -CH / 2 + 19, RANKS[rank - 1]!, rank === 10 ? 22 : 27, color).setFontStyle('bold'),
-      sharpText(this, -CW / 2 + 17, -CH / 2 + 43, suit, 20, color),
-    ];
-    if (rank > 10) {
-      // Picture cards: the letter in a bubble of the suit's color.
-      const bubble = this.add.graphics();
-      bubble.fillStyle(toHex(color), 0.14);
-      bubble.fillCircle(6, 16, 28);
-      parts.push(bubble, sharpText(this, 6, 16, RANKS[rank - 1]!, 38, color).setFontStyle('bold'));
-    } else {
-      parts.push(sharpText(this, 6, 18, suit, 54, color));
-    }
-    const front = this.add.container(0, 0, parts);
-    const box = this.add.container(colX(0), TOP_Y, [shadow, back, front]);
-    front.setVisible(false);
-    return { box, front, back, up: false };
-  }
-
-  private setFace(view: CardView, up: boolean): void {
-    view.up = up;
-    view.front.setVisible(up);
-    view.back.setVisible(!up);
+  private newCardView(card: number): CardView {
+    const view = makeCard(this, card, CW, CH);
+    view.box.setPosition(colX(0), TOP_Y);
+    return view;
   }
 
   /** Moves every card to where the state says it belongs. */
@@ -213,11 +158,11 @@ export class SolitaireScene extends Scene {
             duration: 90,
             delay: delay + (moving ? MOVE_MS * 0.5 : 0),
             onComplete: () => {
-              this.setFace(view, spot.up);
+              setFace(view, spot.up);
               this.tweens.add({ targets: box, scaleX: 1, duration: 110, ease: 'Back.easeOut' });
             },
           });
-        } else this.setFace(view, spot.up);
+        } else setFace(view, spot.up);
       } else box.setScale(1);
       if (moving && animate) {
         box.setDepth(1000 + spot.depth);

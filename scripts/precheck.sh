@@ -8,7 +8,9 @@ REPO="$(cd "$HERE/.." && pwd)"
 fail=0
 
 echo "== duplicate exports in packages/rules"
-dupes=$(cd "$REPO/packages/rules/src" && grep -rhoE "^export (const|function|class|type|interface|enum) [A-Za-z0-9_]+" games core | awk '{print $3}' | sort | uniq -d)
+named=$(cd "$REPO/packages/rules/src" && grep -rhoE "^export (const|function|class|type|interface|enum) [A-Za-z0-9_]+" games core | awk '{print $3}')
+listed=$(cd "$REPO/packages/rules/src" && grep -rhoE "^export \{[^}]*\}" games core | tr -d 'exports{}' | tr ',' '\n' | awk '{print $1}' | grep -v '^$')
+dupes=$(printf '%s\n%s\n' "$named" "$listed" | sort | uniq -d)
 if [ -n "$dupes" ]; then echo "  DUPLICATE: $dupes"; fail=1; else echo "  ok"; fi
 
 echo "== duplicate art functions and tile map keys"

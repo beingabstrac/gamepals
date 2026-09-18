@@ -13,6 +13,8 @@ const GAMES = [
   '2048',
   'Sudoku',
   'Solitaire',
+  'FreeCell',
+  'Spider',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',
@@ -39,8 +41,8 @@ const GAMES = [
   'Snake Battle',
 ];
 
-/** Solitaire deals can be unwinnable, so for it a long stretch of play with no errors is the pass mark. */
-const MAY_NOT_FINISH = new Set(['Solitaire']);
+/** Patience deals can be unwinnable, so for those a long stretch of play with no errors is the pass mark. */
+const MAY_NOT_FINISH = new Set(['Solitaire', 'FreeCell', 'Spider']);
 
 for (const name of GAMES) {
   test(`${name}: a whole game plays to the end @full`, async ({ page }) => {

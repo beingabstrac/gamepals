@@ -371,6 +371,48 @@ function SolitaireArt() {
 }
 
 
+function FreeCellArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="12" width="17" height="23" rx="5" fill="#fff" stroke={COLORS.sky} stroke-width="2.5" />
+      <rect x="31" y="12" width="17" height="23" rx="5" fill="#fff" stroke={COLORS.sky} stroke-width="2.5" />
+      <rect x="55" y="12" width="17" height="23" rx="5" fill="#fff" stroke={COLORS.sky} stroke-width="2.5" />
+      <rect x="76" y="12" width="17" height="23" rx="5" fill={COLORS.sky} />
+      <path d="M84.5 18 l4.5 5.5 -4.5 5.5 -4.5 -5.5 z" fill="#fff" />
+      <rect x="22" y="44" width="24" height="33" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="34" y="60" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill={COLORS.tomato}>
+        9
+      </text>
+      <rect x="22" y="60" width="24" height="33" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="34" y="76" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill={INK}>
+        8
+      </text>
+      <rect x="54" y="52" width="24" height="33" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="66" y="68" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill={COLORS.tomato}>
+        K
+      </text>
+    </svg>
+  );
+}
+
+function SpiderArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="9" y="16" width="20" height="28" rx="6" fill={DARK.mint} />
+      <rect x="34" y="16" width="20" height="28" rx="6" fill={DARK.mint} />
+      <rect x="59" y="16" width="20" height="28" rx="6" fill={DARK.mint} />
+      <rect x="9" y="34" width="20" height="28" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <path d="M19 44 c-4 4 -6 6 -6 8 a3.2 3.2 0 0 0 6 1.6 a3.2 3.2 0 0 0 6 -1.6 c0 -2 -2 -4 -6 -8 z" fill={INK} />
+      <rect x="34" y="34" width="20" height="28" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <path d="M44 44 c-4 4 -6 6 -6 8 a3.2 3.2 0 0 0 6 1.6 a3.2 3.2 0 0 0 6 -1.6 c0 -2 -2 -4 -6 -8 z" fill={COLORS.tomato} />
+      <rect x="59" y="34" width="20" height="28" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <path d="M69 44 c-4 4 -6 6 -6 8 a3.2 3.2 0 0 0 6 1.6 a3.2 3.2 0 0 0 6 -1.6 c0 -2 -2 -4 -6 -8 z" fill={INK} />
+      <rect x="66" y="68" width="24" height="24" rx="7" fill={COLORS.peach} />
+      <path d="M72 80 h12 M78 74 v12" stroke="#fff" stroke-width="3" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -643,6 +685,8 @@ const ART: Record<string, () => JSX.Element> = {
   backgammon: BackgammonArt,
   'sea-battle': SeaBattleArt,
   solitaire: SolitaireArt,
+  freecell: FreeCellArt,
+  spider: SpiderArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
   'color-sort': ColorSortArt,
