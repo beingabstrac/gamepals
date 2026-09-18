@@ -62,13 +62,15 @@ test('the running score follows the same players from game to game', async ({ pa
   expect(errors).toEqual([]);
 });
 
-test('a picture of both, for looking over @full', async ({ page }, testInfo) => {
+test('a picture of both, for looking over', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone', 'One screen type is enough for a picture');
   const dir = `screenshots/${testInfo.project.name}`;
   // The coaching line, on a game nobody has played before.
   await page.goto('/');
   await play(page, 'Four in a Row');
   await expect(page.locator('.coach')).toBeVisible();
+  // The bubble pops in over 420ms, and a picture taken before that is a picture of nothing.
+  await page.waitForTimeout(600);
   await page.screenshot({ path: `${dir}/coach-line.png` });
 
   // The running score, after two games between the same players.
@@ -79,6 +81,10 @@ test('a picture of both, for looking over @full', async ({ page }, testInfo) => 
   await sheet.getByRole('button', { name: 'Rematch' }).click();
   await expect(sheet).toBeHidden();
   await expect(sheet).toBeVisible({ timeout: 60_000 });
+  await expect(page.locator('.rivalry-score')).toBeVisible();
+  // The sheet slides up over 520ms from nothing, so wait for it to arrive before shooting.
+  await page.waitForTimeout(700);
+  await expect(sheet).toHaveCSS('opacity', '1');
   await page.screenshot({ path: `${dir}/running-score.png` });
 });
 
