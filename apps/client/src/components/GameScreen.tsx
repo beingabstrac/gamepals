@@ -2,6 +2,8 @@ import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS } from '../autoplay';
 import { cue } from '../feedback';
+import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
+import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
 import { DPR } from '../games/crisp';
 import type { GameEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
@@ -25,6 +27,12 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
   const [seed, setSeed] = useState(newSeed);
   const [, setTick] = useState(0);
   const host = useRef<HTMLDivElement>(null);
+  const rivalryKey = keyFor(entry.definition.id, seats);
+  const [rivalry, setRivalry] = useState<Rivalry>(() => load(rivalryKey));
+  // The coaching line, shown the first time this game is opened and gone once you move.
+  const [coach, setCoach] = useState(() => isFirstPlay(entry.definition.id));
+  // One game, one entry in the score, however many times the screen renders.
+  const counted = useRef<Session<unknown> | null>(null);
 
   const session = useMemo(
     () => new Session(entry.definition, seats, seed, AUTOPLAY ? AUTOPLAY_BOT_DELAY_MS : entry.botDelayMs, variant),
@@ -32,12 +40,24 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
   );
 
   useEffect(() => {
+    if (!coach) return;
+    markPlayed(entry.definition.id);
+    const timer = setTimeout(() => setCoach(false), 10_000);
+    return () => clearTimeout(timer);
+  }, [coach, entry]);
+
+  useEffect(() => {
     let before = session.state;
     const unsubscribe = session.subscribe(() => {
       setTick((t) => t + 1);
       const after = session.state;
+      if (after.result && counted.current !== (session as Session<unknown>)) {
+        counted.current = session as Session<unknown>;
+        setRivalry(record(rivalryKey, seats, after.result));
+      }
       if (after.result) cue(outcomeOf(after.result, seats));
       else cue(entry.moveCue?.(before, after) ?? (seats[before.currentSeat]?.kind === 'bot' ? 'botPlace' : 'place'));
+      if (session.moves.length > 0) setCoach(false);
       before = after;
     });
     const game = new Game({
@@ -56,7 +76,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       session.dispose();
       game.destroy(true);
     };
-  }, [session, entry, seats]);
+  }, [session, entry, seats, rivalryKey]);
 
   const { state } = session;
   const names = entry.sideNames(seats.length);
@@ -96,11 +116,16 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
         {Controls && <Controls session={session} />}
         {/* How to play, until you have played: games with buttons say it there instead. */}
         {entry.hint && !Controls && !state.result && session.moves.length === 0 && <TurnHint>{entry.hint}</TurnHint>}
+        {/* First time at this game: one line to get you going, gone as soon as you move. */}
+        {coach && !state.result && <p class="coach">{tryItLine(entry.howTo.controls, entry.tryIt)}</p>}
       </div>
       {state.result && (
         <ResultSheet
           title={entry.resultText?.(state) ?? resultTitle(state.result, seats, sideName)}
           outcome={outcomeOf(state.result, seats)}
+          score={scoreLine(rivalry, seats)}
+          streak={streakLine(rivalry)}
+          games={rivalry.games}
           onRematch={rematch}
           onChangeMode={onExit}
         />

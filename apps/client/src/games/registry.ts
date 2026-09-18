@@ -146,6 +146,9 @@ export interface EntryBase {
   };
   readonly tagline: string;
   readonly howTo: HowTo;
+  /** One line to get going, shown the first time this game is opened. Defaults to the
+   *  first sentence of `howTo.controls`, which is already written as the thing to do first. */
+  readonly tryIt?: string;
   /** Levels picked at the table (passed to the rules as the game variant). */
   readonly levels?: readonly { readonly id: string; readonly label: string }[];
   /** Name of each seat's side for a given player count, e.g. X and O. */

@@ -2,6 +2,8 @@ import type { GameResult } from '@gamepals/rules';
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { cue } from '../feedback';
+import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
+import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
 import { DPR } from '../games/crisp';
 import type { RealtimeEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
@@ -22,6 +24,17 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
   const [scores, setScores] = useState<readonly number[]>(seats.map(() => 0));
   const [result, setResult] = useState<GameResult | null>(null);
   const host = useRef<HTMLDivElement>(null);
+  const rivalryKey = keyFor(entry.definition.id, seats);
+  const [rivalry, setRivalry] = useState<Rivalry>(() => load(rivalryKey));
+  // The coaching line, shown the first time this game is opened.
+  const [coach, setCoach] = useState(() => isFirstPlay(entry.definition.id));
+
+  useEffect(() => {
+    if (!coach) return;
+    markPlayed(entry.definition.id);
+    const timer = setTimeout(() => setCoach(false), 10_000);
+    return () => clearTimeout(timer);
+  }, [coach, entry]);
 
   useEffect(() => {
     setScores(seats.map(() => 0));
@@ -38,9 +51,14 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
         entry.createScene({
           seats,
           seed: newSeed(),
-          onScore: (next) => setScores([...next]),
+          onScore: (next) => {
+            setScores([...next]);
+            setCoach(false);
+          },
           onEnd: (final) => {
             setResult(final);
+            setCoach(false);
+            setRivalry(record(rivalryKey, seats, final));
             cue(outcomeOf(final, seats));
           },
           onCue: cue,
@@ -48,7 +66,7 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
       ],
     });
     return () => game.destroy(true);
-  }, [round, entry, seats]);
+  }, [round, entry, seats, rivalryKey]);
 
   const names = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
@@ -77,11 +95,16 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
         </div>
         {/* A fresh container per round so the old game's canvas leaves immediately on rematch (see GameScreen). */}
         <div class="board realtime" key={round} ref={host} style={{ aspectRatio: `${entry.size.width} / ${entry.size.height}` }} />
+        {/* First time at this game: one line to get you going. */}
+        {coach && !result && <p class="coach">{tryItLine(entry.howTo.controls, entry.tryIt)}</p>}
       </div>
       {result && (
         <ResultSheet
           title={entry.resultText?.(result, scores) ?? resultTitle(result, seats, sideName)}
           outcome={outcomeOf(result, seats)}
+          score={scoreLine(rivalry, seats)}
+          streak={streakLine(rivalry)}
+          games={rivalry.games}
           onRematch={() => setRound((r) => r + 1)}
           onChangeMode={onExit}
         />

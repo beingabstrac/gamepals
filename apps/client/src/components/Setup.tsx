@@ -3,6 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import type { EntryBase } from '../games/registry';
 import type { SeatController } from '../session';
 import { storage } from '../platform';
+import { keyFor, load, scoreLine, streakLine } from '../rivalry';
 import { BackIcon, BotFace, GameArt, PersonFace } from './Art';
 
 export const TIER_LABEL: Record<BotTier, string> = {
@@ -174,6 +175,9 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
   const positions = positionsFor(maxPlayers);
   const solo = maxPlayers === 1;
   const seats = toSeats(choices);
+  const rivalry = load(keyFor(entry.definition.id, seats));
+  const score = scoreLine(rivalry, seats);
+  const streak = streakLine(rivalry);
   const sideNames = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
   const occupied = choices.filter((choice) => choice !== 'empty').length;
@@ -277,6 +281,14 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
       <p class="hint">
         {!solo ? 'Tap a chair to choose who sits there.' : entry.levels ? 'Just you. Pick a level, then press Play.' : 'Just you. Racing a friend on the same puzzle is coming soon.'}
       </p>
+
+      {/* How this table has gone so far, so you know what you are walking into. */}
+      {score && (
+        <p class="table-score">
+          {score}
+          {streak && ` · ${streak}`}
+        </p>
+      )}
 
       <section class="how-to" aria-label="How to play">
         <h2>How to play</h2>

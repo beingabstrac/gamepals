@@ -5,6 +5,12 @@ import { COLORS } from '../theme';
 interface Props {
   title: string;
   outcome: Outcome;
+  /** The running score between these players, e.g. "You 3 · Bo 1". */
+  score?: string | null;
+  /** How many games in a row the same player has won, in words. */
+  streak?: string | null;
+  /** Games played between these players, for the tests to count. */
+  games?: number;
   onRematch(): void;
   onChangeMode(): void;
 }
@@ -41,12 +47,18 @@ function Confetti() {
   );
 }
 
-export function ResultSheet({ title, outcome, onRematch, onChangeMode }: Props) {
+export function ResultSheet({ title, outcome, score, streak, games, onRematch, onChangeMode }: Props) {
   return (
     <>
       {outcome === 'win' && <Confetti />}
       <div class={`result-sheet ${outcome}`} role="dialog" aria-live="assertive" aria-label={title}>
         <p class="result-title">{title}</p>
+        {score && (
+          <p class="rivalry" data-games={games}>
+            <span class="rivalry-score">{score}</span>
+            {streak && <span class="rivalry-streak">{streak}</span>}
+          </p>
+        )}
         <div class="result-actions">
           <button class="btn primary" onClick={onRematch}>
             Rematch
