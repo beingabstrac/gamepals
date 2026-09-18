@@ -10,6 +10,13 @@ Solo owner + Claude Code. Rewritten 2026-09-16 as a list of **loop-sized milesto
 5. Blocked on the owner? Add the ask to "Waiting on the owner" and take the next unblocked milestone.
 6. Too big for one loop? Split it here **before** starting. Never leave a milestone half done.
 
+## CI costs real minutes
+A private repo includes 2,000 Actions minutes a month, and on 2026-09-18 we ran out: 31 runs in a day, many of them full runs. Every job that starts after that is rejected with "recent account payments have failed or your spending limit needs to be increased", which looks like a broken build but is billing. How we keep it cheap:
+- **One full run per milestone**, at the end. Between fixes, the quick run on a push (4 screen types, no whole-game tests) is the gate.
+- **The Android emulator job is opt-in** on manual runs (tick `android`), and runs by itself weekly and on release tags. It is about 25 minutes a go, the most expensive thing we have.
+- **iOS stays off** except release tags and an explicit tick: macOS minutes count 10x.
+- `scripts/precheck.sh` runs the whole rules suite and the duplicate scans on the owner's Mac with no `node_modules`, so most mistakes are caught before a run is spent.
+
 ## Waiting on the owner
 These block the milestones marked 🔑. Some have long lead times, so start them early.
 - [ ] Confirm the app ID (placeholder `app.gamepals.game`) and store name.
@@ -19,6 +26,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] Cloudflare account + API token, Firebase project (M13).
 - [ ] Play every new game on a real phone after each quality pass and note what feels wrong. Tests prove games don't crash and can finish; they can't judge feel.
 - [ ] Free trademark search for "Game Pals" ([09](09-naming.md)).
+- [ ] **GitHub Actions is blocked on billing** (hit on 2026-09-18). Settings → Billing & plans: raise the Actions spending limit, or wait for the monthly reset. Nothing ships until a run can start.
 
 ## Done so far
 - [x] Monorepo, pure rules package (seeded, replayable), bots with 4 levels, session with any mix of people and bots

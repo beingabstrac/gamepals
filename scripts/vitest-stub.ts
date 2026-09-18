@@ -1,23 +1,72 @@
-let fails = 0, passes = 0; const prefix: string[] = [];
-export function describe(n: string, f: () => void) { prefix.push(n); f(); prefix.pop(); }
-export function it(n: string, f: () => void) { const t = Date.now(); try { f(); passes++; console.log('✓', n, `${Date.now() - t}ms`); } catch (e) { fails++; console.log('✗', [...prefix, n].join(' > '), (e as Error).message); } }
-const eq = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
-function make(v: any, not: boolean, label?: string): any {
-  const ok = (c: boolean, m: string) => { if (c === not) throw new Error(`${label ? label + ': ' : ''}${not ? 'not ' : ''}${m}`); };
+/**
+ * A small stand-in for vitest, so the rules tests can run on a machine with no node_modules
+ * (scripts/run-rules-tests.sh). It covers exactly what the suite uses; anything else should be
+ * added here rather than worked around in a test, or the local run quietly lies.
+ */
+let fails = 0;
+let passes = 0;
+const prefix: string[] = [];
+
+export function describe(name: string, body: () => void): void {
+  prefix.push(name);
+  body();
+  prefix.pop();
+}
+
+type Body = () => void | Promise<void>;
+
+/** `it(name, body)` and `it(name, { timeout }, body)` are both used in the suite. */
+export function it(name: string, optionsOrBody: Body | Record<string, unknown>, maybeBody?: Body): void {
+  const body = (typeof optionsOrBody === 'function' ? optionsOrBody : maybeBody) as Body;
+  const started = Date.now();
+  try {
+    body();
+    passes++;
+    console.log('✓', name, `${Date.now() - started}ms`);
+  } catch (error) {
+    fails++;
+    console.log('✗', [...prefix, name].join(' > '), (error as Error).message);
+  }
+}
+
+const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+function make(value: any, negated: boolean, label?: string): any {
+  const check = (ok: boolean, message: string) => {
+    if (ok === negated) throw new Error(`${label ? label + ': ' : ''}${negated ? 'not ' : ''}${message}`);
+  };
   return {
-    toBe: (b: any) => ok(Object.is(v, b), `toBe ${JSON.stringify(v)} vs ${JSON.stringify(b)}`),
-    toEqual: (b: any) => ok(eq(v, b), `toEqual ${JSON.stringify(v)} vs ${JSON.stringify(b)}`),
-    toContain: (b: any) => ok(v.includes(b), `toContain ${JSON.stringify(b)}`),
-    toHaveLength: (n: number) => ok(v.length === n, `length ${v.length} vs ${n}`),
-    toBeGreaterThan: (n: number) => ok(v > n, `${v} > ${n}`),
-    toBeLessThan: (n: number) => ok(v < n, `${v} < ${n}`),
-    toBeNull: () => ok(v === null, `null, got ${JSON.stringify(v)}`),
-    toBeUndefined: () => ok(v === undefined, `undefined, got ${JSON.stringify(v)}`),
-    toBeDefined: () => ok(v !== undefined, 'defined'),
-    toMatchObject: (b: any) => ok(Object.entries(b).every(([k, x]) => eq(v?.[k], x)), `toMatchObject ${JSON.stringify(v)}`),
-    toThrow: () => { let t = false; try { v(); } catch { t = true; } ok(t, 'throw'); },
-    get not() { return make(v, !not, label); },
+    toBe: (other: any) => check(Object.is(value, other), `toBe ${JSON.stringify(value)} vs ${JSON.stringify(other)}`),
+    toEqual: (other: any) => check(same(value, other), `toEqual ${JSON.stringify(value)} vs ${JSON.stringify(other)}`),
+    toContain: (item: any) => check(value.includes(item), `toContain ${JSON.stringify(item)}`),
+    toHaveLength: (n: number) => check(value.length === n, `length ${value.length} vs ${n}`),
+    toBeGreaterThan: (n: number) => check(value > n, `${value} > ${n}`),
+    toBeGreaterThanOrEqual: (n: number) => check(value >= n, `${value} >= ${n}`),
+    toBeLessThan: (n: number) => check(value < n, `${value} < ${n}`),
+    toBeLessThanOrEqual: (n: number) => check(value <= n, `${value} <= ${n}`),
+    toBeNull: () => check(value === null, `null, got ${JSON.stringify(value)}`),
+    toBeUndefined: () => check(value === undefined, `undefined, got ${JSON.stringify(value)}`),
+    toBeDefined: () => check(value !== undefined, 'defined'),
+    toMatchObject: (shape: any) =>
+      check(
+        Object.entries(shape).every(([key, want]) => same(value?.[key], want)),
+        `toMatchObject ${JSON.stringify(value)} vs ${JSON.stringify(shape)}`,
+      ),
+    toThrow: () => {
+      let threw = false;
+      try {
+        value();
+      } catch {
+        threw = true;
+      }
+      check(threw, 'throw');
+    },
+    get not() {
+      return make(value, !negated, label);
+    },
   };
 }
-export const expect = (v: any, label?: string) => make(v, false, label);
+
+export const expect = (value: any, label?: string) => make(value, false, label);
+
 process.on('exit', () => console.log(`passed ${passes}, failed ${fails}`));
