@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
-import { drawSlot, jitter, makeCard, setFace, type CardView } from '../cards/view';
+import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -152,7 +152,6 @@ export class SpiderScene extends Scene {
     for (const [card, spot] of [...this.spots].sort((a, b) => a[1].depth - b[1].depth)) {
       const view = this.viewOf(card);
       const box = view.box;
-      this.tweens.killTweensOf(box);
       box.setAngle(0);
       const moving = Math.abs(box.x - spot.x) > 0.5 || Math.abs(box.y - spot.y) > 0.5;
       const delay = deal && spot.depth >= 300 ? order++ * 14 : 0;
@@ -171,18 +170,8 @@ export class SpiderScene extends Scene {
           });
         } else setFace(view, spot.up);
       } else box.setScale(1);
-      if (moving && animate) {
-        box.setDepth(1000 + spot.depth);
-        this.tweens.add({
-          targets: box,
-          x: spot.x,
-          y: spot.y,
-          duration: MOVE_MS,
-          delay,
-          ease: 'Cubic.easeOut',
-          onComplete: () => box.setDepth(spot.depth),
-        });
-      } else box.setPosition(spot.x, spot.y).setDepth(spot.depth);
+      if (moving && animate) slideTo(this, view, spot.x, spot.y, spot.depth, { duration: MOVE_MS, delay });
+      else placeAt(view, spot.x, spot.y, spot.depth);
     }
     this.banner?.setVisible(!state.result && state.stock.length > 0);
     const deals = Math.ceil(state.stock.length / SPIDER_COLUMNS);
@@ -271,7 +260,11 @@ export class SpiderScene extends Scene {
     if (!spot?.source) return;
     const { column, index } = spot.source;
     const cards = state.columns[column]!.cards.slice(index);
-    cards.forEach((card, i) => this.viewOf(card).box.setDepth(2000 + i));
+    cards.forEach((card, i) => {
+      const view = this.viewOf(card);
+      stopSlide(this, view);
+      view.box.setDepth(2000 + i);
+    });
     this.drag = {
       column,
       count: cards.length,
@@ -354,7 +347,9 @@ export class SpiderScene extends Scene {
   /** Winning: the finished runs fan out and tumble across the table. */
   private celebrate(): void {
     this.done.slice(0, PACK).forEach((card, i) => {
-      const box = this.viewOf(card).box;
+      const view = this.viewOf(card);
+      stopSlide(this, view);
+      const box = view.box;
       const delay = 300 + i * 22;
       box.setDepth(3000 + i);
       this.tweens.add({ targets: box, x: 40 + jitter(card) * (W - 80), duration: 900, delay, ease: 'Sine.easeOut' });

@@ -12,7 +12,7 @@ import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
-import { drawSlot, jitter, makeCard, setFace, type CardView } from '../cards/view';
+import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -193,22 +193,13 @@ export class FreeCellScene extends Scene {
     this.spots = layout(this.state);
     let order = 0;
     for (const [card, spot] of [...this.spots].sort((a, b) => a[1].depth - b[1].depth)) {
-      const box = this.views.get(card)!.box;
-      this.tweens.killTweensOf(box);
+      const view = this.views.get(card)!;
+      const box = view.box;
       box.setAngle(0).setScale(1);
       const moving = Math.abs(box.x - spot.x) > 0.5 || Math.abs(box.y - spot.y) > 0.5;
       if (moving && animate) {
-        box.setDepth(1000 + spot.depth);
-        this.tweens.add({
-          targets: box,
-          x: spot.x,
-          y: spot.y,
-          duration: MOVE_MS,
-          delay: deal ? order++ * 16 : 0,
-          ease: deal ? 'Back.easeOut' : 'Cubic.easeOut',
-          onComplete: () => box.setDepth(spot.depth),
-        });
-      } else box.setPosition(spot.x, spot.y).setDepth(spot.depth);
+        slideTo(this, view, spot.x, spot.y, spot.depth, { duration: MOVE_MS, delay: deal ? order++ * 16 : 0, ease: deal ? 'Back.easeOut' : 'Cubic.easeOut' });
+      } else placeAt(view, spot.x, spot.y, spot.depth);
     }
     if (this.state.result && animate) this.celebrate();
     else {
@@ -291,7 +282,11 @@ export class FreeCellScene extends Scene {
     if (!found?.spot.source) return;
     const source = found.spot.source;
     const cards = cardsAt(this.state, source);
-    cards.forEach((card, i) => this.views.get(card)!.box.setDepth(2000 + i));
+    cards.forEach((card, i) => {
+      const view = this.views.get(card)!;
+      stopSlide(this, view);
+      view.box.setDepth(2000 + i);
+    });
     this.drag = {
       from: source.split(':')[0]!,
       count: cards.length,
@@ -362,7 +357,9 @@ export class FreeCellScene extends Scene {
     for (let rank = 13; rank >= 1; rank--) {
       for (let suit = 0; suit < 4; suit++) {
         const card = suit * 13 + rank - 1;
-        const box = this.views.get(card)!.box;
+        const view = this.views.get(card)!;
+        stopSlide(this, view);
+        const box = view.box;
         const delay = 400 + i * 50;
         const drift = (jitter(card) - 0.5) * 560;
         box.setDepth(3000 + i);

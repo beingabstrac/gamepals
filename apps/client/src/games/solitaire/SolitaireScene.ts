@@ -3,7 +3,7 @@ import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
-import { drawSlot, jitter, makeCard, setFace, type CardView } from '../cards/view';
+import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 import { solitaireUiFor, type SolitaireUi } from './ui';
 
@@ -145,7 +145,6 @@ export class SolitaireScene extends Scene {
     for (const [card, spot] of [...this.spots].sort((a, b) => a[1].depth - b[1].depth)) {
       const view = this.views.get(card)!;
       const box = view.box;
-      this.tweens.killTweensOf(box);
       box.setAngle(0);
       const moving = Math.abs(box.x - spot.x) > 0.5 || Math.abs(box.y - spot.y) > 0.5;
       const delay = deal && spot.depth >= 300 ? order++ * 28 : 0;
@@ -164,20 +163,8 @@ export class SolitaireScene extends Scene {
           });
         } else setFace(view, spot.up);
       } else box.setScale(1);
-      if (moving && animate) {
-        box.setDepth(1000 + spot.depth);
-        this.tweens.add({
-          targets: box,
-          x: spot.x,
-          y: spot.y,
-          duration: MOVE_MS,
-          delay,
-          ease: 'Cubic.easeOut',
-          onComplete: () => box.setDepth(spot.depth),
-        });
-      } else {
-        box.setPosition(spot.x, spot.y).setDepth(spot.depth);
-      }
+      if (moving && animate) slideTo(this, view, spot.x, spot.y, spot.depth, { duration: MOVE_MS, delay });
+      else placeAt(view, spot.x, spot.y, spot.depth);
     }
     if (state.result && animate) this.celebrate();
     else if (this.ring?.visible) this.showKeyFocus();
@@ -259,7 +246,11 @@ export class SolitaireScene extends Scene {
     if (!found?.spot.source) return;
     const source = found.spot.source;
     const cards = this.state.cardsAt(source);
-    cards.forEach((card, i) => this.views.get(card)!.box.setDepth(2000 + i));
+    cards.forEach((card, i) => {
+      const view = this.views.get(card)!;
+      stopSlide(this, view);
+      view.box.setDepth(2000 + i);
+    });
     this.drag = {
       source,
       cards,
@@ -327,7 +318,9 @@ export class SolitaireScene extends Scene {
     for (let rank = 13; rank >= 1; rank--) {
       for (let s = 0; s < 4; s++) {
         const card = s * 13 + rank - 1;
-        const box = this.views.get(card)!.box;
+        const view = this.views.get(card)!;
+        stopSlide(this, view);
+        const box = view.box;
         const delay = 400 + i * 55;
         const drift = (jitter(card) - 0.5) * 520;
         box.setDepth(3000 + i);

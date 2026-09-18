@@ -11,6 +11,50 @@ export interface CardView {
   readonly front: GameObjects.Container;
   readonly back: GameObjects.Graphics;
   up: boolean;
+  /** Where this card is sliding to, and whether it is still on its way. */
+  tx?: number;
+  ty?: number;
+  sliding?: boolean;
+}
+
+/**
+ * Slides a card to a place, and leaves a slide to that same place alone. Without this a run of
+ * quick moves (a bot in test mode, or the Finish button) kills each slide before the next frame
+ * draws it, and the cards never leave the deck.
+ */
+export function slideTo(scene: Scene, view: CardView, x: number, y: number, depth: number, opts: { duration: number; delay?: number; ease?: string }): void {
+  if (view.sliding && view.tx === x && view.ty === y) return;
+  scene.tweens.killTweensOf(view.box);
+  view.tx = x;
+  view.ty = y;
+  view.sliding = true;
+  view.box.setDepth(1000 + depth);
+  scene.tweens.add({
+    targets: view.box,
+    x,
+    y,
+    duration: opts.duration,
+    delay: opts.delay ?? 0,
+    ease: opts.ease ?? 'Cubic.easeOut',
+    onComplete: () => {
+      view.sliding = false;
+      view.box.setDepth(depth);
+    },
+  });
+}
+
+/** Takes hold of a card: any slide stops, so a finger or a win cascade has it to itself. */
+export function stopSlide(scene: Scene, view: CardView): void {
+  scene.tweens.killTweensOf(view.box);
+  view.sliding = false;
+}
+
+/** Puts a card down where it belongs, with no slide. */
+export function placeAt(view: CardView, x: number, y: number, depth: number): void {
+  view.sliding = false;
+  view.tx = x;
+  view.ty = y;
+  view.box.setPosition(x, y).setDepth(depth);
 }
 
 /** A card drawn at the given size: white face, mint patterned back, a soft shadow under both. */
