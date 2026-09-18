@@ -51,7 +51,13 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - Backgammon point columns are about 25px wide on a 375px phone: widen the tap area (the whole triangle plus its checkers) even if the art stays the same.
   - Wide boards (Mancala, Dominoes, Backgammon, Yatzy) fill the width and leave the bottom third of a phone empty. Centring the board in that space was tried on 2026-09-18 and looked worse (a big gap under the title), so the real fix is a portrait layout per wide game, or landscape support. Not a CSS one-liner.
   - Yatzy dice are blank white before the first roll, which reads as broken; show faded pips or a "Tap Roll" hint.
-- [ ] **M6 Quality pass B:** the remaining games on a phone in portrait (Four in a Row, Tic-Tac-Toe, Reversi, 2048, Sudoku, Solitaire, Memory, Sliding Puzzle, Color Sort, Echo, Classic Snake, and the six real-time duels), same treatment
+- [ ] **M6 Quality pass B:** the remaining games on a phone in portrait, same treatment. **Reviewed on 2026-09-18** (Sumo, Penalty Kicks, Tug of War, Echo, Classic Snake, 2048, Sudoku, Solitaire): they render correctly on a phone. Fixes are waiting on CI, which is blocked on billing, so nothing is ticked yet.
+  - Done and green already: Sudoku's "Notes off" toggle now reads "Notes", with the pressed state carrying the meaning.
+  - Pushed but never run (the run hit the billing wall): `e2e/gallery.spec.ts`, which takes a picture of every game being played and uploads it as a CI artifact. It exists because **every Android screenshot the project ever saved showed an empty canvas**: Playwright cannot capture that WebView's canvas layer, so the old review method was blind. The same pictures become the store screenshots in M12.
+  - To fix: Tug of War shows "Ready..." and "Tap tap tap!" at the same time, which contradict each other.
+  - To fix: the "Your kick!" banner in Penalty Kicks sits on top of the ball.
+  - To fix: control hints on the board are inconsistent. Sumo says "Drag to move. Tap to shove." and Penalty Kicks says "Swipe toward the goal to shoot", but Classic Snake, 2048 and the puzzles say nothing. Pick one rule and apply it (this pairs with M8's "try it" hints).
+  - Technique worth keeping: when reviewing in a hidden browser pane the page gets no animation frames, so a screenshot catches pop-in animations half drawn. Taking three or four screenshots in a row forces enough frames to see the settled board.
 - [ ] **M7 Cards A:** Spider, FreeCell, Pyramid, TriPeaks (cheap to build, top of the charts)
 - [ ] **M8 Teach and rivalry:** 10-second "try it" hint on first play of each game; running score between the same players; rematch streaks
 
