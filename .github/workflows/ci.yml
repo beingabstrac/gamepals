@@ -27,6 +27,10 @@ on:
         description: 'Also test the real Android app on an emulator (the most expensive job: about 25 minutes)'
         type: boolean
         default: false
+      store:
+        description: 'Also take the store screenshots at every store size, as an artifact'
+        type: boolean
+        default: false
   schedule:
     # Weekly run on every screen type (Mondays 06:00 UTC).
     - cron: '0 6 * * 1'
@@ -111,6 +115,40 @@ jobs:
         with:
           name: gallery-${{ matrix.project }}
           path: apps/client/screenshots
+
+  # Store screenshots at the sizes Apple and Google ask for, from real play (docs/14-store-kit.md).
+  # On demand only: nothing on a push needs them, and they are the owner's upload, not a gate.
+  store:
+    needs: check
+    if: github.event_name == 'workflow_dispatch' && inputs.store
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: apps/client/dist
+      - uses: actions/cache@v4
+        id: browser-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-chromium-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm --filter @gamepals/client exec playwright install-deps chromium
+      - if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter @gamepals/client exec playwright install chromium
+      - run: pnpm e2e --project store-iphone --project store-ipad --project store-play-phone --project store-play-tablet --project store-feature --grep @store
+      - uses: actions/upload-artifact@v4
+        with:
+          name: store-screenshots
+          path: apps/client/store
 
   # The real Android app (Capacitor APK) on an Android 14 emulator: every game played to the end
   # inside the app's own WebView. The most expensive job we run (about 25 minutes of Actions time),

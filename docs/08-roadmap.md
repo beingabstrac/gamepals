@@ -72,7 +72,8 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M9 🔑 Native builds:** signed iOS (iPhone + iPad, also runs on Apple silicon Macs) and Android (phones, tablets, Chromebooks) builds from CI on `v*` tags; icons, splash, safe areas, orientation; TestFlight + Play internal track
 - [ ] **M10 🔑 Ads:** AdMob rewarded ads (extra hint, undo, retry), UMP consent, iOS tracking prompt, offline grace; no ads in the web/portal build
 - [ ] **M11 🔑 Pro:** Remove Ads + Pro through RevenueCat; restore purchases
-- [ ] **M12 Store kit:** privacy page (no mic/camera/location, ever), store screenshots made by Playwright, listing text, `app-ads.txt`
+- [ ] **M12a Store screenshots:** every store size made by Playwright from real play, plus the feature graphic, on demand in CI as an artifact
+- [ ] **M12b Store words:** privacy page (no mic/camera/location, ever) on the site, listing text for both stores, `app-ads.txt` once AdMob exists
 - [ ] **Launch 1.0:** Android, iOS, iPad, Mac (iPad app), web; about 35 games
 
 ## Stage 3: online
