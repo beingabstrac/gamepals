@@ -21,8 +21,8 @@ import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type 
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
-const W = 760;
-const H = 900;
+const W = 540;
+const H = 680;
 export const PYRAMID_SIZE = { width: W, height: H };
 
 const CW = 86;
@@ -31,7 +31,7 @@ const CH = 121;
 const STEP_X = CW * 0.58;
 const STEP_Y = CH * 0.42;
 const TOP_Y = 24 + CH / 2;
-const FOOT_Y = H - CH / 2 - 16;
+const FOOT_Y = H - CH / 2 - 54;
 const MOVE_MS = 200;
 const TABLE = 0xffe6f2;
 const SLOT = 0xf0a8ce;
@@ -77,6 +77,7 @@ export class PyramidScene extends Scene {
   private ring?: GameObjects.Graphics;
   private banner?: GameObjects.Text;
   private passText?: GameObjects.Text;
+  private heading?: GameObjects.Text;
 
   constructor(private readonly session: Session<PyramidMove>) {
     super('pyramid');
@@ -120,9 +121,10 @@ export class PyramidScene extends Scene {
     }
     drawSlot(g, DECK_X, FOOT_Y, CW, CH, SLOT);
     drawSlot(g, WASTE_X, FOOT_Y, CW, CH, SLOT);
-    sharpText(this, W / 2, FOOT_Y - CH / 2 - 18, 'Pairs that make 13', 24, '#c2568f').setDepth(4000);
-    this.passText = sharpText(this, DECK_X, FOOT_Y + CH / 2 + 16, '', 22, '#c2568f').setDepth(4000);
-    this.banner = sharpText(this, W / 2, FOOT_Y + CH / 2 + 16, '', 24, '#c2568f').setVisible(false).setDepth(4000);
+    this.heading = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, 'Pairs that make 13', 24, '#c2568f').setDepth(4000);
+    this.passText = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 22, '#c2568f').setDepth(4000);
+    // The banner takes the heading's place while it has something to say.
+    this.banner = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, '', 24, '#c2568f').setVisible(false).setDepth(4001);
   }
 
   private sync(animate: boolean, deal = false): void {
@@ -146,6 +148,7 @@ export class PyramidScene extends Scene {
     for (const [card, view] of this.views) if (!this.spots.has(card)) view.box.setVisible(false);
     this.passText?.setText(state.pass >= PYRAMID_PASSES ? 'Last pass' : `Pass ${state.pass} of ${PYRAMID_PASSES}`);
     this.banner?.setVisible(false);
+    this.heading?.setVisible(!state.result);
     if (state.result && animate) this.celebrate();
     else if (this.ring?.visible) this.showKeyFocus();
   }
@@ -275,6 +278,7 @@ export class PyramidScene extends Scene {
 
   private say(text: string): void {
     if (!this.banner) return;
+    this.heading?.setVisible(false);
     this.banner.setText(text).setVisible(true).setAlpha(1);
     this.tweens.add({ targets: this.banner, alpha: 0.3, duration: 220, yoyo: true, repeat: 2 });
   }

@@ -149,8 +149,8 @@ export class SolitaireScene extends Scene {
       const moving = Math.abs(box.x - spot.x) > 0.5 || Math.abs(box.y - spot.y) > 0.5;
       const delay = deal && spot.depth >= 300 ? order++ * 18 : 0;
       if (spot.up !== view.up) {
-        // Cards are dealt already turned the right way up; only a card uncovered in play turns over.
-        if (animate && !deal) flipTo(this, view, spot.up, moving ? MOVE_MS * 0.5 : 0);
+        // A card that travels arrives already turned; only a card that turns where it lies animates.
+        if (animate && !deal && !moving) flipTo(this, view, spot.up, 0);
         else setFace(view, spot.up);
       } else box.setScale(1);
       if (moving && animate) slideTo(this, view, spot.x, spot.y, spot.depth, { duration: MOVE_MS, delay });

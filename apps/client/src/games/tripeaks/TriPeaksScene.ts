@@ -19,15 +19,15 @@ import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
 const W = 820;
-const H = 860;
+const H = 560;
 export const TRIPEAKS_SIZE = { width: W, height: H };
 
 const CW = 78;
 const CH = 110;
-const STEP_Y = CH * 0.36;
+const STEP_Y = CH * 0.44;
 const TOP_Y = 22 + CH / 2;
 const BASE_GAP = (W - 10 * CW) / 11;
-const FOOT_Y = H - CH / 2 - 16;
+const FOOT_Y = H - CH / 2 - 56;
 const MOVE_MS = 190;
 const TABLE = 0xd8f0e2;
 const SLOT = 0x8ed0aa;
@@ -123,7 +123,7 @@ export class TriPeaksScene extends Scene {
     drawSlot(g, WASTE_X, FOOT_Y, CW, CH, SLOT);
     this.deckText = sharpText(this, DECK_X, FOOT_Y - CH / 2 - 16, '', 22, '#3f9e73').setDepth(4000);
     this.runText = sharpText(this, WASTE_X, FOOT_Y - CH / 2 - 16, '', 22, '#3f9e73').setDepth(4000);
-    this.banner = sharpText(this, W / 2, FOOT_Y + CH / 2 + 12, '', 24, '#3f9e73').setVisible(false).setDepth(4000);
+    this.banner = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 24, '#3f9e73').setVisible(false).setDepth(4000);
   }
 
   private sync(animate: boolean, deal = false): void {
@@ -134,14 +134,15 @@ export class TriPeaksScene extends Scene {
       const view = this.views.get(card)!;
       const box = view.box;
       box.setAngle(0);
-      if (spot.up !== view.up) {
-        // Cards are dealt already turned; a card uncovered in play turns over where it lies.
-        if (animate && !deal) flipTo(this, view, spot.up, MOVE_MS * 0.4);
-        else setFace(view, spot.up);
-      } else box.setScale(1);
       // Cards you can take right now stand a little proud of the rest.
       const y = spot.y - (spot.takeable ? LIFT : 0);
       const moving = Math.abs(box.x - spot.x) > 0.5 || Math.abs(box.y - y) > 0.5;
+      if (spot.up !== view.up) {
+        // A card that travels arrives already turned, the way a dealer turns one as they lay it
+        // down. Only a card that turns where it lies animates, so nothing can race the slide.
+        if (animate && !deal && !moving) flipTo(this, view, spot.up, 0);
+        else setFace(view, spot.up);
+      } else box.setScale(1);
       if (moving && animate) slideTo(this, view, spot.x, y, spot.depth, { duration: MOVE_MS, delay: deal ? order++ * 12 : 0 });
       else placeAt(view, spot.x, y, spot.depth);
       box.setVisible(true);
