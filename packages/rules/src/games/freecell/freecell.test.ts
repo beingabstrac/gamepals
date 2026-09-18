@@ -200,6 +200,10 @@ describe('freecell when the deal is stuck', () => {
     expect(state.legalMoves(0)).toEqual([FREECELL_UNDO]);
   });
 
+  it('sends nothing home from a board where only undo is left', () => {
+    expect(freeCellSafeMove(deadEnd([newFreeCell(4)]))).toBe(null);
+  });
+
   it('takes the last move back instead of giving up', () => {
     const bot = freecell.createBot('medium');
     const state = deadEnd([newFreeCell(4)]);

@@ -239,6 +239,7 @@ export function freeCellSafeMove(state: FreeCellState): FreeCellMove | null {
     return cards.length ? cards[cards.length - 1]! : null;
   };
   for (const play of state.legalMoves(0)) {
+    if (play === FREECELL_UNDO) continue; // Taking a move back is not a card going home.
     const [from, to] = play.slice(1).split('.') as [string, string];
     if (to[0] !== 'h' || play.split('.')[2]) continue;
     const card = topOf(from);
