@@ -72,7 +72,10 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M9 🔑 Native builds:** signed iOS (iPhone + iPad, also runs on Apple silicon Macs) and Android (phones, tablets, Chromebooks) builds from CI on `v*` tags; icons, splash, safe areas, orientation; TestFlight + Play internal track
 - [ ] **M10 🔑 Ads:** AdMob rewarded ads (extra hint, undo, retry), UMP consent, iOS tracking prompt, offline grace; no ads in the web/portal build
 - [ ] **M11 🔑 Pro:** Remove Ads + Pro through RevenueCat; restore purchases
-- [ ] **M12a Store screenshots:** every store size made by Playwright from real play, plus the feature graphic, on demand in CI as an artifact
+- [x] **M12a Store screenshots (2026-09-18):** five Playwright projects render at exactly the sizes the stores ask for, the shots come from real play, and CI hands them back as an artifact when you tick **store** on a manual run. Sizes, sources and gaps: [14](14-store-kit.md).
+  - **Checked both vendors' pages rather than trusting memory, which was as well.** Apple takes 1260 × 2736 (6.9" iPhone) and 2064 × 2752 (13" iPad) and scales those down for every smaller size. **Google Play insists on exactly 16:9 or 9:16**, which Apple's shapes are not (1260 × 2736 is about 1:2.17), so Play cannot reuse them and gets its own pair. Every shot is a JPEG, because both stores refuse an alpha channel and a JPEG cannot carry one.
+  - **The pictures found a real gap.** On a 13" iPad the board fills the width and leaves the bottom third of the screen empty; on a landscape tablet it sits in the middle third with empty felt either side. The e2e layout checks never caught it because nothing overflows: it is wasted space, not broken layout. Same root as the phone note under M6. **The tablet shots should not be uploaded until M12c.**
+- [ ] **M12c Room on big screens:** a layout that uses a tablet and a landscape screen instead of centring a phone-shaped board in them; wide boards in portrait too. Then retake the tablet store shots.
 - [ ] **M12b Store words:** privacy page (no mic/camera/location, ever) on the site, listing text for both stores, `app-ads.txt` once AdMob exists
 - [ ] **Launch 1.0:** Android, iOS, iPad, Mac (iPad app), web; about 35 games
 

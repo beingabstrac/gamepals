@@ -28,6 +28,9 @@ Locally: `pnpm e2e --project store-iphone --grep @store` (and the same for the o
 
 The gameplay shots are taken with bots in every seat, so the board is a real game rather than an empty one. That means the turn line reads as a bot's name rather than "You". If we want "You" in the picture, that is a change to how the shot is taken, not to the app.
 
+## Do not upload the tablet shots yet
+Taking these was the first time anyone looked at the app at tablet size, and it shows: on a 13" iPad the board fills the width and leaves the bottom third empty, and on a landscape tablet it sits in the middle third with empty space either side. The phone shots are fine. M12c is the layout work; retake the tablet shots after it.
+
 ## Still missing
 - **Caption overlays.** These are clean screenshots of the real app, which the stores accept. Most apps add a line of text over each. That is a design pass, not a test pass, and it is not done.
 - **`app-ads.txt`** waits on an AdMob publisher ID (M10). The file is a public promise about who may sell our inventory, so a placeholder is worse than nothing.
