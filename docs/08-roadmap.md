@@ -27,6 +27,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] Cloudflare account + API token, Firebase project (M13).
 - [ ] Play every new game on a real phone after each quality pass and note what feels wrong. Tests prove games don't crash and can finish; they can't judge feel.
 - [ ] Free trademark search for "Game Pals" ([09](09-naming.md)).
+- [ ] A support email address for the store listings (M12b). Not a personal address unless you want it public.
 - [ ] **GitHub Actions is blocked on billing** (hit on 2026-09-18). Settings → Billing & plans: raise the Actions spending limit, or wait for the monthly reset. Nothing ships until a run can start.
 
 ## Done so far
@@ -76,7 +77,10 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - **Checked both vendors' pages rather than trusting memory, which was as well.** Apple takes 1260 × 2736 (6.9" iPhone) and 2064 × 2752 (13" iPad) and scales those down for every smaller size. **Google Play insists on exactly 16:9 or 9:16**, which Apple's shapes are not (1260 × 2736 is about 1:2.17), so Play cannot reuse them and gets its own pair. Every shot is a JPEG, because both stores refuse an alpha channel and a JPEG cannot carry one.
   - **The pictures found a real gap.** On a 13" iPad the board fills the width and leaves the bottom third of the screen empty; on a landscape tablet it sits in the middle third with empty felt either side. The e2e layout checks never caught it because nothing overflows: it is wasted space, not broken layout. Same root as the phone note under M6. **The tablet shots should not be uploaded until M12c.**
 - [ ] **M12c Room on big screens:** a layout that uses a tablet and a landscape screen instead of centring a phone-shaped board in them; wide boards in portrait too. Then retake the tablet store shots.
-- [ ] **M12b Store words:** privacy page (no mic/camera/location, ever) on the site, listing text for both stores, `app-ads.txt` once AdMob exists
+- [x] **M12b Store words (2026-09-18):** the privacy page is live at [/privacy.html](https://beingabstrac.github.io/gamepals/privacy.html), linked from the foot of the shelf, and shipped inside the apps so it opens with no connection. The listing text for both stores is in [15](15-store-listing.md), every field counted against its limit.
+  - **Written from what the code does, not from what I assumed.** The app makes no network requests of its own, holds no advertising identifier, and asks for no permission; the fonts are bundled rather than fetched, which I checked because a font from a CDN would have been a third party to disclose. Everything it remembers (settings, which games you have opened, each table's last setup, the running score, the Classic Snake best) lives on the device.
+  - **Nothing claims what has not shipped.** The subtitle I first drafted said "Online Pals", which would have been a false store claim until M16; the footer line I first wrote said "No ads", which M10 would falsify. Both are gone. The listing doc opens with what to re-check when ads, Pro and online land.
+  - **Still on the owner:** a support address (both stores demand one, and I will not publish a personal address without being asked), and `app-ads.txt`, which needs an AdMob publisher ID. That file is a public statement about who may sell our ad inventory, so a placeholder is worse than nothing.
 - [ ] **Launch 1.0:** Android, iOS, iPad, Mac (iPad app), web; about 35 games
 
 ## Stage 3: online

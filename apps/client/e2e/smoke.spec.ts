@@ -27,6 +27,19 @@ test('home shows every playable game', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test('the privacy page is there, and says what the app stores', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/');
+  // Both stores want a privacy URL that works, and it ships inside the apps so it opens offline.
+  await page.getByRole('link', { name: 'Privacy' }).click();
+  await expect(page.getByRole('heading', { name: 'Privacy', level: 1 })).toBeVisible();
+  await expect(page.locator('body')).toContainText('never leaves it');
+  await expect(page.locator('body')).toContainText('microphone, camera, location');
+  await page.getByRole('link', { name: 'Back to the games' }).click();
+  await expect(page.getByRole('button', { name: /^Chess/ })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 for (const name of GAMES) {
   test(`${name}: starts from the table and survives play`, async ({ page }) => {
     const errors = watchErrors(page);

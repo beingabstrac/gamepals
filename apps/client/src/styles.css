@@ -897,6 +897,22 @@ h2,
   text-wrap: balance;
 }
 
+.shelf-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 28px 0 8px;
+  color: var(--soft);
+  font-size: 0.9rem;
+}
+
+.shelf-foot a {
+  color: var(--grape);
+  font-weight: 600;
+}
+
 .rivalry {
   margin: -4px 0 0;
   display: flex;

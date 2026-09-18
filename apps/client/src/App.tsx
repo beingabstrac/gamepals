@@ -127,6 +127,13 @@ function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
           </div>
         ))}
       </div>
+
+      <footer class="shelf-foot">
+        {/* Ships inside the apps too, so it opens with no connection. */}
+        <a href="./privacy.html">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <span>Works offline</span>
+      </footer>
     </div>
   );
 }
