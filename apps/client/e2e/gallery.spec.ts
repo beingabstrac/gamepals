@@ -25,7 +25,7 @@ for (const name of GAMES) {
     await page.getByRole('button', { name: 'Play', exact: true }).click();
     await expect(page.locator('.board canvas')).toBeVisible();
     // Long enough for the deal and a few moves, short enough that quick games are not over.
-    await page.waitForTimeout(2600);
+    await page.waitForTimeout(3500);
     await page.screenshot({ path: `screenshots/${testInfo.project.name}/${slug(name)}.png` });
   });
 }
