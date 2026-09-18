@@ -48,6 +48,8 @@ export class ClassicSnakeScene extends Scene {
   private snake!: GameObjects.Graphics;
   private fruit!: GameObjects.Container;
   private banner!: GameObjects.Text;
+  /** The "Swipe to steer" line, dropped once the player steers. */
+  private howTo?: GameObjects.Text;
 
   constructor(private readonly options: RealtimeSceneOptions) {
     super('classic-snake');
@@ -62,6 +64,8 @@ export class ClassicSnakeScene extends Scene {
     this.snake = this.add.graphics().setDepth(3);
     this.fruit = this.makeFruit();
     this.banner = sharpText(this, W / 2, H / 2, '', 60, COLORS.ink).setDepth(10);
+    // How to play, until the first steer: the other real-time games say it on the board too.
+    this.howTo = sharpText(this, W / 2, H - 26, 'Swipe to steer', 22, COLORS.ink).setDepth(10).setAlpha(0.6);
     const best = Number(storage.get(CLASSIC_SNAKE_BEST_KEY) ?? 0) || 0;
     this.shout(best > 0 ? `Best: ${best}` : 'Ready?', 900);
 
@@ -93,6 +97,10 @@ export class ClassicSnakeScene extends Scene {
   }
 
   private steer(heading: Heading): void {
+    if (this.howTo) {
+      this.tweens.add({ targets: this.howTo, alpha: 0, duration: 300 });
+      this.howTo = undefined;
+    }
     if (this.bot || this.ended) return;
     const before = this.state.queue.length;
     this.state = classicSnakeSteer(this.state, heading);

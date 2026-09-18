@@ -964,7 +964,6 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: classicSnake,
     tagline: "Eat, grow, don't crash",
-    hint: 'Swipe to steer the snake',
     howTo: {
       goal: 'Steer the snake to the fruit. Every fruit makes it one longer.',
       controls: 'Swipe up, down, left or right to steer. On a keyboard: the arrow keys or W A S D.',
