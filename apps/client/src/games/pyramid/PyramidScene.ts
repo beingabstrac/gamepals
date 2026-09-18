@@ -4,7 +4,6 @@ import {
   PYRAMID_DRAW,
   PYRAMID_PASSES,
   PYRAMID_REDEAL,
-  PYRAMID_ROWS,
   PYRAMID_UNDO,
   PYRAMID_WASTE,
   rankOf,
@@ -116,9 +115,7 @@ export class PyramidScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    for (let row = 0; row < PYRAMID_ROWS; row++) {
-      for (let place = 0; place <= row; place++) drawSlot(g, placeX(row, place), rowY(row), CW, CH, SLOT);
-    }
+    // No outlines under the pyramid: a card that has gone leaves clean felt, the way it should.
     drawSlot(g, DECK_X, FOOT_Y, CW, CH, SLOT);
     drawSlot(g, WASTE_X, FOOT_Y, CW, CH, SLOT);
     this.heading = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, 'Pairs that make 13', 24, '#c2568f').setDepth(4000);
