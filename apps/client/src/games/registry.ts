@@ -37,6 +37,10 @@ import {
   type FreeCellState,
   spider,
   type SpiderState,
+  pyramid,
+  type PyramidState,
+  tripeaks,
+  type TriPeaksState,
   slidingPuzzle,
   sudoku,
   SUDOKU_HINTS,
@@ -109,6 +113,10 @@ import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
 import { SPIDER_SIZE, spiderStatus, SpiderScene } from './spider/SpiderScene';
+import { PyramidControls } from './pyramid/PyramidControls';
+import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
+import { TriPeaksControls } from './tripeaks/TriPeaksControls';
+import { TRIPEAKS_SIZE, triPeaksStatus, TriPeaksScene } from './tripeaks/TriPeaksScene';
 import { SolitaireControls } from './solitaire/SolitaireControls';
 import { SOLITAIRE_SIZE, SolitaireScene } from './solitaire/SolitaireScene';
 import { SudokuControls } from './sudoku/SudokuControls';
@@ -781,6 +789,44 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) => ((after as SpiderState).done > (before as SpiderState).done ? 'go' : 'place'),
     Controls: SpiderControls,
     createScene: (session) => new SpiderScene(session),
+  }),
+  entry({
+    definition: pyramid,
+    tagline: 'Pairs that add up to 13',
+    howTo: {
+      goal: 'Clear the whole pyramid by taking away pairs of cards that add up to 13.',
+      controls: 'Tap a card, then tap the one that goes with it. A King goes on its own. Tap the deck to turn a card. On a keyboard: arrow keys pick a card, Enter takes it, D turns a card.',
+      win: 'You win when every card in the pyramid is gone.',
+      tip: 'Ace is 1, Jack is 11, Queen is 12, King is 13. A card is only free once both cards below it are gone, so take the pairs that open the most. You get three passes through the deck.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.bubblegum],
+    size: PYRAMID_SIZE,
+    color: DARK.bubblegum,
+    status: (state) => pyramidStatus(state as PyramidState),
+    resultText: (state) => `You cleared it! The whole pyramid in ${(state as PyramidState).moves} moves.`,
+    moveCue: (before, after) => ((after as PyramidState).left < (before as PyramidState).left ? 'go' : 'tap'),
+    Controls: PyramidControls,
+    createScene: (session) => new PyramidScene(session),
+  }),
+  entry({
+    definition: tripeaks,
+    tagline: 'One up or one down, over and over',
+    howTo: {
+      goal: 'Clear all three peaks by taking cards one rank above or below the card on the pile.',
+      controls: 'Tap any card that is one rank above or below the pile. Tap the deck to turn a card. On a keyboard: arrow keys pick a card, Enter takes it, D turns a card.',
+      win: 'You win when all 28 cards on the peaks are gone.',
+      tip: 'An Ace goes on a King or a two, so it is the card that keeps a run going. The cards you can take sit a little proud of the rest. Every card you take without touching the deck makes your run longer.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.mint],
+    size: TRIPEAKS_SIZE,
+    color: DARK.mint,
+    status: (state) => triPeaksStatus(state as TriPeaksState),
+    resultText: (state) => `You cleared the peaks! Best run of ${(state as TriPeaksState).best}.`,
+    moveCue: (before, after) => ((after as TriPeaksState).left < (before as TriPeaksState).left ? 'go' : 'tap'),
+    Controls: TriPeaksControls,
+    createScene: (session) => new TriPeaksScene(session),
   }),
   entry({
     definition: slidingPuzzle,

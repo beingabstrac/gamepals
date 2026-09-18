@@ -413,6 +413,71 @@ function SpiderArt() {
   );
 }
 
+function PyramidArt() {
+  const card = (x: number, y: number, label: string, red: boolean) => (
+    <g>
+      <rect x={x} y={y} width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text
+        x={x + 11}
+        y={y + 15}
+        font-family="Fredoka, sans-serif"
+        font-weight="600"
+        font-size="13"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill={red ? COLORS.tomato : INK}
+      >
+        {label}
+      </text>
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {card(39, 10, 'K', false)}
+      {card(27, 33, '9', true)}
+      {card(51, 33, '4', false)}
+      {card(15, 56, '7', false)}
+      {card(39, 56, '6', true)}
+      {card(63, 56, 'A', true)}
+      <circle cx="50" cy="88" r="10" fill={COLORS.bubblegum} />
+      <text x="50" y="88" font-family="Fredoka, sans-serif" font-weight="600" font-size="11" text-anchor="middle" dominant-baseline="central" fill="#fff">
+        13
+      </text>
+    </svg>
+  );
+}
+
+function TriPeaksArt() {
+  const peak = (x: number) => (
+    <g>
+      <rect x={x - 11} y="16" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x={x - 22} y="34" width="22" height="30" rx="6" fill={DARK.mint} />
+      <rect x={x} y="34" width="22" height="30" rx="6" fill={DARK.mint} />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {peak(22)}
+      {peak(50)}
+      {peak(78)}
+      <rect x="6" y="56" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="32" y="56" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="58" y="56" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <g font-family="Fredoka, sans-serif" font-weight="600" font-size="14" text-anchor="middle" dominant-baseline="central">
+        <text x="17" y="71" fill={INK}>
+          8
+        </text>
+        <text x="43" y="71" fill={COLORS.tomato}>
+          9
+        </text>
+        <text x="69" y="71" fill={INK}>
+          10
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -687,6 +752,8 @@ const ART: Record<string, () => JSX.Element> = {
   solitaire: SolitaireArt,
   freecell: FreeCellArt,
   spider: SpiderArt,
+  pyramid: PyramidArt,
+  tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
   'color-sort': ColorSortArt,

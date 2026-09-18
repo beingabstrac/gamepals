@@ -13,6 +13,7 @@ import { freecell } from './freecell';
 import { ludo } from './ludo';
 import { mancala } from './mancala';
 import { memory } from './memory';
+import { pyramid } from './pyramid';
 import { reversi } from './reversi';
 import { seaBattle } from './sea-battle';
 import { shutTheBox } from './shut-the-box';
@@ -20,6 +21,7 @@ import { slidingPuzzle } from './sliding-puzzle';
 import { snakesAndLadders } from './snakes-and-ladders';
 import { solitaire } from './solitaire';
 import { spider } from './spider';
+import { tripeaks } from './tripeaks';
 import { sudoku } from './sudoku';
 import { ticTacToe } from './tic-tac-toe';
 import { twenty48 } from './twenty48';
@@ -41,6 +43,8 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       solitaire,
       freecell,
       spider,
+      pyramid,
+      tripeaks,
       memory,
       slidingPuzzle,
       colorSort,

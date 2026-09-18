@@ -17,9 +17,9 @@ import { _android as android } from '@playwright/test';
 
 const PKG = 'app.gamepals.game';
 const SHOTS = new URL('../native-shots/', import.meta.url).pathname;
-const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Classic Snake', 'Checkers', 'Chess', 'Backgammon', 'Sea Battle', 'Reversi', 'Dots & Boxes', 'Mancala', 'Snakes & Ladders', 'Ultimate Tic-Tac-Toe', 'Yatzy', 'Shut the Box', 'Dominoes', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
+const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Classic Snake', 'Checkers', 'Chess', 'Backgammon', 'Sea Battle', 'Reversi', 'Dots & Boxes', 'Mancala', 'Snakes & Ladders', 'Ultimate Tic-Tac-Toe', 'Yatzy', 'Shut the Box', 'Dominoes', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 /** Solitaire deals can be unwinnable; a long stretch of play with no errors is its pass mark. */
-const MAY_NOT_FINISH = new Set(['Solitaire', 'FreeCell', 'Spider']);
+const MAY_NOT_FINISH = new Set(['Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks']);
 const slug = (name) => name.toLowerCase().replace(/\W+/g, '-');
 const firstLine = (error) => String(error?.message ?? error).split('\n')[0];
 /** The page or its connection went away (not a failed check inside a working page). */
