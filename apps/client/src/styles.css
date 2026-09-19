@@ -1202,3 +1202,171 @@ h2,
     min-height: 0;
   }
 }
+
+/* ==========================================================================
+   The games room (`?look=2`, docs/12 Part 4)
+   The flat look forbade gradients, and that is what made it read as soft and cheap next to a
+   Playrix-grade casual game. This look keeps the layout and changes what it is made of: walnut
+   and felt, brass edges, cream panels, and light that comes from somewhere.
+   ========================================================================== */
+
+:root[data-look='room'] {
+  --paper: #23160d;
+  --card: #f7ecd6;
+  --ink: #2a2118;
+  --soft: #7b6a55;
+  --line: #d8c29a;
+  --game: #d8a94a;
+  --felt: #1f5a43;
+  --felt-dark: #143b2c;
+  --wood: #6b3f22;
+  --wood-light: #8a5a33;
+  --wood-dark: #3b2312;
+  --brass: #d8a94a;
+  --brass-dark: #9c7526;
+  --soft-shadow: 0 14px 30px rgba(10, 6, 2, 0.45);
+}
+
+:root[data-look='room'] body {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 214, 150, 0.16), transparent 60%),
+    repeating-linear-gradient(94deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, #3a2314 0%, #23160d 55%, #180f08 100%);
+  background-attachment: fixed;
+  color: #f4e6cc;
+}
+
+/* The shelf sits on felt, with a brass edge and light falling from the top. */
+:root[data-look='room'] .screen {
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(255, 229, 176, 0.14), transparent 65%),
+    linear-gradient(180deg, var(--felt) 0%, var(--felt-dark) 100%);
+  border: 2px solid var(--brass-dark);
+  border-radius: 26px;
+  box-shadow: inset 0 2px 0 rgba(255, 233, 189, 0.22), inset 0 -30px 60px rgba(0, 0, 0, 0.35), var(--soft-shadow);
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+:root[data-look='room'] .hero {
+  padding: 4px 2px 10px;
+  border-bottom: 2px solid rgba(216, 169, 74, 0.35);
+}
+
+:root[data-look='room'] .logo {
+  color: #fdf3df;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), 0 0 22px rgba(255, 201, 120, 0.35);
+}
+
+:root[data-look='room'] .logo span {
+  color: var(--brass);
+}
+
+:root[data-look='room'] .tagline,
+:root[data-look='room'] .hint,
+:root[data-look='room'] .muted {
+  color: #cdb994;
+}
+
+/* A tile is a card lying on the felt: warm face, brass rim, a lip underneath and a highlight on top. */
+:root[data-look='room'] .tile {
+  background: linear-gradient(180deg, #fff8e8 0%, var(--card) 42%, #e8d8ba 100%);
+  border: 1.5px solid rgba(108, 70, 32, 0.55);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -8px 14px rgba(120, 82, 36, 0.18),
+    0 7px 0 rgba(58, 35, 16, 0.55),
+    0 16px 26px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-look='room'] .tile:not(.soon):active {
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -6px 12px rgba(120, 82, 36, 0.22),
+    0 2px 0 rgba(58, 35, 16, 0.55),
+    0 8px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* The art well is inset into the card, like a recess with felt at the bottom. */
+:root[data-look='room'] .tile .art {
+  border-radius: 18px;
+  background:
+    radial-gradient(70% 60% at 50% 18%, rgba(255, 255, 255, 0.5), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--c) 46%, white) 0%, color-mix(in srgb, var(--c) 78%, #4a3418) 100%);
+  border: 1.5px solid rgba(74, 46, 18, 0.35);
+  box-shadow: inset 0 3px 8px rgba(40, 24, 8, 0.35), inset 0 -2px 0 rgba(255, 255, 255, 0.35);
+}
+
+:root[data-look='room'] .tile .title {
+  color: #3a2b1c;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+:root[data-look='room'] .tile .small {
+  color: #7b6244;
+}
+
+/* Buttons are pressed brass and lacquer, with a lip that actually goes down. */
+:root[data-look='room'] .btn.primary {
+  background: linear-gradient(180deg, #f0c46b 0%, var(--brass) 45%, #b8862f 100%);
+  color: #3a2b10;
+  border: 1.5px solid #7d5c19;
+  text-shadow: 0 1px 0 rgba(255, 248, 226, 0.55);
+  box-shadow: inset 0 1.5px 0 rgba(255, 252, 240, 0.8), 0 6px 0 #6d4f14, 0 12px 20px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-look='room'] .btn.secondary,
+:root[data-look='room'] .quick,
+:root[data-look='room'] .round-btn {
+  background: linear-gradient(180deg, #fff8e8 0%, #efe0c2 100%);
+  color: #3a2b1c;
+  border: 1.5px solid rgba(108, 70, 32, 0.5);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.9), 0 5px 0 rgba(58, 35, 16, 0.5), 0 10px 18px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-look='room'] .quick.selected {
+  background: linear-gradient(180deg, #f0c46b 0%, var(--brass) 100%);
+  color: #3a2b10;
+}
+
+:root[data-look='room'] .btn:active:not(:disabled),
+:root[data-look='room'] .quick:active,
+:root[data-look='room'] .round-btn:active {
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.7), 0 1px 0 rgba(58, 35, 16, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* The turn line is a little brass plate. */
+:root[data-look='room'] .turn-pill {
+  background: linear-gradient(180deg, #fff8e8 0%, #ecdcbc 100%);
+  color: #3a2b1c;
+  border: 1.5px solid rgba(108, 70, 32, 0.45);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.9), 0 4px 0 rgba(58, 35, 16, 0.45), 0 10px 18px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-look='room'] .how-to,
+:root[data-look='room'] .result-sheet,
+:root[data-look='room'] .table-top {
+  background: linear-gradient(180deg, #fff8e8 0%, var(--card) 55%, #e8d8ba 100%);
+  border: 1.5px solid rgba(108, 70, 32, 0.5);
+  color: #2a2118;
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.85), 0 10px 0 rgba(58, 35, 16, 0.45), 0 20px 34px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-look='room'] .avatar {
+  background: linear-gradient(180deg, #fff8e8 0%, #efe0c2 100%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.9), 0 5px 0 rgba(58, 35, 16, 0.5);
+}
+
+:root[data-look='room'] .who {
+  color: #f4e6cc;
+}
+
+:root[data-look='room'] .level {
+  color: #cdb994;
+}
+
+/* The board itself sits in a recess with a shadow under it. */
+:root[data-look='room'] .board canvas {
+  border-radius: 20px;
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.5);
+}

@@ -8,6 +8,8 @@ import { SELFTEST } from './autoplay';
 import { NATIVE, storage } from './platform';
 import { cue } from './feedback';
 import './styles.css';
+// Sets data-look on <html> before the first render, so `?look=2` dresses the shell too.
+import './look';
 
 // Every button answers a tap; the first tap also unlocks Web Audio on iOS.
 document.addEventListener('pointerdown', (event) => {

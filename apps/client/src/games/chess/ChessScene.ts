@@ -19,20 +19,22 @@ import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
 import { arrow, isPress, onKeys } from '../keys';
+import { hex, ROOM, ROOM_COLORS } from '../../look';
 
 const W = 600;
 const H = 600;
-const PAD = 12;
+/** The games room look needs room for a wooden frame around the squares. */
+const PAD = ROOM ? 32 : 12;
 const CELL = (W - PAD * 2) / 8;
 export const CHESS_SIZE = { width: W, height: H };
 
-const LIGHT = 0xfff1dc;
-const DARK_SQUARE = 0xc9b6f5;
-const INK = toHex(COLORS.ink);
-const SUNNY = toHex(COLORS.sunny);
+const LIGHT = ROOM ? ROOM_COLORS.square : 0xfff1dc;
+const DARK_SQUARE = ROOM ? ROOM_COLORS.squareDark : 0xc9b6f5;
+const INK = ROOM ? ROOM_COLORS.ink : toHex(COLORS.ink);
+const SUNNY = ROOM ? ROOM_COLORS.glow : toHex(COLORS.sunny);
 const TOMATO = toHex(COLORS.tomato);
-const WHITE_PIECE = 0xfffdf8;
-const BLACK_PIECE = 0x3b3a4a;
+const WHITE_PIECE = ROOM ? ROOM_COLORS.white : 0xfffdf8;
+const BLACK_PIECE = ROOM ? ROOM_COLORS.black : 0x3b3a4a;
 const PROMOTIONS: readonly number[] = [QUEEN, ROOK, BISHOP, KNIGHT];
 const PROMO_LETTER: Record<number, string> = { [QUEEN]: 'q', [ROOK]: 'r', [BISHOP]: 'b', [KNIGHT]: 'n' };
 
@@ -45,7 +47,7 @@ type Point = { x: number; y: number };
 function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
   const white = colorOf(piece) === 0;
   const fill = white ? WHITE_PIECE : BLACK_PIECE;
-  const line = white ? INK : 0xf3efe6;
+  const line = white ? INK : (ROOM ? 0xc9a253 : 0xf3efe6);
   const s = scale;
   const path = (points: readonly (readonly [number, number])[]) => {
     g.beginPath();
@@ -171,6 +173,18 @@ export class ChessScene extends Scene {
     this.events.once('shutdown', unsubscribe);
     this.drawBoard();
     this.drawPieces();
+    if (ROOM) this.drawCoords();
+  }
+
+  /** Brass letters and numbers on the frame, the way a real board has them. */
+  private drawCoords(): void {
+    for (let i = 0; i < 8; i++) {
+      const file = this.flipped ? 7 - i : i;
+      const rank = this.flipped ? i : 7 - i;
+      const at = PAD + (i + 0.5) * CELL;
+      sharpText(this, at, H - PAD / 2 - 2, 'abcdefgh'[file]!, 15, hex(ROOM_COLORS.brass)).setDepth(1).setAlpha(0.85);
+      sharpText(this, PAD / 2 + 1, at, String(rank + 1), 15, hex(ROOM_COLORS.brass)).setDepth(1).setAlpha(0.85);
+    }
   }
 
   private center(square: number): Point {
@@ -205,15 +219,34 @@ export class ChessScene extends Scene {
 
   private drawBoard(): void {
     const g = this.boardG.clear();
-    g.fillStyle(0xe9e4f5, 1);
-    g.fillRoundedRect(0, 6, W, H - 12, 22);
-    g.fillStyle(0xffffff, 1);
-    g.fillRoundedRect(0, 0, W, H - 12, 22);
+    if (ROOM) this.drawRoom(g);
+    else {
+      g.fillStyle(0xe9e4f5, 1);
+      g.fillRoundedRect(0, 6, W, H - 12, 22);
+      g.fillStyle(0xffffff, 1);
+      g.fillRoundedRect(0, 0, W, H - 12, 22);
+    }
     for (let square = 0; square < 64; square++) {
       const { x, y } = this.center(square);
       const dark = (((square >> 3) + (square & 7)) & 1) === 0;
       g.fillStyle(dark ? DARK_SQUARE : LIGHT, 1);
       g.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL);
+      if (ROOM) {
+        // Light falls from the top, so every square is a shade brighter at its top edge.
+        g.fillStyle(0xffffff, dark ? 0.07 : 0.16);
+        g.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL * 0.38);
+        g.fillStyle(0x000000, 0.08);
+        g.fillRect(x - CELL / 2, y + CELL * 0.26, CELL, CELL * 0.24);
+      }
+    }
+    if (ROOM) {
+      // The board is sunk into its frame, so the frame casts a shadow onto the top two rows.
+      g.fillStyle(0x000000, 0.16);
+      g.fillRect(PAD, PAD, W - PAD * 2, 10);
+      g.fillStyle(0x000000, 0.1);
+      g.fillRect(PAD, PAD, 10, H - PAD * 2);
+      g.lineStyle(2, ROOM_COLORS.brassDark, 0.9);
+      g.strokeRect(PAD - 1, PAD - 1, W - PAD * 2 + 2, H - PAD * 2 + 2);
     }
     // The last move, so you can see what just happened.
     const last = this.state.last;
@@ -226,12 +259,32 @@ export class ChessScene extends Scene {
     }
   }
 
+  /** Felt under a walnut frame with a brass rail, lit from the top of the screen. */
+  private drawRoom(g: GameObjects.Graphics): void {
+    g.fillGradientStyle(ROOM_COLORS.felt, ROOM_COLORS.felt, ROOM_COLORS.feltDark, ROOM_COLORS.feltDark, 1);
+    g.fillRoundedRect(0, 0, W, H, 20);
+    g.fillGradientStyle(ROOM_COLORS.woodLight, ROOM_COLORS.woodLight, ROOM_COLORS.woodDark, ROOM_COLORS.woodDark, 1);
+    g.fillRoundedRect(8, 8, W - 16, H - 16, 16);
+    // A lighter strip along the top of the frame, the way a waxed edge catches the light.
+    g.fillStyle(0xffffff, 0.1);
+    g.fillRoundedRect(8, 8, W - 16, 14, 8);
+    g.fillStyle(ROOM_COLORS.wood, 1);
+    g.fillRoundedRect(14, 14, W - 28, H - 28, 12);
+    g.lineStyle(2.5, ROOM_COLORS.brass, 0.8);
+    g.strokeRoundedRect(17, 17, W - 34, H - 34, 10);
+  }
+
   /** All pieces, leaving out `skip` while its piece is sliding. */
   private drawPieces(skip = -1): void {
     const g = this.piecesG.clear();
     this.state.board.forEach((piece, square) => {
       if (piece === 0 || square === skip) return;
       const { x, y } = this.center(square);
+      if (ROOM) {
+        // A piece standing on a board throws a shadow, and that is most of what makes it look solid.
+        g.fillStyle(0x000000, 0.28);
+        g.fillEllipse(x + 3, y + CELL * 0.3, CELL * 0.56, CELL * 0.18);
+      }
       g.save();
       g.translateCanvas(x, y);
       drawPiece(g, piece, CELL / 57);
