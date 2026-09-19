@@ -26,19 +26,21 @@ export const RUMMY_SIZE = { width: W, height: H };
 
 const CW = 78;
 const CH = 110;
-const MELD_CW = 46;
-const MELD_CH = 66;
+const MELD_CW = 54;
+const MELD_CH = 76;
 const TABLE = 0xdff0f6;
 const SLOT = 0x9cc8d9;
 const MOVE_MS = 220;
 const HAND_Y = H - CH / 2 - 74;
-const PILE_Y = 250;
-const DECK_X = W / 2 - CW * 0.85;
-const PILE_X = W / 2 + CW * 0.85;
-/** Melds laid on the table live in this band, in rows. */
-const MELDS_TOP = 400;
-const MELD_ROW = 84;
-const BUTTON_Y = 640;
+const PILE_Y = 300;
+/** The deck and the pile go down the left, so the melds get the width they need. */
+const DECK_X = 92;
+const PILE_X = 196;
+/** Melds laid on the table fill the space beside the piles, in rows. */
+const MELDS_LEFT = 268;
+const MELDS_TOP = 296;
+const MELD_ROW = 80;
+const BUTTON_Y = 620;
 export const RUMMY_COLORS = [COLORS.sky, COLORS.tomato, COLORS.mint, COLORS.sunny];
 export const RUMMY_NAMES = ['Blue', 'Red', 'Green', 'Yellow'];
 
@@ -133,13 +135,13 @@ export class RummyScene extends Scene {
     let used = 0;
     state.table.forEach((meld) => {
       const width = meld.cards.length * (MELD_CW * 0.8) + 26;
-      if (used + width > W - 40) {
+      if (used + width > W - MELDS_LEFT - 24) {
         row++;
         used = 0;
       }
       meld.cards.forEach((card, i) => {
         spots.set(card, {
-          x: 34 + used + i * MELD_CW * 0.8,
+          x: MELDS_LEFT + used + i * MELD_CW * 0.8,
           y: MELDS_TOP + row * MELD_ROW,
           depth: 200 + i,
           up: true,
@@ -214,7 +216,8 @@ export class RummyScene extends Scene {
     const legal = state.legalMoves(mine);
     const melds = meldsIn(hand).filter((meld) => legal.includes(rummyMeld(meld)));
     // The longest melds first, and at most three buttons, so the row never runs off the table.
-    const best = melds.sort((a, b) => b.length - a.length).slice(0, 3);
+    // Two buttons at most: a third would sit on the melds already on the table.
+    const best = melds.sort((a, b) => b.length - a.length).slice(0, 2);
     return best.map((meld, i) => {
       const label = `Put down ${meld.map(cardLabel).join(' ')}`;
       const width = Math.min(360, 60 + label.length * 10);
@@ -316,7 +319,7 @@ export class RummyScene extends Scene {
       return false;
     }
     // Melds answer to the number keys, in the order the buttons are stacked.
-    if (this.buttons.length && key >= '1' && key <= '3') {
+    if (this.buttons.length && key >= '1' && key <= '2') {
       const button = this.buttons[Number(key) - 1];
       if (button) {
         this.play(button.move);
