@@ -52,6 +52,24 @@ async function connect() {
   await page.locator('.tile').first().waitFor({ timeout: 60_000 });
 }
 
+/**
+ * The same connect, with the relaunch the rest of this file already does for a lost page. The
+ * WebView is occasionally gone before the shelf has even drawn, and the first connect used to be
+ * the one place with no second try, so an emulator hiccup threw the whole run away.
+ */
+async function connectOrRelaunch(times = 3) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await connect();
+      if (attempt > 1) relaunches.push(`start (${attempt} tries)`);
+      return;
+    } catch (error) {
+      if (attempt >= times) throw error;
+      console.log(`↻ the app's page was lost before the shelf drew (${firstLine(error)}); relaunching`);
+    }
+  }
+}
+
 /** Back to the game shelf using the app's own buttons, from wherever we are. */
 async function goHome() {
   for (const label of ['Back to the table', 'Back to games']) {
@@ -68,7 +86,7 @@ async function goHome() {
 // themselves see e2e/gallery.spec.ts, where the browser does capture the canvas.
 const shot = (path) => page.screenshot({ path });
 
-await connect();
+await connectOrRelaunch();
 console.log(`App loaded at ${origin}`);
 
 // The home screen fits the phone: nothing scrolls sideways.
@@ -101,7 +119,7 @@ for (const name of GAMES) {
         relaunches.push(name);
         console.log(`↻ ${name}: the app's page was lost (${firstLine(error)}); relaunching the app and trying again`);
         try {
-          await connect();
+          await connectOrRelaunch(2);
           continue;
         } catch (again) {
           failures.push(`${name}: could not relaunch the app (${firstLine(again)})`);
