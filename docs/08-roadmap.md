@@ -107,7 +107,9 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [x] **M20c Cards B, the odd one out (2026-09-19):** Old Maid, 38 games, and M20 is done. One queen comes out of the deck so the third cannot pair, all 51 cards go round, pairs are thrown away before anybody plays, and a turn is one thing: take a card from the fan the player on your left is holding out. Bots are handed the size of the fan and nothing else, so there is no card they could be aiming for.
   - **A key already on its way could uncover the next person's hand.** The android-tablet run printed what the test saw: the turn had passed and the next hand was showing all seven of its cards. Phaser reads input on its own frame, so the key pressed a moment earlier arrived just after the cover went up and lifted it at once, and a person mashing keys as their turn ends would do the same to the person beside them. A covered hand now swallows input without acting on it and ignores anything arriving within 300ms of the cover. That is a fix to the game, not to the test: the test still presses quickly on purpose.
   - Worth keeping in mind for the rest of the dealt-hand games: this is the third time a flake in these tests turned out to be worth fixing in the app rather than in the test.
-- [ ] **M21 Cards C:** Hearts, Spades, Callbreak
+- [ ] **M21a Cards C, tricks:** Hearts, and the trick-taking core the other two need: following suit, who wins a trick, who leads the next
+- [ ] **M21b Cards C, bidding:** Spades, with partners and nil
+- [ ] **M21c Cards C, the subcontinent's game:** Callbreak
 - [ ] **M22 Cards D:** Rummy, Gin Rummy
 - [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi

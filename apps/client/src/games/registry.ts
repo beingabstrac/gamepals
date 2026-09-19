@@ -47,6 +47,8 @@ import {
   type WarState,
   oldMaid,
   type MaidState,
+  hearts,
+  type HeartsState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -125,6 +127,7 @@ import { EIGHTS_COLORS, EIGHTS_NAMES, EIGHTS_SIZE, eightsStatus, EightsScene } f
 import { FISH_COLORS, FISH_NAMES, FISH_SIZE, fishStatus, FishScene } from './go-fish/FishScene';
 import { WAR_COLORS, WAR_NAMES, WAR_SIZE, warResult, warStatus, WarScene } from './war/WarScene';
 import { MAID_COLORS, MAID_NAMES, MAID_SIZE, maidResult, maidStatus, MaidScene } from './old-maid/MaidScene';
+import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } from './hearts/HeartsScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -918,6 +921,35 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => maidResult(state as MaidState, MAID_NAMES),
     moveCue: (before, after) => ((after as MaidState).pairs.some((n, i) => n > ((before as MaidState).pairs[i] ?? 0)) ? 'go' : 'tap'),
     createScene: (session) => new MaidScene(session),
+  }),
+  entry({
+    definition: hearts,
+    tagline: 'Points are bad. Dodge the queen',
+    levels: [
+      { id: 'hand', label: 'One hand' },
+      { id: '50', label: 'To 50' },
+      { id: '100', label: 'To 100' },
+    ],
+    howTo: {
+      goal: 'Take as few points as you can. Every heart is one point and the queen of spades is thirteen.',
+      controls: 'First pick three cards to pass on, then tap the card you want to play. Cards you cannot play sit back and say why. On a keyboard: arrows pick a card, Enter plays it.',
+      win: 'The lowest score wins when somebody reaches the target.',
+      draw: 'Level scores share the win.',
+      tip: 'You must follow the suit that was led. Hearts cannot be led until one has been thrown away on another suit. Take all 26 points yourself and everybody else takes them instead.',
+    },
+    sideNames: () => HEARTS_NAMES,
+    sideColors: () => HEARTS_COLORS,
+    size: HEARTS_SIZE,
+    color: DARK.tomato,
+    status: (state) => heartsStatus(state as HeartsState),
+    resultText: (state) => {
+      const s2 = state as HeartsState;
+      const low = Math.min(...s2.scores);
+      return `${HEARTS_NAMES[s2.scores.indexOf(low)]} wins with ${low}.`;
+    },
+    moveCue: (before, after) =>
+      (after as HeartsState).trick.length === 0 && (before as HeartsState).trick.length > 0 ? 'go' : 'place',
+    createScene: (session) => new HeartsScene(session),
   }),
   entry({
     definition: slidingPuzzle,

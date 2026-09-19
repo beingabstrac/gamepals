@@ -551,6 +551,36 @@ function OldMaidArt() {
   );
 }
 
+function HeartsArt() {
+  const heart = (x: number, y: number, size: number, fill: string) => (
+    <path
+      d={`M${x} ${y} c-${size} -${size * 0.9} -${size * 1.5} -${size * 1.6} -${size * 1.5} -${size * 2.4} a${size * 0.85} ${size * 0.85} 0 0 1 ${size * 1.5} -${size * 0.55} a${size * 0.85} ${size * 0.85} 0 0 1 ${size * 1.5} ${size * 0.55} c0 ${size * 0.8} -${size * 0.5} ${size * 1.5} -${size * 1.5} ${size * 2.4} z`}
+      fill={fill}
+    />
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="14" y="22" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-9 31 45)" />
+      {heart(31, 52, 9, COLORS.tomato)}
+      <rect x="52" y="32" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(9 69 55)" />
+      <text
+        x="69"
+        y="55"
+        font-family="Fredoka, sans-serif"
+        font-weight="600"
+        font-size="22"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill={INK}
+        transform="rotate(9 69 55)"
+      >
+        Q
+      </text>
+      <path d="M69 68 l5 6 -5 6 -5 -6 z" fill={INK} transform="rotate(9 69 55)" />
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -830,6 +860,7 @@ const ART: Record<string, () => JSX.Element> = {
   'go-fish': GoFishArt,
   war: WarArt,
   'old-maid': OldMaidArt,
+  hearts: HeartsArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

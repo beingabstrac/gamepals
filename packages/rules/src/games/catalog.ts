@@ -8,6 +8,7 @@ import { chess } from './chess';
 import { colorSort } from './color-sort';
 import { dominoes } from './dominoes';
 import { goFish } from './go-fish';
+import { hearts } from './hearts';
 import { dotsAndBoxes } from './dots-and-boxes';
 import { echo } from './echo';
 import { fourInARow } from './four-in-a-row';
@@ -53,6 +54,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       goFish,
       war,
       oldMaid,
+      hearts,
       memory,
       slidingPuzzle,
       colorSort,
