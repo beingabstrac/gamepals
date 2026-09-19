@@ -27,14 +27,14 @@ export const CALLBREAK_SIZE = { width: W, height: H };
 
 const CW = 82;
 const CH = 116;
-const TABLE = 0xe6f4ec;
+const TABLE = 0xfdf1dc;
 const MOVE_MS = 240;
 const HAND_Y = H - CH / 2 - 40;
 const MIDDLE = { x: W / 2, y: 400 };
 /** The banner sits in the empty band between the trick and the hand, clear of the far piles. */
 const BANNER_Y = 600;
 /** Seat labels: the two at the sides sit above their pile, which is what the table has room for. */
-const SIDE_LABEL = { x: 76, y: 400 };
+const SIDE_LABEL = { x: 115, y: 288 };
 
 const TRICK_AT = [
   { x: 0, y: 110 },

@@ -39,7 +39,7 @@ const LIFT = 16;
 /** The banner goes in the empty band between the trick and the hand, not over the far pile. */
 const BANNER_Y = 600;
 /** Seat labels: the two at the sides sit above their pile, which is what the table has room for. */
-const SIDE_LABEL = { x: 76, y: 400 };
+const SIDE_LABEL = { x: 115, y: 288 };
 
 export const HEARTS_COLORS = [COLORS.tomato, COLORS.mint, COLORS.sunny, COLORS.sky];
 export const HEARTS_NAMES = ['Red', 'Green', 'Yellow', 'Blue'];
