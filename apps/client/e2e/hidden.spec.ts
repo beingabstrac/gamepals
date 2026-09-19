@@ -20,9 +20,15 @@ test('two people on one phone never see each other\'s cards', async ({ page }) =
   await page.goto('/?inspect=1');
   await page.getByRole('button', { name: /^Crazy Eights/ }).click();
 
-  // Sit a person in the second chair as well, so the phone has to pass.
+  // Exactly two people and no bots: then nothing moves except the keys this test presses,
+  // which is the only way to be sure about what raised or lifted the cover.
   await page.locator('.seat').nth(1).click();
   await page.getByRole('button', { name: /Person/ }).click();
+  for (const chair of [3, 2]) {
+    await page.locator('.seat').nth(chair).click();
+    await page.getByRole('button', { name: /Nobody/ }).click();
+  }
+  await expect(page.locator('.seat')).toHaveCount(2);
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect(page.locator('.board canvas')).toBeVisible();
 
@@ -43,7 +49,8 @@ test('two people on one phone never see each other\'s cards', async ({ page }) =
   }
   expect((await handCheck(page))?.shown, 'the turn never reached the other person').not.toBe(first!.shown);
   const second = await handCheck(page);
-  expect(second!.covered, 'the hand is covered when the phone changes hands').toBe(true);
-  expect(second!.faceUp, 'no card of the new hand is face up behind the cover').toBe(0);
+  const saw = `first ${JSON.stringify(first)}, then ${JSON.stringify(second)}`;
+  expect(second!.covered, `the hand is covered when the phone changes hands: ${saw}`).toBe(true);
+  expect(second!.faceUp, `no card of the new hand is face up behind the cover: ${saw}`).toBe(0);
   expect(errors).toEqual([]);
 });
