@@ -22,6 +22,7 @@ const GAMES = [
   'War',
   'Old Maid',
   'Hearts',
+  'Spades',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

@@ -49,6 +49,8 @@ import {
   type MaidState,
   hearts,
   type HeartsState,
+  spades,
+  type SpadesState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -128,6 +130,7 @@ import { FISH_COLORS, FISH_NAMES, FISH_SIZE, fishStatus, FishScene } from './go-
 import { WAR_COLORS, WAR_NAMES, WAR_SIZE, warResult, warStatus, WarScene } from './war/WarScene';
 import { MAID_COLORS, MAID_NAMES, MAID_SIZE, maidResult, maidStatus, MaidScene } from './old-maid/MaidScene';
 import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } from './hearts/HeartsScene';
+import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, SpadesScene } from './spades/SpadesScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -950,6 +953,31 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) =>
       (after as HeartsState).trick.length === 0 && (before as HeartsState).trick.length > 0 ? 'go' : 'place',
     createScene: (session) => new HeartsScene(session),
+  }),
+  entry({
+    definition: spades,
+    tagline: 'Say what you will take, then take it',
+    levels: [
+      { id: 'hand', label: 'One hand' },
+      { id: '200', label: 'To 200' },
+      { id: '500', label: 'To 500' },
+    ],
+    howTo: {
+      goal: 'With your partner across the table, take the number of tricks the two of you bid.',
+      controls: 'First say how many tricks you will take, then tap a card to play it. Cards you cannot play sit back and say why. On a keyboard: arrows pick a bid or a card, Enter chooses.',
+      win: 'Making your bid scores ten a trick, with one more for each extra. The first side to the target wins.',
+      draw: 'Level scores share the win.',
+      tip: 'Spades are always trump and cannot be led until one has trumped a trick. Nil says you will take nothing at all: worth a hundred if you manage it and a hundred off if you do not. Every ten extra tricks cost you a hundred.',
+    },
+    sideNames: () => SPADES_NAMES,
+    sideColors: () => SPADES_COLORS,
+    size: SPADES_SIZE,
+    color: DARK.grape,
+    status: (state) => spadesStatus(state as SpadesState),
+    resultText: (state) => spadesResult(state as SpadesState),
+    moveCue: (before, after) =>
+      (after as SpadesState).trick.length === 0 && (before as SpadesState).trick.length > 0 ? 'go' : 'place',
+    createScene: (session) => new SpadesScene(session),
   }),
   entry({
     definition: slidingPuzzle,
