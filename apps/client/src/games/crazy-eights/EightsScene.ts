@@ -18,7 +18,7 @@ import { drawSlot, makeCard, placeAt, setFace, slideTo, type CardView } from '..
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
 const W = 760;
-const H = 1000;
+const H = 780;
 export const EIGHTS_SIZE = { width: W, height: H };
 
 const CW = 84;
@@ -26,8 +26,8 @@ const CH = 118;
 const TABLE = 0xd6ecff;
 const SLOT = 0x8fc4ee;
 const MOVE_MS = 220;
-const HAND_Y = H - CH / 2 - 40;
-const PILE_Y = H / 2 - 20;
+const HAND_Y = H - CH / 2 - 34;
+const PILE_Y = 360;
 const DECK_X = W / 2 - CW * 0.85;
 const PILE_X = W / 2 + CW * 0.85;
 const LIFT = 14;
@@ -340,6 +340,20 @@ export class EightsScene extends Scene {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Test mode only: whose hand is on screen, whether it is covered, and how many of that hand's
+   * cards are face up. The promise is that nobody sees a hand that is not theirs, and a canvas
+   * cannot be asked that from the outside.
+   */
+  handCheck(): { shown: number; covered: boolean; faceUp: number } {
+    const mine = this.state.hands[this.shown] ?? [];
+    return {
+      shown: this.shown,
+      covered: this.covered,
+      faceUp: mine.filter((card) => this.views.get(card)?.up).length,
+    };
   }
 
   private showKeyFocus(): void {

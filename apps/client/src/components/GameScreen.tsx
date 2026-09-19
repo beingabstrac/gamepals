@@ -1,6 +1,6 @@
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS } from '../autoplay';
+import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS, INSPECT } from '../autoplay';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
@@ -72,11 +72,11 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       scene: [entry.createScene(session)],
     });
     // Test mode only: lets e2e ask a scene whether what it has drawn still matches the rules.
-    if (AUTOPLAY) (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame = game;
+    if (AUTOPLAY || INSPECT) (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame = game;
     return () => {
       unsubscribe();
       session.dispose();
-      if (AUTOPLAY) delete (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame;
+      if (AUTOPLAY || INSPECT) delete (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame;
       game.destroy(true);
     };
   }, [session, entry, seats, rivalryKey]);

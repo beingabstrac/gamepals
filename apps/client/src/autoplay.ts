@@ -10,6 +10,11 @@ const params = new URLSearchParams(typeof location === 'undefined' ? '' : locati
 /** Native test builds (`VITE_SELFTEST=1`) play every game by themselves; see selftest.ts. */
 export const SELFTEST = import.meta.env.VITE_SELFTEST === '1';
 export const AUTOPLAY = params.has('autoplay') || SELFTEST;
+/**
+ * `?inspect` opens the same test seam as autoplay without putting bots in the seats, so a test
+ * can set a table up by hand and then ask a scene what it is showing. Players never see it.
+ */
+export const INSPECT = params.has('inspect');
 export const SPEED = AUTOPLAY ? Math.max(1, Math.min(10, Number(params.get('autoplay')) || 6)) : 1;
 /** Bot pause between turns in test mode. */
 export const AUTOPLAY_BOT_DELAY_MS = 40;
