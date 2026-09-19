@@ -611,6 +611,36 @@ function SpadesArt() {
   );
 }
 
+function CallbreakArt() {
+  const spade = (x: number, y: number, size: number, fill: string) => (
+    <path
+      d={`M${x} ${y - size * 2.2} c${size} ${size} ${size * 1.6} ${size * 1.5} ${size * 1.6} ${size * 2.3} a${size * 0.9} ${size * 0.9} 0 0 1 -${size * 1.6} ${size * 0.6} a${size * 0.9} ${size * 0.9} 0 0 1 -${size * 1.6} -${size * 0.6} c0 -${size * 0.8} ${size * 0.6} -${size * 1.3} ${size * 1.6} -${size * 2.3} z M${x - size * 0.5} ${y + size * 0.9} h${size} l-${size * 0.5} ${size * 0.9} z`}
+      fill={fill}
+    />
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="16" y="18" width="34" height="46" rx="9" fill="#fff" stroke="#DCE9E1" stroke-width="2.5" transform="rotate(-12 33 41)" />
+      {spade(33, 40, 7, DARK.mint)}
+      <rect x="42" y="14" width="34" height="46" rx="9" fill="#fff" stroke="#DCE9E1" stroke-width="2.5" transform="rotate(8 59 37)" />
+      {spade(59, 36, 7, INK)}
+      <circle cx="62" cy="72" r="19" fill={COLORS.mint} />
+      <text
+        x="62"
+        y="73"
+        font-family="Fredoka, sans-serif"
+        font-weight="600"
+        font-size="22"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill="#fff"
+      >
+        5
+      </text>
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -892,6 +922,7 @@ const ART: Record<string, () => JSX.Element> = {
   'old-maid': OldMaidArt,
   hearts: HeartsArt,
   spades: SpadesArt,
+  callbreak: CallbreakArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

@@ -51,6 +51,8 @@ import {
   type HeartsState,
   spades,
   type SpadesState,
+  callbreak,
+  type CallbreakState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -131,6 +133,7 @@ import { WAR_COLORS, WAR_NAMES, WAR_SIZE, warResult, warStatus, WarScene } from 
 import { MAID_COLORS, MAID_NAMES, MAID_SIZE, maidResult, maidStatus, MaidScene } from './old-maid/MaidScene';
 import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } from './hearts/HeartsScene';
 import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, SpadesScene } from './spades/SpadesScene';
+import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakResult, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -978,6 +981,30 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) =>
       (after as SpadesState).trick.length === 0 && (before as SpadesState).trick.length > 0 ? 'go' : 'place',
     createScene: (session) => new SpadesScene(session),
+  }),
+  entry({
+    definition: callbreak,
+    tagline: 'Call your tricks, then go and win them',
+    levels: [
+      { id: 'one', label: 'One round' },
+      { id: 'five', label: 'Five rounds' },
+    ],
+    howTo: {
+      goal: 'Say how many tricks you will take, then take at least that many. Spades are always trump.',
+      controls: 'First say how many tricks you will take, then tap a card to play it. Cards you cannot play sit back and say why. On a keyboard: arrows pick a call or a card, Enter chooses.',
+      win: 'Making your call scores it, plus a tenth for each extra trick. The highest score after the last round wins.',
+      draw: 'Level scores share the win.',
+      tip: 'You must beat the highest card of the suit led if you hold a higher one. With none of that suit you must play a spade that beats any spade already there.',
+    },
+    sideNames: () => CALLBREAK_NAMES,
+    sideColors: () => CALLBREAK_COLORS,
+    size: CALLBREAK_SIZE,
+    color: DARK.mint,
+    status: (state) => callbreakStatus(state as CallbreakState),
+    resultText: (state) => callbreakResult(state as CallbreakState),
+    moveCue: (before, after) =>
+      (after as CallbreakState).trick.length === 0 && (before as CallbreakState).trick.length > 0 ? 'go' : 'place',
+    createScene: (session) => new CallbreakScene(session),
   }),
   entry({
     definition: slidingPuzzle,

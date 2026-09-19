@@ -9,7 +9,7 @@ import { expect, test } from '@playwright/test';
 const GAMES = [
   'Tic-Tac-Toe', 'Checkers', 'Chess', 'Backgammon', 'Sea Battle', 'Reversi', 'Dots & Boxes', 'Mancala',
   'Snakes & Ladders', 'Ultimate Tic-Tac-Toe', 'Yatzy', 'Shut the Box', 'Dominoes', 'Four in a Row', 'Ludo',
-  '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks', 'Crazy Eights', 'Go Fish', 'War', 'Old Maid', 'Hearts', 'Spades', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Classic Snake',
+  '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks', 'Crazy Eights', 'Go Fish', 'War', 'Old Maid', 'Hearts', 'Spades', 'Callbreak', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Classic Snake',
   'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle',
 ];
 

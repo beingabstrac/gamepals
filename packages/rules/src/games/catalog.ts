@@ -22,6 +22,7 @@ import { reversi } from './reversi';
 import { seaBattle } from './sea-battle';
 import { shutTheBox } from './shut-the-box';
 import { slidingPuzzle } from './sliding-puzzle';
+import { callbreak } from './callbreak';
 import { spades } from './spades';
 import { snakesAndLadders } from './snakes-and-ladders';
 import { solitaire } from './solitaire';
@@ -57,6 +58,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       oldMaid,
       hearts,
       spades,
+      callbreak,
       memory,
       slidingPuzzle,
       colorSort,

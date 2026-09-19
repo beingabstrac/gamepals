@@ -29,6 +29,7 @@ export * from './games/old-maid';
 export * from './games/tricks';
 export * from './games/hearts';
 export * from './games/spades';
+export * from './games/callbreak';
 export * from './games/memory';
 export * from './games/sliding-puzzle';
 export * from './games/color-sort';
