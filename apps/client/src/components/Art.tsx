@@ -494,6 +494,39 @@ function CrazyEightsArt() {
   );
 }
 
+function GoFishArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="20" width="26" height="36" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="20" y="30" width="26" height="36" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="30" y="40" width="26" height="36" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="43" y="58" font-family="Fredoka, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="central" fill={COLORS.sky}>
+        7
+      </text>
+      <path d="M64 46 c10 -9 22 -9 26 0 c-4 9 -16 9 -26 0 z" fill={COLORS.sky} />
+      <path d="M90 46 l8 -7 v14 z" fill={COLORS.sky} />
+      <circle cx="71" cy="45" r="2" fill="#fff" />
+    </svg>
+  );
+}
+
+function WarArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="16" width="34" height="46" rx="8" fill={COLORS.sky} transform="rotate(-8 27 39)" />
+      <rect x="14" y="20" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="31" y="43" font-family="Fredoka, sans-serif" font-weight="600" font-size="20" text-anchor="middle" dominant-baseline="central" fill={INK}>
+        A
+      </text>
+      <rect x="56" y="38" width="34" height="46" rx="8" fill={COLORS.tomato} transform="rotate(8 73 61)" />
+      <rect x="52" y="34" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="69" y="57" font-family="Fredoka, sans-serif" font-weight="600" font-size="20" text-anchor="middle" dominant-baseline="central" fill={COLORS.tomato}>
+        K
+      </text>
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -770,6 +803,8 @@ const ART: Record<string, () => JSX.Element> = {
   spider: SpiderArt,
   pyramid: PyramidArt,
   'crazy-eights': CrazyEightsArt,
+  'go-fish': GoFishArt,
+  war: WarArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

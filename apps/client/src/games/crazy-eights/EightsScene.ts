@@ -12,9 +12,10 @@ import {
 import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
-import { COLORS, DARK, toHex } from '../../theme';
+import { COLORS } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, makeCard, placeAt, setFace, slideTo, type CardView } from '../cards/view';
+import { HandPrivacy } from '../cards/privacy';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
 const W = 760;
@@ -49,11 +50,7 @@ interface Spot {
 export class EightsScene extends Scene {
   private views = new Map<number, CardView>();
   private spots = new Map<number, Spot>();
-  /** The seat whose hand is on screen: the person playing, or the last one who did. */
-  private shown = 0;
-  /** A hand stays covered until its owner says they are ready. */
-  private covered = false;
-  private cover?: GameObjects.Container;
+  private privacy!: HandPrivacy;
   /** The eight waiting for a suit, and the four buttons asking. */
   private asking: number | null = null;
   private suitButtons?: GameObjects.Container;
@@ -72,9 +69,6 @@ export class EightsScene extends Scene {
     return this.session.state as EightsState;
   }
 
-  private get people(): number {
-    return this.session.seats.filter((seat) => seat.kind === 'human').length;
-  }
 
   create(): void {
     fitCamera(this, W, H);
@@ -85,7 +79,7 @@ export class EightsScene extends Scene {
       view.box.setPosition(DECK_X, PILE_Y);
       this.views.set(card, view);
     }
-    this.shown = this.firstPerson();
+    this.privacy = new HandPrivacy(this, this.session.seats, { x: W / 2, y: HAND_Y - 60, width: W - 48 });
     this.sync(true);
 
     this.input.on('pointerdown', (p: { worldX: number; worldY: number }) => this.press(p.worldX, p.worldY));
@@ -94,11 +88,6 @@ export class EightsScene extends Scene {
 
     const off = this.session.subscribe(() => this.onMove());
     this.events.once('shutdown', off);
-  }
-
-  private firstPerson(): number {
-    const seat = this.session.seats.findIndex((s) => s.kind === 'human');
-    return seat === -1 ? 0 : seat;
   }
 
   private drawTable(): void {
@@ -128,13 +117,13 @@ export class EightsScene extends Scene {
       spots.set(card, { x: PILE_X + Math.min(3, deep) * -4, y: PILE_Y, depth: 200 + i, up: true, move: null, lift: 0 });
     });
     state.hands.forEach((hand, seat) => {
-      if (seat === this.shown) return;
+      if (seat === this.privacy.shown) return;
       // Other people's cards stay face down, stacked behind their name.
       const x = (W / (state.hands.length + 1)) * (seat + 1);
       hand.forEach((card, i) => spots.set(card, { x: x + i * 6 - hand.length * 3, y: 108, depth: 100 + i, up: false, move: null, lift: 0 }));
     });
-    const mine = state.hands[this.shown] ?? [];
-    const yours = this.session.seats[this.shown]?.kind === 'human';
+    const mine = state.hands[this.privacy.shown] ?? [];
+    const yours = this.privacy.open;
     const step = Math.min(CW * 0.78, (W - CW - 40) / Math.max(1, mine.length - 1));
     const left = W / 2 - (step * (mine.length - 1)) / 2;
     mine.forEach((card, i) => {
@@ -143,7 +132,7 @@ export class EightsScene extends Scene {
         x: left + i * step,
         y: HAND_Y,
         depth: 300 + i,
-        up: yours && !this.covered,
+        up: yours,
         move,
         // What you can play stands proud; what you cannot sits back.
         lift: move ? LIFT : 0,
@@ -155,20 +144,14 @@ export class EightsScene extends Scene {
   /** The move this card of yours makes, if it is your turn and the card can go. */
   private moveFor(card: number): EightsMove | null {
     const state = this.state;
-    if (state.result || state.currentSeat !== this.shown) return null;
-    if (this.session.seats[this.shown]?.kind !== 'human') return null;
-    if (!state.hands[this.shown]!.includes(card) || !state.playable(card)) return null;
+    if (state.result || state.currentSeat !== this.privacy.shown) return null;
+    if (this.session.seats[this.privacy.shown]?.kind !== 'human') return null;
+    if (!state.hands[this.privacy.shown]!.includes(card) || !state.playable(card)) return null;
     return rankOf(card) === WILD_RANK ? playMove(card, 0) : playMove(card);
   }
 
   private onMove(): void {
-    const state = this.state;
-    const seat = state.currentSeat;
-    // The phone has come round to somebody else: cover the hand until they say they are ready.
-    if (!state.result && this.session.seats[seat]?.kind === 'human' && seat !== this.shown) {
-      this.shown = seat;
-      if (this.people > 1) this.covered = true;
-    }
+    this.privacy.turnChanged(this.state.currentSeat, this.state.result !== null);
     this.asking = null;
     this.sync(true);
   }
@@ -190,31 +173,13 @@ export class EightsScene extends Scene {
     this.deckText?.setText(state.stock.length ? `${state.stock.length} left` : 'Deck is out');
     this.suitPip?.setText(SUIT_SYMBOLS[state.suit]!).setColor(state.suit === 1 || state.suit === 2 ? COLORS.tomato : COLORS.ink);
     this.session.seats.forEach((seat, i) => {
-      const you = i === this.shown && seat.kind === 'human';
+      const you = i === this.privacy.shown && seat.kind === 'human';
       this.seatText[i]?.setText(you ? '' : `${seat.label}: ${state.counts[i]}`);
     });
     this.banner?.setVisible(false);
-    this.drawCover();
+    this.privacy.draw();
     this.drawSuitButtons();
     if (this.ring?.visible) this.showKeyFocus();
-  }
-
-  /** The cover that keeps one person's hand from the next person's eyes. */
-  private drawCover(): void {
-    this.cover?.destroy();
-    this.cover = undefined;
-    if (!this.covered) return;
-    const label = this.session.seats[this.shown]?.label ?? 'You';
-    const panel = this.add.graphics();
-    panel.fillStyle(toHex(DARK.sky), 1);
-    panel.fillRoundedRect(-W / 2 + 24, -150, W - 48, 300, 28);
-    this.cover = this.add
-      .container(W / 2, HAND_Y - 60, [
-        panel,
-        sharpText(this, 0, -40, `Pass to ${label}`, 40, '#ffffff'),
-        sharpText(this, 0, 20, 'Tap when nobody else is looking', 24, '#e8f2ff'),
-      ])
-      .setDepth(5000);
   }
 
   /** Four big buttons asking which suit an eight meant. */
@@ -244,8 +209,7 @@ export class EightsScene extends Scene {
   }
 
   private press(x: number, y: number): void {
-    if (this.covered) {
-      this.covered = false;
+    if (this.privacy.lift()) {
       this.sync(true);
       return;
     }
@@ -271,7 +235,7 @@ export class EightsScene extends Scene {
     const found = this.hit(x, y);
     if (!found) return;
     if (!found.spot.move) {
-      if (state.hands[this.shown]!.includes(found.card) && state.currentSeat === this.shown) {
+      if (state.hands[this.privacy.shown]!.includes(found.card) && state.currentSeat === this.privacy.shown) {
         this.say(`That one does not match ${SUIT_SYMBOLS[state.suit]} or a ${rankOf(state.top)}`);
       }
       return;
@@ -300,12 +264,11 @@ export class EightsScene extends Scene {
   }
 
   private playableCards(): number[] {
-    return (this.state.hands[this.shown] ?? []).filter((card) => this.moveFor(card) !== null);
+    return (this.state.hands[this.privacy.shown] ?? []).filter((card) => this.moveFor(card) !== null);
   }
 
   private key(key: string): boolean {
-    if (this.covered) {
-      this.covered = false;
+    if (this.privacy.lift()) {
       this.sync(true);
       return true;
     }
@@ -348,10 +311,10 @@ export class EightsScene extends Scene {
    * cannot be asked that from the outside.
    */
   handCheck(): { shown: number; covered: boolean; faceUp: number } {
-    const mine = this.state.hands[this.shown] ?? [];
+    const mine = this.state.hands[this.privacy.shown] ?? [];
     return {
-      shown: this.shown,
-      covered: this.covered,
+      shown: this.privacy.shown,
+      covered: this.privacy.covered,
       faceUp: mine.filter((card) => this.views.get(card)?.up).length,
     };
   }

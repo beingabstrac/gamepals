@@ -23,6 +23,8 @@ export * from './games/spider';
 export * from './games/pyramid';
 export * from './games/tripeaks';
 export * from './games/crazy-eights';
+export * from './games/go-fish';
+export * from './games/war';
 export * from './games/memory';
 export * from './games/sliding-puzzle';
 export * from './games/color-sort';

@@ -7,6 +7,7 @@ import { crazyEights } from './crazy-eights';
 import { chess } from './chess';
 import { colorSort } from './color-sort';
 import { dominoes } from './dominoes';
+import { goFish } from './go-fish';
 import { dotsAndBoxes } from './dots-and-boxes';
 import { echo } from './echo';
 import { fourInARow } from './four-in-a-row';
@@ -27,6 +28,7 @@ import { sudoku } from './sudoku';
 import { ticTacToe } from './tic-tac-toe';
 import { twenty48 } from './twenty48';
 import { ultimateTtt } from './ultimate-ttt';
+import { war } from './war';
 import { yatzy } from './yatzy';
 
 /** A game looked up by id, where the kind of move no longer matters. */
@@ -47,6 +49,8 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       pyramid,
       tripeaks,
       crazyEights,
+      goFish,
+      war,
       memory,
       slidingPuzzle,
       colorSort,

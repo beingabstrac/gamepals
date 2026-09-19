@@ -41,6 +41,10 @@ import {
   type PyramidState,
   crazyEights,
   type EightsState,
+  goFish,
+  type FishState,
+  war,
+  type WarState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -116,6 +120,8 @@ import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCel
 import { SpiderControls } from './spider/SpiderControls';
 import { SPIDER_SIZE, spiderStatus, SpiderScene } from './spider/SpiderScene';
 import { EIGHTS_COLORS, EIGHTS_NAMES, EIGHTS_SIZE, eightsStatus, EightsScene } from './crazy-eights/EightsScene';
+import { FISH_COLORS, FISH_NAMES, FISH_SIZE, fishStatus, FishScene } from './go-fish/FishScene';
+import { WAR_COLORS, WAR_NAMES, WAR_SIZE, warResult, warStatus, WarScene } from './war/WarScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -851,6 +857,46 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => `Out of cards! ${(state as EightsState).score} points left in the other hands.`,
     moveCue: (before, after) => ((after as EightsState).discard.length > (before as EightsState).discard.length ? 'place' : 'tap'),
     createScene: (session) => new EightsScene(session),
+  }),
+  entry({
+    definition: goFish,
+    tagline: 'Ask for a card, make a book',
+    howTo: {
+      goal: 'Collect four of a kind, over and over. Most books wins.',
+      controls: 'Tap a card in your hand to pick that number, then tap the player you want it from. If they have none, tap the pool to go fishing. On a keyboard: arrows pick a number, Enter asks, D draws.',
+      win: 'When all thirteen books are down, whoever laid the most wins.',
+      draw: 'Level books is a draw.',
+      tip: 'You can only ask for a number you already hold. Listen to what everybody else asks for: that is how you know who has what.',
+    },
+    sideNames: (players) => FISH_NAMES.slice(0, players),
+    sideColors: (players) => FISH_COLORS.slice(0, players),
+    size: FISH_SIZE,
+    color: COLORS.sky,
+    status: (state) => fishStatus(state as FishState),
+    moveCue: (before, after) =>
+      (after as FishState).books.flat().length > (before as FishState).books.flat().length ? 'go' : 'tap',
+    createScene: (session) => new FishScene(session),
+  }),
+  entry({
+    definition: war,
+    tagline: 'Turn it over. Highest wins',
+    tryIt: 'Tap anywhere to turn the cards over.',
+    howTo: {
+      goal: 'Win all 52 cards.',
+      controls: 'Tap anywhere to turn the top card of each stack over. Nothing else to do.',
+      win: 'Take every card, or hold the most after 300 battles.',
+      draw: 'Level stacks after 300 battles is a draw.',
+      tip: 'Aces are high. Equal cards mean war: one card face down each, then one face up to settle it.',
+    },
+    sideNames: () => WAR_NAMES,
+    sideColors: () => WAR_COLORS,
+    size: WAR_SIZE,
+    color: COLORS.tomato,
+    botDelayMs: 620,
+    status: (state) => warStatus(state as WarState),
+    resultText: (state) => warResult(state as WarState),
+    moveCue: (before, after) => ((after as WarState).last?.wars ? 'go' : 'place'),
+    createScene: (session) => new WarScene(session),
   }),
   entry({
     definition: slidingPuzzle,

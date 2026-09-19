@@ -18,6 +18,8 @@ const GAMES = [
   'Pyramid',
   'TriPeaks',
   'Crazy Eights',
+  'Go Fish',
+  'War',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',
