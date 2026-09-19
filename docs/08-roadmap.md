@@ -95,7 +95,10 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M19 Realtime online duels (research first):** latency-tolerant Air Hockey; may stay same-device only if it doesn't feel good
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
-- [ ] **M20a Cards B, hidden hands:** Crazy Eights, and the pattern the other three need: a hand only its owner can see, a cover screen when the phone is passed, and bots that provably cannot see what they should not
+- [x] **M20a Cards B, hidden hands (2026-09-19):** Crazy Eights, 35 games, and the first game here where you hold cards nobody else may see. Two players get seven cards and three or four get five, a play matches suit or rank, an eight goes on anything and names the next suit, you draw until you can play, and the pile becomes a new deck when the deck runs out.
+  - **Bots that cannot cheat, rather than bots asked not to.** `chooseMove` hands the bot a seat's *view* (its own cards, the pile, the suit in force, everyone's hand sizes, how deep the deck is) and never the state. A test shuffles the other hands and reverses the deck behind each of the four levels and checks the same move still comes out. Sea Battle's bot was written not to look, but nothing proved it; this one is proved.
+  - **The privacy promise is a test, not a paragraph.** A canvas cannot be asked what it is showing, so the scene answers `handCheck()` behind `?inspect`, which opens the test seam without putting bots in the chairs the way `?autoplay` does. The test sits two people at one phone, plays a turn on the keyboard and checks the cover came down with not one card of the new hand face up behind it.
+  - That test failed first for a good reason: it pressed three keys between looks, and a key is also how you lift the cover, so it kept opening the hand it had come to see covered. The cover was fine; the test was not.
 - [ ] **M20b Cards B, asking and racing:** Go Fish and War
 - [ ] **M20c Cards B, the odd one out:** Old Maid
 - [ ] **M21 Cards C:** Hearts, Spades, Callbreak
