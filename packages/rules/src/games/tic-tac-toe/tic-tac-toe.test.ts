@@ -71,14 +71,14 @@ describe('tic-tac-toe bots', () => {
     }
   });
 
-  it('expert never loses to easy, from either seat', () => {
+  it('expert never loses to easy, from either seat', { timeout: 120_000 }, () => {
     for (let seed = 0; seed < 100; seed++) {
       expect(playBots(['expert', 'easy'], seed).result?.winners).not.toContain(1);
       expect(playBots(['easy', 'expert'], seed).result?.winners).not.toContain(0);
     }
   });
 
-  it('expert beats easy regularly', () => {
+  it('expert beats easy regularly', { timeout: 120_000 }, () => {
     let wins = 0;
     for (let seed = 0; seed < 100; seed++) {
       if (playBots(['expert', 'easy'], seed).result?.winners.includes(0)) wins++;

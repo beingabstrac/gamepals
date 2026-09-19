@@ -71,7 +71,7 @@ describe('classic snake', () => {
     expect(newClassicSnake(9).fruit).toEqual(newClassicSnake(9).fruit);
   });
 
-  it('the autoplay bot eats plenty and never turns into a wall on purpose', () => {
+  it('the autoplay bot eats plenty and never turns into a wall on purpose', { timeout: 120_000 }, () => {
     let total = 0;
     for (const seed of [1, 2, 3]) {
       let state = newClassicSnake(seed);

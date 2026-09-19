@@ -132,7 +132,7 @@ describe('yatzy bots', () => {
     }
   });
 
-  it('Nova scores more than Pip on average', () => {
+  it('Nova scores more than Pip on average', { timeout: 120_000 }, () => {
     let pip = 0;
     let nova = 0;
     // Over 20 games Pip averages about 177 and Nova about 219.

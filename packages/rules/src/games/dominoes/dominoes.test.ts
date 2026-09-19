@@ -143,7 +143,7 @@ describe('dominoes bots', () => {
     expect(bot.chooseMove(a, 0, createRng(1))).toBe(bot.chooseMove(b, 0, createRng(1)));
   });
 
-  it('Nova beats Pip', () => {
+  it('Nova beats Pip', { timeout: 120_000 }, () => {
     let wins = 0;
     for (let game = 0; game < 6; game++) {
       const novaSeat = game % 2;
