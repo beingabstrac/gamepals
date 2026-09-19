@@ -41,3 +41,29 @@ for (const name of ['Hearts', 'Spades', 'Callbreak', 'Gin Rummy']) {
     expect(looked, 'the scene answered labelCheck at least once').toBeGreaterThan(0);
   });
 }
+
+/**
+ * The turn line, while moves come quickly. `.turn-pill` is keyed on its own text, so it remounts
+ * whenever the text changes and replays its entry animation. In Gin Rummy the text changes on
+ * every single move (take, draw, throw), so the pill restarted a fade-from-nothing several times
+ * a second and was never actually readable. The gallery shot showed an empty gap where the turn
+ * line should be, and no test said a word.
+ */
+test('Gin Rummy: the turn line stays readable while moves come quickly', async ({ page }) => {
+  await page.goto('/?autoplay=2');
+  await page.getByRole('button', { name: /^Gin Rummy/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+
+  const seen: number[] = [];
+  for (let look = 0; look < 6; look++) {
+    await page.waitForTimeout(400);
+    const opacity = await page.evaluate(() => {
+      const pill = document.querySelector('.turn-pill');
+      return pill ? Number(getComputedStyle(pill).opacity) : -1;
+    });
+    if (opacity >= 0) seen.push(opacity);
+  }
+  expect(seen.length, 'the turn line is on screen').toBeGreaterThan(0);
+  expect(Math.min(...seen), `turn line opacity over a stretch of play: ${seen.map((n) => n.toFixed(2)).join(', ')}`).toBeGreaterThan(0.5);
+});
