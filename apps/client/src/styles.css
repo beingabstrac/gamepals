@@ -87,6 +87,13 @@ h2,
   }
 }
 
+@keyframes pill-in {
+  from {
+    opacity: 0.55;
+    transform: scale(0.94) translateY(6px);
+  }
+}
+
 @keyframes bob {
   50% {
     transform: translateY(-4px) rotate(-3deg);
@@ -650,7 +657,10 @@ h2,
   font-size: 1.05rem;
   font-weight: 500;
   box-shadow: 0 4px 0 var(--line), var(--soft-shadow);
-  animation: pop-in 360ms var(--spring) both;
+  /* Keyed on its own text, so it remounts and replays this whenever the turn line changes.
+     It must never start from nothing: in Gin Rummy the line changes on every move, and a
+     fade-from-zero left the pill sitting at opacity 0 for the whole game. */
+  animation: pill-in 360ms var(--spring) both;
 }
 
 .turn-dot {
