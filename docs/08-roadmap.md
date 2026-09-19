@@ -112,7 +112,11 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - Passing goes left, right, across and then a hand with no passing; the two of clubs leads; nothing that scores may go on the first trick; hearts cannot be led until one has been thrown away; all 26 on one player puts 26 on everybody else.
   - **One hand, to 50 or to 100** is picked at the table. A full game is eight or nine hands, which is a long sitting on a phone, so it is a choice rather than the only way to play.
   - Passing needed the turn to walk round the table rather than everybody choosing at once, because the session only ever asks the seat whose turn it is. The cards still change hands at the same moment, once the fourth player has chosen.
-- [ ] **M21b Cards C, bidding:** Spades, with partners and nil
+- [x] **M21b Cards C, bidding (2026-09-19):** Spades, 40 games, and the first game where a player says how well they expect to do before they play. Seats across from each other are partners, the two bids add up, and the pair has to take at least that many tricks. Spades are always trump and cannot be led until somebody has been forced to throw one.
+  - **A bid of nought is nil, not "no bid".** It is a promise to take no tricks at all, worth a hundred either way. I wrote two test fixtures expecting the scores of a partnership that simply had not bid, and both were wrong. The rules were right and my reading of them was not, which is the sort of mistake a test only catches if the numbers in it were worked out by hand.
+  - **Bags** are the part that makes the game: every trick over the bid is worth a single point now and ten against you later, once ten of them have piled up. Taking more than you promised is not free, so a pair that has been overshooting all game can lose on a hand it won.
+  - One hand, to 200 or to 500, picked at the table, and the scoreboard shows each pair's score, tricks taken against tricks bid, and bags, because none of those three can be worked out from the others.
+  - **An unused helper in a test file failed CI**, after typecheck had passed everything else. `scripts/precheck.sh` did not read test files, so `scripts/unused-scan.sh` now does: it finds a name bound once and used once, anywhere in the repo, and says whether it is exported.
 - [ ] **M21c Cards C, the subcontinent's game:** Callbreak
 - [ ] **M22 Cards D:** Rummy, Gin Rummy
 - [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person
