@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { replay, toMoveLog } from '../../core/replay';
 import { createRng } from '../../core/rng';
 import { BOT_TIERS, type Seat } from '../../core/types';
-import type { Played } from '../tricks';
 import {
   BAG_LIMIT,
   countWinners,
@@ -19,10 +18,9 @@ import {
 } from './index';
 
 const card = (rank: number, suit: number) => suit * 13 + rank - 1;
-const play = (seat: number, c: number): Played => ({ seat: seat as Seat, card: c });
 /** A hand in the play phase, with the bids already in. */
-const at = (hands: number[][], bids: number[], seat: Seat = 0, trick: Played[] = [], broken = false, won = [0, 0, 0, 0]) =>
-  new SpadesState(hands, bids, won, [0, 0], [0, 0], 'play', trick, [], broken, 0, seat, 'hand', 0, null, null);
+const at = (hands: number[][], bids: number[], seat: Seat = 0, broken = false, won = [0, 0, 0, 0]) =>
+  new SpadesState(hands, bids, won, [0, 0], [0, 0], 'play', [], [], broken, 0, seat, 'hand', 0, null, null);
 
 describe('spades deal and bidding', () => {
   it('deals thirteen each and starts with everybody bidding', () => {
@@ -48,13 +46,13 @@ describe('spades playing', () => {
     const hand = [card(9, SPADES_SUIT), card(4, 3)];
     const shut = at([hand, [], [], []], [3, 3, 3, 3]);
     expect(shut.legalMoves(0)).toEqual([spadesPlay(card(4, 3))]);
-    const open = at([hand, [], [], []], [3, 3, 3, 3], 0, [], true);
+    const open = at([hand, [], [], []], [3, 3, 3, 3], 0, true);
     expect(open.legalMoves(0)).toHaveLength(2);
   });
 
   it('gives the trick to the highest spade when one is played', () => {
     const hands = [[card(1, 3)], [card(2, SPADES_SUIT)], [card(13, 3)], [card(5, 3)]];
-    let state = at(hands, [1, 1, 1, 1], 0, [], true);
+    let state = at(hands, [1, 1, 1, 1], 0, true);
     for (const seat of [0, 1, 2, 3]) state = state.apply(spadesPlay(hands[seat]![0]!));
     // The two of spades beats the ace of clubs, because spades are trump.
     expect(state.last?.took).toBe(1);
@@ -63,7 +61,7 @@ describe('spades playing', () => {
   it('scores ten a trick bid, with a bag for each one over', () => {
     // Everybody bids one, so each pair is on two. A bid of nought would be nil, not "no bid".
     const hands = [[card(1, 3)], [card(1, 2)], [card(2, 3)], [card(2, 2)]];
-    let state = at(hands, [1, 1, 1, 1], 0, [], true, [2, 1, 0, 0]);
+    let state = at(hands, [1, 1, 1, 1], 0, true, [2, 1, 0, 0]);
     for (const seat of [0, 1, 2, 3]) state = state.apply(spadesPlay(hands[seat]![0]!));
     // Seat 0 takes this one as well: three against a contract of two, so twenty and a bag.
     expect(state.scores[0]).toBe(20 + 1);
@@ -77,7 +75,7 @@ describe('spades playing', () => {
     // Nobody has cards left, so scoring the hand is what the next play does; call it directly
     // through a last trick instead.
     const hands = [[card(2, 3)], [card(1, 3)], [card(3, 3)], [card(4, 3)]];
-    let broken = at(hands, [0, 2, 2, 2], 0, [], true, [0, 1, 1, 1]);
+    let broken = at(hands, [0, 2, 2, 2], 0, true, [0, 1, 1, 1]);
     for (const seat of [0, 1, 2, 3]) broken = broken.apply(spadesPlay(hands[seat]![0]!));
     // Seat 1 took this trick too, so seat 0's nil held: +100, and the pair's contract of 2 failed.
     expect(broken.scores[0]).toBe(NIL_SCORE - 20);
