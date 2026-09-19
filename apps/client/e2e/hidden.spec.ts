@@ -42,12 +42,16 @@ test('two people on one phone never see each other\'s cards', async ({ page }) =
   // Play this hand's turn with the keyboard: Enter plays the card in focus, D draws when stuck.
   // One key at a time, checking in between: a key is also how you lift the cover, so pressing on
   // past the turn change would knock on the very cover this test is here to see.
+  // Phaser reads input on its own frame, so a press is not finished when Playwright returns and
+  // the next one can arrive after the turn has changed. That is exactly the case the cover has
+  // to survive, so the test keeps pressing quickly rather than tiptoeing around it.
   const board = page.locator('.board');
   const keys = ['ArrowRight', 'Enter', 'd'];
   for (let tries = 0; tries < 60; tries++) {
     if ((await handCheck(page))?.shown !== first!.shown) break;
     await board.press(keys[tries % keys.length]!);
   }
+  await page.waitForTimeout(150);
   expect((await handCheck(page))?.shown, 'the turn never reached the other person').not.toBe(first!.shown);
   const second = await handCheck(page);
   const saw = `first ${JSON.stringify(first)}, then ${JSON.stringify(second)}`;

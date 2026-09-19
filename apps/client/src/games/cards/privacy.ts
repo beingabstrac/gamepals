@@ -12,6 +12,7 @@ export class HandPrivacy {
   /** The seat whose hand is on screen: the person playing, or the last one who did. */
   shown = 0;
   private hidden = false;
+  private raisedAt = 0;
   private panel?: GameObjects.Container;
 
   constructor(
@@ -39,13 +40,23 @@ export class HandPrivacy {
   turnChanged(seat: number, over: boolean): void {
     if (over || this.seats[seat]?.kind !== 'human' || seat === this.shown) return;
     this.shown = seat;
-    if (this.people > 1) this.hidden = true;
+    if (this.people > 1) {
+      this.hidden = true;
+      this.raisedAt = Date.now();
+    }
   }
 
-  /** A tap or a key anywhere lifts the cover. True when that is all it did. */
+  /**
+   * A tap or a key anywhere lifts the cover. True when the input went no further, which is
+   * always the case while a hand is covered: a covered hand never acts on a press.
+   *
+   * A press already on its way when the cover went up must not lift it. Phaser reads input on
+   * its own frame, so the key somebody was still pressing as their turn ended arrives just
+   * after the cover does, and without this it would open the next person's hand at once.
+   */
   lift(): boolean {
     if (!this.hidden) return false;
-    this.hidden = false;
+    if (Date.now() - this.raisedAt > 300) this.hidden = false;
     return true;
   }
 
