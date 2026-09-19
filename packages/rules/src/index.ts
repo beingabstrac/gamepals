@@ -32,6 +32,7 @@ export * from './games/hearts';
 export * from './games/spades';
 export * from './games/callbreak';
 export * from './games/gin-rummy';
+export * from './games/rummy';
 export * from './games/memory';
 export * from './games/sliding-puzzle';
 export * from './games/color-sort';

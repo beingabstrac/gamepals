@@ -660,6 +660,28 @@ function GinRummyArt() {
   );
 }
 
+function RummyArt() {
+  const pip = (x: number, y: number, fill: string) => <circle cx={x} cy={y} r="4" fill={fill} />;
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="22" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" />
+      {pip(22, 39, COLORS.sky)}
+      <rect x="30" y="22" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" />
+      {pip(42, 33, COLORS.sky)}
+      {pip(42, 45, COLORS.sky)}
+      <rect x="50" y="22" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" />
+      {pip(62, 31, COLORS.sky)}
+      {pip(62, 39, COLORS.sky)}
+      {pip(62, 47, COLORS.sky)}
+      <rect x="24" y="58" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" transform="rotate(-6 36 75)" />
+      {pip(36, 75, COLORS.tomato)}
+      <rect x="52" y="58" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" transform="rotate(6 64 75)" />
+      {pip(64, 69, COLORS.tomato)}
+      {pip(64, 81, COLORS.tomato)}
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -943,6 +965,7 @@ const ART: Record<string, () => JSX.Element> = {
   spades: SpadesArt,
   callbreak: CallbreakArt,
   'gin-rummy': GinRummyArt,
+  rummy: RummyArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

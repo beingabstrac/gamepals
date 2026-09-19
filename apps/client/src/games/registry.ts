@@ -55,6 +55,8 @@ import {
   type CallbreakState,
   ginRummy,
   type GinState,
+  rummy,
+  type RummyState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -137,6 +139,7 @@ import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } f
 import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, SpadesScene } from './spades/SpadesScene';
 import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
 import { GIN_COLORS, GIN_NAMES, GIN_SIZE, ginResult, ginStatus, GinScene } from './gin-rummy/GinScene';
+import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -1031,6 +1034,30 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) =>
       (after as GinState).hands[0]!.length > (before as GinState).hands[0]!.length ? 'tap' : 'place',
     createScene: (session) => new GinScene(session),
+  }),
+  entry({
+    definition: rummy,
+    tagline: 'Sets and runs, and first one out wins',
+    levels: [
+      { id: 'hand', label: 'One deal' },
+      { id: '100', label: 'Game to 100' },
+    ],
+    howTo: {
+      goal: 'Get rid of all your cards by making sets and runs. A set is three or four of a kind, a run is three or more in a row in one suit.',
+      controls: 'Take a card from the deck or the pile, put down any melds the buttons offer, then tap a card to throw it away. A card that fits a meld on the table goes there instead. On a keyboard: arrows pick a card, Enter plays it, number keys put melds down.',
+      win: 'The first player out takes the value of every other hand. Court cards are ten, aces one.',
+      draw: 'If the cards run out twice, the hand is thrown in and nobody scores.',
+      tip: 'You never have to put a meld down. Holding your whole hand back and laying it all down in one turn is a rummy, and it doubles what you score.',
+    },
+    sideNames: (players) => RUMMY_NAMES.slice(0, players),
+    sideColors: (players) => RUMMY_COLORS.slice(0, players),
+    size: RUMMY_SIZE,
+    color: DARK.sky,
+    status: (state) => rummyStatus(state as RummyState),
+    resultText: (state) => rummyResult(state as RummyState),
+    moveCue: (before, after) =>
+      (after as RummyState).table.length > (before as RummyState).table.length ? 'go' : 'place',
+    createScene: (session) => new RummyScene(session),
   }),
   entry({
     definition: slidingPuzzle,

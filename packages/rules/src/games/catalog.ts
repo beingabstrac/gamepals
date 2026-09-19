@@ -20,6 +20,7 @@ import { memory } from './memory';
 import { oldMaid } from './old-maid';
 import { pyramid } from './pyramid';
 import { reversi } from './reversi';
+import { rummy } from './rummy';
 import { seaBattle } from './sea-battle';
 import { shutTheBox } from './shut-the-box';
 import { slidingPuzzle } from './sliding-puzzle';
@@ -61,6 +62,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       spades,
       callbreak,
       ginRummy,
+      rummy,
       memory,
       slidingPuzzle,
       colorSort,

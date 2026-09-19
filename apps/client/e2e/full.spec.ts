@@ -25,6 +25,7 @@ const GAMES = [
   'Spades',
   'Callbreak',
   'Gin Rummy',
+  'Rummy',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',
