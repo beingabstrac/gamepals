@@ -133,7 +133,7 @@ import { WAR_COLORS, WAR_NAMES, WAR_SIZE, warResult, warStatus, WarScene } from 
 import { MAID_COLORS, MAID_NAMES, MAID_SIZE, maidResult, maidStatus, MaidScene } from './old-maid/MaidScene';
 import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } from './hearts/HeartsScene';
 import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, SpadesScene } from './spades/SpadesScene';
-import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakResult, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
+import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -1001,7 +1001,6 @@ export const GAMES: readonly AnyEntry[] = [
     size: CALLBREAK_SIZE,
     color: DARK.mint,
     status: (state) => callbreakStatus(state as CallbreakState),
-    resultText: (state) => callbreakResult(state as CallbreakState),
     moveCue: (before, after) =>
       (after as CallbreakState).trick.length === 0 && (before as CallbreakState).trick.length > 0 ? 'go' : 'place',
     createScene: (session) => new CallbreakScene(session),

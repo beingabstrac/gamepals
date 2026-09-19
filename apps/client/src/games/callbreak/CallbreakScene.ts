@@ -18,6 +18,7 @@ import { COLORS } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { makeCard, placeAt, setFace, slideTo, type CardView } from '../cards/view';
 import { HandPrivacy } from '../cards/privacy';
+import { labelReport, type LabelReport } from '../cards/labels';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
 const W = 800;
@@ -30,6 +31,11 @@ const TABLE = 0xe6f4ec;
 const MOVE_MS = 240;
 const HAND_Y = H - CH / 2 - 40;
 const MIDDLE = { x: W / 2, y: 400 };
+/** The banner sits in the empty band between the trick and the hand, clear of the far piles. */
+const BANNER_Y = 600;
+/** Seat labels: the two at the sides sit above their pile, which is what the table has room for. */
+const SIDE_LABEL = { x: 76, y: 400 };
+
 const TRICK_AT = [
   { x: 0, y: 110 },
   { x: -150, y: 0 },
@@ -78,15 +84,16 @@ export class CallbreakScene extends Scene {
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
     this.scoreText = sharpText(this, W / 2, 40, '', 22, '#2f6b4f').setDepth(4000);
-    this.banner = sharpText(this, W / 2, 128, '', 26, '#2f6b4f').setDepth(4000);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, '#2f6b4f').setDepth(4000);
     const spots = [
       { x: W / 2, y: H - 20 },
-      { x: 76, y: MIDDLE.y },
+      { x: SIDE_LABEL.x, y: SIDE_LABEL.y },
       { x: W / 2, y: 78 },
-      { x: W - 76, y: MIDDLE.y },
+      { x: W - SIDE_LABEL.x, y: SIDE_LABEL.y },
     ];
     for (let seat = 0; seat < 4; seat++) {
-      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', 20, '#2f6b4f').setDepth(4000));
+      const side = seat === 1 || seat === 3;
+      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 20, '#2f6b4f').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);
@@ -168,7 +175,8 @@ export class CallbreakScene extends Scene {
       const you = i === this.privacy.shown && this.privacy.open;
       const call = state.calls[i]!;
       const said = call < 0 ? '…' : String(call);
-      this.seatText[this.place(i)]?.setText(`${you ? 'You' : seat.label} · called ${said} · won ${state.won[i]}`);
+      const who = you ? 'You' : seat.label;
+      this.seatText[this.place(i)]?.setText(`${who} · called ${said} · won ${state.won[i]}`);
     });
     this.scoreText?.setText(
       `Round ${state.round + 1} of ${state.rounds}   ·   ` +
@@ -312,6 +320,12 @@ export class CallbreakScene extends Scene {
     moveRing(this, this.ring, spot?.x ?? W / 2, spot?.y ?? HAND_Y);
   }
 
+  /** Test mode only: whether any seat label runs off the table or sits on a card. */
+  labelCheck(): LabelReport {
+    const cards = [...this.spots.values()].map((spot) => ({ x: spot.x, y: spot.y, w: CW, h: CH }));
+    return labelReport(this.seatText, cards, W, H);
+  }
+
   /** Test mode only: whose hand is on screen, whether it is covered, and how much of it shows. */
   handCheck(): { shown: number; covered: boolean; faceUp: number } {
     const mine = this.state.hands[this.privacy.shown] ?? [];
@@ -321,14 +335,10 @@ export class CallbreakScene extends Scene {
 
 export const callbreakStatus = (state: CallbreakState): string | undefined => {
   if (state.result) return undefined;
+  const round = `Round ${state.round + 1} of ${state.rounds}`;
   if (state.phase === 'call') return 'Say how many tricks you will take';
-  const top = state.scores.indexOf(Math.max(...state.scores));
-  return `Round ${state.round + 1} of ${state.rounds} · ${CALLBREAK_NAMES[top]} ahead on ${showScore(state.scores[top]!)}`;
-};
-
-export const callbreakResult = (state: CallbreakState): string | undefined => {
-  if (!state.result) return undefined;
   const best = Math.max(...state.scores);
-  if (state.result.draw) return `Level on ${showScore(best)}.`;
-  return `${CALLBREAK_NAMES[state.result.winners[0]!]} wins with ${showScore(best)}.`;
+  // Everybody on nothing means nobody is ahead, so say something that is true instead.
+  if (state.scores.every((score) => score === best)) return `${round} · spades are trump`;
+  return `${round} · best score ${showScore(best)}`;
 };

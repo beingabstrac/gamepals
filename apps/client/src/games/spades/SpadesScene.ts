@@ -6,6 +6,7 @@ import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { makeCard, placeAt, setFace, slideTo, type CardView } from '../cards/view';
 import { HandPrivacy } from '../cards/privacy';
+import { labelReport, type LabelReport } from '../cards/labels';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
 const W = 800;
@@ -25,6 +26,11 @@ const TRICK_AT = [
   { x: 150, y: 0 },
 ];
 const LIFT = 16;
+/** The banner goes in the empty band between the trick and the hand, not over the far pile. */
+const BANNER_Y = 600;
+/** Seat labels: the two at the sides sit above their pile, which is what the table has room for. */
+const SIDE_LABEL = { x: 76, y: 400 };
+
 /** The bid row is laid out from the left edge of the table: nil first, then one to thirteen. */
 const NIL_TO = 142;
 const BID_FROM = 170;
@@ -69,15 +75,16 @@ export class SpadesScene extends Scene {
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
     this.scoreText = sharpText(this, W / 2, 40, '', 22, '#5b4d9e').setDepth(4000);
-    this.banner = sharpText(this, W / 2, 128, '', 26, '#5b4d9e').setDepth(4000);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, '#5b4d9e').setDepth(4000);
     const spots = [
       { x: W / 2, y: H - 20 },
-      { x: 76, y: MIDDLE.y },
+      { x: SIDE_LABEL.x, y: SIDE_LABEL.y },
       { x: W / 2, y: 78 },
-      { x: W - 76, y: MIDDLE.y },
+      { x: W - SIDE_LABEL.x, y: SIDE_LABEL.y },
     ];
     for (let seat = 0; seat < 4; seat++) {
-      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', 20, '#5b4d9e').setDepth(4000));
+      const side = seat === 1 || seat === 3;
+      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 20, '#5b4d9e').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);
@@ -301,6 +308,12 @@ export class SpadesScene extends Scene {
     if (open.length && !open.includes(this.keyCard)) this.keyCard = open[0]!;
     const spot = this.spots.get(this.keyCard);
     moveRing(this, this.ring, spot?.x ?? W / 2, spot?.y ?? HAND_Y);
+  }
+
+  /** Test mode only: whether any seat label runs off the table or sits on a card. */
+  labelCheck(): LabelReport {
+    const cards = [...this.spots.values()].map((spot) => ({ x: spot.x, y: spot.y, w: CW, h: CH }));
+    return labelReport(this.seatText, cards, W, H);
   }
 
   /** Test mode only: whose hand is on screen, whether it is covered, and how much of it shows. */
