@@ -165,7 +165,7 @@ export class FishScene extends Scene {
     this.askButtons?.destroy();
     this.askButtons = undefined;
     if (this.asking === null) return;
-    const others = this.session.seats.map((seat, i) => ({ seat, i })).filter(({ i }) => i !== this.privacy.shown && this.state.counts[i]);
+    const others = this.askTargets();
     if (!others.length) return;
     const parts: GameObjects.GameObject[] = [];
     const width = Math.min(W - 60, others.length * 200 + 40);
@@ -173,12 +173,12 @@ export class FishScene extends Scene {
     panel.fillStyle(0xffffff, 1);
     panel.fillRoundedRect(-width / 2, -78, width, 156, 28);
     parts.push(panel, sharpText(this, 0, -48, `Ask who for a ${RANKS[this.asking - 1]}?`, 24, COLORS.soft));
-    others.forEach(({ seat, i }, n) => {
+    others.forEach((seat, n) => {
       const x = -((others.length - 1) * 190) / 2 + n * 190;
       const bubble = this.add.graphics();
       bubble.fillStyle(0xe8f2ff, 1);
       bubble.fillRoundedRect(x - 88, -8, 176, 62, 22);
-      parts.push(bubble, sharpText(this, x, 23, seat.label, 26, COLORS.ink));
+      parts.push(bubble, sharpText(this, x, 23, this.session.seats[seat]?.label ?? `Player ${seat + 1}`, 26, COLORS.ink));
     });
     this.askButtons = this.add.container(W / 2, POOL_Y, parts).setDepth(5000);
   }

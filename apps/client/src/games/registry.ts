@@ -895,7 +895,7 @@ export const GAMES: readonly AnyEntry[] = [
     botDelayMs: 620,
     status: (state) => warStatus(state as WarState),
     resultText: (state) => warResult(state as WarState),
-    moveCue: (before, after) => ((after as WarState).last?.wars ? 'go' : 'place'),
+    moveCue: (_before, after) => ((after as WarState).last?.wars ? 'go' : 'place'),
     createScene: (session) => new WarScene(session),
   }),
   entry({

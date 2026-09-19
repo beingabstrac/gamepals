@@ -12,7 +12,7 @@ import {
 import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
-import { COLORS } from '../../theme';
+import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, makeCard, placeAt, setFace, slideTo, type CardView } from '../cards/view';
 import { HandPrivacy } from '../cards/privacy';
