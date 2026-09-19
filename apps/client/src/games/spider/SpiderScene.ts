@@ -1,5 +1,6 @@
 import { SPIDER_COLUMNS, SPIDER_DEAL, spiderMoveFrom, SPIDER_UNDO, type SpiderMove, type SpiderState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
@@ -21,8 +22,8 @@ const UP_STEP = 30;
 const FOOT_Y = H - CH / 2 - 14;
 const MOVE_MS = 200;
 const DRAG_MIN = 10;
-const TABLE = 0xffe2c4;
-const SLOT = 0xf0b878;
+const TABLE = tableFill(0xffe2c4);
+const SLOT = slotFill(0xf0b878);
 /** Cards in play: two packs. */
 const PACK = 104;
 
@@ -126,10 +127,10 @@ export class SpiderScene extends Scene {
     for (let c = 0; c < SPIDER_COLUMNS; c++) drawSlot(g, colX(c), TAB_Y, CW, CH, SLOT);
     drawSlot(g, W - CW / 2 - 16, FOOT_Y, CW, CH, SLOT);
     // How many rows are still in the deck, on the deck itself.
-    this.dealsLeft = sharpText(this, W - CW / 2 - 16, FOOT_Y - CH / 2 - 16, '', 24, '#b3672a').setDepth(4000);
+    this.dealsLeft = sharpText(this, W - CW / 2 - 16, FOOT_Y - CH / 2 - 16, '', 24, tableInk('#b3672a')).setDepth(4000);
     drawSlot(g, 16 + CW / 2, FOOT_Y, CW, CH, SLOT);
-    sharpText(this, 16 + CW / 2, FOOT_Y, '★', 34, '#d99450');
-    this.banner = sharpText(this, W / 2, FOOT_Y, 'Tap the deck for a new row', 26, '#b3672a').setDepth(4000);
+    sharpText(this, 16 + CW / 2, FOOT_Y, '★', 34, tableInk('#d99450'));
+    this.banner = sharpText(this, W / 2, FOOT_Y, 'Tap the deck for a new row', 26, tableInk('#b3672a')).setDepth(4000);
   }
 
   /** Cards in the state that we have not made a view for yet never happens: the deal makes them all. */

@@ -12,6 +12,7 @@ import {
   type Played,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS } from '../../theme';
@@ -27,7 +28,7 @@ export const CALLBREAK_SIZE = { width: W, height: H };
 
 const CW = 82;
 const CH = 116;
-const TABLE = 0xfdf1dc;
+const TABLE = tableFill(0xfdf1dc);
 const MOVE_MS = 240;
 const HAND_Y = H - CH / 2 - 40;
 const MIDDLE = { x: W / 2, y: 400 };
@@ -83,8 +84,8 @@ export class CallbreakScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    this.scoreText = sharpText(this, W / 2, 40, '', 22, '#2f6b4f').setDepth(4000);
-    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, '#2f6b4f').setDepth(4000);
+    this.scoreText = sharpText(this, W / 2, 40, '', 22, tableInk('#2f6b4f')).setDepth(4000);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, tableInk('#2f6b4f')).setDepth(4000);
     const spots = [
       { x: W / 2, y: H - 20 },
       { x: SIDE_LABEL.x, y: SIDE_LABEL.y },
@@ -93,7 +94,7 @@ export class CallbreakScene extends Scene {
     ];
     for (let seat = 0; seat < 4; seat++) {
       const side = seat === 1 || seat === 3;
-      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 20, '#2f6b4f').setDepth(4000));
+      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 20, tableInk('#2f6b4f')).setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);

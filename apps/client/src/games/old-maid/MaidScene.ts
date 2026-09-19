@@ -1,5 +1,6 @@
 import { MAID_QUEEN, rankOf, takeMove, type MaidMove, type MaidState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS } from '../../theme';
@@ -14,7 +15,7 @@ export const MAID_SIZE = { width: W, height: H };
 
 const CW = 80;
 const CH = 113;
-const TABLE = 0xf5e6ff;
+const TABLE = tableFill(0xf5e6ff);
 const MOVE_MS = 230;
 const HAND_Y = H - CH / 2 - 34;
 const OFFER_Y = 250;
@@ -55,11 +56,11 @@ export class MaidScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    this.offerText = sharpText(this, W / 2, OFFER_Y - CH / 2 - 26, '', 24, '#7a4dae').setDepth(4000);
-    this.banner = sharpText(this, W / 2, OFFER_Y + CH / 2 + 30, '', 26, '#7a4dae').setDepth(4000);
+    this.offerText = sharpText(this, W / 2, OFFER_Y - CH / 2 - 26, '', 24, tableInk('#7a4dae')).setDepth(4000);
+    this.banner = sharpText(this, W / 2, OFFER_Y + CH / 2 + 30, '', 26, tableInk('#7a4dae')).setDepth(4000);
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
-      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 48, '', 21, '#7a4dae').setDepth(4000));
+      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 48, '', 21, tableInk('#7a4dae')).setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);

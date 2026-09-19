@@ -94,6 +94,12 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M18 Online 3–4 players + ratings (Glicko-2)**
 - [ ] **M19 Realtime online duels (research first):** latency-tolerant Air Hockey; may stay same-device only if it doesn't feel good
 
+## The look (started 2026-09-19, after the owner called the flat look soft)
+The look that shipped first is flat candy with **no gradients** ([12](12-catalog-and-direction.md) Part 3). Against a Playrix-grade casual game (the owner pointed at Township) it reads cheap, and the rule against depth is why. The games room look is the answer: walnut, felt, brass and cream, with light falling from the top. Both looks are in the build behind `?look=2` so they can be compared on one phone, and look 1 goes when the new one is finished.
+- [x] **L1 The room, proved on one game (2026-09-19):** the shelf, the table setup, every button and the Chess board. A wooden frame with grain, squares lit from the top, a brass rail and coordinates, felt underneath, and a shadow under every piece. Live at `/?look=2`.
+- [ ] **L2 The card room:** all fifteen card and patience tables on felt, a red pack so backs are not green on green, the hand cover in walnut.
+- [ ] **L3 The rest of the tables, the tile art and the mark:** the board and duel games, the shelf art redrawn in the same materials, the app mark and name to match, then look 1 comes out.
+
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
 - [x] **M20a Cards B, hidden hands (2026-09-19):** Crazy Eights, 35 games, and the first game here where you hold cards nobody else may see. Two players get seven cards and three or four get five, a play matches suit or rank, an eight goes on anything and names the next suit, you draw until you can play, and the pile becomes a new deck when the deck runs out.
   - **Bots that cannot cheat, rather than bots asked not to.** `chooseMove` hands the bot a seat's *view* (its own cards, the pile, the suit in force, everyone's hand sizes, how deep the deck is) and never the state. A test shuffles the other hands and reverses the deck behind each of the four levels and checks the same move still comes out. Sea Battle's bot was written not to look, but nothing proved it; this one is proved.

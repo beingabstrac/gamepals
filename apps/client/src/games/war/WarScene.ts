@@ -1,5 +1,6 @@
 import { WAR_BATTLES, WAR_FLIP, type WarMove, type WarState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS } from '../../theme';
@@ -13,8 +14,8 @@ export const WAR_SIZE = { width: W, height: H };
 
 const CW = 96;
 const CH = 135;
-const TABLE = 0xffe0e0;
-const SLOT = 0xf0a0a0;
+const TABLE = tableFill(0xffe0e0);
+const SLOT = slotFill(0xf0a0a0);
 const MOVE_MS = 240;
 /** The two stacks, and the row where the battle happens. */
 const STACK_Y = [H - CH / 2 - 40, CH / 2 + 40];
@@ -46,9 +47,9 @@ export class WarScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     for (const seat of [0, 1]) {
       drawSlot(g, STACK_X, STACK_Y[seat]!, CW, CH, SLOT);
-      this.countText.push(sharpText(this, STACK_X, STACK_Y[seat]! + (seat === 0 ? CH / 2 + 22 : -CH / 2 - 22), '', 24, '#b3474a').setDepth(4000));
+      this.countText.push(sharpText(this, STACK_X, STACK_Y[seat]! + (seat === 0 ? CH / 2 + 22 : -CH / 2 - 22), '', 24, tableInk('#b3474a')).setDepth(4000));
     }
-    this.banner = sharpText(this, W / 2, H / 2, '', 52, '#b3474a').setVisible(false).setDepth(4000);
+    this.banner = sharpText(this, W / 2, H / 2, '', 52, tableInk('#b3474a')).setVisible(false).setDepth(4000);
 
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);

@@ -2,6 +2,7 @@ import { isRed, rankOf, suitOf, SUIT_SYMBOLS } from '@gamepals/rules';
 import type { GameObjects, Scene } from 'phaser';
 import { COLORS, DARK, toHex } from '../../theme';
 import { sharpText } from '../crisp';
+import { ROOM } from '../../look';
 
 /** One card face, shared by Solitaire, FreeCell and Spider so the card games look like one family. */
 export const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -63,15 +64,20 @@ export function placeAt(view: CardView, x: number, y: number, depth: number): vo
 export function makeCard(scene: Scene, card: number, cw: number, ch: number): CardView {
   const scale = cw / 88;
   const shadow = scene.add.graphics();
-  shadow.fillStyle(0x2b2a3a, 0.14);
+  shadow.fillStyle(0x000000, ROOM ? 0.3 : 0.14);
   shadow.fillRoundedRect(-cw / 2, -ch / 2 + 4, cw, ch, 12);
 
   const back = scene.add.graphics();
-  back.fillStyle(toHex(DARK.mint), 1);
+  // Green backs on green felt would be one flat shape, so the games room deals a red pack.
+  back.fillStyle(ROOM ? 0x9c2f2f : toHex(DARK.mint), 1);
   back.fillRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
-  back.lineStyle(3, 0xffffff, 0.9);
+  if (ROOM) {
+    back.fillStyle(0x7a2020, 1);
+    back.fillRoundedRect(-cw / 2 + 5, -ch / 2 + 5, cw - 10, ch - 10, 9);
+  }
+  back.lineStyle(3, ROOM ? 0xe8c98a : 0xffffff, ROOM ? 0.85 : 0.9);
   back.strokeRoundedRect(-cw / 2 + 7, -ch / 2 + 7, cw - 14, ch - 14, 8);
-  back.fillStyle(0xffffff, 0.35);
+  back.fillStyle(ROOM ? 0xe8c98a : 0xffffff, ROOM ? 0.4 : 0.35);
   for (let row = 0; row < 4; row++)
     for (let col = 0; col < 3; col++) back.fillCircle((-20 + col * 20) * scale, (-36 + row * 24) * scale, 4 * scale);
 
@@ -79,9 +85,9 @@ export function makeCard(scene: Scene, card: number, cw: number, ch: number): Ca
   const rank = rankOf(card);
   const suit = SUIT_SYMBOLS[suitOf(card)]!;
   const face = scene.add.graphics();
-  face.fillStyle(0xffffff, 1);
+  face.fillStyle(ROOM ? 0xfbf4e4 : 0xffffff, 1);
   face.fillRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
-  face.lineStyle(2, 0xdcd6ee, 1);
+  face.lineStyle(2, ROOM ? 0xcdb992 : 0xdcd6ee, 1);
   face.strokeRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
   const parts: GameObjects.GameObject[] = [
     face,

@@ -1,5 +1,6 @@
 import { askMove, FISH_DRAW, FISH_PASS, rankOf, type FishMove, type FishState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS } from '../../theme';
@@ -14,7 +15,7 @@ export const FISH_SIZE = { width: W, height: H };
 
 const CW = 80;
 const CH = 113;
-const TABLE = 0xd8f3ff;
+const TABLE = tableFill(0xd8f3ff);
 const MOVE_MS = 220;
 const HAND_Y = H - CH / 2 - 34;
 const POOL_Y = 330;
@@ -76,12 +77,12 @@ export class FishScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    this.poolText = sharpText(this, W / 2, POOL_Y + CH / 2 + 20, '', 22, '#2f76b0').setDepth(4000);
-    this.banner = sharpText(this, W / 2, POOL_Y - CH / 2 - 26, '', 26, '#2f76b0').setDepth(4000);
+    this.poolText = sharpText(this, W / 2, POOL_Y + CH / 2 + 20, '', 22, tableInk('#2f76b0')).setDepth(4000);
+    this.banner = sharpText(this, W / 2, POOL_Y - CH / 2 - 26, '', 26, tableInk('#2f76b0')).setDepth(4000);
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
       const x = (W / (seats + 1)) * (seat + 1);
-      this.seatText.push(sharpText(this, x, 44, '', 21, '#2f76b0').setDepth(4000));
+      this.seatText.push(sharpText(this, x, 44, '', 21, tableInk('#2f76b0')).setDepth(4000));
     }
   }
 

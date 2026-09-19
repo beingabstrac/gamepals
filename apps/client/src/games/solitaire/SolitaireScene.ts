@@ -1,5 +1,6 @@
 import { bestMoveFrom, DRAW_MOVE, suitOf, SUIT_SYMBOLS, type SolitaireMove, type SolitaireState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { slotFill, tableFill, tableInk } from '../../look';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
@@ -21,8 +22,8 @@ const DOWN_STEP = 18;
 const UP_STEP = 38;
 const MOVE_MS = 230;
 const DRAG_MIN = 10;
-const TABLE = 0xbdeed6;
-const SLOT = 0x8fdcb6;
+const TABLE = tableFill(0xbdeed6);
+const SLOT = slotFill(0x8fdcb6);
 
 interface Spot {
   readonly x: number;
@@ -123,10 +124,10 @@ export class SolitaireScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     const slot = (x: number, y: number) => drawSlot(g, x, y, CW, CH, SLOT);
     slot(colX(0), TOP_Y);
-    sharpText(this, colX(0), TOP_Y, '↻', 40, '#5fc796');
+    sharpText(this, colX(0), TOP_Y, '↻', 40, tableInk('#5fc796'));
     for (let s = 0; s < 4; s++) {
       slot(colX(3 + s), TOP_Y);
-      sharpText(this, colX(3 + s), TOP_Y, SUIT_SYMBOLS[s]!, 44, '#5fc796');
+      sharpText(this, colX(3 + s), TOP_Y, SUIT_SYMBOLS[s]!, 44, tableInk('#5fc796'));
     }
     for (let c = 0; c < 7; c++) slot(colX(c), TAB_Y);
   }

@@ -30,3 +30,12 @@ export const ROOM_COLORS = {
 } as const;
 
 export const hex = (color: number): string => `#${color.toString(16).padStart(6, '0')}`;
+
+/** The table a card game is played on: green felt in the games room, its own colour otherwise. */
+export const tableFill = (flat: number): number => (ROOM ? ROOM_COLORS.felt : flat);
+
+/** An empty slot drawn on that table: a darker patch of felt in the games room. */
+export const slotFill = (flat: number): number => (ROOM ? ROOM_COLORS.feltDark : flat);
+
+/** Writing on the table: cream in the games room, where the felt is dark. */
+export const tableInk = (flat: string): string => (ROOM ? '#f3e3c4' : flat);

@@ -2,6 +2,7 @@ import type { GameObjects, Scene } from 'phaser';
 import type { SeatController } from '../../session';
 import { DARK, toHex } from '../../theme';
 import { sharpText } from '../crisp';
+import { ROOM } from '../../look';
 
 /**
  * Hands that only their owner may see, shared by the card games that deal them
@@ -67,7 +68,8 @@ export class HandPrivacy {
     if (!this.hidden) return;
     const label = this.seats[this.shown]?.label ?? 'You';
     const back = this.scene.add.graphics();
-    back.fillStyle(toHex(DARK.sky), 1);
+    // The cover is a piece of the room's furniture, not a blue card.
+    back.fillStyle(ROOM ? 0x3b2312 : toHex(DARK.sky), 1);
     back.fillRoundedRect(-this.where.width / 2, -150, this.where.width, 300, 28);
     this.panel = this.scene.add
       .container(this.where.x, this.where.y, [
