@@ -53,6 +53,8 @@ import {
   type SpadesState,
   callbreak,
   type CallbreakState,
+  ginRummy,
+  type GinState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -134,6 +136,7 @@ import { MAID_COLORS, MAID_NAMES, MAID_SIZE, maidResult, maidStatus, MaidScene }
 import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } from './hearts/HeartsScene';
 import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, SpadesScene } from './spades/SpadesScene';
 import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
+import { GIN_COLORS, GIN_NAMES, GIN_SIZE, ginResult, ginStatus, GinScene } from './gin-rummy/GinScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -1004,6 +1007,30 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) =>
       (after as CallbreakState).trick.length === 0 && (before as CallbreakState).trick.length > 0 ? 'go' : 'place',
     createScene: (session) => new CallbreakScene(session),
+  }),
+  entry({
+    definition: ginRummy,
+    tagline: 'Make sets and runs, then knock',
+    levels: [
+      { id: 'hand', label: 'One hand' },
+      { id: '100', label: 'Game to 100' },
+    ],
+    howTo: {
+      goal: 'Get your ten cards into sets and runs. A set is three or four of a kind, a run is three or more in a row in one suit.',
+      controls: 'Take a card from the deck or the pile, then throw one away. Your hand sorts itself, and the number under it is what you are still holding loose. On a keyboard: arrows pick a card, Enter throws it, K knocks.',
+      win: 'Knock when your loose cards come to ten or less and you score the difference between the two hands.',
+      draw: 'If the deck runs down to two cards, nobody scores.',
+      tip: 'Gin is no loose cards at all and pays twenty more. Knock too soon and the other player can lay their cards on your sets and undercut you.',
+    },
+    sideNames: () => GIN_NAMES,
+    sideColors: () => GIN_COLORS,
+    size: GIN_SIZE,
+    color: DARK.grape,
+    status: (state) => ginStatus(state as GinState),
+    resultText: (state) => ginResult(state as GinState),
+    moveCue: (before, after) =>
+      (after as GinState).hands[0]!.length > (before as GinState).hands[0]!.length ? 'tap' : 'place',
+    createScene: (session) => new GinScene(session),
   }),
   entry({
     definition: slidingPuzzle,

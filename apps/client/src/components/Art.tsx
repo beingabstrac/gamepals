@@ -641,6 +641,25 @@ function CallbreakArt() {
   );
 }
 
+function GinRummyArt() {
+  const pip = (x: number, y: number, fill: string) => <circle cx={x} cy={y} r="4.5" fill={fill} />;
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="30" width="26" height="38" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-10 21 49)" />
+      {pip(21, 49, COLORS.grape)}
+      <rect x="30" y="26" width="26" height="38" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      {pip(43, 38, COLORS.grape)}
+      {pip(43, 52, COLORS.grape)}
+      <rect x="52" y="26" width="26" height="38" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      {pip(65, 34, COLORS.grape)}
+      {pip(65, 45, COLORS.grape)}
+      {pip(65, 56, COLORS.grape)}
+      <circle cx="72" cy="74" r="17" fill={COLORS.sunny} />
+      <path d="M64 74 l6 6 l12 -13" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -923,6 +942,7 @@ const ART: Record<string, () => JSX.Element> = {
   hearts: HeartsArt,
   spades: SpadesArt,
   callbreak: CallbreakArt,
+  'gin-rummy': GinRummyArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

@@ -7,6 +7,7 @@ import { crazyEights } from './crazy-eights';
 import { chess } from './chess';
 import { colorSort } from './color-sort';
 import { dominoes } from './dominoes';
+import { ginRummy } from './gin-rummy';
 import { goFish } from './go-fish';
 import { hearts } from './hearts';
 import { dotsAndBoxes } from './dots-and-boxes';
@@ -59,6 +60,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       hearts,
       spades,
       callbreak,
+      ginRummy,
       memory,
       slidingPuzzle,
       colorSort,

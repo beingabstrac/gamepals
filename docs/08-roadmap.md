@@ -122,7 +122,8 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - **Scores are kept in tenths** (41 is 4.1), because a trick over your call is worth a tenth of a point. Keeping them as whole numbers inside the rules means no rounding to argue with, and one place to turn them into words.
   - **The gallery screenshot found two faults that every test passed over.** The two seats at the sides had their names centred 76px from the edge of an 800px table, so in Spades and Callbreak the names ran off both edges, and in all three trick-taking games they sat on top of that seat's own face-down pile. The message banner sat on the far pile too. Hearts and Spades shipped like that in the last two milestones and nothing caught it: the page did not scroll, the board fitted, no card went missing.
   - **So the check is now a test.** The scenes answer `labelCheck()` in test mode and `e2e/labels.spec.ts` asserts no seat name runs off the table or sits on a card. Run 35444543112 is that test against the layout that shipped: red on both engines, "names on top of a card" for Hearts and Spades, "names off the table" for Callbreak. Worth repeating, because it keeps coming back: green CI says a game works, not that it looks right. Looking at the gallery artifact is part of finishing a game.
-- [ ] **M22 Cards D:** Rummy, Gin Rummy
+- [ ] **M22a Cards D, melds:** Gin Rummy, and the bones of a melding game (sets, runs, and what is left over) in `packages/rules/src/games/melds.ts`. Rummy sits on the same thing.
+- [ ] **M22b Cards D, the family game:** Rummy for 2 to 4
 - [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
