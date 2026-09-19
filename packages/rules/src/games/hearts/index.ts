@@ -131,12 +131,12 @@ export class HeartsState implements GameState<HeartsMove> {
     }
     // Everybody has chosen: the cards change hands at the same moment.
     const step = this.passTo;
-    const hands = this.hands.map((cards2, i) => {
+    const hands = this.hands.map((_hand, i) => {
       const from = (i - step + this.hands.length) % this.hands.length;
       const kept = this.hands[i]!.filter((card) => !passing[i]!.includes(card));
       return [...kept, ...passing[from]!].sort((a, b) => a - b);
     });
-    const leads = hands.findIndex((cards2) => cards2.includes(TWO_OF_CLUBS)) as Seat;
+    const leads = hands.findIndex((hand) => hand.includes(TWO_OF_CLUBS)) as Seat;
     return new HeartsState(hands, this.scores, this.taken, 'play', this.hands.map(() => []), this.hand, [], [], false,
       leads, this.target, this.moves + 1, null, { kind: 'pass' });
   }
