@@ -32,13 +32,13 @@ const TABLE = 0xdff0f6;
 const SLOT = 0x9cc8d9;
 const MOVE_MS = 220;
 const HAND_Y = H - CH / 2 - 74;
-const PILE_Y = 214;
+const PILE_Y = 250;
 const DECK_X = W / 2 - CW * 0.85;
 const PILE_X = W / 2 + CW * 0.85;
 /** Melds laid on the table live in this band, in rows. */
-const MELDS_TOP = 330;
+const MELDS_TOP = 400;
 const MELD_ROW = 84;
-const BUTTON_Y = H - CH - 132;
+const BUTTON_Y = 640;
 export const RUMMY_COLORS = [COLORS.sky, COLORS.tomato, COLORS.mint, COLORS.sunny];
 export const RUMMY_NAMES = ['Blue', 'Red', 'Green', 'Yellow'];
 
@@ -90,11 +90,11 @@ export class RummyScene extends Scene {
     drawSlot(g, DECK_X, PILE_Y, CW, CH, SLOT);
     drawSlot(g, PILE_X, PILE_Y, CW, CH, SLOT);
     this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 18, '', 19, '#2c6c83').setDepth(4000);
-    this.banner = sharpText(this, W / 2, 30, '', 22, '#2c6c83').setDepth(4000);
+    this.banner = sharpText(this, W / 2, 28, '', 22, '#2c6c83').setDepth(4000);
     this.countText = sharpText(this, W / 2, H - 26, '', 21, '#2c6c83').setDepth(4000);
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
-      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 88, '', 18, '#2c6c83').setDepth(4000));
+      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 68, '', 18, '#2c6c83').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);
@@ -126,7 +126,7 @@ export class RummyScene extends Scene {
     state.hands.forEach((hand, seat) => {
       if (seat === mine) return;
       const x = (W / (state.hands.length + 1)) * (seat + 1);
-      hand.forEach((card, i) => spots.set(card, { x: x + i * 5 - hand.length * 2.5, y: 130, depth: 100 + i, up: false, small: false, mine: false }));
+      hand.forEach((card, i) => spots.set(card, { x: x + i * 5 - hand.length * 2.5, y: 146, depth: 100 + i, up: false, small: false, mine: false }));
     });
     // The melds on the table, in rows, laid out small.
     let row = 0;
