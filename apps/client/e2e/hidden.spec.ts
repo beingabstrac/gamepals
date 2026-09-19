@@ -28,7 +28,8 @@ test('two people on one phone never see each other\'s cards', async ({ page }) =
     await page.locator('.seat').nth(chair).click();
     await page.getByRole('button', { name: /Nobody/ }).click();
   }
-  await expect(page.locator('.seat')).toHaveCount(2);
+  // Empty chairs keep the .seat class and say "Add", so count the ones somebody is sitting in.
+  await expect(page.getByRole('button', { name: /Tap to change/ })).toHaveCount(2);
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect(page.locator('.board canvas')).toBeVisible();
 
