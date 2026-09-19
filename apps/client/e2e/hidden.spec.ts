@@ -33,11 +33,13 @@ test('two people on one phone never see each other\'s cards', async ({ page }) =
   expect(first!.faceUp).toBeGreaterThan(0);
 
   // Play this hand's turn with the keyboard: Enter plays the card in focus, D draws when stuck.
+  // One key at a time, checking in between: a key is also how you lift the cover, so pressing on
+  // past the turn change would knock on the very cover this test is here to see.
   const board = page.locator('.board');
-  for (let tries = 0; tries < 30 && (await handCheck(page))?.shown === first!.shown; tries++) {
-    await board.press('ArrowRight');
-    await board.press('Enter');
-    await board.press('d');
+  const keys = ['ArrowRight', 'Enter', 'd'];
+  for (let tries = 0; tries < 60; tries++) {
+    if ((await handCheck(page))?.shown !== first!.shown) break;
+    await board.press(keys[tries % keys.length]!);
   }
   expect((await handCheck(page))?.shown, 'the turn never reached the other person').not.toBe(first!.shown);
   const second = await handCheck(page);
