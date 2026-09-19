@@ -45,6 +45,8 @@ import {
   type FishState,
   war,
   type WarState,
+  oldMaid,
+  type MaidState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -122,6 +124,7 @@ import { SPIDER_SIZE, spiderStatus, SpiderScene } from './spider/SpiderScene';
 import { EIGHTS_COLORS, EIGHTS_NAMES, EIGHTS_SIZE, eightsStatus, EightsScene } from './crazy-eights/EightsScene';
 import { FISH_COLORS, FISH_NAMES, FISH_SIZE, fishStatus, FishScene } from './go-fish/FishScene';
 import { WAR_COLORS, WAR_NAMES, WAR_SIZE, warResult, warStatus, WarScene } from './war/WarScene';
+import { MAID_COLORS, MAID_NAMES, MAID_SIZE, maidResult, maidStatus, MaidScene } from './old-maid/MaidScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -897,6 +900,24 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => warResult(state as WarState),
     moveCue: (_before, after) => ((after as WarState).last?.wars ? 'go' : 'place'),
     createScene: (session) => new WarScene(session),
+  }),
+  entry({
+    definition: oldMaid,
+    tagline: 'Do not be left with the queen',
+    howTo: {
+      goal: 'Pair off all your cards. Do not be the one left holding the odd queen.',
+      controls: 'Tap any card in the fan held out to you. If it matches one of yours, the pair goes down. On a keyboard: arrows pick a card in the fan, Enter takes it.',
+      win: 'Everybody who runs out of cards has won. The last player, holding the odd queen, is the old maid.',
+      tip: 'One queen was taken out of the deck, so the third one can never be paired. The fan is face down, so there is nothing to work out: just pick.',
+    },
+    sideNames: (players) => MAID_NAMES.slice(0, players),
+    sideColors: (players) => MAID_COLORS.slice(0, players),
+    size: MAID_SIZE,
+    color: COLORS.grape,
+    status: (state) => maidStatus(state as MaidState),
+    resultText: (state) => maidResult(state as MaidState, MAID_NAMES),
+    moveCue: (before, after) => ((after as MaidState).pairs.some((n, i) => n > ((before as MaidState).pairs[i] ?? 0)) ? 'go' : 'tap'),
+    createScene: (session) => new MaidScene(session),
   }),
   entry({
     definition: slidingPuzzle,

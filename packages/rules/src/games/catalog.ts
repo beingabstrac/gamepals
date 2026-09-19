@@ -15,6 +15,7 @@ import { freecell } from './freecell';
 import { ludo } from './ludo';
 import { mancala } from './mancala';
 import { memory } from './memory';
+import { oldMaid } from './old-maid';
 import { pyramid } from './pyramid';
 import { reversi } from './reversi';
 import { seaBattle } from './sea-battle';
@@ -51,6 +52,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       crazyEights,
       goFish,
       war,
+      oldMaid,
       memory,
       slidingPuzzle,
       colorSort,

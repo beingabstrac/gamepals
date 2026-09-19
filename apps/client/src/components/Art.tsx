@@ -527,6 +527,30 @@ function WarArt() {
   );
 }
 
+function OldMaidArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="28" width="28" height="40" rx="7" fill={DARK.grape} transform="rotate(-10 22 48)" />
+      <rect x="26" y="24" width="28" height="40" rx="7" fill={DARK.grape} />
+      <rect x="46" y="28" width="28" height="40" rx="7" fill={DARK.grape} transform="rotate(10 60 48)" />
+      <rect x="62" y="34" width="30" height="42" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(14 77 55)" />
+      <text
+        x="77"
+        y="53"
+        font-family="Fredoka, sans-serif"
+        font-weight="600"
+        font-size="20"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill={COLORS.bubblegum}
+        transform="rotate(14 77 55)"
+      >
+        Q
+      </text>
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -805,6 +829,7 @@ const ART: Record<string, () => JSX.Element> = {
   'crazy-eights': CrazyEightsArt,
   'go-fish': GoFishArt,
   war: WarArt,
+  'old-maid': OldMaidArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

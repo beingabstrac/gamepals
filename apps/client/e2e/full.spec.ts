@@ -20,6 +20,7 @@ const GAMES = [
   'Crazy Eights',
   'Go Fish',
   'War',
+  'Old Maid',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',
