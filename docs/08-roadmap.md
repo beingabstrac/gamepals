@@ -97,7 +97,9 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 ## The look (started 2026-09-19, after the owner called the flat look soft)
 The look that shipped first is flat candy with **no gradients** ([12](12-catalog-and-direction.md) Part 3). Against a Playrix-grade casual game (the owner pointed at Township) it reads cheap, and the rule against depth is why. The games room look is the answer: walnut, felt, brass and cream, with light falling from the top. Both looks are in the build behind `?look=2` so they can be compared on one phone, and look 1 goes when the new one is finished.
 - [x] **L1 The room, proved on one game (2026-09-19):** the shelf, the table setup, every button and the Chess board. A wooden frame with grain, squares lit from the top, a brass rail and coordinates, felt underneath, and a shadow under every piece. Live at `/?look=2`.
-- [ ] **L2 The card room:** all fifteen card and patience tables on felt, a red pack so backs are not green on green, the hand cover in walnut.
+- [x] **L2 The card room (2026-09-20):** all fifteen card and patience tables take their colour from the look, so in the room they are one green felt with cream writing and slots cut as darker patches of it. The pack is red there, because green backs on green felt are one flat shape, and the hand cover is walnut.
+  - **Cream writing on a cream button is invisible**, which is what Solitaire's Undo and Hint became the moment the body text went light for the felt. Every cream panel now states its own ink: `.tool`, `.die`, `.pad-key`, `.picker`, `.score`, `.soon-pill`, `.edit-badge`, `.yatzy-cell`. Found by opening the game and looking, not by a test.
+  - **A board sits on wood, not on more felt.** The page behind a game was the same green as the table, so the table had no edge. The game screen is walnut now and the felt reads as a thing lying on it.
 - [ ] **L3 The rest of the tables, the tile art and the mark:** the board and duel games, the shelf art redrawn in the same materials, the app mark and name to match, then look 1 comes out.
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
