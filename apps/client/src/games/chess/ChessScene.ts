@@ -47,7 +47,7 @@ type Point = { x: number; y: number };
 function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
   const white = colorOf(piece) === 0;
   const fill = white ? WHITE_PIECE : BLACK_PIECE;
-  const line = white ? INK : (ROOM ? 0xc9a253 : 0xf3efe6);
+  const line = white ? INK : (ROOM ? 0x8b7a5c : 0xf3efe6);
   const s = scale;
   const path = (points: readonly (readonly [number, number])[]) => {
     g.beginPath();
@@ -270,6 +270,12 @@ export class ChessScene extends Scene {
     g.fillRoundedRect(8, 8, W - 16, 14, 8);
     g.fillStyle(ROOM_COLORS.wood, 1);
     g.fillRoundedRect(14, 14, W - 28, H - 28, 12);
+    // Grain: a few long, faint lines along the frame, which is most of what says "wood".
+    for (let i = 0; i < 14; i++) {
+      const y = 18 + i * ((H - 36) / 14) + (i % 3) * 1.5;
+      g.lineStyle(1.5, i % 2 ? ROOM_COLORS.woodDark : ROOM_COLORS.woodLight, 0.16);
+      g.lineBetween(16, y, W - 16, y + (i % 4) - 1.5);
+    }
     g.lineStyle(2.5, ROOM_COLORS.brass, 0.8);
     g.strokeRoundedRect(17, 17, W - 34, H - 34, 10);
   }
