@@ -17,6 +17,7 @@ const GAMES = [
   'Spider',
   'Pyramid',
   'TriPeaks',
+  'Crazy Eights',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

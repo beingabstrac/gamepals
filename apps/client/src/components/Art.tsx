@@ -478,6 +478,22 @@ function TriPeaksArt() {
   );
 }
 
+function CrazyEightsArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="14" y="30" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-12 31 53)" />
+      <rect x="34" y="26" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <text x="51" y="49" font-family="Fredoka, sans-serif" font-weight="600" font-size="26" text-anchor="middle" dominant-baseline="central" fill={COLORS.grape}>
+        8
+      </text>
+      <circle cx="74" cy="34" r="11" fill={COLORS.tomato} />
+      <path d="M74 29 c-3 3 -5 5 -5 6.5 a2.6 2.6 0 0 0 5 1.3 a2.6 2.6 0 0 0 5 -1.3 c0 -1.5 -2 -3.5 -5 -6.5 z" fill="#fff" />
+      <circle cx="74" cy="60" r="11" fill={COLORS.ink} />
+      <path d="M74 55 l4.5 5.5 -4.5 5.5 -4.5 -5.5 z" fill="#fff" />
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -753,6 +769,7 @@ const ART: Record<string, () => JSX.Element> = {
   freecell: FreeCellArt,
   spider: SpiderArt,
   pyramid: PyramidArt,
+  'crazy-eights': CrazyEightsArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

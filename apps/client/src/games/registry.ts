@@ -39,6 +39,8 @@ import {
   type SpiderState,
   pyramid,
   type PyramidState,
+  crazyEights,
+  type EightsState,
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
@@ -113,6 +115,7 @@ import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
 import { SPIDER_SIZE, spiderStatus, SpiderScene } from './spider/SpiderScene';
+import { EIGHTS_COLORS, EIGHTS_NAMES, EIGHTS_SIZE, eightsStatus, EightsScene } from './crazy-eights/EightsScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
 import { TriPeaksControls } from './tripeaks/TriPeaksControls';
@@ -830,6 +833,24 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) => ((after as TriPeaksState).left < (before as TriPeaksState).left ? 'go' : 'tap'),
     Controls: TriPeaksControls,
     createScene: (session) => new TriPeaksScene(session),
+  }),
+  entry({
+    definition: crazyEights,
+    tagline: 'Match it, or play an eight',
+    howTo: {
+      goal: 'Be the first to get rid of all your cards.',
+      controls: 'Tap a card that matches the pile by suit or by number. An eight goes on anything, and then you pick the next suit. Tap the deck when you have nothing. On a keyboard: arrows pick a card, Enter plays it, D draws.',
+      win: 'The first player with no cards left wins.',
+      tip: 'An eight can be played at any time and changes the suit, so it is worth keeping for when you are stuck. Watch how many cards everybody else is holding.',
+    },
+    sideNames: (players) => EIGHTS_NAMES.slice(0, players),
+    sideColors: (players) => EIGHTS_COLORS.slice(0, players),
+    size: EIGHTS_SIZE,
+    color: DARK.sky,
+    status: (state) => eightsStatus(state as EightsState),
+    resultText: (state) => `Out of cards! ${(state as EightsState).score} points left in the other hands.`,
+    moveCue: (before, after) => ((after as EightsState).discard.length > (before as EightsState).discard.length ? 'place' : 'tap'),
+    createScene: (session) => new EightsScene(session),
   }),
   entry({
     definition: slidingPuzzle,

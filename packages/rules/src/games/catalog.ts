@@ -3,6 +3,7 @@ import { createRng } from '../core/rng';
 import type { BotTier, GameDefinition, GameState, Seat } from '../core/types';
 import { backgammon } from './backgammon';
 import { checkers } from './checkers';
+import { crazyEights } from './crazy-eights';
 import { chess } from './chess';
 import { colorSort } from './color-sort';
 import { dominoes } from './dominoes';
@@ -45,6 +46,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       spider,
       pyramid,
       tripeaks,
+      crazyEights,
       memory,
       slidingPuzzle,
       colorSort,

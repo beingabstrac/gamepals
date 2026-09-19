@@ -95,7 +95,9 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M19 Realtime online duels (research first):** latency-tolerant Air Hockey; may stay same-device only if it doesn't feel good
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
-- [ ] **M20 Cards B:** Crazy Eights, Go Fish, Old Maid, War
+- [ ] **M20a Cards B, hidden hands:** Crazy Eights, and the pattern the other three need: a hand only its owner can see, a cover screen when the phone is passed, and bots that provably cannot see what they should not
+- [ ] **M20b Cards B, asking and racing:** Go Fish and War
+- [ ] **M20c Cards B, the odd one out:** Old Maid
 - [ ] **M21 Cards C:** Hearts, Spades, Callbreak
 - [ ] **M22 Cards D:** Rummy, Gin Rummy
 - [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person
