@@ -1573,3 +1573,37 @@ h2,
   transform: translateY(5px) scale(0.98);
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.5), 0 2px 0 #136b41, 0 6px 10px rgba(20, 80, 50, 0.3);
 }
+
+/* Three round buttons plus the emblem plus the name is more than a 375px phone has, so the
+   sign was pushing the last button off its own edge. */
+:root[data-look='room'] .hero {
+  padding: 8px 10px;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+:root[data-look='room'] .hero > div {
+  flex: 1;
+  min-width: 0;
+}
+
+:root[data-look='room'] .toggles {
+  flex: none;
+  gap: 5px;
+}
+
+:root[data-look='room'] .round-btn {
+  width: 34px;
+  height: 34px;
+}
+
+:root[data-look='room'] .round-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+:root[data-look='room'] .mascot {
+  width: 44px;
+  height: 44px;
+  flex: none;
+}
