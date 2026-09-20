@@ -531,9 +531,16 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state) => {
       const s = state as SnakesState;
       if (s.result) return undefined;
-      // Only mention tokens that have actually set off, so a fresh game reads "Red to roll".
-      const moved = s.positions.flatMap((square, seat) => (square > 0 ? [`${SNAKES_SEAT_NAMES[seat]} ${square}`] : []));
-      const lead = moved.slice(-2).join(', ');
+      // Only mention tokens that have actually set off, so a fresh game reads "Red to roll", and
+      // mention the two in front rather than the last two to sit down: `slice(-2)` took the last
+      // two by seat, so a four-player game always named Yellow and Blue however far behind they
+      // were, and never named the leader.
+      const moved = s.positions
+        .flatMap((square, seat) => (square > 0 ? [{ square, seat }] : []))
+        .sort((a, b) => b.square - a.square)
+        .slice(0, 2)
+        .map((one) => `${SNAKES_SEAT_NAMES[one.seat]} ${one.square}`);
+      const lead = moved.join(', ');
       return lead ? `${SNAKES_SEAT_NAMES[s.currentSeat]} to roll. ${lead}` : `${SNAKES_SEAT_NAMES[s.currentSeat]} to roll`;
     },
     moveCue: (_before, after) => {

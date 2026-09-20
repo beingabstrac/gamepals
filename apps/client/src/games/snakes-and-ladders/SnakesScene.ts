@@ -71,6 +71,11 @@ export class SnakesScene extends Scene {
   private shown: number[] = [];
   private queue: SnakesEvent[] = [];
   private running = false;
+  /**
+   * Bumped whenever the board gives up on the walk and jumps to the truth, so a walk that was
+   * already in flight knows its landing square is out of date and does not write it back.
+   */
+  private generation = 0;
   private seen: SnakesEvent | null = null;
   private banner!: GameObjects.Text;
   private bodies = new Map<number, Point[]>();
@@ -120,11 +125,30 @@ export class SnakesScene extends Scene {
     this.session.play('roll');
   }
 
+  /** More moves than this waiting and the board stops trying to walk them all. */
+  private static readonly CATCH_UP = 3;
+
   private onChange(): void {
     const event = this.state.last;
     if (event && event !== this.seen) {
       this.seen = event;
       this.queue.push(event);
+    }
+    /**
+     * A walk takes real time and rolls do not wait for it, so with quick play the queue grows
+     * without bound and the board falls arbitrarily far behind. The score line is read straight
+     * from the state, so the two disagree: the gallery caught the board showing both tokens at the
+     * start while the line above it had them on 47 and 45. Past a few moves behind, catch up.
+     * A board that jumps is better than a board that is wrong.
+     */
+    if (this.queue.length > SnakesScene.CATCH_UP) {
+      this.queue.length = 0;
+      this.running = false;
+      this.generation++;
+      for (const token of this.tokens) this.tweens.killTweensOf(token);
+      this.shown = this.state.positions.slice();
+      this.layout();
+      return;
     }
     this.next();
   }
@@ -186,7 +210,10 @@ export class SnakesScene extends Scene {
     });
 
     const landed = event.jump ? event.jump.to : (event.path[event.path.length - 1] ?? event.from);
+    const era = this.generation;
     const finish = () => {
+      // The board jumped ahead while this walk was in the air, so where it was going is history.
+      if (era !== this.generation) return;
       this.shown[event.seat] = landed;
       mover.setDepth(5).setAngle(0);
       if (landed === 100) this.tweens.add({ targets: mover, scale: 1.5, duration: 200, yoyo: true, repeat: 2, ease: 'Back.easeOut' });
@@ -247,6 +274,18 @@ export class SnakesScene extends Scene {
       const token = this.tokens[state.currentSeat]!;
       this.tweens.add({ targets: token, scale: token.scale * 1.18, duration: 380, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
+  }
+
+  /**
+   * Where the board says every token is, against where the state says it is. The board walks its
+   * tokens a square at a time while the line above it is read straight from the state, so these
+   * two drifting apart is the thing to watch: they were 47 squares apart when the gallery caught
+   * it. Tokens still walking are not counted, only how far behind the board is allowed to settle.
+   */
+  boardCheck(): { behind: number; walking: boolean } {
+    const truth = this.state.positions;
+    const behind = this.shown.reduce((worst, square, seat) => Math.max(worst, Math.abs(square - (truth[seat] ?? 0))), 0);
+    return { behind, walking: this.running || this.queue.length > 0 };
   }
 
   private drawBoard(): void {

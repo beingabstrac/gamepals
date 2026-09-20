@@ -234,6 +234,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   (`labelCheck`, `handCheck`, `tileCheck`, `layoutCheck`, `boardCheck`) are the card games and the
   ones built this week. The other thirty-four are unchecked, and the ones with pieces that travel
   are where the next Dominoes is. Worth a milestone of its own rather than a line here.
+- **Snakes & Ladders: the board fell behind the score line without limit (2026-09-21).** Two real
+  bugs in one picture, once the shot was settled properly. The board walks a token a square at a
+  time and rolls do not wait for the walk, so with quick play the queue grew without bound and the
+  board was arbitrarily far behind: forty-seven squares, in the shot that caught it. It now jumps
+  to the truth once it is more than three moves behind, because a board that jumps is better than
+  a board that is wrong. And the status line named the wrong players: `moved.slice(-2)` takes the
+  last two *by seat*, so a four-player game always said Yellow and Blue however far behind they
+  were and never named the leader. It sorts by square now. The scene answers `boardCheck()` with
+  how far behind it has settled.
 - **One quiet moment is not the end of the motion (2026-09-21).** The settle added yesterday waits
   for the scene's tweens to empty, which is not the same as the movement being over: a token walks
   its squares as a chain of short hops, and there is a still instant between every one of them.

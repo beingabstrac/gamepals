@@ -100,3 +100,25 @@ test('Dominoes: played tiles end up on the board, not on the players', async ({ 
   expect(bestOnBoard, `${laid} tiles played and none ever settled on the board`).toBeGreaterThan(0);
   expect(worstOnChips, 'tiles came to rest on a player rather than the board').toBe(0);
 });
+
+/**
+ * Snakes & Ladders walks its tokens a square at a time while the line above the board is read
+ * straight from the state. With quick play the walk fell behind without limit, so the board showed
+ * both tokens at the start while the line had them on 47 and 45.
+ */
+test('Snakes & Ladders: the board keeps up with the score line', async ({ page }) => {
+  await open(page, 'Snakes & Ladders');
+  let worst = 0;
+  for (let look = 0; look < 6; look++) {
+    await page.waitForTimeout(900);
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as { boardCheck?: () => { behind: number; walking: boolean } } | undefined;
+      return scene?.boardCheck ? scene.boardCheck() : null;
+    });
+    if (!report) break;
+    // A token in the middle of its walk is allowed to be behind; a settled board is not.
+    if (!report.walking) worst = Math.max(worst, report.behind);
+  }
+  expect(worst, 'the board settled this many squares behind the state').toBeLessThanOrEqual(6);
+});
