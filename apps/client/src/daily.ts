@@ -12,7 +12,7 @@ import { storage } from './platform';
 /** The games that suit a daily: one person, one sitting, and a result worth comparing. */
 export const DAILY_GAMES: readonly string[] = [
   'word-guess',
-  'twenty48',
+  '2048',
   'sudoku',
   'classic-snake',
   'sliding-puzzle',

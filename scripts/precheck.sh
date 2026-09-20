@@ -140,6 +140,32 @@ if missing:
 print('  ok:', len(names), 'names exported')
 BARRELEOF
 
+echo "== every game in the daily rota is a real game id"
+REPO="$REPO" python3 - <<'ROTAEOF' || fail=1
+import os, re, sys
+repo = os.environ['REPO']
+ids = set()
+for root, _, files in os.walk(os.path.join(repo, 'packages/rules/src/games')):
+    for name in files:
+        if name != 'index.ts': continue
+        for found in re.finditer(r"^  id: '([a-z0-9-]+)',$", open(os.path.join(root, name)).read(), re.M):
+            ids.add(found.group(1))
+
+daily = open(os.path.join(repo, 'apps/client/src/daily.ts')).read()
+listed = re.search(r"DAILY_GAMES: readonly string\[\] = \[(.*?)\];", daily, re.S)
+wanted = re.findall(r"'([a-z0-9-]+)'", listed.group(1)) if listed else []
+if not wanted:
+    print('  could not read DAILY_GAMES')
+    sys.exit(1)
+missing = [one for one in wanted if one not in ids]
+if missing:
+    # A folder name is not a game id: twenty48 is the folder, 2048 is the game, and the shelf
+    # simply vanished on the day the rota came round to it.
+    print('  NOT A GAME ID:', ', '.join(missing))
+    sys.exit(1)
+print('  ok:', len(wanted), 'games in the rota, all real')
+ROTAEOF
+
 echo "== every game present in all six test lists"
 REPO="$REPO" node -e '
 const fs = require("fs"), path = require("path");

@@ -7,7 +7,7 @@ import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
-import { dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
+import { DAILY_GAMES, dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
 import { ProSheet, usePro } from './components/Pro';
 import { onBackButton } from './platform';
 
@@ -87,7 +87,13 @@ function Daily({ onPlay }: { onPlay(entry: AnyEntry, seed: number): void }) {
   const [today, setToday] = useState(todayKey);
   const [left, setLeft] = useState(timeToNext);
   const [state, setState] = useState(loadDaily);
-  const entry = GAMES.find((game) => game.definition.id === dailyGameId(today));
+  const wanted = dailyGameId(today);
+  // If the rota ever names a game that is not in the registry, show the next one that is. This
+  // used to return nothing, so the whole shelf vanished for a day without a word about why, and
+  // it did: DAILY_GAMES said 'twenty48', which is the folder, while the game calls itself '2048'.
+  const entry =
+    GAMES.find((game) => game.definition.id === wanted) ??
+    GAMES.find((game) => DAILY_GAMES.includes(game.definition.id));
 
   useEffect(() => {
     // The countdown ticks, and at midnight the day rolls over without a reload.
@@ -99,6 +105,11 @@ function Daily({ onPlay }: { onPlay(entry: AnyEntry, seed: number): void }) {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    // Loud, because a rota pointing at nothing is a mistake in the list, and e2e fails on this.
+    if (entry?.definition.id !== wanted) console.error(`Today's puzzle names "${wanted}", which is not a game.`);
+  }, [wanted, entry]);
 
   if (!entry) return null;
   const done = doneToday(state, today);
