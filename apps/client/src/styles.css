@@ -1499,3 +1499,21 @@ h2,
 :root[data-look='room'] .how-to h2 {
   color: #3a2b1c;
 }
+
+/* The art inside each well is still drawn in candy colours. Redrawing forty-three pictures is a
+   job of its own, so until then they are warmed and taken down a notch to sit on parchment. */
+:root[data-look='room'] .tile .art svg {
+  filter: saturate(0.72) contrast(0.96) sepia(0.16);
+}
+
+/* "Jump, capture, crown a ki…" reads worse than two tidy lines of the same height. */
+:root[data-look='room'] .tile .small {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.1em;
+  line-height: 1.05;
+}
