@@ -32,8 +32,13 @@ test('a finished game goes on the record', async ({ page }) => {
   await page.getByRole('button', { name: 'Back to the table' }).click();
   await page.getByRole('button', { name: 'Back to games' }).click();
   await page.getByRole('button', { name: 'Your stats' }).click();
-  await expect(sheet).toContainText('1 game finished');
+  // The number and its label are separate elements, so read them separately rather than hoping
+  // for a space between them: the page says "1" and "game finished", not "1 game finished".
+  const first = sheet.locator('.stats-totals li').first();
+  await expect(first.locator('.stats-number')).toHaveText('1');
+  await expect(first.locator('.stats-label')).toHaveText('game finished');
   await expect(sheet.locator('.stats-game')).toHaveText('Tic-Tac-Toe');
+  await expect(sheet.locator('.stats-count')).toContainText('1 played');
 });
 
 test('an autoplay run never reaches the record', async ({ page }) => {
