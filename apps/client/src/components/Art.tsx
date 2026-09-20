@@ -7,12 +7,12 @@ import { COLORS, DARK } from '../theme';
  * The pale fills inside the pictures were the flat look showing through on forty-three tiles:
  * lavender rules, cold blue grids, white paper. In the room they are parchment and ochre.
  */
-const PAPER = ROOM ? '#F1E2C0' : '#FFFAF0';
-const PAPER_WARM = ROOM ? '#E8D3A6' : PAPER_WARM;
-const PAPER_LINE = ROOM ? '#CBAE7E' : '#E6E1F3';
-const COOL = ROOM ? '#5E8FA8' : '#8EC2FF';
+const PAPER = ROOM ? '#FFF8E8' : '#FFFAF0';
+const PAPER_WARM = ROOM ? '#FFE0B0' : '#FFE9CF';
+const PAPER_LINE = ROOM ? '#F0D9A8' : '#E6E1F3';
+const COOL = ROOM ? '#7CC8F0' : '#8EC2FF';
 const COOL_LINE = ROOM ? '#2F8CB5' : '#B9D9F2';
-const SQUARE_DARK = ROOM ? '#D39A5F' : SQUARE_DARK;
+const SQUARE_DARK = ROOM ? '#D39A5F' : '#C9B6F5';
 
 /* Original vector art: crisp at any size. The playroom lights it from the stylesheet. */
 
