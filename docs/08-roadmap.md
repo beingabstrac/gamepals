@@ -228,6 +228,18 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   journey from the player's chip to the board. It now only starts a new journey when the
   destination has actually changed. Worst in the fast builds, which is why the gallery is where it
   showed up, but wrong at any speed.
+- **Thirty-four scenes answer no question about themselves (noted 2026-09-21).** Dominoes was
+  broken since it shipped and nothing caught it, because the game runs, finishes, logs nothing and
+  fits every screen; the tiles were simply in the wrong place. The scenes that do answer something
+  (`labelCheck`, `handCheck`, `tileCheck`, `layoutCheck`, `boardCheck`) are the card games and the
+  ones built this week. The other thirty-four are unchecked, and the ones with pieces that travel
+  are where the next Dominoes is. Worth a milestone of its own rather than a line here.
+- **One quiet moment is not the end of the motion (2026-09-21).** The settle added yesterday waits
+  for the scene's tweens to empty, which is not the same as the movement being over: a token walks
+  its squares as a chain of short hops, and there is a still instant between every one of them.
+  Snakes & Ladders was caught in one, with the board showing tokens at the start while the status
+  line had them at 19 and 23. It now wants two quiet samples a beat apart. The first version of a
+  check is usually the part of the problem I had already thought of.
 - **The gallery now settles before it shoots (2026-09-20).** Reviewing the older games' pictures,
   Dominoes appeared to draw tiles across the players' names and Rummy to show a seat with a card
   count and no cards. Both turned out to be unjudgeable rather than wrong: the shot is taken at a

@@ -23,8 +23,8 @@ const slug = (name: string) => name.toLowerCase().replace(/\W+/g, '-');
  * gallery now settles first. Real-time games never settle, so there is a cap.
  */
 async function settle(page: Page): Promise<void> {
-  const quiet = await page
-    .waitForFunction(
+  const quiet = () =>
+    page.waitForFunction(
       () => {
         const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: { tweens?: { getTweens(): unknown[] } }[] } } })
           .gamepalsTestGame;
@@ -33,10 +33,20 @@ async function settle(page: Page): Promise<void> {
       },
       undefined,
       { timeout: 4000 },
-    )
-    .catch(() => null);
-  // Nothing settled in time: a real-time game, so take it as it is rather than failing a shot.
-  if (!quiet) await page.waitForTimeout(200);
+    );
+  // Twice, with a gap. One quiet moment is not the end of the motion: a Ludo token walks its
+  // squares as a chain of short hops, so there is a still instant between every one of them and
+  // a single check catches the board halfway through a move while the status line has already
+  // moved on. Two quiet samples a beat apart means the chain really has finished.
+  for (let look = 0; look < 2; look++) {
+    const settled = await quiet().catch(() => null);
+    // Nothing settles in a real-time game, so take the shot as it is rather than failing it.
+    if (!settled) {
+      await page.waitForTimeout(200);
+      return;
+    }
+    if (look === 0) await page.waitForTimeout(280);
+  }
 }
 
 for (const name of GAMES) {
