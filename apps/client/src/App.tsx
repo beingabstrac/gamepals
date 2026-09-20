@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { GameArt, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
+import { FlameIcon, GameArt, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
 import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
 import { Setup } from './components/Setup';
@@ -7,12 +7,13 @@ import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
+import { dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
 import { onBackButton } from './platform';
 
 type Screen =
   | { name: 'home' }
   | { name: 'setup'; entry: AnyEntry }
-  | { name: 'play'; entry: AnyEntry; seats: SeatController[]; variant?: string };
+  | { name: 'play'; entry: AnyEntry; seats: SeatController[]; variant?: string; seed?: number; daily?: boolean };
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
@@ -37,7 +38,16 @@ export function App() {
     if (screen.entry.kind === 'realtime') {
       return <RealtimeGameScreen entry={screen.entry} seats={screen.seats} onExit={onExit} />;
     }
-    return <GameScreen entry={screen.entry} seats={screen.seats} variant={screen.variant} onExit={onExit} />;
+    return (
+      <GameScreen
+        entry={screen.entry}
+        seats={screen.seats}
+        variant={screen.variant}
+        seed={screen.seed}
+        daily={screen.daily}
+        onExit={onExit}
+      />
+    );
   }
   if (screen.name === 'setup') {
     return (
@@ -48,7 +58,20 @@ export function App() {
       />
     );
   }
-  return <Home onPick={(entry) => setScreen({ name: 'setup', entry })} />;
+  return (
+    <Home
+      onPick={(entry) => setScreen({ name: 'setup', entry })}
+      onDaily={(entry, seed) =>
+        setScreen({
+          name: 'play',
+          entry,
+          seats: AUTOPLAY ? autoplaySeats(1) : [{ kind: 'human', label: 'You' }],
+          seed,
+          daily: true,
+        })
+      }
+    />
+  );
 }
 
 function useSettings(): Settings {
@@ -57,8 +80,53 @@ function useSettings(): Settings {
   return value;
 }
 
+/** Today's puzzle: the same board for everybody, a countdown to the next, and the streak. */
+function Daily({ onPlay }: { onPlay(entry: AnyEntry, seed: number): void }) {
+  const { streaks } = useSettings();
+  const [today, setToday] = useState(todayKey);
+  const [left, setLeft] = useState(timeToNext);
+  const [state, setState] = useState(loadDaily);
+  const entry = GAMES.find((game) => game.definition.id === dailyGameId(today));
+
+  useEffect(() => {
+    // The countdown ticks, and at midnight the day rolls over without a reload.
+    const timer = setInterval(() => {
+      setLeft(timeToNext());
+      const now = todayKey();
+      setToday((was) => (was === now ? was : now));
+      setState(loadDaily());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (!entry) return null;
+  const done = doneToday(state, today);
+  return (
+    <section class="daily" aria-label="Today's puzzle">
+      <div class="daily-art" style={{ '--c': entry.color }}>
+        <GameArt id={entry.definition.id} />
+      </div>
+      <div class="daily-words">
+        <p class="daily-kicker">Today's puzzle{done ? ' · done' : ''}</p>
+        <h2>{entry.definition.name}</h2>
+        <p class="daily-note">
+          {entry.minutes} · everyone gets the same one · next in {left}
+        </p>
+      </div>
+      {streaks && state.streak > 0 && (
+        <p class="daily-streak" aria-label={`${state.streak} day streak`}>
+          <span aria-hidden="true">🔥</span> {state.streak}
+        </p>
+      )}
+      <button class="btn primary daily-play" onClick={() => onPlay(entry, dailySeed(today))}>
+        {done ? 'Play again' : 'Play'}
+      </button>
+    </section>
+  );
+}
+
 function SettingsToggles() {
-  const { sound, haptics } = useSettings();
+  const { sound, haptics, streaks } = useSettings();
   return (
     <div class="toggles">
       <button
@@ -77,11 +145,20 @@ function SettingsToggles() {
       >
         <VibrateIcon on={haptics} />
       </button>
+      {/* A hook you cannot turn off is a trap, so the streak has a switch. */}
+      <button
+        class="round-btn"
+        aria-pressed={streaks}
+        aria-label={streaks ? 'Streaks on' : 'Streaks off'}
+        onClick={() => settings.set({ streaks: !streaks })}
+      >
+        <FlameIcon on={streaks} />
+      </button>
     </div>
   );
 }
 
-function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
+function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entry: AnyEntry, seed: number): void }) {
   return (
     <div class="screen">
       <header class="hero">
@@ -96,6 +173,8 @@ function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
         </div>
         <SettingsToggles />
       </header>
+
+      <Daily onPlay={onDaily} />
 
       <div class="grid">
         {GAMES.map((entry, i) => (

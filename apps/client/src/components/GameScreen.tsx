@@ -1,6 +1,7 @@
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS, INSPECT } from '../autoplay';
+import { finishDaily } from '../daily';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
@@ -17,14 +18,18 @@ interface Props {
   seats: readonly SeatController[];
   /** Game option picked at the table, such as a puzzle level. */
   variant?: string;
+  /** A fixed seed, for the daily, where everybody plays the same board. */
+  seed?: number;
+  /** This is today's daily, so finishing it keeps the streak going. */
+  daily?: boolean;
   onExit(): void;
 }
 
 const newSeed = () => Math.floor(Math.random() * 0xffffffff);
 
-export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Props) {
+export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSeed, daily, onExit }: Props) {
   const [seats, setSeats] = useState(initialSeats);
-  const [seed, setSeed] = useState(newSeed);
+  const [seed, setSeed] = useState(fixedSeed ?? newSeed);
   const [, setTick] = useState(0);
   const host = useRef<HTMLDivElement>(null);
   const rivalryKey = keyFor(entry.definition.id, seats);
@@ -54,6 +59,8 @@ export function GameScreen({ entry, seats: initialSeats, variant, onExit }: Prop
       if (after.result && counted.current !== (session as Session<unknown>)) {
         counted.current = session as Session<unknown>;
         setRivalry(record(rivalryKey, seats, after.result));
+        // Today's puzzle only counts when it is actually finished.
+        if (daily) finishDaily();
       }
       if (after.result) cue(outcomeOf(after.result, seats));
       else cue(entry.moveCue?.(before, after) ?? (seats[before.currentSeat]?.kind === 'bot' ? 'botPlace' : 'place'));

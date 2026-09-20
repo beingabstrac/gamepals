@@ -1248,3 +1248,82 @@ h2,
   justify-self: end;
   align-self: center;
 }
+
+/* ---------- Today's puzzle ---------- */
+
+/* The same board for everybody, a countdown to the next one, and a streak you can switch off. */
+.daily {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: 0 6px 0 var(--line), var(--soft-shadow);
+  animation: pop-in 480ms var(--spring) both;
+}
+
+.daily-art {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--c) 38%, white);
+}
+
+.daily-art svg {
+  width: 76%;
+  height: 76%;
+}
+
+.daily-words {
+  min-width: 0;
+}
+
+.daily-words h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.daily-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--game);
+}
+
+.daily-note {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--soft);
+}
+
+.daily-streak {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--peach);
+}
+
+.daily-play {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+/* On anything wider than a phone the button sits beside the words rather than under them. */
+@media (min-width: 560px) {
+  .daily {
+    grid-template-columns: auto 1fr auto auto;
+  }
+
+  .daily-play {
+    grid-column: auto;
+    width: auto;
+  }
+}

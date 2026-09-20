@@ -3,10 +3,12 @@ import { storage } from './platform';
 export interface Settings {
   readonly sound: boolean;
   readonly haptics: boolean;
+  /** Ponder Club ships a switch for this, and they are right: a hook you cannot turn off is a trap. */
+  readonly streaks: boolean;
 }
 
 const KEY = 'gamepals.settings';
-const DEFAULTS: Settings = { sound: true, haptics: true };
+const DEFAULTS: Settings = { sound: true, haptics: true, streaks: true };
 
 // Native Preferences in the apps, localStorage on the web (platform.ts).
 function load(): Settings {

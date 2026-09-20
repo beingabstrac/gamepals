@@ -1104,6 +1104,16 @@ export function VibrateIcon({ on }: { on: boolean }) {
   );
 }
 
+/** The streak switch: a flame, struck through when streaks are hidden. */
+export function FlameIcon({ on }: { on: boolean }) {
+  return (
+    <svg {...iconProps}>
+      <path d="M12 3c2.5 3 4.5 4.8 4.5 8a4.5 4.5 0 0 1-9 0c0-1.6.6-2.8 1.6-4 .2 1.2.8 2 1.7 2.4C10.4 7.4 11 5.2 12 3z" />
+      {!on && <path d="M4 4l16 16" />}
+    </svg>
+  );
+}
+
 export function BackIcon() {
   return (
     <svg {...iconProps}>
