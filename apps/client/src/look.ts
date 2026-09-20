@@ -39,3 +39,11 @@ export const slotFill = (flat: number): number => (ROOM ? ROOM_COLORS.feltDark :
 
 /** Writing on the table: cream in the games room, where the felt is dark. */
 export const tableInk = (flat: string): string => (ROOM ? '#f3e3c4' : flat);
+
+/** Switch looks and reload. The look is in the URL, so there is nothing stored to go stale. */
+export function switchLook(): void {
+  const url = new URL(location.href);
+  if (ROOM) url.searchParams.delete('look');
+  else url.searchParams.set('look', '2');
+  location.href = url.toString();
+}

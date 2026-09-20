@@ -27,4 +27,12 @@ void storage.init().finally(() => {
 // Web only: an installable app that opens with no connection. The native apps already carry every file.
 if (!NATIVE && !SELFTEST && 'serviceWorker' in navigator) {
   void import('virtual:pwa-register').then(({ registerSW }) => registerSW({ immediate: true }));
+  // A new build used to wait for a second visit, so a deploy could sit behind yesterday's cache
+  // for a day. When the new worker takes over, reload once, but never in the middle of a game.
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading || document.querySelector('.board canvas')) return;
+    reloading = true;
+    location.reload();
+  });
 }

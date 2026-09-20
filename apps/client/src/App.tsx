@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { GameArt, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
+import { GameArt, LookIcon, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
+import { ROOM, switchLook } from './look';
 import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
 import { Setup } from './components/Setup';
@@ -76,6 +77,15 @@ function SettingsToggles() {
         onClick={() => settings.set({ haptics: !haptics })}
       >
         <VibrateIcon on={haptics} />
+      </button>
+      {/* While two looks are in the build, one tap swaps them (docs/08, the look). */}
+      <button
+        class="round-btn"
+        aria-pressed={ROOM}
+        aria-label={ROOM ? 'Back to the old look' : 'Try the games room look'}
+        onClick={switchLook}
+      >
+        <LookIcon room={ROOM} />
       </button>
     </div>
   );

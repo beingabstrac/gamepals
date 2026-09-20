@@ -1104,6 +1104,16 @@ export function VibrateIcon({ on }: { on: boolean }) {
   );
 }
 
+/** Two swatches: the flat look and the games room, for the button that swaps them. */
+export function LookIcon({ room }: { room: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3" y="5" width="9" height="14" rx="3" fill={room ? '#1f5a43' : COLORS.grape} />
+      <rect x="12" y="5" width="9" height="14" rx="3" fill={room ? '#d8a94a' : COLORS.sunny} />
+    </svg>
+  );
+}
+
 export function BackIcon() {
   return (
     <svg {...iconProps}>
