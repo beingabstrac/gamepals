@@ -194,6 +194,20 @@ export class DominoScene extends Scene {
     this.sync(false);
   }
 
+  /**
+   * The chips and the tiles, for the layout check. A settled gallery shot showed a domino sitting
+   * on every player's name with the table empty, which is either a real overlap or something the
+   * picture cannot tell apart from one. This measures it rather than guessing.
+   */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    const ys = [...this.sprites.values()].map((g) => g.y);
+    return [
+      { name: 'chips', top: 22 - 17, bottom: 22 + 17 },
+      // No tiles on the board yet is not an overlap, so an empty board reports the table top.
+      { name: 'tiles', top: ys.length ? Math.min(...ys) - TH : 44, bottom: ys.length ? Math.max(...ys) + TH : 45 },
+    ];
+  }
+
   private chipPos(seat: number): Point {
     const players = this.state.players;
     return { x: ((seat + 0.5) * W) / players, y: 22 };

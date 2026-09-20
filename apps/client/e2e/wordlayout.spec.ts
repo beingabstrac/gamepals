@@ -1,7 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * Every scene with a status line, against its own board. Every one of these scenes put a status line through
+ * Every scene with a status line or a label somewhere a piece could land on, against its own
+ * board. Every one of these scenes put a status line through
  * its own content at least once, and only a screenshot ever showed it: Word Guess printed
  * "Got it!" inside an empty square of the grid, Word Groups printed "All four." across the last
  * group, Anagram Hunt printed the count straight through the list of finds. Tests said all three
@@ -31,7 +32,7 @@ async function open(page: Page, name: string): Promise<void> {
   await expect(page.locator('.board canvas')).toBeVisible();
 }
 
-const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths'];
+const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Dominoes'];
 
 for (const name of BANDED) {
   test(`${name}: nothing is drawn on top of anything else`, async ({ page }) => {
