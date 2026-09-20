@@ -904,6 +904,23 @@ function TargetNumberArt() {
   );
 }
 
+function QuickMathsArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="12" width="80" height="34" rx="12" fill="#CFE4FF" />
+      <rect x="10" y="54" width="80" height="34" rx="12" fill="#FFD6D6" />
+      <text x="50" y="29" font-family="Fredoka, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="central" fill={INK}>
+        7 × 8
+      </text>
+      <text x="50" y="71" font-family="Fredoka, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="central" fill={INK} transform="rotate(180 50 71)">
+        7 × 8
+      </text>
+      <circle cx="24" cy="50" r="7" fill={COLORS.sky} />
+      <circle cx="76" cy="50" r="7" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1195,6 +1212,7 @@ const ART: Record<string, () => JSX.Element> = {
   'word-groups': WordGroupsArt,
   'anagram-hunt': AnagramHuntArt,
   'target-number': TargetNumberArt,
+  'quick-maths': QuickMathsArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

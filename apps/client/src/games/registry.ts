@@ -62,6 +62,7 @@ import {
   wordGroupsGame,
   anagramHuntGame,
   targetNumberGame,
+  quickMaths,
   type WordState,
   type SearchState,
   type CrossState,
@@ -160,6 +161,7 @@ import { LADDER_COLORS, LADDER_NAMES, LADDER_SIZE, ladderResult, ladderStatus, L
 import { GROUPS_COLORS, GROUPS_NAMES, GROUPS_SIZE, groupsResult, groupsStatus, GroupsScene } from './word-groups/GroupsScene';
 import { HUNT_COLORS, HUNT_NAMES, HUNT_SIZE, huntResult, huntStatus, HuntScene } from './anagram-hunt/HuntScene';
 import { TARGET_COLORS, TARGET_NAMES, TARGET_SIZE, targetResult, targetStatus, TargetScene } from './target-number/TargetScene';
+import { QUICK_MATHS_SIZE, QuickMathsScene } from './quick-maths/QuickMathsScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1449,6 +1451,22 @@ export const GAMES: readonly AnyEntry[] = [
     size: TUG_OF_WAR_SIZE,
     color: COLORS.bubblegum,
     createScene: (options) => new TugOfWarScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: quickMaths,
+    tagline: 'First right answer wins the point',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Answer the sum before the other player does.',
+      controls: 'Tap one of the four answers on your half. A wrong answer puts you out of that question. On a keyboard: arrows for the bottom player, WASD for the top.',
+      win: 'First to 5 points wins.',
+      tip: 'A wrong tap costs you the whole question, so read all four before you go.',
+    },
+    ...duelSides,
+    size: QUICK_MATHS_SIZE,
+    color: COLORS.sky,
+    createScene: (options) => new QuickMathsScene(options),
   },
   {
     kind: 'realtime',

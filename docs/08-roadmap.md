@@ -238,7 +238,12 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     104ms, so guaranteeing it costs almost nothing.
     The band check written an hour earlier caught this scene before it shipped: the operations
     ended at 464 and the line under them started at 436.
-  - [ ] **N1b Quick Maths (duel):** two people on one device racing to answer.
+  - [x] **N1b Quick Maths (2026-09-20):** 51 games, and the first new duel in a while. A real-time
+    game like Reflex Race, not a turn-based one, because both players are live at once. The sums
+    get harder with the round, so there are no levels to pick and nothing to set up. A wrong answer
+    locks that player out of the question, because without a cost the best play is to hit all four
+    buttons, which is not a game. The band check caught the score sitting on the bottom-left answer
+    before it ran.
   - [ ] **N1c Digit Shift:** moved to last on purpose. "A digit slider" is one line of a
     competitor's list, and the two obvious readings of it are a 2048 reskin and a Sliding Puzzle
     reskin, both of which we already ship. Rule: each game must clearly be its own game. This one
