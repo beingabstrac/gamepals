@@ -142,9 +142,10 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     five-letter words is beyond a clue dictionary, failing half the time and giving the same grid
     five times in forty seeds, so the patterns were picked by measurement. A puzzle now lays in
     about thirty milliseconds and forty seeds give thirty-four different grids.
-  - [ ] **W1c-ii the puzzle:** the scene. Tap a square to switch between across and down, type,
-    the clue for the word you are in sits under the grid, wrong letters are not called out until
-    you ask.
+  - [x] **W1c-ii the puzzle (2026-09-20):** 46 games, and W1 is done. Tapping the square you are
+    already in turns the corner, the clue for the word you are in sits above the grid, typing runs
+    on by itself, and wrong letters stay quiet until you press Check my letters, because being told
+    straight away takes the puzzle away.
 - [ ] **W2 Word more:** Word Ladder, Word Groups, Anagram Hunt
 - [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw

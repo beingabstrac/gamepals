@@ -25,6 +25,7 @@ export const DAILY_GAMES: readonly string[] = [
   'tripeaks',
   'memory',
   'word-search',
+  'mini-crossword',
 ];
 
 /** Today, as the person's own calendar sees it: `2026-09-20`. */

@@ -57,8 +57,10 @@ import {
   type GinState,
   wordGuessGame,
   wordSearchGame,
+  crosswordGame,
   type WordState,
   type SearchState,
+  type CrossState,
   rummy,
   type RummyState,
   tripeaks,
@@ -145,6 +147,7 @@ import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakStatus, Cal
 import { GIN_COLORS, GIN_NAMES, GIN_SIZE, ginResult, ginStatus, GinScene } from './gin-rummy/GinScene';
 import { WORD_COLORS, WORD_NAMES, WORD_SIZE, wordResult, wordStatus, WordScene } from './word-guess/WordScene';
 import { SEARCH_COLORS, SEARCH_NAMES, SEARCH_SIZE, searchResult, searchStatus, SearchScene } from './word-search/SearchScene';
+import { CROSS_COLORS, CROSS_NAMES, CROSS_SIZE, crossResult, crossStatus, CrossScene } from './crossword/CrossScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1145,6 +1148,26 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => searchResult(state as SearchState),
     moveCue: () => 'place',
     createScene: (session) => new SearchScene(session),
+  }),
+  entry({
+    definition: crosswordGame,
+    tagline: 'Five by five, ten clues',
+    minutes: '3 min',
+    hint: 'Tap a square and start typing',
+    howTo: {
+      goal: 'Fill every white square so the across words and the down words both read right.',
+      controls: 'Tap a square and type. Tap it again to switch between across and down. The clue for the word you are in sits above the grid. On a keyboard: the arrows move, Space turns the corner, Backspace rubs out.',
+      win: 'The puzzle is done when the whole grid is right.',
+      tip: 'A clue you cannot get is usually handed to you by the letters of the words that cross it. Leave it and come back.',
+    },
+    sideNames: () => CROSS_NAMES,
+    sideColors: () => CROSS_COLORS,
+    size: CROSS_SIZE,
+    color: DARK.sky,
+    status: (state) => crossStatus(state as CrossState),
+    resultText: (state) => crossResult(state as CrossState),
+    moveCue: () => 'place',
+    createScene: (session) => new CrossScene(session),
   }),
   entry({
     definition: slidingPuzzle,

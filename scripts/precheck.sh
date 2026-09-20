@@ -8,11 +8,52 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$HERE/.." && pwd)"
 fail=0
 
-echo "== duplicate exports in packages/rules"
-named=$(cd "$REPO/packages/rules/src" && grep -rhoE "^export (const|function|class|type|interface|enum) [A-Za-z0-9_]+" games core | awk '{print $3}')
-listed=$(cd "$REPO/packages/rules/src" && grep -rhoE "^export \{[^}]*\}" games core | tr -d 'exports{}' | tr ',' '\n' | awk '{print $1}' | grep -v '^$')
-dupes=$(printf '%s\n%s\n' "$named" "$listed" | sort | uniq -d)
-if [ -n "$dupes" ]; then echo "  DUPLICATE: $dupes"; fail=1; else echo "  ok"; fi
+echo "== two modules putting the same name into the rules barrel"
+REPO="$REPO" python3 - <<'DUPEEOF' || fail=1
+import os, re, sys
+repo = os.environ['REPO']
+rules = os.path.join(repo, 'packages/rules/src')
+
+def resolve(base, rel):
+    path = os.path.normpath(os.path.join(os.path.dirname(base), rel))
+    for candidate in (path + '.ts', os.path.join(path, 'index.ts')):
+        if os.path.isfile(candidate): return candidate
+    return None
+
+def names_in(path, seen=None):
+    """Every name this module puts into a star import of it, re-exports included."""
+    seen = seen if seen is not None else set()
+    if not path or path in seen: return set()
+    seen.add(path)
+    text = open(path).read()
+    out = set()
+    for star in re.finditer(r"export \* from '([^']+)';", text):
+        out |= names_in(resolve(path, star.group(1)), seen)
+    for listed in re.finditer(r"export (?:type )?\{([^}]*)\}", text):
+        for part in listed.group(1).split(','):
+            part = part.strip().replace('type ', '')
+            if ' as ' in part: part = part.split(' as ')[-1].strip()
+            if part: out.add(part)
+    for named in re.finditer(r"^export (?:declare )?(?:const|function|class|type|interface|enum) ([A-Za-z0-9_]+)", text, re.M):
+        out.add(named.group(1))
+    return out
+
+index = os.path.join(rules, 'index.ts')
+# A name is only a clash when two different entries of the barrel both provide it: a module
+# re-exporting its own neighbour is how a game folder is meant to be put together.
+owners = {}
+for star in re.finditer(r"export \* from '([^']+)';", open(index).read()):
+    entry = star.group(1)
+    for name in names_in(resolve(index, entry)):
+        owners.setdefault(name, []).append(entry)
+
+clashes = {name: where for name, where in owners.items() if len(set(where)) > 1}
+if clashes:
+    print('  CLASH: a star export of the barrel would drop these')
+    for name, where in sorted(clashes.items()): print('   ', name, 'from', ', '.join(sorted(set(where))))
+    sys.exit(1)
+print('  ok:', len(owners), 'names, no two entries claiming one')
+DUPEEOF
 
 echo "== duplicate art functions and tile map keys"
 REPO="$REPO" node -e '

@@ -28,6 +28,7 @@ const GAMES = [
   'Rummy',
   'Word Guess',
   'Word Search',
+  'Mini Crossword',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

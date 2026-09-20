@@ -52,14 +52,35 @@ function make(value: any, negated: boolean, label?: string): any {
         Object.entries(shape).every(([key, want]) => same(value?.[key], want)),
         `toMatchObject ${JSON.stringify(value)} vs ${JSON.stringify(shape)}`,
       ),
-    toThrow: () => {
+    toMatch: (pattern: RegExp | string) =>
+      check(
+        typeof pattern === 'string' ? String(value).includes(pattern) : pattern.test(String(value)),
+        `toMatch ${pattern} in ${JSON.stringify(value)}`,
+      ),
+    /**
+     * `toThrow(/x/)` has to check the message, or a test passes on any error at all. The suite
+     * also passes an error class, as vitest allows.
+     */
+    toThrow: (want?: RegExp | string | (new (...args: any[]) => Error)) => {
+      let thrown: unknown;
       let threw = false;
       try {
         value();
-      } catch {
+      } catch (error) {
         threw = true;
+        thrown = error;
       }
-      check(threw, 'throw');
+      if (!want) return check(threw, 'throw');
+      const message = threw ? ((thrown as Error).message ?? '') : '';
+      const matched =
+        threw &&
+        (typeof want === 'string'
+          ? message.includes(want)
+          : want instanceof RegExp
+            ? want.test(message)
+            : thrown instanceof want);
+      const named = typeof want === 'function' ? want.name : String(want);
+      check(matched, `throw ${named}, got ${threw ? JSON.stringify(message) : 'nothing'}`);
     },
     get not() {
       return make(value, !negated, label);

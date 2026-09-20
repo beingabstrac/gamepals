@@ -739,6 +739,42 @@ function WordSearchArt() {
   );
 }
 
+function CrosswordArt() {
+  const blocks = new Set(['0,0', '0,1', '1,0', '3,3', '3,4', '4,3', '4,4']);
+  const cells = [];
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      const block = blocks.has(`${r},${c}`);
+      cells.push(
+        <rect
+          key={`${r},${c}`}
+          x={14 + c * 14.4}
+          y={14 + r * 14.4}
+          width="13"
+          height="13"
+          rx="3"
+          fill={block ? INK : '#fff'}
+          stroke={block ? INK : '#E6E1F3'}
+          stroke-width="2"
+        />,
+      );
+    }
+  }
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="16" width="80" height="80" rx="12" fill="#E3DEF0" />
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#fff" stroke="#E6E1F3" stroke-width="3" />
+      {cells}
+      <text x="49.5" y="49.5" font-family="Fredoka, sans-serif" font-weight="600" font-size="11" text-anchor="middle" dominant-baseline="central" fill={DARK.sky}>
+        C
+      </text>
+      <text x="63.9" y="49.5" font-family="Fredoka, sans-serif" font-weight="600" font-size="11" text-anchor="middle" dominant-baseline="central" fill={DARK.sky}>
+        R
+      </text>
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1025,6 +1061,7 @@ const ART: Record<string, () => JSX.Element> = {
   rummy: RummyArt,
   'word-guess': WordGuessArt,
   'word-search': WordSearchArt,
+  'mini-crossword': CrosswordArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
