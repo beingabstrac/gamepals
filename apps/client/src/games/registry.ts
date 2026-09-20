@@ -56,7 +56,9 @@ import {
   ginRummy,
   type GinState,
   wordGuessGame,
+  wordSearchGame,
   type WordState,
+  type SearchState,
   rummy,
   type RummyState,
   tripeaks,
@@ -142,6 +144,7 @@ import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, S
 import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
 import { GIN_COLORS, GIN_NAMES, GIN_SIZE, ginResult, ginStatus, GinScene } from './gin-rummy/GinScene';
 import { WORD_COLORS, WORD_NAMES, WORD_SIZE, wordResult, wordStatus, WordScene } from './word-guess/WordScene';
+import { SEARCH_COLORS, SEARCH_NAMES, SEARCH_SIZE, searchResult, searchStatus, SearchScene } from './word-search/SearchScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1117,6 +1120,31 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => wordResult(state as WordState),
     moveCue: () => 'place',
     createScene: (session) => new WordScene(session),
+  }),
+  entry({
+    definition: wordSearchGame,
+    tagline: 'Find the hidden words',
+    minutes: '5 min',
+    hint: 'Drag across a word to take it',
+    levels: [
+      { id: 'small', label: '8 by 8, 6 words' },
+      { id: 'medium', label: '10 by 10, 8 words' },
+      { id: 'large', label: '12 by 12, backwards too' },
+    ],
+    howTo: {
+      goal: 'Find every word on the list in the grid of letters.',
+      controls: 'Drag your finger across a word to take it. Words run across, down and diagonally, and on the big grid backwards as well. On a keyboard: Space starts a line, the arrows move its end, Enter takes it.',
+      win: 'The puzzle is done when the list is empty.',
+      tip: 'Hunt for a letter that is rare in the word, like a J or a Z, rather than reading the whole grid.',
+    },
+    sideNames: () => SEARCH_NAMES,
+    sideColors: () => SEARCH_COLORS,
+    size: SEARCH_SIZE,
+    color: DARK.mint,
+    status: (state) => searchStatus(state as SearchState),
+    resultText: (state) => searchResult(state as SearchState),
+    moveCue: () => 'place',
+    createScene: (session) => new SearchScene(session),
   }),
   entry({
     definition: slidingPuzzle,

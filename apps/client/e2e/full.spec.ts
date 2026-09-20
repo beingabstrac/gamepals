@@ -27,6 +27,7 @@ const GAMES = [
   'Gin Rummy',
   'Rummy',
   'Word Guess',
+  'Word Search',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

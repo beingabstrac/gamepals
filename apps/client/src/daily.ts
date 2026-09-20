@@ -11,6 +11,7 @@ import { storage } from './platform';
 
 /** The games that suit a daily: one person, one sitting, and a result worth comparing. */
 export const DAILY_GAMES: readonly string[] = [
+  'word-guess',
   'twenty48',
   'sudoku',
   'classic-snake',
@@ -23,6 +24,7 @@ export const DAILY_GAMES: readonly string[] = [
   'pyramid',
   'tripeaks',
   'memory',
+  'word-search',
 ];
 
 /** Today, as the person's own calendar sees it: `2026-09-20`. */

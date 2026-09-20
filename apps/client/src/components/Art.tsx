@@ -713,6 +713,32 @@ function WordGuessArt() {
   );
 }
 
+function WordSearchArt() {
+  const letters = ['S', 'C', 'A', 'N', 'W', 'O', 'R', 'D', 'T', 'E', 'H', 'M', 'P', 'I', 'L', 'K'];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="12" y="20" width="76" height="70" rx="12" fill="#E3DEF0" />
+      <rect x="12" y="14" width="76" height="70" rx="12" fill="#fff" stroke="#E6E1F3" stroke-width="3" />
+      <rect x="19" y="39" width="62" height="14" rx="7" fill={COLORS.mint} opacity="0.35" />
+      {letters.map((letter, i) => (
+        <text
+          key={letter + i}
+          x={26 + (i % 4) * 16}
+          y={27 + Math.floor(i / 4) * 16}
+          font-family="Fredoka, sans-serif"
+          font-weight="600"
+          font-size="13"
+          text-anchor="middle"
+          dominant-baseline="central"
+          fill={i >= 4 && i <= 7 ? DARK.mint : INK}
+        >
+          {letter}
+        </text>
+      ))}
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -998,6 +1024,7 @@ const ART: Record<string, () => JSX.Element> = {
   'gin-rummy': GinRummyArt,
   rummy: RummyArt,
   'word-guess': WordGuessArt,
+  'word-search': WordSearchArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

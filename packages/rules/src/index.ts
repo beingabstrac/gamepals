@@ -34,6 +34,7 @@ export * from './games/callbreak';
 export * from './games/gin-rummy';
 export * from './games/rummy';
 export * from './games/word-guess';
+export * from './games/word-search';
 export * from './games/memory';
 export * from './games/sliding-puzzle';
 export * from './games/color-sort';
