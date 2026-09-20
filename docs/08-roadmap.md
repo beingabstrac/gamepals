@@ -294,6 +294,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     reskin, both of which we already ship. Rule: each game must clearly be its own game. This one
     does not get built until there is a design that is not one of those two, and inventing that is
     a loop of its own rather than a rushed third of this one.
+- [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
+  the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
+  Thirty-four scenes still answer no question about themselves. The ones with pieces that travel
+  are the risk, because the failure is always the same: an animation that cannot keep up with the
+  speed of play, drifting while every test passes. Give each of them the smallest true question
+  (`boardCheck()` is usually "is what I am drawing what the state says", `layoutCheck()` is "is
+  anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
+  Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
+  eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
