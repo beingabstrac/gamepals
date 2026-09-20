@@ -81,7 +81,7 @@ export class ReversiScene extends Scene {
     const g = this.add.graphics();
     if (ROOM) {
       roomTable(g, SIZE, SIZE, MARGIN);
-      g.fillStyle(ROOM_COLORS.felt, 1);
+      g.fillGradientStyle(0x4cbd80, 0x4cbd80, ROOM_COLORS.feltDark, ROOM_COLORS.feltDark, 1);
       g.fillRect(MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
       roomInset(g, MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
     } else {
@@ -102,6 +102,20 @@ export class ReversiScene extends Scene {
 
   private paint(face: GameObjects.Graphics, seat: 0 | 1): void {
     face.clear();
+    if (ROOM) {
+      // A counter is a moulded disc: a shadow on the baize, a lip, a lit face and a highlight.
+      face.fillStyle(0x1c6b45, 0.3);
+      face.fillEllipse(1, RADIUS * 0.62, RADIUS * 1.9, RADIUS * 0.7);
+      face.fillStyle(LIP[seat]!, 1);
+      face.fillCircle(0, 3, RADIUS);
+      face.fillStyle(FACE[seat]!, 1);
+      face.fillCircle(0, 0, RADIUS);
+      face.fillStyle(0xffffff, seat === 0 ? 0.16 : 0.5);
+      face.fillEllipse(-RADIUS * 0.28, -RADIUS * 0.34, RADIUS * 0.9, RADIUS * 0.55);
+      face.lineStyle(2, LIP[seat]!, 0.55);
+      face.strokeCircle(0, 0, RADIUS * 0.72);
+      return;
+    }
     face.fillStyle(LIP[seat]!, 1);
     face.fillCircle(0, 4, RADIUS);
     face.fillStyle(FACE[seat]!, 1);
