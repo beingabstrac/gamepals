@@ -127,7 +127,24 @@ The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
 Both competitors' catalogues, and what neither of them has. [JindoBlu](https://apps.apple.com/us/app/2-player-games-offline-games/id1465731199) names Ping Pong, Spinner War, Air Hockey, Snakes, Pool, Tic Tac Toe, Penalty Kicks, Sumo, mini golf, racing cars, sword duels, chess, paint fight, archery, tug of war, whack a mole, memory, maths, solitaire and jigsaw. [Ponder Club](https://ponderclub.co) runs a mini crossword, a word search, a themed-grouping game, a word ladder, an anagram hunt, a Wordle-alike, a 2048-alike, a digit slider, sudoku, a minesweeper, a numbers-target game, flood-it, solitaire, mahjong solitaire and a code breaker. We already have 18 of those. These are the rest, named our own way ([03 §4](03-game-catalog.md#4-trademark-safe-naming)), three or four to a milestone.
 - [x] **W1a Word Guess (2026-09-20):** 44 games, and the first word game. Six goes at a five-letter word, a coloured keyboard, a row that shakes when the word is not one we know, and the repeated-letter rule that most copies get wrong. Two public-domain lists: 2,332 answers, 8,585 words you may type. The secret comes from the seed, so it slots into the daily.
 - [x] **W1b Word Search (2026-09-20):** 45 games. A themed square of letters with a list hidden in it, across, down and diagonally, and backwards too on the twelve by twelve. Three sizes from the table. Twelve themes written for us, so there is no dictionary to ship and the filler letters come from the theme's own words. A move is the line the finger drew, not the word it was after, so the rules read the grid and say what was found.
-- [ ] **W1c Mini Crossword (5x5):** needs clues, which needs a source. Decide between a hand-written set and a permissive dictionary before starting.
+- **W1c Mini Crossword (5x5). Source decided 2026-09-20: a clue dictionary of our own, not puzzles.**
+  Hand-writing whole puzzles caps the game at however many were written. Hand-writing one clue per
+  word and generating the grids does not: the same three hundred words fill an unlimited number of
+  5x5 grids, and the date can pick one. A permissive dictionary is no help here, because a
+  dictionary definition is not a crossword clue. Split in two, because the words and the filler are
+  a loop on their own:
+  - [x] **W1c-i the words and the grid (2026-09-20):** 1,631 clues written here (216 of three
+    letters, 582 of four, 833 of five), six block patterns and a backtracking filler. Nothing is
+    registered as a game yet and nothing is exported from the rules barrel: this is the half that
+    had to be right before a scene was worth writing. Two things were found by measuring rather
+    than by looking: a crossing can finish a word the filler never chose, so every finished word is
+    checked against the dictionary, not just the ones the filler picked; and a 5x5 with six
+    five-letter words is beyond a clue dictionary, failing half the time and giving the same grid
+    five times in forty seeds, so the patterns were picked by measurement. A puzzle now lays in
+    about thirty milliseconds and forty seeds give thirty-four different grids.
+  - [ ] **W1c-ii the puzzle:** the scene. Tap a square to switch between across and down, type,
+    the clue for the word you are in sits under the grid, wrong letters are not called out until
+    you ask.
 - [ ] **W2 Word more:** Word Ladder, Word Groups, Anagram Hunt
 - [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
