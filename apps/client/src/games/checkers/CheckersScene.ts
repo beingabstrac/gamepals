@@ -108,12 +108,27 @@ export class CheckersScene extends Scene {
   private makePiece(piece: number, sq: number): GameObjects.Container {
     const seat = ownerOf(piece) as 0 | 1;
     const g = this.add.graphics();
-    g.fillStyle(PIECE_DARK[seat]!, 1);
-    g.fillCircle(0, 5, RADIUS);
-    g.fillStyle(PIECE_COLOR[seat]!, 1);
-    g.fillCircle(0, 0, RADIUS);
-    g.lineStyle(4, 0xffffff, 0.35);
-    g.strokeCircle(0, 0, RADIUS * 0.66);
+    if (ROOM) {
+      // A draught is a turned counter: a shadow on the square, two stacked rims, a lit face and
+      // the ring the wood was cut with.
+      g.fillStyle(0x7a4a14, 0.26);
+      g.fillEllipse(1, RADIUS * 0.66, RADIUS * 1.85, RADIUS * 0.66);
+      g.fillStyle(PIECE_DARK[seat]!, 1);
+      g.fillCircle(0, 5, RADIUS);
+      g.fillStyle(PIECE_COLOR[seat]!, 1);
+      g.fillCircle(0, 0, RADIUS);
+      g.fillStyle(0xffffff, seat === 0 ? 0.18 : 0.45);
+      g.fillEllipse(-RADIUS * 0.26, -RADIUS * 0.36, RADIUS * 0.92, RADIUS * 0.5);
+      g.lineStyle(3, PIECE_DARK[seat]!, 0.7);
+      g.strokeCircle(0, 0, RADIUS * 0.68);
+    } else {
+      g.fillStyle(PIECE_DARK[seat]!, 1);
+      g.fillCircle(0, 5, RADIUS);
+      g.fillStyle(PIECE_COLOR[seat]!, 1);
+      g.fillCircle(0, 0, RADIUS);
+      g.lineStyle(4, 0xffffff, 0.35);
+      g.strokeCircle(0, 0, RADIUS * 0.66);
+    }
     const { x, y } = center(sq);
     const view = this.add.container(x, y, [g]).setDepth(2);
     if (isKing(piece)) view.add(this.makeCrown());
