@@ -212,7 +212,16 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     right letter listed, when typing wrong ones is the game), and Word Search listed a line one way
     round. All four fixed, each with a test that fails on the old code, and the contract is now
     written into `GameState` and CLAUDE.md.
-  - [x] **W2c Anagram Hunt (2026-09-20):** 49 games, and W2 is done. Seven letters, words of three
+  - **The gallery caught the same mistake three times (2026-09-20).** The full matrix went green on
+  eight screen types and the Android emulator, and then the pictures showed Word Groups printing
+  "All four." across the last group bar, Anagram Hunt printing its count straight through the list
+  of finds, and Word Ladder leaving an empty input row after the game was over. Word Guess had done
+  the same thing that morning. Four scenes, one mistake: a status line placed at a computed `y`
+  with no band reserved for it. Every word scene now answers `layoutCheck()` with the bands it
+  draws in, and one spec fails when any two overlap. Proven against the shipped numbers: Word
+  Groups had the board ending at 354 and the banner starting at 348, Anagram Hunt had the banner
+  running to 248 and the list starting at 234.
+- [x] **W2c Anagram Hunt (2026-09-20):** 49 games, and W2 is done. Seven letters, words of three
     or more hiding in them, one using all seven. Seven because six is not a game, and that was
     measured before building: against the words we already ship, a five-letter base hides a median
     of three findable words, six hides six, seven hides fifteen. A five-letter base left more than

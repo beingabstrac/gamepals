@@ -16,7 +16,9 @@ const GAP = 8;
 const COLS = 4;
 const TILE_W = (W - 16 - GAP * (COLS - 1)) / COLS;
 const TILE_H = ROW_H - GAP;
-const CONTROLS_Y = TOP + 4 * ROW_H + 44;
+/** Far enough below the last row that the line above it is not printed on a group. */
+const CONTROLS_Y = TOP + 4 * ROW_H + 68;
+const BANNER_Y = CONTROLS_Y - 52;
 /** Plainest group first, so the colour says how hard it was rather than when you found it. */
 const RANK = [COLORS.sunny, COLORS.mint, COLORS.sky, COLORS.grape];
 
@@ -48,7 +50,7 @@ export class GroupsScene extends Scene {
     fitCamera(this, W, H);
     applySpeed(this);
     this.board = this.add.graphics();
-    this.banner = sharpText(this, W / 2, CONTROLS_Y - 44, '', 26, COLORS.soft).setDepth(3);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, COLORS.soft).setDepth(3);
     this.livesText = sharpText(this, W / 2, CONTROLS_Y + 58, '', 24, COLORS.soft).setDepth(3);
     for (const button of this.buttons) {
       button.text = sharpText(this, button.x, CONTROLS_Y, button.label, 24, COLORS.ink).setDepth(3);
@@ -190,7 +192,19 @@ export class GroupsScene extends Scene {
     return `${this.picked.length} of ${GROUP_SIZE} picked`;
   }
 
+  /** The bands that must not sit on top of each other, for the layout check. */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    return [
+      { name: 'board', top: TOP, bottom: TOP + 4 * ROW_H - GAP },
+      { name: 'banner', top: BANNER_Y - 14, bottom: BANNER_Y + 14 },
+      { name: 'controls', top: CONTROLS_Y - 26, bottom: CONTROLS_Y + 26 },
+    ];
+  }
+
   private drawButtons(g: GameObjects.Graphics): void {
+    // Nothing to press once it is over: the result sheet is the only thing left to answer.
+    for (const button of this.buttons) button.text?.setVisible(!this.state.result);
+    if (this.state.result) return;
     for (const button of this.buttons) {
       const ready = button.label !== 'Guess' || this.picked.length === GROUP_SIZE;
       g.fillStyle(ready ? toHex(COLORS.sky) : 0xece8f5, 1);

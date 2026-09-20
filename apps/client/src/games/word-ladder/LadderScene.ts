@@ -108,7 +108,8 @@ export class LadderScene extends Scene {
     const words = [state.start, ...state.rungs];
     // The climb so far, then the rung being typed. A climb longer than the board scrolls, so
     // what you are doing now is always the row you are looking at.
-    const all = [...words, this.typed.padEnd(state.letters, ' ')];
+    // No empty row once it is over: an input row after the result invites a tap that does nothing.
+    const all = state.result ? words : [...words, this.typed.padEnd(state.letters, ' ')];
     const cut = Math.max(0, all.length - MAX_ROWS);
     const shown = all.slice(cut);
     shown.forEach((word, row) => {
@@ -162,6 +163,19 @@ export class LadderScene extends Scene {
       }
     });
     for (let i = slot; i < this.rows.length; i++) this.rows[i]!.setVisible(false);
+  }
+
+  /**
+   * The bands that must not sit on top of each other, for the layout check. Every one of these
+   * scenes put a status line through its own content at least once.
+   */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    const rows = Math.min(this.state.rungs.length + 2, MAX_ROWS);
+    return [
+      { name: 'ladder', top: TOP, bottom: TOP + (rows - 1) * STEP + TILE },
+      { name: 'banner', top: BACK_Y - 46 - 14, bottom: BACK_Y - 46 + 14 },
+      { name: 'take back', top: BACK_Y - 16, bottom: BACK_Y + 16 },
+    ];
   }
 
   /** A refused word shakes its row rather than doing nothing. */

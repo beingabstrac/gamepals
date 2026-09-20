@@ -74,11 +74,15 @@ export class WordScene extends Scene {
   }
 
   /**
-   * Where the grid ends and where the line under it sits, for the layout check. They shipped
-   * 8px apart once, so "Got it!" was printed inside an empty square of the grid.
+   * The bands that must not sit on top of each other, for the layout check. These shipped 8px
+   * apart once, so "Got it!" was printed inside an empty square of the grid.
    */
-  bannerCheck(): { gridBottom: number; sayTop: number; keysTop: number } {
-    return { gridBottom: cellAt(TRIES - 1, 0).y + CELL / 2, sayTop: SAY_Y - 16, keysTop: KEYS_TOP };
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    return [
+      { name: 'grid', top: GRID_TOP, bottom: cellAt(TRIES - 1, 0).y + CELL / 2 },
+      { name: 'banner', top: SAY_Y - 16, bottom: SAY_Y + 16 },
+      { name: 'keyboard', top: KEYS_TOP, bottom: KEYS_TOP + 2 * (KEY_H + 8) + KEY_H },
+    ];
   }
 
   private draw(): void {

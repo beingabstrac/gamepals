@@ -14,7 +14,9 @@ const TILE = 74;
 const TILE_GAP = 8;
 const TILES_Y = 132;
 const TYPED_Y = 54;
-const LIST_TOP = 250;
+/** Below the banner, which used to be printed straight through the first row of finds. */
+const BANNER_Y = TILES_Y + TILE + 34;
+const LIST_TOP = 296;
 const LIST_COLS = 3;
 
 export const HUNT_COLORS = [COLORS.peach];
@@ -45,7 +47,7 @@ export class HuntScene extends Scene {
     this.shown = this.state.letters;
     this.board = this.add.graphics();
     this.typedText = sharpText(this, W / 2, TYPED_Y, '', 44, COLORS.ink).setDepth(2);
-    this.banner = sharpText(this, W / 2, TILES_Y + TILE + 28, '', 24, COLORS.soft).setDepth(2);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 24, COLORS.soft).setDepth(2);
     for (let i = 0; i < this.shown.length; i++) {
       this.tiles.push(sharpText(this, 0, 0, '', 40, COLORS.ink).setDepth(2));
     }
@@ -132,7 +134,7 @@ export class HuntScene extends Scene {
         .setColor(used ? COLORS.soft : '#ffffff');
     }
 
-    this.typedText.setText(this.typed.toUpperCase() || '·');
+    this.typedText.setText(state.result ? '' : this.typed.toUpperCase() || '·');
     this.banner.setText(
       state.result
         ? `${state.found.length} found${state.gotLong ? ', including the long one' : ''}`
@@ -153,6 +155,17 @@ export class HuntScene extends Scene {
         .setVisible(true);
     });
     for (let i = state.found.length; i < this.list.length; i++) this.list[i]!.setVisible(false);
+  }
+
+  /** The bands that must not sit on top of each other, for the layout check. */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    const rows = Math.max(1, Math.ceil(this.state.found.length / LIST_COLS));
+    return [
+      { name: 'typed', top: TYPED_Y - 24, bottom: TYPED_Y + 24 },
+      { name: 'letters', top: TILES_Y, bottom: TILES_Y + TILE },
+      { name: 'banner', top: BANNER_Y - 14, bottom: BANNER_Y + 14 },
+      { name: 'found', top: LIST_TOP - 16, bottom: LIST_TOP + (rows - 1) * 40 + 16 },
+    ];
   }
 
   private reject(why: string): boolean {

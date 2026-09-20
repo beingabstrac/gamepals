@@ -226,6 +226,16 @@ export class CrossScene extends Scene {
     }
   }
 
+  /** The bands that must not sit on top of each other, for the layout check. */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    return [
+      { name: 'where', top: 52 - 16, bottom: 52 + 16 },
+      { name: 'clue', top: 92 - 22, bottom: 92 + 22 },
+      { name: 'grid', top: GRID_TOP - 10, bottom: GRID_TOP + GRID + 10 },
+      { name: 'check', top: this.askText.y - 26, bottom: this.askText.y + 26 },
+    ];
+  }
+
   /** The widest the clue line ever gets, against the room it has, for the layout check. */
   clueCheck(): { widest: number; room: number } {
     return { widest: Math.round(this.clueLine.width), room: CLUE_WIDTH };

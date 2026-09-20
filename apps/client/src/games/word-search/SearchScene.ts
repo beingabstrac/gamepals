@@ -187,6 +187,16 @@ export class SearchScene extends Scene {
     this.drawList();
   }
 
+  /** The bands that must not sit on top of each other, for the layout check. */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    const rows = Math.ceil(this.state.words.length / (this.state.words.length > 8 ? 3 : 2));
+    return [
+      { name: 'theme', top: 52 - 20, bottom: 52 + 20 },
+      { name: 'grid', top: GRID_TOP - 14, bottom: GRID_TOP + GRID_SIZE + 14 },
+      { name: 'list', top: LIST_TOP - 18, bottom: LIST_TOP + (rows - 1) * 46 + 18 },
+    ];
+  }
+
   /** A rounded band along a line, the way a highlighter pen would leave one. */
   private band(g: GameObjects.Graphics, one: Found, color: string, alpha: number, length?: number): void {
     const step = this.step;

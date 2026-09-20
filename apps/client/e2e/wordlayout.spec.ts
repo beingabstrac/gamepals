@@ -1,19 +1,27 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The word games against their own boards. Both of these shipped green and only a screenshot
- * showed the trouble: Word Guess printed "Got it!" inside an empty square of the grid, because
- * the line under the board sat 8px above where the grid ended. The crossword's clue is the same
- * kind of thing waiting to happen, since one clue in the dictionary is forty-two characters and
- * the short ones set the font size. Each scene answers a small question about itself.
+ * The word games against their own boards. Every one of these scenes put a status line through
+ * its own content at least once, and only a screenshot ever showed it: Word Guess printed
+ * "Got it!" inside an empty square of the grid, Word Groups printed "All four." across the last
+ * group, Anagram Hunt printed the count straight through the list of finds. Tests said all three
+ * ran, finished, fitted eight screen types and logged nothing.
+ *
+ * So each scene now says where its bands are and this checks that none of them sit on top of
+ * another. A band is a horizontal strip the scene draws something in.
  */
-async function ask<T>(page: Page, method: string): Promise<T | null> {
-  return page.evaluate((name) => {
+interface Band {
+  name: string;
+  top: number;
+  bottom: number;
+}
+
+async function bands(page: Page): Promise<Band[] | null> {
+  return page.evaluate(() => {
     const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
-    const scene = game?.scene.scenes[0] as Record<string, undefined | (() => unknown)> | undefined;
-    const method = scene?.[name];
-    return typeof method === 'function' ? (method.call(scene) as T) : null;
-  }, method);
+    const scene = game?.scene.scenes[0] as { layoutCheck?: () => Band[] } | undefined;
+    return scene?.layoutCheck ? scene.layoutCheck() : null;
+  });
 }
 
 async function open(page: Page, name: string): Promise<void> {
@@ -23,19 +31,39 @@ async function open(page: Page, name: string): Promise<void> {
   await expect(page.locator('.board canvas')).toBeVisible();
 }
 
-test('Word Guess: the line under the board is below the board', async ({ page }) => {
-  await open(page, 'Word Guess');
-  const report = await ask<{ gridBottom: number; sayTop: number; keysTop: number }>(page, 'bannerCheck');
-  expect(report, 'the scene answers bannerCheck').not.toBeNull();
-  expect(report!.sayTop, 'the line sits inside the grid').toBeGreaterThan(report!.gridBottom);
-  expect(report!.keysTop, 'the keyboard sits on the line').toBeGreaterThan(report!.sayTop + 16);
-});
+const WORD_GAMES = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt'];
+
+for (const name of WORD_GAMES) {
+  test(`${name}: nothing is drawn on top of anything else`, async ({ page }) => {
+    await open(page, name);
+    // Look a few times: the bands move as the board fills, and a bot game can end while we look.
+    for (let look = 0; look < 4; look++) {
+      const report = await bands(page);
+      if (!report) break;
+      expect(report.length, `${name} answers layoutCheck`).toBeGreaterThan(1);
+      const sorted = [...report].sort((a, b) => a.top - b.top);
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const above = sorted[i]!;
+        const below = sorted[i + 1]!;
+        expect(
+          below.top,
+          `look ${look + 1}: "${above.name}" ends at ${above.bottom} and "${below.name}" starts at ${below.top}`,
+        ).toBeGreaterThanOrEqual(above.bottom);
+      }
+      await page.waitForTimeout(800);
+    }
+  });
+}
 
 test('Mini Crossword: no clue runs off the sides', async ({ page }) => {
   await open(page, 'Mini Crossword');
   // Bots fill the grid, so the clue changes as they go. Every one of them has to fit.
   for (let look = 0; look < 6; look++) {
-    const report = await ask<{ widest: number; room: number }>(page, 'clueCheck');
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as { clueCheck?: () => { widest: number; room: number } } | undefined;
+      return scene?.clueCheck ? scene.clueCheck() : null;
+    });
     if (!report) break;
     expect(report.widest, `look ${look + 1}: the clue is wider than the board`).toBeLessThanOrEqual(report.room);
     await page.waitForTimeout(700);
