@@ -30,6 +30,8 @@ function spot(pit: number): { x: number; y: number } {
 
 export class MancalaScene extends Scene {
   private shown: number[] = [];
+  /** Bumped by every sowing, so an older one still in the air stops writing to the board. */
+  private generation = 0;
   private seedLayer!: GameObjects.Graphics;
   private glow!: GameObjects.Graphics;
   private counts: GameObjects.Text[] = [];
@@ -196,8 +198,16 @@ export class MancalaScene extends Scene {
     this.animate(event);
   }
 
-  /** One pebble hops along the path, the counts rising as it lands; then any capture or end sweep. */
+  /**
+   * One pebble hops along the path, the counts rising as it lands; then any capture or end sweep.
+   *
+   * Every callback below checks its era first. Nothing stopped two sowings overlapping, and the
+   * first one to finish would snap the board to the state and clear `busy` while the second was
+   * still in the air, so its remaining hops then counted seeds onto an already-correct board. The
+   * check measured it settling three seeds out.
+   */
   private animate(event: MancalaEvent): void {
+    const era = ++this.generation;
     this.busy = true;
     this.glow.clear();
     this.shown[event.pit] = 0;
@@ -205,6 +215,7 @@ export class MancalaScene extends Scene {
     const hopper = this.add.circle(spot(event.pit).x, spot(event.pit).y, 9, toHex(COLORS.sunny)).setStrokeStyle(3, 0xffffff).setDepth(5);
     event.path.forEach((pit, i) => {
       this.time.delayedCall(i * HOP_MS, () => {
+        if (era !== this.generation) return;
         const from = i === 0 ? spot(event.pit) : spot(event.path[i - 1]!);
         const to = spot(pit);
         this.tweens.addCounter({
@@ -217,6 +228,7 @@ export class MancalaScene extends Scene {
             hopper.setPosition(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t - Math.sin(Math.PI * t) * 24);
           },
           onComplete: () => {
+            if (era !== this.generation) return;
             this.shown[pit]!++;
             this.redraw();
             if (pit === 6 || pit === 13) this.tweens.add({ targets: this.counts[pit], scale: 1.3, duration: 90, yoyo: true });
@@ -227,6 +239,8 @@ export class MancalaScene extends Scene {
     const sown = event.path.length * HOP_MS + 60;
     this.time.delayedCall(sown, () => {
       hopper.destroy();
+      // A newer sowing is under way, so this one does not get to say where the board stands.
+      if (era !== this.generation) return;
       if (event.capture) {
         // Both piles slide into the store with a little burst.
         const landing = event.path[event.path.length - 1]!;

@@ -308,9 +308,12 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     review. Every scene in all fifty-one games, sorted:
     - **Drains a queue of events one at a time** (unbounded lag, the actual bug): Snakes & Ladders
       and Shut the Box. Both fixed, both answer `boardCheck()`, one test covers them.
-    - **Keeps a copy of the board and walks it**: Mancala only. Safe, because every sowing ends by
-      snapping back to the state rather than trusting its own arithmetic, and it now says so with
-      a `boardCheck()` that allows a drift of exactly zero.
+    - **Keeps a copy of the board and walks it**: Mancala only. I wrote it down as safe and the
+      check I added to say so failed instead, three seeds out. Nothing stopped two sowings
+      overlapping, and the first to finish snapped the board to the state and cleared `busy` while
+      the second was still in the air, so its remaining hops counted seeds onto an already-correct
+      board. Every callback checks its era now, same as the other two. That is three of the three
+      scenes with this shape broken, which is a better answer than "two of three".
     - **Keeps a counter or a record of what it drew last**: Four in a Row, Tic-Tac-Toe, Ultimate,
       Sudoku, Anagram Hunt. Not mirrors, nothing to drift.
     - **Draws straight from the state**: everything else, Ludo and Backgammon included, which is
