@@ -1064,6 +1064,27 @@ export function PersonFace({ color }: { color: string }) {
   );
 }
 
+/**
+ * A stand-in mark for the games room while the real one is undecided: a brass ring, a cream face
+ * and a die on it. Anything is better than a purple cartoon blob on a felt table.
+ */
+export function RoomEmblem() {
+  const pip = (x: number, y: number) => <circle cx={x} cy={y} r="6" fill="#3b2312" />;
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="#9c7526" />
+      <circle cx="50" cy="50" r="42" fill="#d8a94a" />
+      <circle cx="50" cy="50" r="36" fill="#f6ead2" />
+      <rect x="26" y="26" width="48" height="48" rx="13" fill="#e8d5ae" stroke="#b9975a" stroke-width="2" />
+      {pip(38, 38)}
+      {pip(62, 38)}
+      {pip(50, 50)}
+      {pip(38, 62)}
+      {pip(62, 62)}
+    </svg>
+  );
+}
+
 /** The Game Pals mascot. */
 export function Mascot() {
   return (

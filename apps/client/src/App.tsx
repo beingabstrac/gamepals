@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { GameArt, LookIcon, Mascot, SpeakerIcon, VibrateIcon } from './components/Art';
+import { GameArt, LookIcon, Mascot, RoomEmblem, SpeakerIcon, VibrateIcon } from './components/Art';
 import { ROOM, switchLook } from './look';
 import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
@@ -95,9 +95,7 @@ function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
   return (
     <div class="screen">
       <header class="hero">
-        <span class="mascot">
-          <Mascot />
-        </span>
+        <span class="mascot">{ROOM ? <RoomEmblem /> : <Mascot />}</span>
         <div>
           <h1 class="logo">
             Game <span>Pals</span>
