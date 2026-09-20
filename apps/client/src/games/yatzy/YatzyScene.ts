@@ -1,6 +1,6 @@
 import { YATZY_FIRST_ROLL, yatzyRoll, type YatzyEvent, type YatzyMove, type YatzyState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM, ROOM_COLORS } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -70,10 +70,15 @@ export class YatzyScene extends Scene {
     this.seen = this.state.last;
 
     const tray = this.add.graphics();
-    tray.fillStyle(toHex(DARK.mint), 1);
+    // Dice are thrown into a felt tray with a wooden lip.
+    tray.fillStyle(ROOM ? ROOM_COLORS.wood : toHex(DARK.mint), 1);
     tray.fillRoundedRect(8, 16, W - 16, H - 40, 36);
-    tray.fillStyle(toHex(COLORS.mint), 1);
+    tray.fillStyle(ROOM ? ROOM_COLORS.felt : toHex(COLORS.mint), 1);
     tray.fillRoundedRect(8, 8, W - 16, H - 40, 36);
+    if (ROOM) {
+      tray.lineStyle(3, ROOM_COLORS.brassDark, 0.7);
+      tray.strokeRoundedRect(20, 20, W - 40, H - 64, 28);
+    }
 
     this.dice = [0, 1, 2, 3, 4].map((i) => this.add.graphics().setPosition(dieX(i), REST_Y));
     for (let i = 0; i < 5; i++) {

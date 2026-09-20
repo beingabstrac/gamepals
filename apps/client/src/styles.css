@@ -1517,3 +1517,14 @@ h2,
   min-height: 2.1em;
   line-height: 1.05;
 }
+
+/* A square board on a tall phone left a third of the table empty below it. The play area takes
+   the room that is going and centres what is in it. */
+:root[data-look='room'] .game-screen {
+  min-height: calc(100vh - 28px);
+}
+
+:root[data-look='room'] .play-area {
+  flex: 1;
+  justify-content: center;
+}
