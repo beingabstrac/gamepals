@@ -1,6 +1,7 @@
 import { discOf, placeDisc, REVERSI_EMPTY, type ReversiEvent, type ReversiMove, type ReversiState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM, ROOM_COLORS, ROOM_TONES, tone } from '../../look';
+import { roomInset, roomTable } from '../room';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -78,10 +79,17 @@ export class ReversiScene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    g.fillStyle(toHex(DARK.mint), 1);
-    g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
-    g.fillStyle(BOARD, 1);
-    g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
+    if (ROOM) {
+      roomTable(g, SIZE, SIZE, MARGIN);
+      g.fillStyle(ROOM_COLORS.felt, 1);
+      g.fillRect(MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
+      roomInset(g, MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
+    } else {
+      g.fillStyle(toHex(DARK.mint), 1);
+      g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
+      g.fillStyle(BOARD, 1);
+      g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
+    }
     g.lineStyle(3, GRID, 0.9);
     for (let i = 0; i <= 8; i++) {
       g.lineBetween(MARGIN + i * CELL, MARGIN, MARGIN + i * CELL, SIZE - MARGIN);
