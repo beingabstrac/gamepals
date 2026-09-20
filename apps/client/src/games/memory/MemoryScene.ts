@@ -1,6 +1,6 @@
 import { flipMove, MEMORY_SIZES, type MemoryEvent, type MemoryMove, type MemoryState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -165,12 +165,22 @@ export class MemoryScene extends Scene {
     const w = this.cardW;
     const h = this.cardH;
     const shadow = this.add.graphics();
-    shadow.fillStyle(0x2b2a3a, 0.12);
+    shadow.fillStyle(ROOM ? 0x7a4a14 : 0x2b2a3a, ROOM ? 0.24 : 0.12);
     shadow.fillRoundedRect(-w / 2, -h / 2 + 5, w, h, 16);
 
     const back = this.add.graphics();
-    back.fillStyle(toHex(DARK.bubblegum), 1);
-    back.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
+    if (ROOM) {
+      // A card face-down is a moulded tile: a lip, a lit face, and a highlight along the top.
+      back.fillStyle(toHex(DARK.bubblegum), 1);
+      back.fillRoundedRect(-w / 2, -h / 2 + 4, w, h, 16);
+      back.fillGradientStyle(0xff8ec2, 0xff8ec2, toHex(COLORS.bubblegum), toHex(COLORS.bubblegum), 1);
+      back.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
+      back.fillStyle(0xffffff, 0.25);
+      back.fillRoundedRect(-w / 2 + 6, -h / 2 + 5, w - 12, Math.max(6, h * 0.12), 6);
+    } else {
+      back.fillStyle(toHex(DARK.bubblegum), 1);
+      back.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
+    }
     back.lineStyle(4, 0xffffff, 0.85);
     back.strokeRoundedRect(-w / 2 + 8, -h / 2 + 8, w - 16, h - 16, 10);
     back.fillStyle(0xffffff, 0.3);

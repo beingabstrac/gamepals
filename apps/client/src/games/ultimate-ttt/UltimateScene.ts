@@ -1,6 +1,6 @@
 import { LINES, ultimateSquare, type UltimateMove, type UltimateState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -204,7 +204,14 @@ export class UltimateScene extends Scene {
       // Tile: sunny glow when live, soft when not.
       g.fillStyle(tone(0xe9e4f5, ROOM_TONES.line), 1);
       g.fillRoundedRect(o.x + 6, o.y + 10, BIG - 12, BIG - 12, 20);
-      g.fillStyle(live.has(board) ? 0xfff3c4 : 0xffffff, 1);
+      if (ROOM) {
+        // Nine little cards, each lit from its top edge, the live one warmed through.
+        const top = live.has(board) ? 0xfff6d2 : 0xfffdf6;
+        const bottom = live.has(board) ? 0xffe6a2 : 0xfff1d8;
+        g.fillGradientStyle(top, top, bottom, bottom, 1);
+      } else {
+        g.fillStyle(live.has(board) ? 0xfff3c4 : 0xffffff, 1);
+      }
       g.fillRoundedRect(o.x + 6, o.y + 6, BIG - 12, BIG - 12, 20);
       if (live.has(board)) {
         g.lineStyle(4, SUNNY, 1);
