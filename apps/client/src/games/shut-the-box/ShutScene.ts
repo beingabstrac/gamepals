@@ -55,6 +55,9 @@ export class ShutScene extends Scene {
   private picked = new Set<number>();
   private queue: ShutEvent[] = [];
   private running = false;
+  /** Bumped when the box gives up on the queue and jumps to the truth, so a running animation
+   *  knows the tiles it was about to set are out of date. */
+  private generation = 0;
   private seen: ShutEvent | null = null;
 
   constructor(private readonly session: Session<ShutMove>) {
@@ -165,6 +168,17 @@ export class ShutScene extends Scene {
     this.drawTiles();
   }
 
+  /**
+   * Which tiles the box is showing against which the state says are open, for the board check.
+   * The box plays each roll out in turn while the score line is read from the state, so the two
+   * drifting apart is the thing to watch.
+   */
+  boardCheck(): { behind: number; walking: boolean } {
+    let behind = 0;
+    for (let differs = this.shownOpen ^ this.state.open; differs; differs >>= 1) behind += differs & 1;
+    return { behind, walking: this.running || this.queue.length > 0 };
+  }
+
   private drawTiles(): void {
     const w = this.tileWidth();
     for (let tile = 1; tile <= this.count; tile++) {
@@ -211,11 +225,28 @@ export class ShutScene extends Scene {
     this.tweens.add({ targets: this.banner, alpha: 0, delay: 1000, duration: 280 });
   }
 
+  /** More rolls than this waiting and the box stops trying to play them all out. */
+  private static readonly CATCH_UP = 3;
+
   private onChange(): void {
     const event = this.state.last;
     if (event && event !== this.seen) {
       this.seen = event;
       this.queue.push(event);
+    }
+    /**
+     * The same trap Snakes & Ladders fell into: a roll takes real time to play out and the next
+     * one does not wait, so with quick play the queue grows without bound and the tiles shown
+     * drift away from the tiles the state says are open. Past a few rolls behind, catch up.
+     */
+    if (this.queue.length > ShutScene.CATCH_UP) {
+      this.queue.length = 0;
+      this.running = false;
+      this.generation++;
+      this.picked.clear();
+      this.shownOpen = this.state.open;
+      this.drawTiles();
+      return;
     }
     this.next();
   }
@@ -259,7 +290,10 @@ export class ShutScene extends Scene {
       this.shout(`${who}no way to make ${total}. ${event.score} points`);
       this.cameras.main.shake(160, 0.005);
       // The next player gets a fresh box: every tile flips back up.
+      const era = this.generation;
       this.time.delayedCall(1300, () => {
+        // The box jumped ahead while this roll was playing out, so these tiles are history.
+        if (era !== this.generation) return;
         if (!this.state.result || this.state.last !== event) {
           this.shownOpen = (1 << this.count) - 1;
           for (let tile = 1; tile <= this.count; tile++) {

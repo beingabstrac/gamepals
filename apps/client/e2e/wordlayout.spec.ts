@@ -102,23 +102,29 @@ test('Dominoes: played tiles end up on the board, not on the players', async ({ 
 });
 
 /**
- * Snakes & Ladders walks its tokens a square at a time while the line above the board is read
- * straight from the state. With quick play the walk fell behind without limit, so the board showed
- * both tokens at the start while the line had them on 47 and 45.
+ * A scene that plays events out one at a time, while the line above it is read straight from the
+ * state, can drift. Snakes & Ladders did, without limit: the board showed both tokens at the start
+ * while the line had them on 47 and 45. Shut the Box was built the same way.
  */
-test('Snakes & Ladders: the board keeps up with the score line', async ({ page }) => {
-  await open(page, 'Snakes & Ladders');
-  let worst = 0;
-  for (let look = 0; look < 6; look++) {
-    await page.waitForTimeout(900);
-    const report = await page.evaluate(() => {
-      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
-      const scene = game?.scene.scenes[0] as { boardCheck?: () => { behind: number; walking: boolean } } | undefined;
-      return scene?.boardCheck ? scene.boardCheck() : null;
-    });
-    if (!report) break;
-    // A token in the middle of its walk is allowed to be behind; a settled board is not.
-    if (!report.walking) worst = Math.max(worst, report.behind);
-  }
-  expect(worst, 'the board settled this many squares behind the state').toBeLessThanOrEqual(6);
-});
+for (const { name, limit } of [
+  { name: 'Snakes & Ladders', limit: 6 },
+  // Shut the Box plays each roll out in turn and had the same unbounded queue.
+  { name: 'Shut the Box', limit: 2 },
+]) {
+  test(`${name}: the board keeps up with the score line`, async ({ page }) => {
+    await open(page, name);
+    let worst = 0;
+    for (let look = 0; look < 6; look++) {
+      await page.waitForTimeout(900);
+      const report = await page.evaluate(() => {
+        const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+        const scene = game?.scene.scenes[0] as { boardCheck?: () => { behind: number; walking: boolean } } | undefined;
+        return scene?.boardCheck ? scene.boardCheck() : null;
+      });
+      if (!report) break;
+      // A token in the middle of its walk is allowed to be behind; a settled board is not.
+      if (!report.walking) worst = Math.max(worst, report.behind);
+    }
+    expect(worst, `${name}: the board settled this far behind the state`).toBeLessThanOrEqual(limit);
+  });
+}

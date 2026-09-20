@@ -303,6 +303,11 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
   Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
   eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
+  - [x] **Shut the Box (2026-09-21).** Found by looking for the shape rather than at more pictures:
+    only two scenes drain a queue of events one at a time, and the other one was Snakes & Ladders.
+    Same unbounded lag, same fix, same `boardCheck()`, and one test now covers both. Ludo looked
+    like the same risk and is not: it draws every token straight from the state, which is why it
+    cannot drift and why its picture was clean.
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
