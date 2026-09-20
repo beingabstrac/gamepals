@@ -268,6 +268,7 @@ export class DominoScene extends Scene {
     }
     for (const [tile, t] of targets) {
       let g = this.sprites.get(tile);
+      const fresh = !g;
       if (!g) {
         g = this.add.graphics().setDepth(2);
         const start = spawn ?? t;
@@ -276,15 +277,19 @@ export class DominoScene extends Scene {
       }
       drawTile(g, t.a, t.b, t.w, t.h, t.outline);
       const heading = `${t.x},${t.y},${t.angle}`;
-      // Only start a new journey when the destination has actually changed. Every state change
-      // calls sync, and killing an in-flight tween to restart it from where it had got to meant a
-      // tile never arrived when play was quick: the gallery showed every domino still sitting on
-      // its player's chip with the table empty, and the scene measured them all at y=22.
-      const already = this.headingTo.get(tile) === heading && this.tweens.getTweensOf(g).length > 0;
-      if (already) continue;
-      this.tweens.killTweensOf(g);
+      if (this.headingTo.get(tile) === heading && this.tweens.getTweensOf(g).length > 0) continue;
       this.headingTo.set(tile, heading);
-      if (animate) this.tweens.add({ targets: g, x: t.x, y: t.y, angle: t.angle, duration: 260, ease: 'Back.easeOut' });
+      this.tweens.killTweensOf(g);
+      /**
+       * Only the tile just played travels. Every other tile on the board snaps to its place.
+       *
+       * The line re-flows as it grows, so adding one tile moves every tile already down. Animating
+       * all of them meant that with quick play nothing ever converged: each new play gave every
+       * tile a fresh 260ms journey before the last one had finished, and the board measured
+       * nineteen tiles played with not one of them ever settling anywhere. It is also how a real
+       * table behaves. Tiles already down do not glide about; the row just shifts.
+       */
+      if (animate && fresh) this.tweens.add({ targets: g, x: t.x, y: t.y, angle: t.angle, duration: 260, ease: 'Back.easeOut' });
       else g.setPosition(t.x, t.y).setAngle(t.angle);
     }
 
