@@ -1003,6 +1003,25 @@ export function GameArt({ id }: { id: string }) {
 /* ---------- Characters ---------- */
 
 function Blob({ color, children }: { color: string; children: ComponentChildren }) {
+  if (ROOM) {
+    // In the playroom a face is a moulded bead: a rim, a body lit from the top, and a highlight.
+    return (
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <linearGradient id={`face-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55" />
+            <stop offset="45%" stop-color="#ffffff" stop-opacity="0.05" />
+            <stop offset="100%" stop-color="#000000" stop-opacity="0.18" />
+          </linearGradient>
+        </defs>
+        <rect x="8" y="14" width="84" height="80" rx="38" fill={color} opacity="0.55" />
+        <rect x="8" y="10" width="84" height="80" rx="38" fill={color} />
+        <rect x="8" y="10" width="84" height="80" rx="38" fill={`url(#face-${color.replace('#', '')})`} />
+        <ellipse cx="34" cy="28" rx="15" ry="9" fill="#ffffff" opacity="0.4" />
+        {children}
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="14" width="80" height="76" rx="36" fill={color} />
