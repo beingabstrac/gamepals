@@ -1539,3 +1539,37 @@ h2,
 :root[data-look='room'] .setup .table-top svg {
   filter: drop-shadow(0 4px 4px rgba(20, 70, 44, 0.4));
 }
+
+/* Play sat under the whole rulebook, so on a phone you scrolled past five paragraphs to reach
+   the one button you came for. In the playroom it sits right under the table, and how to play
+   follows it for whoever wants it. */
+:root[data-look='room'] .setup {
+  display: flex;
+  flex-direction: column;
+}
+
+:root[data-look='room'] .setup .play-bubble {
+  order: 5;
+}
+
+:root[data-look='room'] .setup .how-to {
+  order: 6;
+}
+
+:root[data-look='room'] .setup .soon-pill {
+  order: 7;
+}
+
+:root[data-look='room'] .play-bubble {
+  background: linear-gradient(180deg, #7ee6a8 0%, #35c47f 52%, #1e9a5f 100%);
+  color: #ffffff;
+  -webkit-text-stroke: 2px #17804e;
+  paint-order: stroke fill;
+  border: 2px solid #17804e;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.55), 0 8px 0 #136b41, 0 16px 22px rgba(20, 80, 50, 0.35);
+}
+
+:root[data-look='room'] .play-bubble:active {
+  transform: translateY(5px) scale(0.98);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.5), 0 2px 0 #136b41, 0 6px 10px rgba(20, 80, 50, 0.3);
+}

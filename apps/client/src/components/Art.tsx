@@ -8,10 +8,11 @@ import { COLORS, DARK } from '../theme';
  * lavender rules, cold blue grids, white paper. In the room they are parchment and ochre.
  */
 const PAPER = ROOM ? '#F1E2C0' : '#FFFAF0';
-const PAPER_WARM = ROOM ? '#E8D3A6' : '#FFE9CF';
+const PAPER_WARM = ROOM ? '#E8D3A6' : PAPER_WARM;
 const PAPER_LINE = ROOM ? '#CBAE7E' : '#E6E1F3';
 const COOL = ROOM ? '#5E8FA8' : '#8EC2FF';
-const COOL_LINE = ROOM ? '#3E6C80' : '#B9D9F2';
+const COOL_LINE = ROOM ? '#2F8CB5' : '#B9D9F2';
+const SQUARE_DARK = ROOM ? '#D39A5F' : SQUARE_DARK;
 
 /* Original vector art: crisp at any size. The playroom lights it from the stylesheet. */
 
@@ -249,7 +250,7 @@ function ChessArt() {
       <rect x="10" y="14" width="80" height="80" rx="14" fill={PAPER_LINE} />
       <rect x="10" y="10" width="80" height="80" rx="14" fill={PAPER} />
       {squares.map(({ row, col }) =>
-        (row + col) % 2 ? <rect key={`${row}-${col}`} x={14 + col * 18} y={14 + row * 18} width="18" height="18" fill="#C9B6F5" /> : null,
+        (row + col) % 2 ? <rect key={`${row}-${col}`} x={14 + col * 18} y={14 + row * 18} width="18" height="18" fill={SQUARE_DARK} /> : null,
       )}
       <g>
         <ellipse cx="50" cy="74" rx="15" ry="5" fill={INK} opacity="0.12" />
@@ -273,8 +274,8 @@ function BackgammonArt() {
       <rect x="47" y="16" width="6" height="64" fill={DARK.peach} />
       {cols.map((c) => (
         <g key={c}>
-          <path d={`M${12 + c * 13} 16 L${22 + c * 13} 16 L${17 + c * 13} 44 Z`} fill={c % 2 ? '#C9B6F5' : '#FFE9CF'} />
-          <path d={`M${12 + c * 13} 80 L${22 + c * 13} 80 L${17 + c * 13} 52 Z`} fill={c % 2 ? '#FFE9CF' : '#C9B6F5'} />
+          <path d={`M${12 + c * 13} 16 L${22 + c * 13} 16 L${17 + c * 13} 44 Z`} fill={c % 2 ? SQUARE_DARK : PAPER_WARM} />
+          <path d={`M${12 + c * 13} 80 L${22 + c * 13} 80 L${17 + c * 13} 52 Z`} fill={c % 2 ? PAPER_WARM : SQUARE_DARK} />
         </g>
       ))}
       <circle cx="17" cy="74" r="6" fill={COLORS.sky} />
