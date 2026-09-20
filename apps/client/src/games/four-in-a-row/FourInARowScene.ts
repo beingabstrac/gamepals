@@ -1,6 +1,5 @@
 import { cellIndex, COLS, ROWS, type FourInARowMove, type FourInARowState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -13,7 +12,7 @@ export const FOUR_IN_A_ROW_SIZE = { width: COLS * CELL, height: FACE_HEIGHT + LI
 
 const BOARD = toHex(COLORS.sky);
 const BOARD_LIP = toHex(DARK.sky);
-const HOLE = tone(0xeaf3ff, ROOM_TONES.parchment);
+const HOLE = 0xeaf3ff;
 const DISC = [toHex(COLORS.sunny), toHex(COLORS.tomato)];
 const DISC_RING = [toHex(DARK.sunny), toHex(DARK.tomato)];
 const RADIUS = CELL / 2 - 11;
@@ -144,13 +143,8 @@ export class FourInARowScene extends Scene {
 
     g.fillStyle(BOARD_LIP, 1);
     g.fillRoundedRect(0, LIP, COLS * CELL, FACE_HEIGHT, 30);
-    if (ROOM) g.fillGradientStyle(0x5bc0f8, 0x5bc0f8, BOARD, BOARD, 1);
-    else g.fillStyle(BOARD, 1);
+    g.fillStyle(BOARD, 1);
     g.fillRoundedRect(0, 0, COLS * CELL, FACE_HEIGHT, 30);
-    if (ROOM) {
-      g.fillStyle(0xffffff, 0.22);
-      g.fillRoundedRect(10, 8, COLS * CELL - 20, 16, 8);
-    }
 
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
@@ -158,26 +152,12 @@ export class FourInARowScene extends Scene {
         const disc = index === hideCell ? null : state.board[index];
         const { x, y } = cellCenter(col, row);
         if (disc === null || disc === undefined) {
-          // An empty hole is a hole: dark at the top where the front of the board overhangs it.
           g.fillStyle(HOLE, 1);
           g.fillCircle(x, y, RADIUS);
-          if (ROOM) {
-            g.fillStyle(0x1f5f8f, 0.28);
-            g.fillEllipse(x, y - RADIUS * 0.3, RADIUS * 1.85, RADIUS * 0.85);
-            g.fillStyle(HOLE, 1);
-            g.fillCircle(x, y + RADIUS * 0.08, RADIUS * 0.94);
-          }
           continue;
         }
         g.fillStyle(DISC[disc] ?? HOLE, 1);
         g.fillCircle(x, y, RADIUS);
-        if (ROOM) {
-          // A counter dropped in a slot: lit at the top, shaded where the board covers it.
-          g.fillStyle(0xffffff, 0.4);
-          g.fillEllipse(x - RADIUS * 0.22, y - RADIUS * 0.36, RADIUS * 0.95, RADIUS * 0.5);
-          g.fillStyle(DISC_RING[disc] ?? 0x000000, 0.35);
-          g.fillEllipse(x, y + RADIUS * 0.55, RADIUS * 1.4, RADIUS * 0.5);
-        }
         g.lineStyle(6, DISC_RING[disc] ?? 0x000000, 1);
         g.strokeCircle(x, y, RADIUS - 13);
       }

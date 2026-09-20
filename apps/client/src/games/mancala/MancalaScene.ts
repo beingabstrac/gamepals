@@ -1,6 +1,5 @@
 import { housesOf, sowMove, storeOf, type MancalaEvent, type MancalaMove, type MancalaState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM, ROOM_COLORS } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -111,15 +110,10 @@ export class MancalaScene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    // A mancala board is a carved piece of wood, so in the room it is one.
-    g.fillStyle(ROOM ? ROOM_COLORS.woodDark : toHex(DARK.peach), 1);
+    g.fillStyle(toHex(DARK.peach), 1);
     g.fillRoundedRect(8, 16, W - 16, H - 24, 48);
-    g.fillStyle(ROOM ? ROOM_COLORS.wood : toHex(COLORS.peach), 1);
+    g.fillStyle(toHex(COLORS.peach), 1);
     g.fillRoundedRect(8, 8, W - 16, H - 24, 48);
-    if (ROOM) {
-      g.fillStyle(0xffffff, 0.08);
-      g.fillRoundedRect(8, 8, W - 16, 18, 9);
-    }
     for (let pit = 0; pit < 14; pit++) {
       const { x, y } = spot(pit);
       const owner = pit <= 6 ? 0 : 1;

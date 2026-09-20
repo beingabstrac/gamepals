@@ -1,6 +1,5 @@
 import { slideMove, type SlidingMove, type SlidingState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -45,20 +44,14 @@ export class SlidingScene extends Scene {
     this.cell = (SIZE - PAD * 2 - GAP * (this.n - 1)) / this.n;
 
     const frame = this.add.graphics();
-    frame.fillStyle(ROOM ? 0xe9cfa0 : 0xe6e0f4, 1);
+    frame.fillStyle(0xe6e0f4, 1);
     frame.fillRoundedRect(0, 8, SIZE, SIZE - 8, 30);
-    if (ROOM) frame.fillGradientStyle(0xfffdf6, 0xfffdf6, 0xfff0d4, 0xfff0d4, 1);
-    else frame.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+    frame.fillStyle(0xffffff, 1);
     frame.fillRoundedRect(0, 0, SIZE, SIZE - 8, 30);
     for (let cell = 0; cell < this.n * this.n; cell++) {
       const { x, y } = this.pos(cell);
-      // The empty bed under a tile, shaded where the frame overhangs it.
-      frame.fillStyle(ROOM ? 0xecd7ac : 0xf1edfa, 1);
+      frame.fillStyle(0xf1edfa, 1);
       frame.fillRoundedRect(x - this.cell / 2, y - this.cell / 2, this.cell, this.cell, 18);
-      if (ROOM) {
-        frame.fillStyle(0xd8bd8a, 0.5);
-        frame.fillRoundedRect(x - this.cell / 2, y - this.cell / 2, this.cell, this.cell * 0.2, 12);
-      }
     }
 
     this.state.tiles.forEach((tile, cell) => {
@@ -100,10 +93,6 @@ export class SlidingScene extends Scene {
     const size = this.cell;
     const row = Math.floor((tile - 1) / this.n);
     const g = this.add.graphics();
-    if (ROOM) {
-      g.fillStyle(0x7a4a14, 0.2);
-      g.fillRoundedRect(-this.cell / 2, -this.cell / 2 + 7, this.cell, this.cell, 18);
-    }
     g.fillStyle(toHex(ROW_DARK[row % ROW_DARK.length]!), 1);
     g.fillRoundedRect(-size / 2, -size / 2 + 6, size, size - 2, 18);
     g.fillStyle(toHex(ROW_COLORS[row % ROW_COLORS.length]!), 1);

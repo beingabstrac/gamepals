@@ -1,6 +1,5 @@
 import { flipMove, MEMORY_SIZES, type MemoryEvent, type MemoryMove, type MemoryState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -165,29 +164,19 @@ export class MemoryScene extends Scene {
     const w = this.cardW;
     const h = this.cardH;
     const shadow = this.add.graphics();
-    shadow.fillStyle(ROOM ? 0x7a4a14 : 0x2b2a3a, ROOM ? 0.24 : 0.12);
+    shadow.fillStyle(0x2b2a3a, 0.12);
     shadow.fillRoundedRect(-w / 2, -h / 2 + 5, w, h, 16);
 
     const back = this.add.graphics();
-    if (ROOM) {
-      // A card face-down is a moulded tile: a lip, a lit face, and a highlight along the top.
-      back.fillStyle(toHex(DARK.bubblegum), 1);
-      back.fillRoundedRect(-w / 2, -h / 2 + 4, w, h, 16);
-      back.fillGradientStyle(0xff8ec2, 0xff8ec2, toHex(COLORS.bubblegum), toHex(COLORS.bubblegum), 1);
-      back.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
-      back.fillStyle(0xffffff, 0.25);
-      back.fillRoundedRect(-w / 2 + 6, -h / 2 + 5, w - 12, Math.max(6, h * 0.12), 6);
-    } else {
-      back.fillStyle(toHex(DARK.bubblegum), 1);
-      back.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
-    }
+    back.fillStyle(toHex(DARK.bubblegum), 1);
+    back.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
     back.lineStyle(4, 0xffffff, 0.85);
     back.strokeRoundedRect(-w / 2 + 8, -h / 2 + 8, w - 16, h - 16, 10);
     back.fillStyle(0xffffff, 0.3);
     for (let row = -1; row <= 1; row++) for (let col = -1; col <= 1; col++) back.fillCircle(col * w * 0.2, row * h * 0.2, Math.max(3, w * 0.035));
 
     const face = this.add.graphics();
-    face.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+    face.fillStyle(0xffffff, 1);
     face.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
     face.lineStyle(3, 0xe6e0f4, 1);
     face.strokeRoundedRect(-w / 2, -h / 2, w, h, 16);
@@ -210,7 +199,7 @@ export class MemoryScene extends Scene {
       const x = (W * (seat + 0.5)) / players;
       const width = Math.min(136, W / players - 12);
       const g = this.add.graphics();
-      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+      g.fillStyle(0xffffff, 1);
       g.fillRoundedRect(-width / 2, -28, width, 56, 28);
       g.lineStyle(4, toHex(MEMORY_COLORS[seat]!), 1);
       g.strokeRoundedRect(-width / 2, -28, width, 56, 28);

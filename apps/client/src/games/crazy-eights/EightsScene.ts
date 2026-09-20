@@ -10,7 +10,6 @@ import {
   type EightsState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk, ROOM_TONES, tone } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
@@ -25,8 +24,8 @@ export const EIGHTS_SIZE = { width: W, height: H };
 
 const CW = 84;
 const CH = 118;
-const TABLE = tableFill(0xd6ecff);
-const SLOT = slotFill(0x8fc4ee);
+const TABLE = 0xd6ecff;
+const SLOT = 0x8fc4ee;
 const MOVE_MS = 220;
 const HAND_Y = H - CH / 2 - 34;
 const PILE_Y = 360;
@@ -97,14 +96,14 @@ export class EightsScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     drawSlot(g, DECK_X, PILE_Y, CW, CH, SLOT);
     drawSlot(g, PILE_X, PILE_Y, CW, CH, SLOT);
-    this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 18, '', 22, tableInk('#2f76b0')).setDepth(4000);
-    this.suitPip = sharpText(this, PILE_X, PILE_Y - CH / 2 - 22, '', 40, tableInk('#2f76b0')).setDepth(4000);
-    this.banner = sharpText(this, W / 2, PILE_Y + CH + 40, '', 24, tableInk('#2f76b0')).setVisible(false).setDepth(4000);
+    this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 18, '', 22, '#2f76b0').setDepth(4000);
+    this.suitPip = sharpText(this, PILE_X, PILE_Y - CH / 2 - 22, '', 40, '#2f76b0').setDepth(4000);
+    this.banner = sharpText(this, W / 2, PILE_Y + CH + 40, '', 24, '#2f76b0').setVisible(false).setDepth(4000);
     // Everybody else, along the top, with how many cards they are holding.
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
       const x = (W / (seats + 1)) * (seat + 1);
-      this.seatText.push(sharpText(this, x, 46, '', 22, tableInk('#2f76b0')).setDepth(4000));
+      this.seatText.push(sharpText(this, x, 46, '', 22, '#2f76b0').setDepth(4000));
     }
   }
 
@@ -190,7 +189,7 @@ export class EightsScene extends Scene {
     if (this.asking === null) return;
     const parts: GameObjects.GameObject[] = [];
     const panel = this.add.graphics();
-    panel.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+    panel.fillStyle(0xffffff, 1);
     panel.fillRoundedRect(-230, -70, 460, 140, 28);
     parts.push(panel, sharpText(this, 0, -44, 'Which suit?', 24, COLORS.soft));
     for (let suit = 0; suit < 4; suit++) {

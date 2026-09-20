@@ -9,7 +9,6 @@ import {
   type FreeCellState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
@@ -33,8 +32,8 @@ const TAB_Y = TOP_Y + CH + 30;
 const STEP = 36;
 const MOVE_MS = 200;
 const DRAG_MIN = 10;
-const TABLE = tableFill(0xc9e3ff);
-const SLOT = slotFill(0x8cbdf0);
+const TABLE = 0xc9e3ff;
+const SLOT = 0x8cbdf0;
 /** Piles the keyboard walks through: the eight columns, then the four free cells. */
 const KEY_PILES = COLUMNS + CELLS;
 
@@ -158,18 +157,18 @@ export class FreeCellScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     for (let i = 0; i < CELLS; i++) {
       drawSlot(g, topX(i), TOP_Y, CW, CH, SLOT);
-      sharpText(this, topX(i), TOP_Y, 'free', 22, tableInk('#6aa4e0'));
+      sharpText(this, topX(i), TOP_Y, 'free', 22, '#6aa4e0');
     }
     for (let suit = 0; suit < 4; suit++) {
       // Home piles sit on a paler patch, so the four cells and the four homes never read as one row.
       g.fillStyle(0xdceeff, 1);
       g.fillRoundedRect(topX(CELLS + suit) - CW / 2, TOP_Y - CH / 2, CW, CH, 12);
       drawSlot(g, topX(CELLS + suit), TOP_Y, CW, CH, SLOT);
-      sharpText(this, topX(CELLS + suit), TOP_Y, SUIT_SYMBOLS[suit]!, 42, tableInk('#6aa4e0'));
+      sharpText(this, topX(CELLS + suit), TOP_Y, SUIT_SYMBOLS[suit]!, 42, '#6aa4e0');
     }
-    sharpText(this, (topX(CELLS - 1) + topX(CELLS)) / 2, TOP_Y, '›', 30, tableInk('#a9cdf0'));
+    sharpText(this, (topX(CELLS - 1) + topX(CELLS)) / 2, TOP_Y, '›', 30, '#a9cdf0');
     for (let c = 0; c < COLUMNS; c++) drawSlot(g, spotX(c), TAB_Y, CW, CH, SLOT);
-    this.banner = sharpText(this, W / 2, TAB_Y - 17, '', 24, tableInk('#3d7cc0')).setVisible(false).setDepth(4000);
+    this.banner = sharpText(this, W / 2, TAB_Y - 17, '', 24, '#3d7cc0').setVisible(false).setDepth(4000);
   }
 
   private say(text: string): void {

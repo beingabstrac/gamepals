@@ -9,7 +9,6 @@ import {
   type HeartsState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
@@ -25,7 +24,7 @@ export const HEARTS_SIZE = { width: W, height: H };
 
 const CW = 82;
 const CH = 116;
-const TABLE = tableFill(0xffe3ea);
+const TABLE = 0xffe3ea;
 const MOVE_MS = 240;
 const HAND_Y = H - CH / 2 - 40;
 const MIDDLE = { x: W / 2, y: 400 };
@@ -81,7 +80,7 @@ export class HeartsScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, tableInk('#b3475f')).setDepth(4000);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, '#b3475f').setDepth(4000);
     // The other three seats, across the top and down the sides.
     const spots = [
       { x: W / 2, y: H - 20 },
@@ -91,7 +90,7 @@ export class HeartsScene extends Scene {
     ];
     for (let seat = 0; seat < 4; seat++) {
       const side = seat === 1 || seat === 3;
-      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 21, tableInk('#b3475f')).setDepth(4000));
+      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 21, '#b3475f').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);
@@ -201,7 +200,7 @@ export class HeartsScene extends Scene {
     this.passButton = this.add
       .container(W / 2, HAND_Y - CH / 2 - 60, [
         panel,
-        sharpText(this, 0, 0, ready ? `Pass ${where}` : `Pick ${PASS_COUNT - this.picked.length} more`, 26, ready ? '#ffffff' : tableInk('#9a7a84')),
+        sharpText(this, 0, 0, ready ? `Pass ${where}` : `Pick ${PASS_COUNT - this.picked.length} more`, 26, ready ? '#ffffff' : '#9a7a84'),
       ])
       .setDepth(4500);
   }

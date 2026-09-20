@@ -1,6 +1,5 @@
 import { boxOf, colOf, rowOf, UNITS, type SudokuMove, type SudokuState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -43,10 +42,9 @@ export class SudokuScene extends Scene {
     fitCamera(this, SIZE, SIZE);
     applySpeed(this);
     const paper = this.add.graphics();
-    paper.fillStyle(ROOM ? 0xe9cfa0 : 0x2b2a3a, ROOM ? 1 : 0.08);
+    paper.fillStyle(0x2b2a3a, 0.08);
     paper.fillRoundedRect(4, 10, SIZE - 8, SIZE - 10, 28);
-    if (ROOM) paper.fillGradientStyle(0xfffdf6, 0xfffdf6, 0xfff3de, 0xfff3de, 1);
-    else paper.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+    paper.fillStyle(0xffffff, 1);
     paper.fillRoundedRect(4, 2, SIZE - 8, SIZE - 10, 28);
     this.highlight = this.add.graphics().setDepth(1);
     this.drawLines();

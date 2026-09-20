@@ -1,6 +1,5 @@
 import { cellsOf, seaCol, FLEET, fireMove, HIT, MISS, placeShip, seaRow, SEA_SIZE, type Placement, type SeaEvent, type SeaMove, type SeaBattleState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -19,8 +18,8 @@ export const SEA_COLORS = [COLORS.sky, COLORS.tomato];
 const LEFT = (W - GRID) / 2;
 const THEIRS_Y = 56;
 const MINE_Y = 430;
-const WATER = tone(0xdff1ff, ROOM_TONES.water);
-const WATER_LINE = tone(0xb9d9f2, ROOM_TONES.waterLine);
+const WATER = 0xdff1ff;
+const WATER_LINE = 0xb9d9f2;
 const SHIP = 0x8d93a8;
 const SHIP_DOWN = 0x4b4a5c;
 const SUNNY = toHex(COLORS.sunny);
@@ -186,14 +185,8 @@ export class SeaScene extends Scene {
     const top = this.gridTop(grid);
     g.fillStyle(WATER_LINE, 1);
     g.fillRoundedRect(LEFT - 6, top - 2, GRID + 12, GRID + 12, 12);
-    // Water is deeper further away, and catches the light where it meets the frame.
-    if (ROOM) g.fillGradientStyle(0x7fd4f2, 0x7fd4f2, WATER, WATER, 1);
-    else g.fillStyle(WATER, 1);
+    g.fillStyle(WATER, 1);
     g.fillRoundedRect(LEFT - 6, top - 6, GRID + 12, GRID + 12, 12);
-    if (ROOM) {
-      g.fillStyle(0xffffff, 0.22);
-      g.fillRoundedRect(LEFT - 2, top - 2, GRID + 4, 10, 5);
-    }
     g.lineStyle(1.5, WATER_LINE, 1);
     for (let i = 0; i <= SEA_SIZE; i++) {
       g.lineBetween(LEFT + i * CELL, top, LEFT + i * CELL, top + GRID);

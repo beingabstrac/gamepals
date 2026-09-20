@@ -1,7 +1,5 @@
 import { CheckerPiece, isKing, ownerOf, type CheckersEvent, type CheckersMove, type CheckersState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM, ROOM_COLORS, ROOM_TONES, tone } from '../../look';
-import { roomInset, roomTable } from '../room';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -12,8 +10,8 @@ const SIZE = 640;
 export const CHECKERS_SIZE = { width: SIZE, height: SIZE };
 const MARGIN = 32;
 const CELL = (SIZE - MARGIN * 2) / 8;
-const LIGHT = tone(0xfff4dc, ROOM_TONES.parchment);
-const DARK_SQUARE = ROOM ? ROOM_COLORS.squareDark : toHex(COLORS.mint);
+const LIGHT = 0xfff4dc;
+const DARK_SQUARE = toHex(COLORS.mint);
 const LAST_MOVE = toHex(COLORS.sunny);
 const TARGET = 0xffffff;
 /** Black (ink) for seat 0, red (tomato) for seat 1. */
@@ -86,49 +84,26 @@ export class CheckersScene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    if (ROOM) roomTable(g, SIZE, SIZE, MARGIN);
-    else {
-      g.fillStyle(toHex(DARK.mint), 1);
-      g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
-      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
-      g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
-    }
+    g.fillStyle(toHex(DARK.mint), 1);
+    g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
+    g.fillStyle(0xffffff, 1);
+    g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
     for (let sq = 0; sq < 64; sq++) {
       const dark = (Math.floor(sq / 8) + (sq % 8)) % 2 === 1;
       g.fillStyle(dark ? DARK_SQUARE : LIGHT, 1);
       g.fillRect(MARGIN + (sq % 8) * CELL, MARGIN + Math.floor(sq / 8) * CELL, CELL, CELL);
-      if (ROOM) {
-        g.fillStyle(0xffffff, dark ? 0.06 : 0.14);
-        g.fillRect(MARGIN + (sq % 8) * CELL, MARGIN + Math.floor(sq / 8) * CELL, CELL, CELL * 0.36);
-      }
     }
-    if (ROOM) roomInset(g, MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
   }
 
   private makePiece(piece: number, sq: number): GameObjects.Container {
     const seat = ownerOf(piece) as 0 | 1;
     const g = this.add.graphics();
-    if (ROOM) {
-      // A draught is a turned counter: a shadow on the square, two stacked rims, a lit face and
-      // the ring the wood was cut with.
-      g.fillStyle(0x7a4a14, 0.26);
-      g.fillEllipse(1, RADIUS * 0.66, RADIUS * 1.85, RADIUS * 0.66);
-      g.fillStyle(PIECE_DARK[seat]!, 1);
-      g.fillCircle(0, 5, RADIUS);
-      g.fillStyle(PIECE_COLOR[seat]!, 1);
-      g.fillCircle(0, 0, RADIUS);
-      g.fillStyle(0xffffff, seat === 0 ? 0.18 : 0.45);
-      g.fillEllipse(-RADIUS * 0.26, -RADIUS * 0.36, RADIUS * 0.92, RADIUS * 0.5);
-      g.lineStyle(3, PIECE_DARK[seat]!, 0.7);
-      g.strokeCircle(0, 0, RADIUS * 0.68);
-    } else {
-      g.fillStyle(PIECE_DARK[seat]!, 1);
-      g.fillCircle(0, 5, RADIUS);
-      g.fillStyle(PIECE_COLOR[seat]!, 1);
-      g.fillCircle(0, 0, RADIUS);
-      g.lineStyle(4, 0xffffff, 0.35);
-      g.strokeCircle(0, 0, RADIUS * 0.66);
-    }
+    g.fillStyle(PIECE_DARK[seat]!, 1);
+    g.fillCircle(0, 5, RADIUS);
+    g.fillStyle(PIECE_COLOR[seat]!, 1);
+    g.fillCircle(0, 0, RADIUS);
+    g.lineStyle(4, 0xffffff, 0.35);
+    g.strokeCircle(0, 0, RADIUS * 0.66);
     const { x, y } = center(sq);
     const view = this.add.container(x, y, [g]).setDepth(2);
     if (isKing(piece)) view.add(this.makeCrown());

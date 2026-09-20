@@ -11,7 +11,6 @@ import {
   type TriPeaksState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
@@ -30,8 +29,8 @@ const TOP_Y = 22 + CH / 2;
 const BASE_GAP = (W - 10 * CW) / 11;
 const FOOT_Y = H - CH / 2 - 56;
 const MOVE_MS = 190;
-const TABLE = tableFill(0xd8f0e2);
-const SLOT = slotFill(0x8ed0aa);
+const TABLE = 0xd8f0e2;
+const SLOT = 0x8ed0aa;
 const LIFT = 9;
 const DECK_X = W / 2 - CW * 0.85;
 const WASTE_X = W / 2 + CW * 0.85;
@@ -122,9 +121,9 @@ export class TriPeaksScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     drawSlot(g, DECK_X, FOOT_Y, CW, CH, SLOT);
     drawSlot(g, WASTE_X, FOOT_Y, CW, CH, SLOT);
-    this.deckText = sharpText(this, DECK_X, FOOT_Y - CH / 2 - 16, '', 22, tableInk('#3f9e73')).setDepth(4000);
-    this.runText = sharpText(this, WASTE_X, FOOT_Y - CH / 2 - 16, '', 22, tableInk('#3f9e73')).setDepth(4000);
-    this.banner = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 24, tableInk('#3f9e73')).setVisible(false).setDepth(4000);
+    this.deckText = sharpText(this, DECK_X, FOOT_Y - CH / 2 - 16, '', 22, '#3f9e73').setDepth(4000);
+    this.runText = sharpText(this, WASTE_X, FOOT_Y - CH / 2 - 16, '', 22, '#3f9e73').setDepth(4000);
+    this.banner = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 24, '#3f9e73').setVisible(false).setDepth(4000);
   }
 
   private sync(animate: boolean, deal = false): void {

@@ -1,7 +1,5 @@
 import { discOf, placeDisc, REVERSI_EMPTY, type ReversiEvent, type ReversiMove, type ReversiState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM, ROOM_COLORS, ROOM_TONES, tone } from '../../look';
-import { roomInset, roomTable } from '../room';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -14,7 +12,7 @@ const MARGIN = 32;
 const CELL = (SIZE - MARGIN * 2) / 8;
 const RADIUS = CELL * 0.4;
 const BOARD = toHex(COLORS.mint);
-const GRID = tone(0xfff4dc, ROOM_TONES.parchment);
+const GRID = 0xfff4dc;
 /** Dark discs are ink; light discs are white with a sky-blue lip, so "Light" still has a color. */
 const FACE = [toHex(COLORS.ink), 0xffffff];
 const LIP = [0x16151f, toHex(COLORS.sky)];
@@ -79,17 +77,10 @@ export class ReversiScene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    if (ROOM) {
-      roomTable(g, SIZE, SIZE, MARGIN);
-      g.fillGradientStyle(0x4cbd80, 0x4cbd80, ROOM_COLORS.feltDark, ROOM_COLORS.feltDark, 1);
-      g.fillRect(MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
-      roomInset(g, MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
-    } else {
-      g.fillStyle(toHex(DARK.mint), 1);
-      g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
-      g.fillStyle(BOARD, 1);
-      g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
-    }
+    g.fillStyle(toHex(DARK.mint), 1);
+    g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
+    g.fillStyle(BOARD, 1);
+    g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
     g.lineStyle(3, GRID, 0.9);
     for (let i = 0; i <= 8; i++) {
       g.lineBetween(MARGIN + i * CELL, MARGIN, MARGIN + i * CELL, SIZE - MARGIN);
@@ -102,20 +93,6 @@ export class ReversiScene extends Scene {
 
   private paint(face: GameObjects.Graphics, seat: 0 | 1): void {
     face.clear();
-    if (ROOM) {
-      // A counter is a moulded disc: a shadow on the baize, a lip, a lit face and a highlight.
-      face.fillStyle(0x1c6b45, 0.3);
-      face.fillEllipse(1, RADIUS * 0.62, RADIUS * 1.9, RADIUS * 0.7);
-      face.fillStyle(LIP[seat]!, 1);
-      face.fillCircle(0, 3, RADIUS);
-      face.fillStyle(FACE[seat]!, 1);
-      face.fillCircle(0, 0, RADIUS);
-      face.fillStyle(0xffffff, seat === 0 ? 0.16 : 0.5);
-      face.fillEllipse(-RADIUS * 0.28, -RADIUS * 0.34, RADIUS * 0.9, RADIUS * 0.55);
-      face.lineStyle(2, LIP[seat]!, 0.55);
-      face.strokeCircle(0, 0, RADIUS * 0.72);
-      return;
-    }
     face.fillStyle(LIP[seat]!, 1);
     face.fillCircle(0, 4, RADIUS);
     face.fillStyle(FACE[seat]!, 1);

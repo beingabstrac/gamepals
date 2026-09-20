@@ -11,7 +11,6 @@ import {
   type RummyState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
@@ -29,8 +28,8 @@ const CW = 78;
 const CH = 110;
 const MELD_CW = 54;
 const MELD_CH = 76;
-const TABLE = tableFill(0xdff0f6);
-const SLOT = slotFill(0x9cc8d9);
+const TABLE = 0xdff0f6;
+const SLOT = 0x9cc8d9;
 const MOVE_MS = 220;
 const HAND_Y = H - CH / 2 - 74;
 const PILE_Y = 300;
@@ -92,12 +91,12 @@ export class RummyScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     drawSlot(g, DECK_X, PILE_Y, CW, CH, SLOT);
     drawSlot(g, PILE_X, PILE_Y, CW, CH, SLOT);
-    this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 18, '', 19, tableInk('#2c6c83')).setDepth(4000);
-    this.banner = sharpText(this, W / 2, 28, '', 22, tableInk('#2c6c83')).setDepth(4000);
-    this.countText = sharpText(this, W / 2, H - 26, '', 21, tableInk('#2c6c83')).setDepth(4000);
+    this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 18, '', 19, '#2c6c83').setDepth(4000);
+    this.banner = sharpText(this, W / 2, 28, '', 22, '#2c6c83').setDepth(4000);
+    this.countText = sharpText(this, W / 2, H - 26, '', 21, '#2c6c83').setDepth(4000);
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
-      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 68, '', 18, tableInk('#2c6c83')).setDepth(4000));
+      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 68, '', 18, '#2c6c83').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);

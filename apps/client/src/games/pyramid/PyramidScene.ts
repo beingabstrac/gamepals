@@ -13,7 +13,6 @@ import {
   type PyramidState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
@@ -33,8 +32,8 @@ const STEP_Y = CH * 0.42;
 const TOP_Y = 24 + CH / 2;
 const FOOT_Y = H - CH / 2 - 54;
 const MOVE_MS = 200;
-const TABLE = tableFill(0xffe6f2);
-const SLOT = slotFill(0xf0a8ce);
+const TABLE = 0xffe6f2;
+const SLOT = 0xf0a8ce;
 const LIFT = 10;
 
 const rowY = (row: number) => TOP_Y + row * STEP_Y;
@@ -119,10 +118,10 @@ export class PyramidScene extends Scene {
     // No outlines under the pyramid: a card that has gone leaves clean felt, the way it should.
     drawSlot(g, DECK_X, FOOT_Y, CW, CH, SLOT);
     drawSlot(g, WASTE_X, FOOT_Y, CW, CH, SLOT);
-    this.heading = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, 'Pairs that make 13', 24, tableInk('#c2568f')).setDepth(4000);
-    this.passText = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 22, tableInk('#c2568f')).setDepth(4000);
+    this.heading = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, 'Pairs that make 13', 24, '#c2568f').setDepth(4000);
+    this.passText = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 22, '#c2568f').setDepth(4000);
     // The banner takes the heading's place while it has something to say.
-    this.banner = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, '', 24, tableInk('#c2568f')).setVisible(false).setDepth(4001);
+    this.banner = sharpText(this, W / 2, FOOT_Y - CH / 2 - 20, '', 24, '#c2568f').setVisible(false).setDepth(4001);
   }
 
   private sync(animate: boolean, deal = false): void {

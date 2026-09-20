@@ -1,6 +1,5 @@
 import { absoluteSquare, HOME, LAST_TRACK, SAFE_SQUARES, YARD, type LudoEvent, type LudoMove, type LudoState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM, ROOM_COLORS } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -14,8 +13,8 @@ export const LUDO_COLORS = [COLORS.tomato, COLORS.mint, COLORS.sunny, COLORS.sky
 export const LUDO_COLOR_NAMES = ['Red', 'Green', 'Yellow', 'Blue'];
 const COLOR_HEX = LUDO_COLORS.map(toHex);
 const DARK_HEX = [DARK.tomato, DARK.mint, DARK.sunny, DARK.sky].map(toHex);
-const CELL_LINE = tone(0xe9e4f5, ROOM_TONES.line);
-const STAR = tone(0xd9d2f0, ROOM_TONES.line);
+const CELL_LINE = 0xe9e4f5;
+const STAR = 0xd9d2f0;
 const TOKEN_RADIUS = CELL * 0.38;
 const HOP_MS = 120;
 const HOP_HEIGHT = 16;
@@ -266,9 +265,9 @@ export class LudoScene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+    g.fillStyle(0xffffff, 1);
     g.fillRoundedRect(0, 0, SIZE, SIZE, 26);
-    g.lineStyle(ROOM ? 4 : 3, ROOM ? ROOM_COLORS.brassDark : CELL_LINE, 1);
+    g.lineStyle(3, CELL_LINE, 1);
     g.strokeRoundedRect(1.5, 1.5, SIZE - 3, SIZE - 3, 26);
 
     TRACK.forEach(([col, row], index) => {
@@ -290,7 +289,7 @@ export class LudoScene extends Scene {
       g.fillRoundedRect(ox * CELL + 6, oy * CELL + 12, 6 * CELL - 12, 6 * CELL - 12, 26);
       g.fillStyle(COLOR_HEX[color]!, 1);
       g.fillRoundedRect(ox * CELL + 6, oy * CELL + 6, 6 * CELL - 12, 6 * CELL - 12, 26);
-      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+      g.fillStyle(0xffffff, 1);
       g.fillRoundedRect((ox + 1) * CELL, (oy + 1) * CELL, 4 * CELL, 4 * CELL, 22);
       for (let token = 0; token < 4; token++) {
         const { x, y } = tokenPoint(color, YARD, token);

@@ -1,6 +1,5 @@
 import { winningLine, type Cell, type TicTacToeMove, type TicTacToeState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -11,7 +10,7 @@ export const TIC_TAC_TOE_SIZE = { width: SIZE, height: SIZE };
 
 const CELL = SIZE / 3;
 const PAD = 40;
-const GRID_COLOR = tone(0xcdbff7, ROOM_TONES.line);
+const GRID_COLOR = 0xcdbff7;
 const SEAT_COLORS = [toHex(COLORS.tomato), toHex(COLORS.sky)];
 const INK = toHex(COLORS.ink);
 const MARK_RADIUS = CELL / 2 - 46;
@@ -36,17 +35,6 @@ function penLine(g: GameObjects.Graphics, ax: number, ay: number, bx: number, by
 
 /** X is two strokes, O is one loop; `t` animates the drawing. */
 function drawMark(g: GameObjects.Graphics, seat: number, x: number, y: number, t = 1): void {
-  if (ROOM && t > 0.99) {
-    // A finished mark throws a small shadow, which is what stops it looking like ink on paper.
-    const r = MARK_RADIUS;
-    g.lineStyle(MARK_WIDTH, 0x7a4a14, 0.16);
-    if (seat === 0) {
-      g.lineBetween(x - r + 3, y - r + 6, x + r + 3, y + r + 6);
-      g.lineBetween(x + r + 3, y - r + 6, x - r + 3, y + r + 6);
-    } else {
-      g.strokeCircle(x + 3, y + 6, r);
-    }
-  }
   const r = MARK_RADIUS;
   const color = SEAT_COLORS[seat] ?? INK;
   if (seat === 0) {
@@ -79,13 +67,6 @@ export class TicTacToeScene extends Scene {
     applySpeed(this);
 
     const grid = this.add.graphics();
-    if (ROOM) {
-      // A card the grid is printed on, so the marks have something to sit against.
-      grid.fillStyle(0xe9cfa0, 1);
-      grid.fillRoundedRect(PAD - 18, PAD - 12, SIZE - PAD * 2 + 36, SIZE - PAD * 2 + 36, 34);
-      grid.fillGradientStyle(0xfffdf6, 0xfffdf6, 0xfff1d8, 0xfff1d8, 1);
-      grid.fillRoundedRect(PAD - 18, PAD - 18, SIZE - PAD * 2 + 36, SIZE - PAD * 2 + 36, 34);
-    }
     grid.fillStyle(GRID_COLOR, 1);
     for (let i = 1; i < 3; i++) {
       grid.fillRoundedRect(i * CELL - 6, PAD, 12, SIZE - 2 * PAD, 6);

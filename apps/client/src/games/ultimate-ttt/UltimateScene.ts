@@ -1,6 +1,5 @@
 import { LINES, ultimateSquare, type UltimateMove, type UltimateState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -15,7 +14,7 @@ const INSET = 14;
 const SMALL = (BIG - INSET * 2) / 3;
 const SEAT_HEX = [toHex(COLORS.tomato), toHex(COLORS.sky)];
 const INK = toHex(COLORS.ink);
-const GRID = tone(0xcdbff7, ROOM_TONES.line);
+const GRID = 0xcdbff7;
 const SUNNY = toHex(COLORS.sunny);
 
 /** Where the small boards are, for plain-language messages. */
@@ -202,16 +201,9 @@ export class UltimateScene extends Scene {
       const o = boardOrigin(board);
       const mark = state.boards[board];
       // Tile: sunny glow when live, soft when not.
-      g.fillStyle(tone(0xe9e4f5, ROOM_TONES.line), 1);
+      g.fillStyle(0xe9e4f5, 1);
       g.fillRoundedRect(o.x + 6, o.y + 10, BIG - 12, BIG - 12, 20);
-      if (ROOM) {
-        // Nine little cards, each lit from its top edge, the live one warmed through.
-        const top = live.has(board) ? 0xfff6d2 : 0xfffdf6;
-        const bottom = live.has(board) ? 0xffe6a2 : 0xfff1d8;
-        g.fillGradientStyle(top, top, bottom, bottom, 1);
-      } else {
-        g.fillStyle(live.has(board) ? 0xfff3c4 : 0xffffff, 1);
-      }
+      g.fillStyle(live.has(board) ? 0xfff3c4 : 0xffffff, 1);
       g.fillRoundedRect(o.x + 6, o.y + 6, BIG - 12, BIG - 12, 20);
       if (live.has(board)) {
         g.lineStyle(4, SUNNY, 1);

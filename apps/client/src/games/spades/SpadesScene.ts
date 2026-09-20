@@ -1,6 +1,5 @@
 import { spadesBid, spadesPlay, SPADES_SUIT, SUIT_SYMBOLS, suitOf, teamOf, type SpadesMove, type SpadesState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { tableFill, tableInk, ROOM_TONES, tone } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
@@ -16,7 +15,7 @@ export const SPADES_SIZE = { width: W, height: H };
 
 const CW = 82;
 const CH = 116;
-const TABLE = tableFill(0xe4e0f7);
+const TABLE = 0xe4e0f7;
 const MOVE_MS = 240;
 const HAND_Y = H - CH / 2 - 40;
 const MIDDLE = { x: W / 2, y: 400 };
@@ -75,8 +74,8 @@ export class SpadesScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(TABLE, 1);
     g.fillRoundedRect(0, 0, W, H, 28);
-    this.scoreText = sharpText(this, W / 2, 40, '', 22, tableInk('#5b4d9e')).setDepth(4000);
-    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, tableInk('#5b4d9e')).setDepth(4000);
+    this.scoreText = sharpText(this, W / 2, 40, '', 22, '#5b4d9e').setDepth(4000);
+    this.banner = sharpText(this, W / 2, BANNER_Y, '', 26, '#5b4d9e').setDepth(4000);
     const spots = [
       { x: W / 2, y: H - 20 },
       { x: SIDE_LABEL.x, y: SIDE_LABEL.y },
@@ -85,7 +84,7 @@ export class SpadesScene extends Scene {
     ];
     for (let seat = 0; seat < 4; seat++) {
       const side = seat === 1 || seat === 3;
-      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 20, tableInk('#5b4d9e')).setDepth(4000));
+      this.seatText.push(sharpText(this, spots[seat]!.x, spots[seat]!.y, '', side ? 17 : 20, '#5b4d9e').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);
@@ -187,7 +186,7 @@ export class SpadesScene extends Scene {
     if (state.phase !== 'bid' || !this.privacy.open || state.currentSeat !== this.privacy.shown) return;
     const parts: GameObjects.GameObject[] = [];
     const panel = this.add.graphics();
-    panel.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
+    panel.fillStyle(0xffffff, 1);
     panel.fillRoundedRect(-W / 2 + 30, -74, W - 60, 148, 28);
     parts.push(panel, sharpText(this, 0, -46, 'How many tricks will you take?', 24, COLORS.soft));
     // Nil on its own at the left, then one to thirteen.

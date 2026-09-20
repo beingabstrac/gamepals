@@ -12,7 +12,6 @@ import {
   type GinState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
@@ -28,8 +27,8 @@ export const GIN_SIZE = { width: W, height: H };
 
 const CW = 84;
 const CH = 118;
-const TABLE = tableFill(0xe8e2f6);
-const SLOT = slotFill(0xb3a5e0);
+const TABLE = 0xe8e2f6;
+const SLOT = 0xb3a5e0;
 const MOVE_MS = 220;
 const HAND_Y = H - CH / 2 - 76;
 const PILE_Y = 340;
@@ -87,11 +86,11 @@ export class GinScene extends Scene {
     g.fillRoundedRect(0, 0, W, H, 28);
     drawSlot(g, DECK_X, PILE_Y, CW, CH, SLOT);
     drawSlot(g, PILE_X, PILE_Y, CW, CH, SLOT);
-    this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 20, '', 20, tableInk('#5b4d9e')).setDepth(4000);
-    this.banner = sharpText(this, W / 2, 212, '', 24, tableInk('#5b4d9e')).setDepth(4000);
-    this.countText = sharpText(this, W / 2, H - 28, '', 22, tableInk('#5b4d9e')).setDepth(4000);
+    this.deckText = sharpText(this, DECK_X, PILE_Y + CH / 2 + 20, '', 20, '#5b4d9e').setDepth(4000);
+    this.banner = sharpText(this, W / 2, 212, '', 24, '#5b4d9e').setDepth(4000);
+    this.countText = sharpText(this, W / 2, H - 28, '', 22, '#5b4d9e').setDepth(4000);
     for (let seat = 0; seat < 2; seat++) {
-      this.seatText.push(sharpText(this, W / 2, seat === 0 ? H - 56 : 28, '', 21, tableInk('#5b4d9e')).setDepth(4000));
+      this.seatText.push(sharpText(this, W / 2, seat === 0 ? H - 56 : 28, '', 21, '#5b4d9e').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);

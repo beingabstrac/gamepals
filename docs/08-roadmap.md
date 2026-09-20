@@ -95,16 +95,15 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] **M18 Online 3–4 players + ratings (Glicko-2)**
 - [ ] **M19 Realtime online duels (research first):** latency-tolerant Air Hockey; may stay same-device only if it doesn't feel good
 
-## The look (started 2026-09-19, after the owner called the flat look soft)
-The look that shipped first is flat candy with **no gradients** ([12](12-catalog-and-direction.md) Part 3). Against a Playrix-grade casual game (the owner pointed at Township) it reads cheap, and the rule against depth is why. The games room look is the answer: walnut, felt, brass and cream, with light falling from the top. Both looks are in the build behind `?look=2` so they can be compared on one phone, and look 1 goes when the new one is finished.
-- [x] **L1 The room, proved on one game (2026-09-19):** the shelf, the table setup, every button and the Chess board. A wooden frame with grain, squares lit from the top, a brass rail and coordinates, felt underneath, and a shadow under every piece. Live at `/?look=2`.
-- [x] **L2 The card room (2026-09-20):** all fifteen card and patience tables take their colour from the look, so in the room they are one green felt with cream writing and slots cut as darker patches of it. The pack is red there, because green backs on green felt are one flat shape, and the hand cover is walnut.
-  - **Cream writing on a cream button is invisible**, which is what Solitaire's Undo and Hint became the moment the body text went light for the felt. Every cream panel now states its own ink: `.tool`, `.die`, `.pad-key`, `.picker`, `.score`, `.soon-pill`, `.edit-badge`, `.yatzy-cell`. Found by opening the game and looking, not by a test.
-  - **A board sits on wood, not on more felt.** The page behind a game was the same green as the table, so the table had no edge. The game screen is walnut now and the felt reads as a thing lying on it.
-- [ ] **L3a The palette, in one place:** every board, piece and picture re-toned by swapping the palette in `theme.ts` rather than editing forty-three scenes, plus the pastels that scenes hardcode.
-- [ ] **L3b Table by table:** each game's own surface given its material (boards in wood, felt or parchment), checked on a phone one at a time.
-- [ ] **L3c The pictures:** the forty-three shelf tiles redrawn for the room rather than re-tinted.
-- [ ] **L3d 🔑 The mark and the wordmark:** needs the name, which is the owner's call. Then look 1 comes out and the flag goes.
+## The look (tried and dropped, 2026-09-19 to 2026-09-20)
+The flat candy look was called soft, so a second look went in behind `?look=2` and was built out over a day: first a dark card room of walnut, felt and brass, then, after the owner pointed at Township, a bright playroom where every surface carried a gradient, a top highlight, an outline, a lip and a shadow. Roughly twenty-five game tables were dressed in it. The owner did not like it, and it is out: one look again, the flat one.
+What was worth keeping, and stayed:
+- **The turn line never fades to nothing** (`pill-in`). It is keyed on its own text, so in a game whose line changes every move it used to sit at opacity 0 for the whole game.
+- **A deploy no longer waits a day.** The page reloads once when the new service worker takes over, unless a game is on screen.
+- **The game's page does its job in one screen.** The goal is one line, the rest of the rules are behind a toggle, and Play is reachable without scrolling.
+- **`labelCheck()` and `e2e/labels.spec.ts`**, which catch a seat name running off a table or sitting on a card.
+- **A time on every game**, which came from the model rather than the paint.
+What it cost: about a day. What it bought: those five fixes, and a clear answer that the flat look stays.
 
 ## The model (decided 2026-09-20, from Ponder Club)
 [ponderclub.co](https://ponderclub.co) is two independent developers running a daily-puzzle site with about sixteen games. They take the opposite line from JindoBlu: calm, anti-doomscroll, "thoughtful games for restless minds", and they say out loud that they have no investors. What they prove, and what we copy:
