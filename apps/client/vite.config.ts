@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
  * A portal build (docs/08 M12d) ships no service worker at all. Not registering one is not enough:
  * the plugin still writes sw.js and a manifest into the folder, and the CI check caught exactly
  * that on its first run, which is the point of checking the build rather than trusting the flag.
+ * The plugin is disabled rather than removed, because main.tsx imports one of its virtual modules.
  */
 const PORTAL = process.env.VITE_PORTAL === '1';
 
@@ -16,6 +17,11 @@ const PORTAL = process.env.VITE_PORTAL === '1';
  */
 const pwa = [
   VitePWA({
+    // Off, not absent. main.tsx imports `virtual:pwa-register`, and that module only exists while
+    // the plugin is loaded, so dropping the plugin altogether fails the build at the dynamic
+    // import even though the call sits behind a flag. Disabled, the plugin keeps the module as a
+    // no-op and writes no service worker.
+    disable: PORTAL,
     registerType: 'autoUpdate',
     injectRegister: false,
     includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png'],
@@ -44,7 +50,7 @@ const pwa = [
 ];
 
 export default defineConfig({
-  plugins: [preact(), ...(PORTAL ? [] : pwa)],
+  plugins: [preact(), ...pwa],
   // Relative asset paths so the same build works on the web, in portals and inside Capacitor.
   base: './',
   // The bot worker is a module worker (src/bot/worker.ts); keep that format in the build too.
