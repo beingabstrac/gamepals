@@ -18,19 +18,28 @@ export interface Offer {
   readonly hero?: boolean;
 }
 
+/**
+ * Provisional. When the owner sets real prices, the evidence points down: JindoBlu sells Remove
+ * Ads at $6.99 against 413K ratings, with a brand and years of reviews behind it, and we have
+ * none of that. $14.99 is more than double a proven price from a position of no strength.
+ */
 export const OFFERS: readonly Offer[] = [
   { plan: 'monthly', title: 'Monthly', price: '$2.99', note: 'every month' },
   { plan: 'yearly', title: 'Yearly', price: '$11.99', note: 'every year, saves a third' },
   { plan: 'lifetime', title: 'One payment', price: '$14.99', note: 'yours for good, no subscription', hero: true },
 ];
 
-/** What Pro actually turns on. Written the way it goes on the page. */
+/**
+ * What Pro actually turns on. Every line here has to be something the app really does. It used
+ * to list five things of which one was true: nothing gated a level, there was no archive, and
+ * there were no stats, and a paywall that promises what it does not do is how refunds and
+ * one-star reviews are earned. Levels stay free for everybody, because taking away what people
+ * already have is worse than not charging for it. Stats go back on this list in D3b.
+ */
 export const PRO_GIVES: readonly string[] = [
   'No ads, ever',
-  'Every level of every game',
   'Hints and undo without watching anything',
-  "Every day's puzzle in the archive",
-  'Your full stats and streak history',
+  "Every day's puzzle, all the way back",
 ];
 
 export interface ProState {

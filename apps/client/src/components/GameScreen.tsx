@@ -2,7 +2,7 @@ import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS, INSPECT } from '../autoplay';
 import { maybeInterstitial } from '../ads';
-import { finishDaily } from '../daily';
+import { finishDaily, finishPast, todayKey } from '../daily';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
@@ -21,14 +21,14 @@ interface Props {
   variant?: string;
   /** A fixed seed, for the daily, where everybody plays the same board. */
   seed?: number;
-  /** This is today's daily, so finishing it keeps the streak going. */
-  daily?: boolean;
+  /** The day this puzzle belongs to. Today keeps the streak going; a past day only gets ticked. */
+  dailyKey?: string;
   onExit(): void;
 }
 
 const newSeed = () => Math.floor(Math.random() * 0xffffffff);
 
-export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSeed, daily, onExit }: Props) {
+export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSeed, dailyKey, onExit }: Props) {
   const [seats, setSeats] = useState(initialSeats);
   const [seed, setSeed] = useState(fixedSeed ?? newSeed);
   const [, setTick] = useState(0);
@@ -60,8 +60,10 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
       if (after.result && counted.current !== (session as Session<unknown>)) {
         counted.current = session as Session<unknown>;
         setRivalry(record(rivalryKey, seats, after.result));
-        // Today's puzzle only counts when it is actually finished.
-        if (daily) finishDaily();
+        // Today's puzzle only counts when it is actually finished, and an old one never
+        // counts towards the streak, only towards the tick in the archive.
+        if (dailyKey === todayKey()) finishDaily(dailyKey);
+        else if (dailyKey) finishPast(dailyKey);
         // Between games is the only place an interstitial is ever allowed, and the rules in
         // ads.ts decide whether this one is even a candidate.
         void maybeInterstitial();

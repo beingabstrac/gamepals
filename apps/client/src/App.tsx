@@ -9,12 +9,13 @@ import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
 import { DAILY_GAMES, dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
 import { ProSheet, usePro } from './components/Pro';
+import { ArchiveSheet } from './components/Archive';
 import { onBackButton } from './platform';
 
 type Screen =
   | { name: 'home' }
   | { name: 'setup'; entry: AnyEntry }
-  | { name: 'play'; entry: AnyEntry; seats: SeatController[]; variant?: string; seed?: number; daily?: boolean };
+  | { name: 'play'; entry: AnyEntry; seats: SeatController[]; variant?: string; seed?: number; dailyKey?: string };
 
 export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
@@ -45,7 +46,7 @@ export function App() {
         seats={screen.seats}
         variant={screen.variant}
         seed={screen.seed}
-        daily={screen.daily}
+        dailyKey={screen.dailyKey}
         onExit={onExit}
       />
     );
@@ -62,13 +63,13 @@ export function App() {
   return (
     <Home
       onPick={(entry) => setScreen({ name: 'setup', entry })}
-      onDaily={(entry, seed) =>
+      onDaily={(entry, seed, key) =>
         setScreen({
           name: 'play',
           entry,
           seats: AUTOPLAY ? autoplaySeats(1) : [{ kind: 'human', label: 'You' }],
           seed,
-          daily: true,
+          dailyKey: key ?? todayKey(),
         })
       }
     />
@@ -82,7 +83,7 @@ function useSettings(): Settings {
 }
 
 /** Today's puzzle: the same board for everybody, a countdown to the next, and the streak. */
-function Daily({ onPlay }: { onPlay(entry: AnyEntry, seed: number): void }) {
+function Daily({ onPlay, onArchive }: { onPlay(entry: AnyEntry, seed: number): void; onArchive(): void }) {
   const { streaks } = useSettings();
   const [today, setToday] = useState(todayKey);
   const [left, setLeft] = useState(timeToNext);
@@ -133,6 +134,9 @@ function Daily({ onPlay }: { onPlay(entry: AnyEntry, seed: number): void }) {
       <button class="btn primary daily-play" onClick={() => onPlay(entry, dailySeed(today))}>
         {done ? 'Play again' : 'Play'}
       </button>
+      <button class="daily-past" onClick={onArchive}>
+        Past puzzles
+      </button>
     </section>
   );
 }
@@ -170,12 +174,26 @@ function SettingsToggles() {
   );
 }
 
-function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entry: AnyEntry, seed: number): void }) {
+function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entry: AnyEntry, seed: number, key?: string): void }) {
   const [shop, setShop] = useState(false);
+  const [past, setPast] = useState(false);
   const { pro: hasPro } = usePro();
   return (
     <div class="screen">
       {shop && <ProSheet onClose={() => setShop(false)} />}
+      {past && (
+        <ArchiveSheet
+          onClose={() => setPast(false)}
+          onPlay={(entry, seed, key) => {
+            setPast(false);
+            onDaily(entry, seed, key);
+          }}
+          onGoPro={() => {
+            setPast(false);
+            setShop(true);
+          }}
+        />
+      )}
       <header class="hero">
         <span class="mascot">
           <Mascot />
@@ -189,7 +207,7 @@ function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entr
         <SettingsToggles />
       </header>
 
-      <Daily onPlay={onDaily} />
+      <Daily onPlay={onDaily} onArchive={() => setPast(true)} />
 
       <div class="grid">
         {GAMES.map((entry, i) => (

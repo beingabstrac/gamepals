@@ -75,10 +75,17 @@ export interface DailyState {
   readonly last: string | null;
   readonly streak: number;
   readonly best: number;
+  /** Which days have been finished, newest first, for the archive. */
+  readonly done: readonly string[];
 }
 
+/** How many past days the archive offers. About four months is more than anybody scrolls. */
+export const ARCHIVE_DAYS = 120;
+/** How far back anybody may go. The rest is what Pro is for. */
+export const FREE_ARCHIVE_DAYS = 7;
+
 const KEY = 'gamepals.daily';
-const EMPTY: DailyState = { last: null, streak: 0, best: 0 };
+const EMPTY: DailyState = { last: null, streak: 0, best: 0, done: [] };
 
 export function loadDaily(): DailyState {
   try {
@@ -88,13 +95,6 @@ export function loadDaily(): DailyState {
   }
 }
 
-/** Yesterday, so a streak can tell "kept going" from "came back after a gap". */
-function dayBefore(key: string): string {
-  const [year, month, day] = key.split('-').map(Number);
-  const date = new Date(Date.UTC(year!, (month ?? 1) - 1, (day ?? 1) - 1));
-  return todayKey(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-}
-
 /**
  * Today is done. Finishing the same day twice changes nothing, and a missed day starts the
  * streak again at one rather than pretending it carried on.
@@ -102,10 +102,65 @@ function dayBefore(key: string): string {
 export function finishDaily(key = todayKey()): DailyState {
   const now = loadDaily();
   if (now.last === key) return now;
-  const streak = now.last === dayBefore(key) ? now.streak + 1 : 1;
-  const next: DailyState = { last: key, streak, best: Math.max(now.best, streak) };
+  const streak = now.last === daysBefore(key, 1) ? now.streak + 1 : 1;
+  const done = [key, ...now.done.filter((one) => one !== key)].slice(0, ARCHIVE_DAYS);
+  const next: DailyState = { last: key, streak, best: Math.max(now.best, streak), done };
   storage.set(KEY, JSON.stringify(next));
   return next;
 }
+
+/**
+ * A day from the archive was finished. It goes in the list so the archive can tick it, and it
+ * does nothing to the streak: a streak that can be topped up by playing last Tuesday is not a
+ * streak, and people would rightly stop believing it.
+ */
+export function finishPast(key: string): DailyState {
+  const now = loadDaily();
+  if (now.done.includes(key)) return now;
+  const next: DailyState = { ...now, done: [key, ...now.done].slice(0, ARCHIVE_DAYS) };
+  storage.set(KEY, JSON.stringify(next));
+  return next;
+}
+
+export interface ArchiveDay {
+  readonly key: string;
+  readonly gameId: string;
+  /** How many days back, 0 being today. */
+  readonly ago: number;
+  readonly done: boolean;
+  /** Past the free window and not paid for. */
+  readonly locked: boolean;
+}
+
+/**
+ * The days behind today, newest first. The last week is open to everybody, because a week is
+ * enough to catch up after a busy few days, and the rest is what Pro is for.
+ */
+export function archive(state: DailyState, isPro: boolean, today = todayKey(), days = ARCHIVE_DAYS): ArchiveDay[] {
+  const finished = new Set(state.done);
+  const out: ArchiveDay[] = [];
+  for (let ago = 1; ago <= days; ago++) {
+    const key = daysBefore(today, ago);
+    out.push({
+      key,
+      gameId: dailyGameId(key),
+      ago,
+      done: finished.has(key),
+      locked: !isPro && ago > FREE_ARCHIVE_DAYS,
+    });
+  }
+  return out;
+}
+
+/** The day `ago` days before `key`. One day back is what tells a kept streak from a broken one. */
+export function daysBefore(key: string, ago: number): string {
+  const [year, month, day] = key.split('-').map(Number);
+  const date = new Date(Date.UTC(year!, (month ?? 1) - 1, (day ?? 1) - ago));
+  return todayKey(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
+
+/** "Yesterday", "3 days ago", for the archive rows. */
+export const agoWords = (ago: number): string =>
+  ago === 1 ? 'Yesterday' : ago < 7 ? `${ago} days ago` : ago < 14 ? 'Last week' : `${Math.floor(ago / 7)} weeks ago`;
 
 export const doneToday = (state: DailyState, key = todayKey()): boolean => state.last === key;

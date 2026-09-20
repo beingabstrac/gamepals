@@ -33,3 +33,34 @@ test('the streak can be switched off', async ({ page }) => {
   await flame.click();
   await expect(page.getByRole('button', { name: 'Streaks off' })).toHaveAttribute('aria-pressed', 'false');
 });
+
+test('past puzzles are there, the last week open and the rest behind Pro', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Past puzzles' }).click();
+  const sheet = page.locator('.archive');
+  await expect(sheet).toBeVisible();
+
+  const days = sheet.locator('.archive-day');
+  await expect(days.first()).toContainText('Yesterday');
+  // A week is open to everybody and the eighth day back is not.
+  await expect(days.nth(6)).not.toHaveClass(/locked/);
+  await expect(days.nth(7)).toHaveClass(/locked/);
+
+  // A locked day sends you to the shop rather than doing nothing.
+  await days.nth(7).click();
+  await expect(page.getByRole('dialog', { name: /Pro/ })).toBeVisible();
+});
+
+test('an open past day plays, and the rota does not move under it', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Past puzzles' }).click();
+  const first = page.locator('.archive-day').first();
+  const game = await first.locator('.archive-game').textContent();
+  await first.click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+
+  // The rota is the date, so yesterday is the same game on a fresh load, not a new draw.
+  await page.reload();
+  await page.getByRole('button', { name: 'Past puzzles' }).click();
+  await expect(page.locator('.archive-day').first().locator('.archive-game')).toHaveText(game!);
+});

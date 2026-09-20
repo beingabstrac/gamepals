@@ -120,7 +120,30 @@ The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
 - [x] **D2 The daily and the streak (2026-09-20):** one seeded puzzle a day, the same for everybody, from twelve solo games taking turns. A row at the top of the shelf with today's game, how long it takes, a countdown to the next one and the streak. No server: the seed is the date, so two people on opposite sides of the world get the same board with nothing stored anywhere.
   - The streak starts again at one after a missed day, finishing today twice changes nothing, and there is a switch to hide it next to sound and vibration, because a hook you cannot turn off is a trap.
   - **The Android emulator caught what eight screen types missed.** A third round button in the hero pushed the home screen 10px sideways and the flame hung off the edge. The WebView is narrower than any of our Playwright screens, so the layout spec now checks the shelf at 320 as well, with every settings button required to be in view. That is the second time a button has fallen off that row.
-- [ ] **D3 Ad-free forever:** the entitlement, the wording and the price, with a stub store until RevenueCat exists.
+- **D3 Ad-free forever.** M11b built the entitlement, the three offers and the ad caps, and they
+  work. What it also built was a page promising five things, of which one is true:
+  | The page says | Is it real? |
+  |---|---|
+  | No ads, ever | Yes. `gameFinished` returns false for Pro and `watchFor` grants without watching. |
+  | Every level of every game | **No.** Nothing gates a level anywhere, and gating what people already have would be a regression. Dropped from the wording rather than built. |
+  | Hints and undo without watching anything | Half. The seam is real, but only Sudoku asks. |
+  | Every day's puzzle in the archive | **No.** The only place that phrase appears is the promise. |
+  | Your full stats and streak history | **No.** Same. |
+  A paywall that lists things it does not do is how refunds and one-star reviews are earned, so
+  the rest of D3 is making the page true. Split in two:
+  - [x] **D3a The archive, and honest wording (2026-09-20):** the daily now keeps which days were
+    finished, and a Past puzzles sheet lists four months of them, newest first, with the game each
+    day held and a tick on the ones played. The last week is open to everybody, because a week is
+    enough to catch up after a busy few days, and the rest is one of the three things Pro gives.
+    Finishing an old day ticks it and does nothing to the streak: a streak that can be topped up by
+    playing last Tuesday is not a streak. PRO_GIVES is down from five lines to three, all true.
+  - [ ] **D3b Stats and streak history:** games played, current and best streak, per-game bests,
+    with a taster free and the full history behind Pro. Only then does that line go back on the page.
+  - **The price is the owner's, and the evidence points down, not up.** Our placeholder lifetime is
+    $14.99. JindoBlu sells Remove Ads at **$6.99** against 413K ratings, with a brand, an install
+    base and years of reviews. We have none of those. Asking more than double a proven price with
+    nothing behind it is not a position we can hold. The recommendation when the owner sets real
+    prices: lifetime at or under $6.99, and let the subscriptions sit above it rather than below.
 - [ ] **D4 The testing shelf:** a "still cooking" row where scores are not kept.
 
 ## Stage 5: cover the field (decided 2026-09-20)
