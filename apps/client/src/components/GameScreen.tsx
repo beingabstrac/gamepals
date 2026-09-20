@@ -8,7 +8,7 @@ import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
 import { DPR } from '../games/crisp';
-import type { GameEntry } from '../games/registry';
+import { isCooking, type GameEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
 import { Session, type SeatController } from '../session';
 import { TurnHint } from '../games/hint';
@@ -60,8 +60,12 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
       const after = session.state;
       if (after.result && counted.current !== (session as Session<unknown>)) {
         counted.current = session as Session<unknown>;
-        setRivalry(record(rivalryKey, seats, after.result));
-        recordGame(entry.definition.id, seats, after.result);
+        // A game still cooking is playable but keeps nothing: it is out early on purpose, and
+        // its numbers should not end up in anybody's record or running score.
+        if (!isCooking(entry.definition.id)) {
+          setRivalry(record(rivalryKey, seats, after.result));
+          recordGame(entry.definition.id, seats, after.result);
+        }
         // Today's puzzle only counts when it is actually finished, and an old one never
         // counts towards the streak, only towards the tick in the archive.
         if (dailyKey === todayKey()) finishDaily(dailyKey);

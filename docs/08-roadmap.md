@@ -152,7 +152,16 @@ The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
     base and years of reviews. We have none of those. Asking more than double a proven price with
     nothing behind it is not a position we can hold. The recommendation when the owner sets real
     prices: lifetime at or under $6.99, and let the subscriptions sit above it rather than below.
-- [ ] **D4 The testing shelf:** a "still cooking" row where scores are not kept.
+- [x] **D4 The testing shelf (2026-09-20):** a "Still cooking" row for games that are out early
+  and not finished. A game in it is playable and keeps nothing: no stats, no running score, and it
+  can never be the daily, because the daily is the one board everybody gets that day. It replaces
+  the "Coming soon" tiles, which were unplayable and, as it turned out, an empty list rendering
+  nothing at all. The row is empty in a normal build and that is the point, so `?cooking=<id>`
+  puts a game in it and the test plays that game to the end and proves the record stays empty.
+  **A check that cannot answer its question is worse than none:** the first go at this was a
+  precheck rule reading the registry as text to find cooking games in the daily rota, which cannot
+  map a definition's variable name to a game id and would have passed forever. It is a runtime
+  fallback in the shelf instead, next to the one that already catches a rota naming nothing.
 
 ## Stage 5: cover the field (decided 2026-09-20)
 Both competitors' catalogues, and what neither of them has. [JindoBlu](https://apps.apple.com/us/app/2-player-games-offline-games/id1465731199) names Ping Pong, Spinner War, Air Hockey, Snakes, Pool, Tic Tac Toe, Penalty Kicks, Sumo, mini golf, racing cars, sword duels, chess, paint fight, archery, tug of war, whack a mole, memory, maths, solitaire and jigsaw. [Ponder Club](https://ponderclub.co) runs a mini crossword, a word search, a themed-grouping game, a word ladder, an anagram hunt, a Wordle-alike, a 2048-alike, a digit slider, sudoku, a minesweeper, a numbers-target game, flood-it, solitaire, mahjong solitaire and a code breaker. We already have 18 of those. These are the rest, named our own way ([03 §4](03-game-catalog.md#4-trademark-safe-naming)), three or four to a milestone.

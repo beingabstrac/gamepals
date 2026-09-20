@@ -201,6 +201,12 @@ export interface EntryBase {
   readonly size: { readonly width: number; readonly height: number };
   /** The game's own flat candy color (tile, table, Play button). */
   readonly color: string;
+  /**
+   * Still cooking (docs/08 D4): playable, but out early and not finished. It sits in its own row
+   * on the shelf and nothing it does is kept, so a game can go out before it is ready without
+   * putting made-up numbers in anybody's record. Ponder Club runs a shelf like this.
+   */
+  readonly cooking?: boolean;
 }
 
 /** Turn-based game driven by a `Session`. */
@@ -1438,4 +1444,24 @@ export const GAMES: readonly AnyEntry[] = [
 ];
 
 /** Shown on the home shelf so the catalog direction is visible from day one (docs/12). */
-export const COMING_SOON: readonly { id: string; name: string; color: string }[] = [];
+/**
+ * Games still cooking. Empty most of the time, and that is the point: the row exists so the next
+ * game can go out before it is finished, rather than waiting behind a "coming soon" tile nobody
+ * can play. `?cooking=<id>` puts a game in it for a test run.
+ */
+const asked = (): Set<string> => {
+  if (typeof location === 'undefined') return new Set();
+  const listed = new URLSearchParams(location.search).get('cooking');
+  return new Set(listed ? listed.split(',').filter(Boolean) : []);
+};
+
+const COOKING_IDS = asked();
+
+export const isCooking = (id: string): boolean =>
+  COOKING_IDS.has(id) || (GAMES.find((game) => game.definition.id === id)?.cooking ?? false);
+
+/** What the main shelf shows: everything that is finished. */
+export const READY: readonly AnyEntry[] = GAMES.filter((game) => !isCooking(game.definition.id));
+
+/** What the "still cooking" row shows. */
+export const COOKING: readonly AnyEntry[] = GAMES.filter((game) => isCooking(game.definition.id));

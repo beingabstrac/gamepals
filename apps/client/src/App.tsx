@@ -3,7 +3,7 @@ import { FlameIcon, GameArt, Mascot, SpeakerIcon, VibrateIcon } from './componen
 import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
 import { Setup } from './components/Setup';
-import { COMING_SOON, GAMES, type AnyEntry } from './games/registry';
+import { COOKING, GAMES, isCooking, READY, type AnyEntry } from './games/registry';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
@@ -90,12 +90,15 @@ function Daily({ onPlay, onArchive }: { onPlay(entry: AnyEntry, seed: number): v
   const [left, setLeft] = useState(timeToNext);
   const [state, setState] = useState(loadDaily);
   const wanted = dailyGameId(today);
-  // If the rota ever names a game that is not in the registry, show the next one that is. This
-  // used to return nothing, so the whole shelf vanished for a day without a word about why, and
-  // it did: DAILY_GAMES said 'twenty48', which is the folder, while the game calls itself '2048'.
+  // If the rota ever names a game that is not in the registry, or one still cooking, show the
+  // next one that works. It used to return nothing, so the whole shelf vanished for a day without
+  // a word about why, and it did: DAILY_GAMES said 'twenty48', which is the folder, while the
+  // game calls itself '2048'. A game still cooking keeps nothing, so it cannot be the puzzle
+  // everybody gets that day either.
+  const usable = (id: string) => !isCooking(id);
   const entry =
-    GAMES.find((game) => game.definition.id === wanted) ??
-    GAMES.find((game) => DAILY_GAMES.includes(game.definition.id));
+    (usable(wanted) ? GAMES.find((game) => game.definition.id === wanted) : undefined) ??
+    GAMES.find((game) => DAILY_GAMES.includes(game.definition.id) && usable(game.definition.id));
 
   useEffect(() => {
     // The countdown ticks, and at midnight the day rolls over without a reload.
@@ -175,6 +178,33 @@ function SettingsToggles() {
   );
 }
 
+function Tile({
+  entry,
+  delay,
+  onPick,
+  cooking,
+}: {
+  entry: AnyEntry;
+  delay: number;
+  onPick(entry: AnyEntry): void;
+  cooking?: boolean;
+}) {
+  return (
+    <button
+      class={`tile${cooking ? ' is-cooking' : ''}`}
+      style={{ '--c': entry.color, animationDelay: `${delay}ms` }}
+      onClick={() => onPick(entry)}
+    >
+      <span class="art">
+        <GameArt id={entry.definition.id} />
+      </span>
+      <span class="title">{entry.definition.name}</span>
+      <span class="small">{entry.tagline}</span>
+      <span class="mins">{cooking ? 'testing' : entry.minutes}</span>
+    </button>
+  );
+}
+
 function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entry: AnyEntry, seed: number, key?: string): void }) {
   const [shop, setShop] = useState(false);
   const [past, setPast] = useState(false);
@@ -221,36 +251,24 @@ function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entr
       <Daily onPlay={onDaily} onArchive={() => setPast(true)} />
 
       <div class="grid">
-        {GAMES.map((entry, i) => (
-          <button
-            key={entry.definition.id}
-            class="tile"
-            style={{ '--c': entry.color, animationDelay: `${i * 50}ms` }}
-            onClick={() => onPick(entry)}
-          >
-            <span class="art">
-              <GameArt id={entry.definition.id} />
-            </span>
-            <span class="title">{entry.definition.name}</span>
-            <span class="small">{entry.tagline}</span>
-            <span class="mins">{entry.minutes}</span>
-          </button>
-        ))}
-        {COMING_SOON.map((game, i) => (
-          <div
-            key={game.id}
-            class="tile soon"
-            aria-disabled="true"
-            style={{ '--c': game.color, animationDelay: `${(GAMES.length + i) * 50}ms` }}
-          >
-            <span class="art">
-              <GameArt id={game.id} />
-            </span>
-            <span class="title">{game.name}</span>
-            <span class="small">Coming soon</span>
-          </div>
+        {READY.map((entry, i) => (
+          <Tile key={entry.definition.id} entry={entry} delay={i * 50} onPick={onPick} />
         ))}
       </div>
+
+      {COOKING.length > 0 && (
+        <section class="cooking" aria-label="Still cooking">
+          <h2 class="cooking-head">Still cooking</h2>
+          <p class="cooking-note">
+            Out early and not finished yet. Play them, but nothing here counts towards your record.
+          </p>
+          <div class="grid">
+            {COOKING.map((entry, i) => (
+              <Tile key={entry.definition.id} entry={entry} delay={i * 50} onPick={onPick} cooking />
+            ))}
+          </div>
+        </section>
+      )}
 
       <footer class="shelf-foot">
         <button class="foot-link" onClick={() => setShop(true)}>

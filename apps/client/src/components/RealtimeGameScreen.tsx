@@ -6,7 +6,7 @@ import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
 import { recordGame } from '../stats';
 import { DPR } from '../games/crisp';
-import type { RealtimeEntry } from '../games/registry';
+import { isCooking, type RealtimeEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
 import type { SeatController } from '../session';
 import { BackIcon } from './Art';
@@ -59,9 +59,12 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
           onEnd: (final) => {
             setResult(final);
             setCoach(false);
-            setRivalry(record(rivalryKey, seats, final));
-            // The real-time games count towards your record too: Air Hockey is a game you played.
-            recordGame(entry.definition.id, seats, final);
+            // A game still cooking is playable but keeps nothing: it is out early on purpose,
+            // and its numbers should not end up in anybody's record or running score.
+            if (!isCooking(entry.definition.id)) {
+              setRivalry(record(rivalryKey, seats, final));
+              recordGame(entry.definition.id, seats, final);
+            }
             cue(outcomeOf(final, seats));
           },
           onCue: cue,
