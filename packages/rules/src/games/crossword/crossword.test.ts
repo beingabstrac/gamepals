@@ -44,13 +44,18 @@ describe('the mini crossword', () => {
 
   it('is over the moment the grid matches, and not before', () => {
     let state = game(3);
-    const moves = state.legalMoves(0);
-    for (const move of moves.slice(0, moves.length - 1)) state = state.apply(move);
+    // The right letter for every open square, worked out here rather than taken from
+    // legalMoves, which lists every letter because a person may type any of them.
+    const right: string[] = [];
+    for (let r = 0; r < SIDE; r++) {
+      for (let c = 0; c < SIDE; c++) if (!state.blockAt(r, c)) right.push(writeIn(r, c, state.answer[r]![c]!));
+    }
+    for (const move of right.slice(0, right.length - 1)) state = state.apply(move);
     expect(state.result).toBe(null);
-    state = state.apply(moves[moves.length - 1]!);
+    state = state.apply(right[right.length - 1]!);
     expect(state.done).toBe(true);
     expect(state.result?.winners).toEqual([0]);
-    expect(() => state.apply(moves[0]!)).toThrow(/over/);
+    expect(() => state.apply(right[0]!)).toThrow(/over/);
   });
 
   it('never shows the answer to a seat', () => {

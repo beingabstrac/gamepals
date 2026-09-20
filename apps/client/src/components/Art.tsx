@@ -815,6 +815,35 @@ function WordLadderArt() {
   );
 }
 
+function WordGroupsArt() {
+  const fills = [COLORS.sunny, COLORS.mint, COLORS.sky, '#fff'];
+  const cells = [];
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      cells.push(
+        <rect
+          key={`${r}${c}`}
+          x={14 + c * 19}
+          y={20 + r * 17}
+          width="16"
+          height="14"
+          rx="4"
+          fill={fills[r]}
+          stroke={fills[r] === '#fff' ? '#E6E1F3' : fills[r]}
+          stroke-width="2"
+        />,
+      );
+    }
+  }
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="20" width="84" height="76" rx="12" fill="#E3DEF0" />
+      <rect x="8" y="14" width="84" height="76" rx="12" fill="#fff" stroke="#E6E1F3" stroke-width="3" />
+      {cells}
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1103,6 +1132,7 @@ const ART: Record<string, () => JSX.Element> = {
   'word-search': WordSearchArt,
   'mini-crossword': CrosswordArt,
   'word-ladder': WordLadderArt,
+  'word-groups': WordGroupsArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

@@ -26,7 +26,17 @@ export interface GameConfig {
 export interface GameState<M> {
   readonly currentSeat: Seat;
   readonly result: GameResult | null;
-  /** Legal moves for `seat`; empty when it isn't that seat's turn or the game is over. */
+  /**
+   * Legal moves for `seat`; empty when it isn't that seat's turn or the game is over.
+   *
+   * **This must list everything `apply` accepts, not the shorter list a bot would pick from.**
+   * `replay` is the server referee and checks each move against this, so anything `apply` takes
+   * and this leaves out is a move a person can really make and the server will then refuse to
+   * verify. Four of the word games shipped or nearly shipped that way: Word Guess listed only
+   * answers while taking any real word, the crossword listed only the right letter while the
+   * whole game is typing wrong ones. Where a bot needs a shorter list, give it its own method
+   * (`candidates`, `right`) rather than narrowing this one.
+   */
   legalMoves(seat: Seat): readonly M[];
   /** Throws on an illegal move. */
   apply(move: M): GameState<M>;

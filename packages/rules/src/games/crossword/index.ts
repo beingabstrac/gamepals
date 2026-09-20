@@ -20,6 +20,8 @@ export const CHECK: CrossMove = '?';
 
 export const BLOCK = '#';
 
+const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
 export class CrossState implements GameState<CrossMove> {
   constructor(
     /** The answer, one string per row, '#' for a black square. */
@@ -63,18 +65,28 @@ export class CrossState implements GameState<CrossMove> {
     return this.filled.join('|') === this.answer.join('|');
   }
 
+  /**
+   * Every letter in every open square, rubbing out, and asking. It has to be everything `apply`
+   * takes: `replay` is the server referee and checks each move against this, and a crossword
+   * where only the right letter is listed cannot verify a single real game, because typing a
+   * wrong letter and fixing it is the game.
+   */
   legalMoves(seat: Seat): readonly CrossMove[] {
     if (this.result || seat !== this.currentSeat) return [];
-    const moves: CrossMove[] = [];
+    const moves: CrossMove[] = [CHECK];
     for (let r = 0; r < SIDE; r++) {
       for (let c = 0; c < SIDE; c++) {
         if (this.blockAt(r, c)) continue;
-        // Only the right letter is offered, because the list of moves is what plays the game in
-        // a test build and twenty-six wrong letters a square would never finish.
-        moves.push(writeIn(r, c, this.answer[r]![c]!));
+        for (const letter of LETTERS) moves.push(writeIn(r, c, letter));
+        if (this.letterAt(r, c)) moves.push(rubOut(r, c));
       }
     }
     return moves;
+  }
+
+  /** The answer for one square. What the autoplayer writes, since a solo puzzle has no opponent. */
+  rightAtSquare(row: number, col: number): string {
+    return this.answer[row]?.[col] ?? '';
   }
 
   apply(move: CrossMove): CrossState {
@@ -127,13 +139,18 @@ export const crossViewFor = (state: CrossState): CrossView => ({
 function createCrossBot(tidy: boolean): Bot<CrossMove> {
   return {
     chooseMove(generic: GameState<CrossMove>, seat: Seat, rng: Rng): CrossMove {
-      const moves = (generic as CrossState).legalMoves(seat).filter((move) => {
-        const row = Number(move[1]);
-        const col = Number(move[2]);
-        return !(generic as CrossState).letterAt(row, col);
-      });
-      if (!moves.length) throw new Error('No legal moves');
-      return tidy ? moves[0]! : rng.pick(moves);
+      const state = generic as CrossState;
+      // The list of moves is every letter in every square now, so the autoplayer picks the right
+      // one itself rather than leaning on the list to have done the thinking.
+      const empty: { row: number; col: number }[] = [];
+      for (let row = 0; row < SIDE; row++) {
+        for (let col = 0; col < SIDE; col++) {
+          if (!state.blockAt(row, col) && !state.letterAt(row, col)) empty.push({ row, col });
+        }
+      }
+      if (!empty.length) throw new Error('No legal moves');
+      const square = tidy ? empty[0]! : empty[rng.int(empty.length)]!;
+      return writeIn(square.row, square.col, state.rightAtSquare(square.row, square.col));
     },
   };
 }

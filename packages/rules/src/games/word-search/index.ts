@@ -94,8 +94,11 @@ export class SearchState implements GameState<SearchMove> {
   }
 
   /**
-   * Every line that spells a word still on the list. A solo puzzle has no opponent to keep
-   * anything from, so this is the answer sheet, and it is what lets a test build finish a game.
+   * Every line that spells a word still on the list, drawn from either end. A solo puzzle has no
+   * opponent to keep anything from, so this is the answer sheet, and it is what lets a test build
+   * finish a game. Both ends matter: `replay` is the server referee and checks each move against
+   * this list, so a line only listed one way round means a person who dragged the other way
+   * produces a game the server refuses to verify.
    */
   legalMoves(seat: Seat): readonly SearchMove[] {
     if (this.result || seat !== this.currentSeat) return [];
@@ -108,7 +111,10 @@ export class SearchState implements GameState<SearchMove> {
           for (const word of wanted) {
             const r2 = r + dr * (word.length - 1);
             const c2 = c + dc * (word.length - 1);
-            if (this.read(r, c, r2, c2) === word) lines.push(searchLine(r, c, r2, c2));
+            // Both ends, because a finger can start at either and `apply` takes both.
+            if (this.read(r, c, r2, c2) === word) {
+              lines.push(searchLine(r, c, r2, c2), searchLine(r2, c2, r, c));
+            }
           }
         }
       }

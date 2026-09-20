@@ -198,8 +198,20 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     arrived, so they now go by which word looks most like the target, which is how a person plays
     badly. A ladder can also be climbed into a corner where every neighbour is used up, so taking a
     rung back is a move in the rules, and the bots take it.
-  - [ ] **W2b Word Groups:** sixteen words, four secret groups of four, four wrong guesses allowed.
-    The whole game is in the overlaps, so the groups have to be written, not generated.
+  - [x] **W2b Word Groups (2026-09-20):** 48 games. Twenty-four puzzles written here, and written
+    is the point: a crossword's difficulty is in the grid, which a search can lay, while this
+    game's difficulty is entirely in the traps, and no search writes a red herring on purpose. So
+    the count is finite and said out loud. First draft had words appearing in two groups of the
+    same board, which is not a trap but a mistake, since a trap is a word that only *looks* like it
+    belongs elsewhere; the structure check caught all sixteen of them.
+    **And it turned up a bug four games deep.** The bot played a deliberate wrong guess and
+    `replay` refused it, because `legalMoves` listed only the right four. `replay` is the server
+    referee, so anything `apply` takes and `legalMoves` leaves out is a move a person really makes
+    and the server then will not verify. Word Guess had it and had shipped (ZONAL is a perfectly
+    good guess and produced an unverifiable game), the crossword had it worst of all (only the
+    right letter listed, when typing wrong ones is the game), and Word Search listed a line one way
+    round. All four fixed, each with a test that fails on the old code, and the contract is now
+    written into `GameState` and CLAUDE.md.
   - [ ] **W2c Anagram Hunt:** one set of letters, find every word in it, the long one uses them all.
 - [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw

@@ -59,10 +59,12 @@ import {
   wordSearchGame,
   crosswordGame,
   wordLadderGame,
+  wordGroupsGame,
   type WordState,
   type SearchState,
   type CrossState,
   type LadderState,
+  type GroupsState,
   rummy,
   type RummyState,
   tripeaks,
@@ -151,6 +153,7 @@ import { WORD_COLORS, WORD_NAMES, WORD_SIZE, wordResult, wordStatus, WordScene }
 import { SEARCH_COLORS, SEARCH_NAMES, SEARCH_SIZE, searchResult, searchStatus, SearchScene } from './word-search/SearchScene';
 import { CROSS_COLORS, CROSS_NAMES, CROSS_SIZE, crossResult, crossStatus, CrossScene } from './crossword/CrossScene';
 import { LADDER_COLORS, LADDER_NAMES, LADDER_SIZE, ladderResult, ladderStatus, LadderScene } from './word-ladder/LadderScene';
+import { GROUPS_COLORS, GROUPS_NAMES, GROUPS_SIZE, groupsResult, groupsStatus, GroupsScene } from './word-groups/GroupsScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1202,6 +1205,26 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => ladderResult(state as LadderState),
     moveCue: () => 'place',
     createScene: (session) => new LadderScene(session),
+  }),
+  entry({
+    definition: wordGroupsGame,
+    tagline: 'Sixteen words, four secret groups',
+    minutes: '5 min',
+    hint: 'Pick four that belong together',
+    howTo: {
+      goal: 'Find the four groups of four hiding in the sixteen words.',
+      controls: 'Tap four words then tap Guess. Shuffle reorders the board, Clear starts the pick again. On a keyboard: number keys pick, Enter guesses, Space shuffles.',
+      win: 'Find all four groups before four wrong guesses.',
+      tip: 'A word that fits two groups belongs to the harder one. When five words fit a group, you have the wrong four.',
+    },
+    sideNames: () => GROUPS_NAMES,
+    sideColors: () => GROUPS_COLORS,
+    size: GROUPS_SIZE,
+    color: DARK.sky,
+    status: (state) => groupsStatus(state as GroupsState),
+    resultText: (state) => groupsResult(state as GroupsState),
+    moveCue: () => 'place',
+    createScene: (session) => new GroupsScene(session),
   }),
   entry({
     definition: slidingPuzzle,

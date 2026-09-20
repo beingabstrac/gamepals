@@ -87,13 +87,20 @@ export class WordState implements GameState<WordMove> {
   }
 
   /**
-   * Every word still standing. A person types whatever they like, and `apply` takes any real
-   * word, but a list of eight thousand moves helps nobody: this is the list a bot chooses from
-   * and the list the tests walk.
+   * Every word that may be typed. This has to be everything `apply` takes, not the shorter list a
+   * bot would pick from: `replay` is the server referee and checks each move against this, so a
+   * narrower list means a person guessing a perfectly good word produces a game the server then
+   * refuses to verify. It shipped that way and ZONAL was the word that proved it.
    */
   legalMoves(seat: Seat): readonly WordMove[] {
     if (this.result || seat !== this.currentSeat) return [];
-    return (this.cached ??= ANSWERS.filter((word) => fits(word, this.guesses)).map(wordGuess));
+    const already = new Set(this.guesses.map((guess) => guess.word));
+    return (this.cached ??= ALLOWED.filter((word) => !already.has(word)).map(wordGuess));
+  }
+
+  /** The shorter list: answers that still fit everything the guesses said. What a bot picks from. */
+  candidates(): readonly string[] {
+    return ANSWERS.filter((word) => fits(word, this.guesses));
   }
 
   apply(move: WordMove): WordState {
@@ -146,11 +153,10 @@ function createWordBot(style: WordStyle): Bot<WordMove> {
       const view = wordViewFor(state);
       if (style.opens && view.guesses.length === 0) return wordGuess(OPENERS[rng.int(OPENERS.length)]!);
       if (!style.listens) return wordGuess(ALLOWED[rng.int(ALLOWED.length)]!);
-      const moves = state.legalMoves(seat);
-      if (!moves.length) throw new Error('No legal moves');
+      const words = state.candidates();
+      if (!words.length) throw new Error('No legal moves');
       // Expert takes the word that splits what is left most evenly; the rest take any that fits.
-      if (!style.opens || moves.length <= 2) return rng.pick(moves);
-      const words = moves.map((move) => move.slice(1));
+      if (!style.opens || words.length <= 2) return wordGuess(rng.pick(words));
       let best = words[0]!;
       let bestWorst = Infinity;
       // A sample, because scoring eight thousand against two thousand on a phone is not free.
