@@ -92,7 +92,10 @@ These block the milestones marked 🔑. Some have long lead times, so start them
     worker, because a portal serves the game from its own origin and some portals reject a build
     that installs one, and CI asserts that rather than trusting the flag: no `serviceWorker` in the
     bundle, no `sw.js`, no absolute paths in the HTML. Asset paths were already relative, so the
-    game itself needed no changes.
+    game itself needed no changes. **The check failed on its first run**, which is the whole
+    argument for writing it: not registering a worker is not the same as not shipping one, and the
+    plugin was still writing `sw.js` into the folder. The plugin is now left out of the build
+    entirely when the flag is set.
   - [ ] **The portal SDKs.** Deliberately not written yet. Each portal's SDK loads from that
     portal's own origin and only behaves inside their frame, so an adapter written now could not be
     run against anything and would be a guess dressed as progress. It goes behind the existing
