@@ -20,7 +20,8 @@ GitHub Pro includes 3,000 Actions minutes a month for private repos, and on 2026
 
 ## Waiting on the owner
 These block the milestones marked 🔑. Some have long lead times, so start them early.
-- [ ] Confirm the app ID (placeholder `app.gamepals.game`) and store name.
+- [ ] **The name.** "Game Pals" is not liked and is not final. Rejected so far: Pips, Turno, Dado, Roda, Toybox, and "Your Turn" (unusable: [ItsYourTurn Games](https://apps.apple.com/us/app/itsyourturn-games/id6748541223) is our pitch in our words, plus three other "Your Turn" apps, and every domain gone). Nothing ships to a store until this is settled, because the bundle ID is permanent from the first upload. Whatever it is, the store title is brand first then JindoBlu's keywords: `<Name>: 2 Player Games` with `Offline cards, board & bots` under it.
+- [ ] Confirm the app ID (placeholder `app.gamepals.game`) once the name is settled.
 - [ ] App Store Connect API key as repo secrets (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY`).
 - [ ] Google Play: account type (a personal account made after Nov 2023 needs a 12-tester closed test for 14 days), a service-account JSON and an upload keystore as secrets.
 - [ ] AdMob account and app IDs (M10). RevenueCat account (M11).
@@ -84,6 +85,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - **Written from what the code does, not from what I assumed.** The app makes no network requests of its own, holds no advertising identifier, and asks for no permission; the fonts are bundled rather than fetched, which I checked because a font from a CDN would have been a third party to disclose. Everything it remembers (settings, which games you have opened, each table's last setup, the running score, the Classic Snake best) lives on the device.
   - **Nothing claims what has not shipped.** The subtitle I first drafted said "Online Pals", which would have been a false store claim until M16; the footer line I first wrote said "No ads", which M10 would falsify. Both are gone. The listing doc opens with what to re-check when ads, Pro and online land.
   - **Still on the owner:** a support address (both stores demand one, and I will not publish a personal address without being asked), and `app-ads.txt`, which needs an AdMob publisher ID. That file is a public statement about who may sell our ad inventory, so a placeholder is worse than nothing.
+- [ ] **M12d The web channel:** portal builds (CrazyGames, Poki, GameDistribution) and an itch.io page, using the portal SDKs instead of AdMob. Ponder Club is not in the App Store at all and does fine, so this is not a consolation prize and it does not wait for M9.
 - [ ] **Launch 1.0:** Android, iOS, iPad, Mac (iPad app), web; about 35 games
 
 ## Stage 3: online
@@ -114,7 +116,7 @@ What it cost: about a day. What it bought: those five fixes, and a clear answer 
 - **A shelf for games still in testing**, where scores do not count, so a new game can go out before it is finished.
 The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
 - [x] **D1 A time on every tile (2026-09-20):** all 43 games carry `minutes` in the registry, shown on the shelf and beside the game's name on its own page.
-- [ ] **D2 The daily and the streak:** one seeded puzzle a day across the solo games, a countdown to the next, a streak kept on the device, and a switch to hide it.
+- [ ] **D2 The daily and the streak:** one seeded puzzle a day, the same for everybody, across the solo games that suit it (2048, Sudoku, Classic Snake, Sliding Puzzle, Color Sort, Shut the Box, Yatzy solo and the patience games). A row at the top of the shelf with today's game, a countdown to the next one, a streak kept on the device with a switch to hide it, and a note of whether today is done. No server: the seed is the date, so everybody gets the same puzzle without anybody storing it.
 - [ ] **D3 Ad-free forever:** the entitlement, the wording and the price, with a stub store until RevenueCat exists.
 - [ ] **D4 The testing shelf:** a "still cooking" row where scores are not kept.
 
@@ -170,10 +172,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
-- [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker
-- [ ] **M27 Puzzles A:** Minesweeper, Nonogram, Mahjong Solitaire, Word Guess
+- [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
+- [ ] **M27 Puzzles A:** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them)
 - [ ] **M28 Chill shelf A:** Pop bubbles, Bubble wrap, Newton's cradle, Zen garden
-- [ ] **M29 Duels B:** Pool, Mini Golf, Archery
 - [ ] **M30+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
