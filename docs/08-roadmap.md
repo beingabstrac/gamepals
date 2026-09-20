@@ -71,8 +71,9 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 
 ## Stage 2: phones, stores and money
 - [ ] **M9 🔑 Native builds:** signed iOS (iPhone + iPad, also runs on Apple silicon Macs) and Android (phones, tablets, Chromebooks) builds from CI on `v*` tags; icons, splash, safe areas, orientation; TestFlight + Play internal track
-- [ ] **M10 🔑 Ads:** AdMob rewarded ads (extra hint, undo, retry), UMP consent, iOS tracking prompt, offline grace; no ads in the web/portal build
-- [ ] **M11 🔑 Pro:** Remove Ads + Pro through RevenueCat; restore purchases
+- [ ] **M10 🔑 Ads:** AdMob rewarded first (extra hint, undo, retry, a second go at a daily), one interstitial between games with a hard cap and never inside a turn, UMP consent, iOS tracking prompt, offline grace, no ads in the web or portal build. The loudest complaint in every review set we read is ad frequency, so the cap is a feature we say out loud.
+- [ ] **M11 🔑 Pro, three ways:** monthly, yearly and lifetime through RevenueCat, with **lifetime as the hero** and the two subscriptions as the anchors beside it. Pro turns ads off, opens every level, keeps the daily archive and the full stats, and gives unlimited hints and undo. Restore purchases. The evidence says this audience buys the one-off (JindoBlu sells Remove Ads at $6.99 against 413K ratings; Ponder Club sells ad-free forever), so the page leads with it and the subscriptions exist to make it look like the sensible choice.
+- [ ] **M11b The paywall and the plumbing (unblocked):** the entitlement, the three-price page, the ad seams behind a flag and a stub store, all of it testable with no accounts, so M10 and M11 become wiring rather than building.
 - [x] **M12a Store screenshots (2026-09-18):** five Playwright projects render at exactly the sizes the stores ask for, the shots come from real play, and CI hands them back as an artifact when you tick **store** on a manual run. Sizes, sources and gaps: [14](14-store-kit.md).
   - **Checked both vendors' pages rather than trusting memory, which was as well.** Apple takes 1260 × 2736 (6.9" iPhone) and 2064 × 2752 (13" iPad) and scales those down for every smaller size. **Google Play insists on exactly 16:9 or 9:16**, which Apple's shapes are not (1260 × 2736 is about 1:2.17), so Play cannot reuse them and gets its own pair. Every shot is a JPEG, because both stores refuse an alpha channel and a JPEG cannot carry one.
   - **The pictures found a real gap.** On a 13" iPad the board fills the width and leaves the bottom third of the screen empty; on a landscape tablet it sits in the middle third with empty felt either side. The e2e layout checks never caught it because nothing overflows: it is wasted space, not broken layout. Same root as the phone note under M6. **The tablet shots should not be uploaded until M12c.**
@@ -117,6 +118,17 @@ The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
 - [ ] **D2 The daily and the streak:** one seeded puzzle a day across the solo games, a countdown to the next, a streak kept on the device, and a switch to hide it.
 - [ ] **D3 Ad-free forever:** the entitlement, the wording and the price, with a stub store until RevenueCat exists.
 - [ ] **D4 The testing shelf:** a "still cooking" row where scores are not kept.
+
+## Stage 5: cover the field (decided 2026-09-20)
+Both competitors' catalogues, and what neither of them has. [JindoBlu](https://apps.apple.com/us/app/2-player-games-offline-games/id1465731199) names Ping Pong, Spinner War, Air Hockey, Snakes, Pool, Tic Tac Toe, Penalty Kicks, Sumo, mini golf, racing cars, sword duels, chess, paint fight, archery, tug of war, whack a mole, memory, maths, solitaire and jigsaw. [Ponder Club](https://ponderclub.co) runs a mini crossword, a word search, a themed-grouping game, a word ladder, an anagram hunt, a Wordle-alike, a 2048-alike, a digit slider, sudoku, a minesweeper, a numbers-target game, flood-it, solitaire, mahjong solitaire and a code breaker. We already have 18 of those. These are the rest, named our own way ([03 §4](03-game-catalog.md#4-trademark-safe-naming)), three or four to a milestone.
+- [ ] **W1 Word daily:** Word Guess, Word Search, Mini Crossword (5x5)
+- [ ] **W2 Word more:** Word Ladder, Word Groups, Anagram Hunt
+- [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
+- [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
+- [ ] **U1 Duels A:** Pool, Mini Golf, Archery
+- [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
+- [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It
+That is twenty-two more games on top of the forty-three, and it covers every game either competitor lists.
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
 - [x] **M20a Cards B, hidden hands (2026-09-19):** Crazy Eights, 35 games, and the first game here where you hold cards nobody else may see. Two players get seven cards and three or four get five, a play matches suit or rank, an eight goes on anything and names the next suit, you draw until you can play, and the pile becomes a new deck when the deck runs out.
