@@ -230,7 +230,20 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     that hide at least eight known words were kept; the test re-derives that property rather than
     trusting the filter. What counts as a word is the clue dictionary plus the word search themes,
     1,727 words people know, so nothing obscure is ever needed to clear a puzzle.
-- [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
+- **N1 Numbers.** Three games, so three loops, and not in the order they were listed.
+  - [x] **N1a Target Number (2026-09-20):** 50 games. Six numbers, four operations, a target from
+    101 to 999, no fractions and nothing below zero. Every round is solvable exactly, checked when
+    it is laid and checked again in the tests by a solver that does not know what the generator
+    claimed. Measured first: 55 of 60 random draws are exactly solvable and the worst solve is
+    104ms, so guaranteeing it costs almost nothing.
+    The band check written an hour earlier caught this scene before it shipped: the operations
+    ended at 464 and the line under them started at 436.
+  - [ ] **N1b Quick Maths (duel):** two people on one device racing to answer.
+  - [ ] **N1c Digit Shift:** moved to last on purpose. "A digit slider" is one line of a
+    competitor's list, and the two obvious readings of it are a 2048 reskin and a Sliding Puzzle
+    reskin, both of which we already ship. Rule: each game must clearly be its own game. This one
+    does not get built until there is a design that is not one of those two, and inventing that is
+    a loop of its own rather than a rushed third of this one.
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing

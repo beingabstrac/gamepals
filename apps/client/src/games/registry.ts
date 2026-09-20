@@ -61,12 +61,14 @@ import {
   wordLadderGame,
   wordGroupsGame,
   anagramHuntGame,
+  targetNumberGame,
   type WordState,
   type SearchState,
   type CrossState,
   type LadderState,
   type GroupsState,
   type HuntState,
+  type TargetState,
   rummy,
   type RummyState,
   tripeaks,
@@ -157,6 +159,7 @@ import { CROSS_COLORS, CROSS_NAMES, CROSS_SIZE, crossResult, crossStatus, CrossS
 import { LADDER_COLORS, LADDER_NAMES, LADDER_SIZE, ladderResult, ladderStatus, LadderScene } from './word-ladder/LadderScene';
 import { GROUPS_COLORS, GROUPS_NAMES, GROUPS_SIZE, groupsResult, groupsStatus, GroupsScene } from './word-groups/GroupsScene';
 import { HUNT_COLORS, HUNT_NAMES, HUNT_SIZE, huntResult, huntStatus, HuntScene } from './anagram-hunt/HuntScene';
+import { TARGET_COLORS, TARGET_NAMES, TARGET_SIZE, targetResult, targetStatus, TargetScene } from './target-number/TargetScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1248,6 +1251,26 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => huntResult(state as HuntState),
     moveCue: () => 'place',
     createScene: (session) => new HuntScene(session),
+  }),
+  entry({
+    definition: targetNumberGame,
+    tagline: 'Six numbers, hit the target',
+    minutes: '4 min',
+    hint: 'Tap two numbers and a sign',
+    howTo: {
+      goal: 'Use the six numbers to reach the target exactly.',
+      controls: 'Tap a number, tap a sign, tap another number. They turn into the answer. Take a step back with the button. On a keyboard: number keys pick, + - * / choose the sign, Backspace goes back.',
+      win: 'Make the target. You do not have to use all six numbers.',
+      tip: 'Look for a number near the target first and work out the difference, rather than trying to build it from nothing.',
+    },
+    sideNames: () => TARGET_NAMES,
+    sideColors: () => TARGET_COLORS,
+    size: TARGET_SIZE,
+    color: DARK.sky,
+    status: (state) => targetStatus(state as TargetState),
+    resultText: (state) => targetResult(state as TargetState),
+    moveCue: () => 'place',
+    createScene: (session) => new TargetScene(session),
   }),
   entry({
     definition: slidingPuzzle,

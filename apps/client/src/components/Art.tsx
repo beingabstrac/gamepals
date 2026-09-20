@@ -875,6 +875,35 @@ function AnagramHuntArt() {
   );
 }
 
+function TargetNumberArt() {
+  const tiles = [
+    { label: '75', x: 14, y: 46 },
+    { label: '6', x: 41, y: 46 },
+    { label: '4', x: 68, y: 46 },
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="20" y="16" width="60" height="24" rx="10" fill={DARK.sky} />
+      <rect x="20" y="12" width="60" height="24" rx="10" fill={COLORS.sky} />
+      <text x="50" y="24" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill="#fff">
+        454
+      </text>
+      {tiles.map((tile) => (
+        <g key={tile.label}>
+          <rect x={tile.x} y={tile.y + 3} width="22" height="22" rx="7" fill="#E6E1F3" />
+          <rect x={tile.x} y={tile.y} width="22" height="22" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2" />
+          <text x={tile.x + 11} y={tile.y + 11} font-family="Fredoka, sans-serif" font-weight="600" font-size="12" text-anchor="middle" dominant-baseline="central" fill={INK}>
+            {tile.label}
+          </text>
+        </g>
+      ))}
+      <text x="50" y="84" font-family="Fredoka, sans-serif" font-weight="600" font-size="16" text-anchor="middle" dominant-baseline="central" fill={COLORS.sunny}>
+        + − × ÷
+      </text>
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1165,6 +1194,7 @@ const ART: Record<string, () => JSX.Element> = {
   'word-ladder': WordLadderArt,
   'word-groups': WordGroupsArt,
   'anagram-hunt': AnagramHuntArt,
+  'target-number': TargetNumberArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

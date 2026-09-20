@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The word games against their own boards. Every one of these scenes put a status line through
+ * Every scene with a status line, against its own board. Every one of these scenes put a status line through
  * its own content at least once, and only a screenshot ever showed it: Word Guess printed
  * "Got it!" inside an empty square of the grid, Word Groups printed "All four." across the last
  * group, Anagram Hunt printed the count straight through the list of finds. Tests said all three
@@ -31,9 +31,9 @@ async function open(page: Page, name: string): Promise<void> {
   await expect(page.locator('.board canvas')).toBeVisible();
 }
 
-const WORD_GAMES = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt'];
+const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number'];
 
-for (const name of WORD_GAMES) {
+for (const name of BANDED) {
   test(`${name}: nothing is drawn on top of anything else`, async ({ page }) => {
     await open(page, name);
     // Look a few times: the bands move as the board fills, and a bot game can end while we look.

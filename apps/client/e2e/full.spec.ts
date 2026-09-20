@@ -32,6 +32,7 @@ const GAMES = [
   'Word Ladder',
   'Word Groups',
   'Anagram Hunt',
+  'Target Number',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

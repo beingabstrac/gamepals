@@ -39,6 +39,7 @@ export * from './games/crossword';
 export * from './games/word-ladder';
 export * from './games/word-groups';
 export * from './games/anagram-hunt';
+export * from './games/target-number';
 export * from './games/memory';
 export * from './games/sliding-puzzle';
 export * from './games/color-sort';
