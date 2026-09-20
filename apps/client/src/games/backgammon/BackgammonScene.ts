@@ -1,6 +1,6 @@
 import type { BackgammonEvent, BackgammonMove, BackgammonState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM, ROOM_COLORS } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -22,7 +22,7 @@ const CHECKER = 21;
 const POINT_H = 232;
 const SEAT_HEX = BACKGAMMON_COLORS.map(toHex);
 const SEAT_DARK = [DARK.sky, DARK.tomato].map(toHex);
-const POINT_LIGHT = 0xffe9cf;
+const POINT_LIGHT = ROOM ? ROOM_COLORS.cream : 0xffe9cf;
 const POINT_DARK = tone(0xc9b6f5, ROOM_TONES.woodSquare);
 const SUNNY = toHex(COLORS.sunny);
 const INK = toHex(COLORS.ink);
@@ -164,16 +164,21 @@ export class BackgammonScene extends Scene {
   private draw(): void {
     const state = this.state;
     const g = this.boardG.clear();
-    g.fillStyle(toHex(DARK.peach), 1);
+    // A backgammon board is a wooden case with felt inside it.
+    g.fillStyle(ROOM ? ROOM_COLORS.woodDark : toHex(DARK.peach), 1);
     g.fillRoundedRect(0, 8, W, H - 16, 24);
-    g.fillStyle(toHex(COLORS.peach), 1);
+    g.fillStyle(ROOM ? ROOM_COLORS.wood : toHex(COLORS.peach), 1);
     g.fillRoundedRect(0, 0, W, H - 16, 24);
-    g.fillStyle(0xfff6ea, 1);
+    if (ROOM) {
+      g.fillStyle(0xffffff, 0.08);
+      g.fillRoundedRect(0, 0, W, 16, 8);
+    }
+    g.fillStyle(ROOM ? ROOM_COLORS.felt : 0xfff6ea, 1);
     g.fillRect(EDGE, 24, TRAY_X - 40 - EDGE, H - 64);
     // The bar down the middle and the tray at the side.
     g.fillStyle(toHex(DARK.peach), 1);
     g.fillRect(BAR_X - BAR_W / 2, 24, BAR_W, H - 64);
-    g.fillStyle(0xfff6ea, 1);
+    g.fillStyle(ROOM ? ROOM_COLORS.felt : 0xfff6ea, 1);
     g.fillRoundedRect(TRAY_X - 16, 24, 62, H - 64, 12);
 
     for (let point = 0; point < 24; point++) {

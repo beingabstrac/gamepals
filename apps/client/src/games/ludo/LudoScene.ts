@@ -1,6 +1,6 @@
 import { absoluteSquare, HOME, LAST_TRACK, SAFE_SQUARES, YARD, type LudoEvent, type LudoMove, type LudoState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM, ROOM_COLORS } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -268,7 +268,7 @@ export class LudoScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillRoundedRect(0, 0, SIZE, SIZE, 26);
-    g.lineStyle(3, CELL_LINE, 1);
+    g.lineStyle(ROOM ? 4 : 3, ROOM ? ROOM_COLORS.brassDark : CELL_LINE, 1);
     g.strokeRoundedRect(1.5, 1.5, SIZE - 3, SIZE - 3, 26);
 
     TRACK.forEach(([col, row], index) => {

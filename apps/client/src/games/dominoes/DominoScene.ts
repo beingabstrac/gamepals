@@ -1,6 +1,6 @@
 import { DOMINO_TILES, type DominoEvent, type DominoMove, type DominoState, type Placed } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -23,8 +23,8 @@ const LINE_GAP = 4;
 const HAND_Y = 556;
 const HW = 62;
 const HH = 124;
-const IVORY = 0xfffaf0;
-const LIP = 0xe3dccd;
+const IVORY = ROOM ? 0xf7ead0 : 0xfffaf0;
+const LIP = ROOM ? 0xc3a877 : 0xe3dccd;
 const INK = toHex(COLORS.ink);
 const SUNNY = toHex(COLORS.sunny);
 const GRAPE = toHex(COLORS.grape);
