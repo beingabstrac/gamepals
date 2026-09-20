@@ -1,6 +1,17 @@
+import { ROOM } from '../look';
 import type { BotTier } from '@gamepals/rules';
 import type { ComponentChildren, JSX } from 'preact';
 import { COLORS, DARK } from '../theme';
+
+/**
+ * The pale fills inside the pictures were the flat look showing through on forty-three tiles:
+ * lavender rules, cold blue grids, white paper. In the room they are parchment and ochre.
+ */
+const PAPER = ROOM ? '#F1E2C0' : '#FFFAF0';
+const PAPER_WARM = ROOM ? '#E8D3A6' : '#FFE9CF';
+const PAPER_LINE = ROOM ? '#CBAE7E' : '#E6E1F3';
+const COOL = ROOM ? '#5E8FA8' : '#8EC2FF';
+const COOL_LINE = ROOM ? '#3E6C80' : '#B9D9F2';
 
 /* Original vector art: crisp at any size, flat colors, no gradients. */
 
@@ -52,7 +63,7 @@ function LudoArt() {
   ];
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="8" y="8" width="84" height="84" rx="16" fill="#fff" stroke="#E6E1F3" stroke-width="2" />
+      <rect x="8" y="8" width="84" height="84" rx="16" fill="#fff" stroke={PAPER_LINE} stroke-width="2" />
       {corners.map(([x, y, color]) => (
         <g key={color}>
           <rect x={x} y={y} width="30" height="30" rx="9" fill={color} />
@@ -72,8 +83,8 @@ function AirHockeyArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="20" y="6" width="60" height="88" rx="16" fill="#DCEEFF" stroke={DARK.sky} stroke-width="3" />
-      <line x1="24" y1="50" x2="76" y2="50" stroke="#8EC2FF" stroke-width="2.5" />
-      <circle cx="50" cy="50" r="9" fill="none" stroke="#8EC2FF" stroke-width="2.5" />
+      <line x1="24" y1="50" x2="76" y2="50" stroke={COOL} stroke-width="2.5" />
+      <circle cx="50" cy="50" r="9" fill="none" stroke={COOL} stroke-width="2.5" />
       <rect x="38" y="6" width="24" height="4" rx="2" fill={COLORS.tomato} />
       <rect x="38" y="90" width="24" height="4" rx="2" fill={COLORS.sky} />
       <circle cx="50" cy="24" r="9" fill={COLORS.tomato} stroke="#fff" stroke-width="2" />
@@ -113,11 +124,11 @@ function SnakesArt() {
   const rungs = [0.2, 0.4, 0.6, 0.8];
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="14" width="80" height="80" rx="16" fill="#E6E0F4" />
+      <rect x="10" y="14" width="80" height="80" rx="16" fill={PAPER_LINE} />
       <rect x="10" y="10" width="80" height="80" rx="16" fill="#fff" />
       {[0, 1, 2].map((row) =>
         [0, 1, 2].map((col) =>
-          (row + col) % 2 ? null : <rect key={`${row}-${col}`} x={14 + col * 24} y={14 + row * 24} width="24" height="24" rx="6" fill="#FFF1DC" />,
+          (row + col) % 2 ? null : <rect key={`${row}-${col}`} x={14 + col * 24} y={14 + row * 24} width="24" height="24" rx="6" fill={PAPER} />,
         ),
       )}
       <g stroke={DARK.sunny} stroke-width="4" stroke-linecap="round">
@@ -139,7 +150,7 @@ function UltimateArt() {
   const at = [14, 38, 62];
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="8" y="12" width="84" height="84" rx="16" fill="#E6E0F4" />
+      <rect x="8" y="12" width="84" height="84" rx="16" fill={PAPER_LINE} />
       <rect x="8" y="8" width="84" height="84" rx="16" fill="#fff" />
       {at.map((y, row) =>
         at.map((x, col) => {
@@ -191,7 +202,7 @@ function ShutArt() {
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="6" y="24" width="88" height="60" rx="16" fill={DARK.peach} />
       <rect x="6" y="20" width="88" height="60" rx="16" fill={COLORS.peach} />
-      <rect x="12" y="28" width="76" height="40" rx="10" fill="#FFE9CF" />
+      <rect x="12" y="28" width="76" height="40" rx="10" fill={PAPER_WARM} />
       {tiles.map((n, i) =>
         shut.has(n) ? (
           <rect key={n} x={15 + i * 14.6} y="58" width="12" height="7" rx="3" fill={DARK.peach} />
@@ -214,16 +225,16 @@ function DominoArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <g transform="rotate(-14 36 52)">
-        <rect x="22" y="20" width="28" height="60" rx="8" fill="#E3DCCD" />
-        <rect x="22" y="16" width="28" height="60" rx="8" fill="#FFFAF0" />
-        <rect x="26" y="45" width="20" height="3" rx="1.5" fill="#E3DCCD" />
+        <rect x="22" y="20" width="28" height="60" rx="8" fill={PAPER_LINE} />
+        <rect x="22" y="16" width="28" height="60" rx="8" fill={PAPER} />
+        <rect x="26" y="45" width="20" height="3" rx="1.5" fill={PAPER_LINE} />
         {pips(36, 31, [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], COLORS.bubblegum)}
         {pips(36, 61, [[-1, -1], [1, 1]], COLORS.sky)}
       </g>
       <g transform="rotate(12 66 50)">
-        <rect x="52" y="24" width="28" height="60" rx="8" fill="#E3DCCD" />
-        <rect x="52" y="20" width="28" height="60" rx="8" fill="#FFFAF0" />
-        <rect x="56" y="49" width="20" height="3" rx="1.5" fill="#E3DCCD" />
+        <rect x="52" y="24" width="28" height="60" rx="8" fill={PAPER_LINE} />
+        <rect x="52" y="20" width="28" height="60" rx="8" fill={PAPER} />
+        <rect x="56" y="49" width="20" height="3" rx="1.5" fill={PAPER_LINE} />
         {pips(66, 35, [[-1, -1], [1, 1]], COLORS.sky)}
         {pips(66, 65, [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]], COLORS.peach)}
       </g>
@@ -235,8 +246,8 @@ function ChessArt() {
   const squares = [0, 1, 2, 3].flatMap((row) => [0, 1, 2, 3].map((col) => ({ row, col })));
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
-      <rect x="10" y="10" width="80" height="80" rx="14" fill="#FFF1DC" />
+      <rect x="10" y="14" width="80" height="80" rx="14" fill={PAPER_LINE} />
+      <rect x="10" y="10" width="80" height="80" rx="14" fill={PAPER} />
       {squares.map(({ row, col }) =>
         (row + col) % 2 ? <rect key={`${row}-${col}`} x={14 + col * 18} y={14 + row * 18} width="18" height="18" fill="#C9B6F5" /> : null,
       )}
@@ -258,7 +269,7 @@ function BackgammonArt() {
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="6" y="16" width="88" height="72" rx="12" fill={DARK.peach} />
       <rect x="6" y="12" width="88" height="72" rx="12" fill={COLORS.peach} />
-      <rect x="10" y="16" width="80" height="64" fill="#FFF6EA" />
+      <rect x="10" y="16" width="80" height="64" fill={PAPER} />
       <rect x="47" y="16" width="6" height="64" fill={DARK.peach} />
       {cols.map((c) => (
         <g key={c}>
@@ -278,10 +289,10 @@ function SeaBattleArt() {
   const misses: [number, number][] = [[30, 30], [58, 44], [72, 30]];
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="16" width="80" height="76" rx="12" fill="#B9D9F2" />
+      <rect x="10" y="16" width="80" height="76" rx="12" fill={COOL_LINE} />
       <rect x="10" y="12" width="80" height="76" rx="12" fill="#DFF1FF" />
       {[0, 1, 2, 3, 4].map((i) => (
-        <g key={i} stroke="#B9D9F2" stroke-width="1.5">
+        <g key={i} stroke={COOL_LINE} stroke-width="1.5">
           <line x1={10 + i * 16} y1="12" x2={10 + i * 16} y2="88" />
           <line x1="10" y1={12 + i * 15.2} x2="90" y2={12 + i * 15.2} />
         </g>
@@ -305,7 +316,7 @@ function DotsArt() {
   const dots = [22, 50, 78];
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="14" width="80" height="80" rx="16" fill="#E6E0F4" />
+      <rect x="10" y="14" width="80" height="80" rx="16" fill={PAPER_LINE} />
       <rect x="10" y="10" width="80" height="80" rx="16" fill="#fff" />
       <rect x="25" y="25" width="22" height="22" rx="4" fill={COLORS.sky} opacity="0.35" />
       <text x="36" y="36" text-anchor="middle" dominant-baseline="central" font-family="Fredoka, sans-serif" font-weight="600" font-size="14" fill={COLORS.sky}>
@@ -314,7 +325,7 @@ function DotsArt() {
       <g stroke-width="5" stroke-linecap="round">
         <path d="M22 22 H50 M22 22 V50 M50 22 V50 M22 50 H50" stroke={COLORS.sky} />
         <path d="M50 50 H78 M78 50 V78" stroke={COLORS.tomato} />
-        <path d="M22 78 H50" stroke="#E6E0F4" />
+        <path d="M22 78 H50" stroke={PAPER_LINE} />
       </g>
       {dots.map((y) => dots.map((x) => <circle key={`${x}-${y}`} cx={x} cy={y} r="4.5" fill={INK} />))}
     </svg>
@@ -332,7 +343,7 @@ function ReversiArt() {
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
       <rect x="10" y="10" width="80" height="80" rx="16" fill={COLORS.mint} />
-      <path d="M26 10 V90 M50 10 V90 M74 10 V90 M10 26 H90 M10 50 H90 M10 74 H90" stroke="#FFF4DC" stroke-width="2" opacity="0.8" />
+      <path d="M26 10 V90 M50 10 V90 M74 10 V90 M10 26 H90 M10 50 H90 M10 74 H90" stroke={PAPER} stroke-width="2" opacity="0.8" />
       {discs.map(([x, y, side]) => (
         <g key={`${x}-${y}`}>
           <circle cx={x} cy={y + 2} r="10" fill={side === 'dark' ? '#16151F' : COLORS.sky} />
@@ -363,8 +374,8 @@ function CheckersArt() {
 function SolitaireArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="18" y="20" width="40" height="56" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-10 38 48)" />
-      <rect x="42" y="24" width="40" height="56" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(8 62 52)" />
+      <rect x="18" y="20" width="40" height="56" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(-10 38 48)" />
+      <rect x="42" y="24" width="40" height="56" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(8 62 52)" />
       <path d="M62 44 l7 9 -7 9 -7 -9 z" fill={COLORS.tomato} transform="rotate(8 62 52)" />
     </svg>
   );
@@ -379,15 +390,15 @@ function FreeCellArt() {
       <rect x="55" y="12" width="17" height="23" rx="5" fill="#fff" stroke={COLORS.sky} stroke-width="2.5" />
       <rect x="76" y="12" width="17" height="23" rx="5" fill={COLORS.sky} />
       <path d="M84.5 18 l4.5 5.5 -4.5 5.5 -4.5 -5.5 z" fill="#fff" />
-      <rect x="22" y="44" width="24" height="33" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="22" y="44" width="24" height="33" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="34" y="60" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill={COLORS.tomato}>
         9
       </text>
-      <rect x="22" y="60" width="24" height="33" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="22" y="60" width="24" height="33" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="34" y="76" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill={INK}>
         8
       </text>
-      <rect x="54" y="52" width="24" height="33" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="54" y="52" width="24" height="33" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="66" y="68" font-family="Fredoka, sans-serif" font-weight="600" font-size="15" text-anchor="middle" dominant-baseline="central" fill={COLORS.tomato}>
         K
       </text>
@@ -401,11 +412,11 @@ function SpiderArt() {
       <rect x="9" y="16" width="20" height="28" rx="6" fill={DARK.mint} />
       <rect x="34" y="16" width="20" height="28" rx="6" fill={DARK.mint} />
       <rect x="59" y="16" width="20" height="28" rx="6" fill={DARK.mint} />
-      <rect x="9" y="34" width="20" height="28" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="9" y="34" width="20" height="28" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <path d="M19 44 c-4 4 -6 6 -6 8 a3.2 3.2 0 0 0 6 1.6 a3.2 3.2 0 0 0 6 -1.6 c0 -2 -2 -4 -6 -8 z" fill={INK} />
-      <rect x="34" y="34" width="20" height="28" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="34" y="34" width="20" height="28" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <path d="M44 44 c-4 4 -6 6 -6 8 a3.2 3.2 0 0 0 6 1.6 a3.2 3.2 0 0 0 6 -1.6 c0 -2 -2 -4 -6 -8 z" fill={COLORS.tomato} />
-      <rect x="59" y="34" width="20" height="28" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="59" y="34" width="20" height="28" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <path d="M69 44 c-4 4 -6 6 -6 8 a3.2 3.2 0 0 0 6 1.6 a3.2 3.2 0 0 0 6 -1.6 c0 -2 -2 -4 -6 -8 z" fill={INK} />
       <rect x="66" y="68" width="24" height="24" rx="7" fill={COLORS.peach} />
       <path d="M72 80 h12 M78 74 v12" stroke="#fff" stroke-width="3" stroke-linecap="round" />
@@ -416,7 +427,7 @@ function SpiderArt() {
 function PyramidArt() {
   const card = (x: number, y: number, label: string, red: boolean) => (
     <g>
-      <rect x={x} y={y} width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x={x} y={y} width="22" height="30" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text
         x={x + 11}
         y={y + 15}
@@ -450,7 +461,7 @@ function PyramidArt() {
 function TriPeaksArt() {
   const peak = (x: number) => (
     <g>
-      <rect x={x - 11} y="16" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x={x - 11} y="16" width="22" height="30" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <rect x={x - 22} y="34" width="22" height="30" rx="6" fill={DARK.mint} />
       <rect x={x} y="34" width="22" height="30" rx="6" fill={DARK.mint} />
     </g>
@@ -460,9 +471,9 @@ function TriPeaksArt() {
       {peak(22)}
       {peak(50)}
       {peak(78)}
-      <rect x="6" y="56" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
-      <rect x="32" y="56" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
-      <rect x="58" y="56" width="22" height="30" rx="6" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="6" y="56" width="22" height="30" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
+      <rect x="32" y="56" width="22" height="30" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
+      <rect x="58" y="56" width="22" height="30" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <g font-family="Fredoka, sans-serif" font-weight="600" font-size="14" text-anchor="middle" dominant-baseline="central">
         <text x="17" y="71" fill={INK}>
           8
@@ -481,8 +492,8 @@ function TriPeaksArt() {
 function CrazyEightsArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="14" y="30" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-12 31 53)" />
-      <rect x="34" y="26" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="14" y="30" width="34" height="46" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(-12 31 53)" />
+      <rect x="34" y="26" width="34" height="46" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="51" y="49" font-family="Fredoka, sans-serif" font-weight="600" font-size="26" text-anchor="middle" dominant-baseline="central" fill={COLORS.grape}>
         8
       </text>
@@ -497,9 +508,9 @@ function CrazyEightsArt() {
 function GoFishArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="20" width="26" height="36" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
-      <rect x="20" y="30" width="26" height="36" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
-      <rect x="30" y="40" width="26" height="36" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="10" y="20" width="26" height="36" rx="7" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
+      <rect x="20" y="30" width="26" height="36" rx="7" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
+      <rect x="30" y="40" width="26" height="36" rx="7" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="43" y="58" font-family="Fredoka, sans-serif" font-weight="600" font-size="18" text-anchor="middle" dominant-baseline="central" fill={COLORS.sky}>
         7
       </text>
@@ -514,12 +525,12 @@ function WarArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="16" width="34" height="46" rx="8" fill={COLORS.sky} transform="rotate(-8 27 39)" />
-      <rect x="14" y="20" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="14" y="20" width="34" height="46" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="31" y="43" font-family="Fredoka, sans-serif" font-weight="600" font-size="20" text-anchor="middle" dominant-baseline="central" fill={INK}>
         A
       </text>
       <rect x="56" y="38" width="34" height="46" rx="8" fill={COLORS.tomato} transform="rotate(8 73 61)" />
-      <rect x="52" y="34" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="52" y="34" width="34" height="46" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       <text x="69" y="57" font-family="Fredoka, sans-serif" font-weight="600" font-size="20" text-anchor="middle" dominant-baseline="central" fill={COLORS.tomato}>
         K
       </text>
@@ -533,7 +544,7 @@ function OldMaidArt() {
       <rect x="8" y="28" width="28" height="40" rx="7" fill={DARK.grape} transform="rotate(-10 22 48)" />
       <rect x="26" y="24" width="28" height="40" rx="7" fill={DARK.grape} />
       <rect x="46" y="28" width="28" height="40" rx="7" fill={DARK.grape} transform="rotate(10 60 48)" />
-      <rect x="62" y="34" width="30" height="42" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(14 77 55)" />
+      <rect x="62" y="34" width="30" height="42" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(14 77 55)" />
       <text
         x="77"
         y="53"
@@ -560,9 +571,9 @@ function HeartsArt() {
   );
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="14" y="22" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-9 31 45)" />
+      <rect x="14" y="22" width="34" height="46" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(-9 31 45)" />
       {heart(31, 52, 9, COLORS.tomato)}
-      <rect x="52" y="32" width="34" height="46" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(9 69 55)" />
+      <rect x="52" y="32" width="34" height="46" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(9 69 55)" />
       <text
         x="69"
         y="55"
@@ -591,9 +602,9 @@ function SpadesArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="24" width="32" height="44" rx="8" fill={DARK.grape} transform="rotate(-8 26 46)" />
-      <rect x="30" y="20" width="32" height="44" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="30" y="20" width="32" height="44" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       {spade(46, 44, 7, INK)}
-      <rect x="56" y="36" width="32" height="44" rx="8" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(10 72 58)" />
+      <rect x="56" y="36" width="32" height="44" rx="8" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(10 72 58)" />
       <text
         x="72"
         y="58"
@@ -620,9 +631,9 @@ function CallbreakArt() {
   );
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="16" y="18" width="34" height="46" rx="9" fill="#fff" stroke="#DCE9E1" stroke-width="2.5" transform="rotate(-12 33 41)" />
+      <rect x="16" y="18" width="34" height="46" rx="9" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(-12 33 41)" />
       {spade(33, 40, 7, DARK.mint)}
-      <rect x="42" y="14" width="34" height="46" rx="9" fill="#fff" stroke="#DCE9E1" stroke-width="2.5" transform="rotate(8 59 37)" />
+      <rect x="42" y="14" width="34" height="46" rx="9" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(8 59 37)" />
       {spade(59, 36, 7, INK)}
       <circle cx="62" cy="72" r="19" fill={COLORS.mint} />
       <text
@@ -645,12 +656,12 @@ function GinRummyArt() {
   const pip = (x: number, y: number, fill: string) => <circle cx={x} cy={y} r="4.5" fill={fill} />;
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="8" y="30" width="26" height="38" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" transform="rotate(-10 21 49)" />
+      <rect x="8" y="30" width="26" height="38" rx="7" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(-10 21 49)" />
       {pip(21, 49, COLORS.grape)}
-      <rect x="30" y="26" width="26" height="38" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="30" y="26" width="26" height="38" rx="7" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       {pip(43, 38, COLORS.grape)}
       {pip(43, 52, COLORS.grape)}
-      <rect x="52" y="26" width="26" height="38" rx="7" fill="#fff" stroke="#E6E1F3" stroke-width="2.5" />
+      <rect x="52" y="26" width="26" height="38" rx="7" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       {pip(65, 34, COLORS.grape)}
       {pip(65, 45, COLORS.grape)}
       {pip(65, 56, COLORS.grape)}
@@ -664,18 +675,18 @@ function RummyArt() {
   const pip = (x: number, y: number, fill: string) => <circle cx={x} cy={y} r="4" fill={fill} />;
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="22" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" />
+      <rect x="10" y="22" width="24" height="34" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       {pip(22, 39, COLORS.sky)}
-      <rect x="30" y="22" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" />
+      <rect x="30" y="22" width="24" height="34" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       {pip(42, 33, COLORS.sky)}
       {pip(42, 45, COLORS.sky)}
-      <rect x="50" y="22" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" />
+      <rect x="50" y="22" width="24" height="34" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
       {pip(62, 31, COLORS.sky)}
       {pip(62, 39, COLORS.sky)}
       {pip(62, 47, COLORS.sky)}
-      <rect x="24" y="58" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" transform="rotate(-6 36 75)" />
+      <rect x="24" y="58" width="24" height="34" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(-6 36 75)" />
       {pip(36, 75, COLORS.tomato)}
-      <rect x="52" y="58" width="24" height="34" rx="6" fill="#fff" stroke="#DCE9F0" stroke-width="2.5" transform="rotate(6 64 75)" />
+      <rect x="52" y="58" width="24" height="34" rx="6" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" transform="rotate(6 64 75)" />
       {pip(64, 69, COLORS.tomato)}
       {pip(64, 81, COLORS.tomato)}
     </svg>
@@ -703,7 +714,7 @@ function ClassicSnakeArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
-      <rect x="10" y="10" width="80" height="80" rx="16" fill="#B3EFCC" />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill={PAPER_LINE} />
       <path d={path} fill="none" stroke={DARK.sky} stroke-width="11" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 2)" />
       <path d={path} fill="none" stroke={COLORS.sky} stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
       <circle cx="72" cy="40" r="8" fill={COLORS.sky} />
@@ -734,7 +745,7 @@ function EchoArt() {
         </g>
       ))}
       <circle cx="50" cy="24" r="17" fill="#fff" opacity="0.45" />
-      <circle cx="50" cy="50" r="10" fill="#fff" stroke="#E6E0F4" stroke-width="2.5" />
+      <circle cx="50" cy="50" r="10" fill="#fff" stroke={PAPER_LINE} stroke-width="2.5" />
     </svg>
   );
 }
@@ -767,7 +778,7 @@ function SlidingArt() {
   const tiles = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
+      <rect x="10" y="14" width="80" height="80" rx="14" fill={PAPER_LINE} />
       <rect x="10" y="10" width="80" height="80" rx="14" fill="#fff" />
       {tiles.map((tile, i) => {
         const x = 15 + (i % 3) * 24;
@@ -819,9 +830,9 @@ function PingPongArt() {
       <rect x="22" y="10" width="56" height="74" rx="8" fill={COLORS.sky} />
       <rect x="25" y="13" width="50" height="68" rx="6" fill="none" stroke="#fff" stroke-width="2.5" />
       <line x1="50" y1="14" x2="50" y2="80" stroke="#fff" stroke-width="1.5" />
-      <rect x="16" y="44" width="68" height="6" rx="2" fill="#F4F1FF" stroke={INK} stroke-width="1.5" />
+      <rect x="16" y="44" width="68" height="6" rx="2" fill={PAPER} stroke={INK} stroke-width="1.5" />
       <ellipse cx="62" cy="32" rx="4" ry="2.5" fill={INK} opacity="0.2" />
-      <circle cx="62" cy="25" r="4.5" fill="#fff" stroke="#FFE9B8" stroke-width="1.5" />
+      <circle cx="62" cy="25" r="4.5" fill="#fff" stroke={PAPER_WARM} stroke-width="1.5" />
       <circle cx="34" cy="88" r="9" fill={COLORS.sky} stroke="#fff" stroke-width="2" />
       <circle cx="66" cy="8" r="7" fill={COLORS.tomato} stroke="#fff" stroke-width="2" />
     </svg>
@@ -860,10 +871,10 @@ function SumoArt() {
       <circle cx="50" cy="53" r="42" fill="#E9B98B" />
       <circle cx="50" cy="50" r="42" fill="#F6D2AD" />
       <circle cx="50" cy="50" r="36" fill="none" stroke="#D6B273" stroke-width="5" />
-      <circle cx="40" cy="60" r="14" fill="#FFE0C2" stroke={COLORS.sky} stroke-width="4" />
+      <circle cx="40" cy="60" r="14" fill={PAPER_WARM} stroke={COLORS.sky} stroke-width="4" />
       <circle cx="36" cy="58" r="1.8" fill={INK} />
       <circle cx="44" cy="58" r="1.8" fill={INK} />
-      <circle cx="60" cy="40" r="14" fill="#FFE0C2" stroke={COLORS.tomato} stroke-width="4" />
+      <circle cx="60" cy="40" r="14" fill={PAPER_WARM} stroke={COLORS.tomato} stroke-width="4" />
       <circle cx="56" cy="38" r="1.8" fill={INK} />
       <circle cx="64" cy="38" r="1.8" fill={INK} />
     </svg>
@@ -875,7 +886,7 @@ function PenaltyArt() {
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="8" y="8" width="84" height="84" rx="14" fill="#5FD684" />
       <rect x="8" y="50" width="84" height="20" fill="#4ECB74" />
-      <rect x="20" y="14" width="60" height="16" rx="3" fill="#F4F1FF" stroke="#fff" stroke-width="3" />
+      <rect x="20" y="14" width="60" height="16" rx="3" fill={PAPER} stroke="#fff" stroke-width="3" />
       <path d="M26 14 V30 M34 14 V30 M42 14 V30 M50 14 V30 M58 14 V30 M66 14 V30 M74 14 V30" stroke="#C9C2E6" stroke-width="1" />
       <circle cx="44" cy="34" r="8" fill={COLORS.tomato} />
       <circle cx="33" cy="32" r="4" fill="#fff" />
@@ -892,7 +903,7 @@ function SnakeArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="10" y="14" width="80" height="80" rx="16" fill={DARK.mint} />
-      <rect x="10" y="10" width="80" height="80" rx="16" fill="#B3EFCC" />
+      <rect x="10" y="10" width="80" height="80" rx="16" fill={PAPER_LINE} />
       <path d="M24 74 H48 V56 H70" fill="none" stroke={COLORS.sky} stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
       <circle cx="70" cy="56" r="8" fill={COLORS.sky} />
       <circle cx="73" cy="53" r="2.2" fill={INK} />
