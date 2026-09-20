@@ -1,6 +1,6 @@
 import { pourMove, TUBE_SIZE, type ColorSortMove, type ColorSortState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -168,6 +168,13 @@ export class ColorSortScene extends Scene {
       g.fillStyle(PALETTE[color % PALETTE.length]!, 1);
       if (k === 0) g.fillRoundedRect(x, bottom - LAYER + 2, w, LAYER - 2, { tl: 6, tr: 6, bl: 24, br: 24 });
       else g.fillRoundedRect(x, bottom - LAYER + 2, w, LAYER - 2, 6);
+      if (ROOM) {
+        // Liquid in glass: bright where the light runs down the left, dark at the very bottom.
+        g.fillStyle(0xffffff, 0.3);
+        g.fillRoundedRect(x + 3, bottom - LAYER + 5, w * 0.22, LAYER - 9, 4);
+        g.fillStyle(0x000000, 0.1);
+        g.fillRect(x, bottom - 4, w, 3);
+      }
       drawMark(g, color, 0, bottom - LAYER / 2 + 1, 8);
     });
     if (tube.length === TUBE_SIZE && tube.every((c) => c === tube[0])) {
