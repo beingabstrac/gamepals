@@ -1261,7 +1261,7 @@ h2,
 /* A tile is a fat sweet with a rim, a highlight and a lip. */
 :root[data-look='room'] .tile {
   background: linear-gradient(180deg, #ffffff 0%, var(--card) 40%, #ffeecd 100%);
-  border: 3px solid color-mix(in srgb, var(--c) 62%, #b8762a);
+  border: 2px solid color-mix(in srgb, var(--c) 62%, #b8762a);
   border-radius: 30px;
   box-shadow:
     inset 0 3px 0 rgba(255, 255, 255, 0.95),
@@ -1284,7 +1284,7 @@ h2,
   background:
     radial-gradient(80% 60% at 50% 12%, rgba(255, 255, 255, 0.75), transparent 72%),
     linear-gradient(180deg, color-mix(in srgb, var(--c) 34%, white) 0%, color-mix(in srgb, var(--c) 82%, #ffffff) 100%);
-  border: 2.5px solid color-mix(in srgb, var(--c) 72%, #b8762a);
+  border: 1.5px solid color-mix(in srgb, var(--c) 72%, #b8762a);
   box-shadow: inset 0 -6px 12px rgba(180, 120, 40, 0.18), inset 0 3px 0 rgba(255, 255, 255, 0.7);
 }
 
@@ -1307,7 +1307,7 @@ h2,
 :root[data-look='room'] .btn.primary {
   background: linear-gradient(180deg, #ffe07a 0%, var(--gold) 52%, #f0a52e 100%);
   color: #6b3f10;
-  border: 3px solid #c47c16;
+  border: 2px solid #c47c16;
   text-shadow: 0 1px 0 rgba(255, 252, 240, 0.7);
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.9), 0 7px 0 #b06d12, 0 14px 20px rgba(120, 76, 24, 0.3);
 }
@@ -1326,7 +1326,7 @@ h2,
 :root[data-look='room'] .turn-pill {
   background: linear-gradient(180deg, #ffffff 0%, #fff4dc 100%);
   color: #6b4a22;
-  border: 2.5px solid #eccb8e;
+  border: 1.5px solid #eccb8e;
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.95), 0 5px 0 #e0bc82, 0 10px 16px rgba(120, 76, 24, 0.22);
 }
 
@@ -1350,7 +1350,7 @@ h2,
 :root[data-look='room'] .result-sheet,
 :root[data-look='room'] .table-top {
   background: linear-gradient(180deg, #ffffff 0%, var(--card) 45%, #fff0d2 100%);
-  border: 3px solid var(--gold);
+  border: 2px solid var(--gold);
   color: #4a3020;
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.95), 0 10px 0 #e8bf7d, 0 20px 30px rgba(120, 76, 24, 0.3);
 }
@@ -1359,18 +1359,18 @@ h2,
   background:
     radial-gradient(70% 55% at 50% 14%, rgba(255, 255, 255, 0.7), transparent 70%),
     linear-gradient(180deg, #6fd79f 0%, var(--grass) 55%, #33a86f 100%);
-  border: 4px solid #ffd766;
+  border: 2.5px solid #ffd766;
 }
 
 :root[data-look='room'] .avatar {
   background: linear-gradient(180deg, #ffffff 0%, #fff4dc 100%);
-  border: 3px solid var(--side, #eccb8e);
+  border: 2px solid var(--side, #eccb8e);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.95), 0 5px 0 #e0bc82;
 }
 
 :root[data-look='room'] .avatar.empty {
   background: rgba(255, 255, 255, 0.5);
-  border: 3px dashed #e6b96d;
+  border: 2px dashed #e6b96d;
   color: #b08a52;
   box-shadow: none;
 }
@@ -1414,7 +1414,7 @@ h2,
   padding: 10px 14px;
   border-radius: 26px;
   background: linear-gradient(180deg, #ffffff 0%, #fff6e2 55%, #ffeac6 100%);
-  border: 3px solid var(--gold);
+  border: 2px solid var(--gold);
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.95), 0 8px 0 #e8bf7d, 0 16px 24px rgba(120, 76, 24, 0.26);
 }
 
@@ -1422,7 +1422,7 @@ h2,
   white-space: nowrap;
   font-size: clamp(1.5rem, 7.5vw, 2.1rem);
   color: #ffffff;
-  -webkit-text-stroke: 4px #d9892a;
+  -webkit-text-stroke: 3px #d9892a;
   paint-order: stroke fill;
   text-shadow: 0 3px 0 rgba(160, 96, 20, 0.35);
 }
@@ -1441,4 +1441,101 @@ h2,
   width: 52px;
   height: 52px;
   filter: drop-shadow(0 4px 6px rgba(120, 76, 24, 0.35));
+}
+
+/* ---------- The game's own page ---------- */
+
+/* It was a big empty table with two chairs adrift on it. Give it a proper card: the game's
+   picture in a framed medallion, the chairs around it, and nothing floating. */
+:root[data-look='room'] .setup .table {
+  width: min(100%, 380px);
+  margin: 2px auto 0;
+}
+
+:root[data-look='room'] .setup .table-top {
+  inset: 24%;
+  border-radius: 34px;
+  border: 2.5px solid #ffd766;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -12px 20px rgba(24, 96, 60, 0.35),
+    0 8px 0 #2f9c68,
+    0 16px 24px rgba(120, 76, 24, 0.28);
+}
+
+:root[data-look='room'] .setup .table-top svg {
+  width: 70%;
+  height: 70%;
+  filter: drop-shadow(0 4px 5px rgba(20, 70, 44, 0.35));
+}
+
+/* The level and quick-start rows are the first thing on the page, so they read as chips. */
+:root[data-look='room'] .quick-starts {
+  gap: 8px;
+}
+
+:root[data-look='room'] .quick {
+  padding: 9px 15px;
+  font-size: 0.92rem;
+  border-radius: 999px;
+}
+
+/* Chairs: a ring of small, solid seats rather than pale ghosts. */
+:root[data-look='room'] .avatar {
+  width: min(62px, 100%);
+}
+
+:root[data-look='room'] .who {
+  font-size: 0.92rem;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* How to play is a card on the same page, so it should look like one, not like a wall of text. */
+:root[data-look='room'] .how-to {
+  border-radius: 24px;
+  padding: 14px 16px;
+}
+
+:root[data-look='room'] .how-to h2 {
+  font-size: 1rem;
+  color: #b8762a;
+  letter-spacing: 0.02em;
+}
+
+:root[data-look='room'] .how-to li {
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+/* The one thing you came here to press. */
+:root[data-look='room'] .setup .btn.primary {
+  font-size: 1.2rem;
+  padding: 15px 26px;
+}
+
+/* ---------- Lighting the pictures ---------- */
+
+/* The forty-three pictures are drawn flat. Rather than redraw them all at once, the playroom
+   lights them: a shadow under the drawing so it stands off its well, and a sheen across the top
+   of the well itself, which is what makes a casual game's icons look moulded rather than printed. */
+:root[data-look='room'] .tile .art {
+  position: relative;
+  overflow: hidden;
+}
+
+:root[data-look='room'] .tile .art svg {
+  filter: drop-shadow(0 3px 2.5px rgba(122, 74, 20, 0.32));
+}
+
+:root[data-look='room'] .tile .art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.12) 38%, transparent 62%);
+  pointer-events: none;
+}
+
+:root[data-look='room'] .setup .table-top svg {
+  filter: drop-shadow(0 4px 4px rgba(20, 70, 44, 0.4));
 }

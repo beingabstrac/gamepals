@@ -13,7 +13,7 @@ const PAPER_LINE = ROOM ? '#CBAE7E' : '#E6E1F3';
 const COOL = ROOM ? '#5E8FA8' : '#8EC2FF';
 const COOL_LINE = ROOM ? '#3E6C80' : '#B9D9F2';
 
-/* Original vector art: crisp at any size, flat colors, no gradients. */
+/* Original vector art: crisp at any size. The playroom lights it from the stylesheet. */
 
 const INK = COLORS.ink;
 const round = { 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const;
