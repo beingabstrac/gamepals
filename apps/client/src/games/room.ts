@@ -8,12 +8,13 @@ import { ROOM_COLORS } from '../look';
  * `pad` is the space between the edge of the scene and the playing area, which becomes the frame.
  */
 export function roomTable(g: GameObjects.Graphics, width: number, height: number, pad: number): void {
-  g.fillGradientStyle(ROOM_COLORS.felt, ROOM_COLORS.felt, ROOM_COLORS.feltDark, ROOM_COLORS.feltDark, 1);
-  g.fillRoundedRect(0, 0, width, height, 20);
-
+  // Wood runs to the edge of the board: the page behind it is the ground now, so a ring of felt
+  // around the frame just read as a stray green outline.
   const inset = Math.max(4, pad * 0.25);
-  g.fillGradientStyle(ROOM_COLORS.woodLight, ROOM_COLORS.woodLight, ROOM_COLORS.woodDark, ROOM_COLORS.woodDark, 1);
-  g.fillRoundedRect(inset, inset, width - inset * 2, height - inset * 2, 16);
+  g.fillStyle(ROOM_COLORS.woodDark, 1);
+  g.fillRoundedRect(0, 0, width, height, 20);
+  g.fillGradientStyle(ROOM_COLORS.woodLight, ROOM_COLORS.woodLight, ROOM_COLORS.wood, ROOM_COLORS.wood, 1);
+  g.fillRoundedRect(0, 0, width, height - 4, 20);
   // A waxed edge catches the light along the top.
   g.fillStyle(0xffffff, 0.35);
   g.fillRoundedRect(inset, inset, width - inset * 2, 14, 8);

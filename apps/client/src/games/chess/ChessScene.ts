@@ -261,10 +261,10 @@ export class ChessScene extends Scene {
 
   /** Felt under a walnut frame with a brass rail, lit from the top of the screen. */
   private drawRoom(g: GameObjects.Graphics): void {
-    g.fillGradientStyle(ROOM_COLORS.felt, ROOM_COLORS.felt, ROOM_COLORS.feltDark, ROOM_COLORS.feltDark, 1);
+    g.fillStyle(ROOM_COLORS.woodDark, 1);
     g.fillRoundedRect(0, 0, W, H, 20);
-    g.fillGradientStyle(ROOM_COLORS.woodLight, ROOM_COLORS.woodLight, ROOM_COLORS.woodDark, ROOM_COLORS.woodDark, 1);
-    g.fillRoundedRect(8, 8, W - 16, H - 16, 16);
+    g.fillGradientStyle(ROOM_COLORS.woodLight, ROOM_COLORS.woodLight, ROOM_COLORS.wood, ROOM_COLORS.wood, 1);
+    g.fillRoundedRect(0, 0, W, H - 5, 20);
     // A lighter strip along the top of the frame, the way a waxed edge catches the light.
     g.fillStyle(0xffffff, 0.1);
     g.fillRoundedRect(8, 8, W - 16, 14, 8);
