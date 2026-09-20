@@ -11,6 +11,21 @@ async function noSidewaysScroll(page: Page, where: string): Promise<void> {
   expect(overflow, `${where} scrolls sideways by ${overflow}px`).toBeLessThanOrEqual(1);
 }
 
+/**
+ * The Android WebView is narrower than any of our eight screen types, and it was the only thing
+ * that noticed a third button in the hero pushing the home screen 10px sideways. So the shelf is
+ * checked at 320 too, which is narrower than any phone we expect to see.
+ */
+test('home fits a very narrow phone', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/');
+  await expect(page.locator('.tile').first()).toBeVisible();
+  await page.waitForTimeout(500);
+  await noSidewaysScroll(page, 'Home at 320px');
+  // Every settings button is reachable, not hanging off the edge.
+  for (const button of await page.locator('.toggles button').all()) await expect(button).toBeInViewport();
+});
+
 test('home: no sideways scroll, and tile art stays inside each tile', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.tile').first()).toBeVisible();

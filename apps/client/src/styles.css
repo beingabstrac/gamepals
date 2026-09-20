@@ -1428,3 +1428,22 @@ h2,
   color: var(--soft);
   text-decoration: underline;
 }
+
+/* The hero holds the mascot, the name and three round buttons, which is more than a narrow
+   phone has across: the Android emulator cut the third one off and the home screen scrolled
+   sideways by 10px. Under 380px the buttons take a row of their own. */
+.hero > div {
+  min-width: 0;
+}
+
+@media (max-width: 380px) {
+  .hero {
+    flex-wrap: wrap;
+  }
+
+  .toggles {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
