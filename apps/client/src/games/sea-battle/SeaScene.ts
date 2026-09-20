@@ -1,6 +1,6 @@
 import { cellsOf, seaCol, FLEET, fireMove, HIT, MISS, placeShip, seaRow, SEA_SIZE, type Placement, type SeaEvent, type SeaMove, type SeaBattleState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -186,8 +186,14 @@ export class SeaScene extends Scene {
     const top = this.gridTop(grid);
     g.fillStyle(WATER_LINE, 1);
     g.fillRoundedRect(LEFT - 6, top - 2, GRID + 12, GRID + 12, 12);
-    g.fillStyle(WATER, 1);
+    // Water is deeper further away, and catches the light where it meets the frame.
+    if (ROOM) g.fillGradientStyle(0x7fd4f2, 0x7fd4f2, WATER, WATER, 1);
+    else g.fillStyle(WATER, 1);
     g.fillRoundedRect(LEFT - 6, top - 6, GRID + 12, GRID + 12, 12);
+    if (ROOM) {
+      g.fillStyle(0xffffff, 0.22);
+      g.fillRoundedRect(LEFT - 2, top - 2, GRID + 4, 10, 5);
+    }
     g.lineStyle(1.5, WATER_LINE, 1);
     for (let i = 0; i <= SEA_SIZE; i++) {
       g.lineBetween(LEFT + i * CELL, top, LEFT + i * CELL, top + GRID);

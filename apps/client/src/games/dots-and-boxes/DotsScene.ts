@@ -1,6 +1,6 @@
 import { drawLine, lineTotal, type DotsMove, type DotsState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -54,13 +54,20 @@ export class DotsScene extends Scene {
     this.y0 = TOP + (H - TOP - this.sp * this.n) / 2;
 
     const tray = this.add.graphics();
-    tray.fillStyle(0xe6e0f4, 1);
+    tray.fillStyle(ROOM ? 0xe9cfa0 : 0xe6e0f4, 1);
     tray.fillRoundedRect(this.x0 - 28, this.y0 - 22, this.sp * this.n + 56, this.sp * this.n + 56, 28);
     tray.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     tray.fillRoundedRect(this.x0 - 28, this.y0 - 28, this.sp * this.n + 56, this.sp * this.n + 56, 28);
     this.boxLayer = this.add.graphics();
     this.lineLayer = this.add.graphics();
     const dots = this.add.graphics().setDepth(3);
+    if (ROOM) {
+      // Each dot casts a tiny shadow, which is the difference between printed and placed.
+      dots.fillStyle(0x7a4a14, 0.22);
+      for (let r = 0; r <= this.n; r++) {
+        for (let c = 0; c <= this.n; c++) dots.fillCircle(this.x0 + c * this.sp + 1.5, this.y0 + r * this.sp + 2.5, DOT);
+      }
+    }
     dots.fillStyle(toHex(COLORS.ink), 1);
     for (let r = 0; r <= this.n; r++) for (let c = 0; c <= this.n; c++) dots.fillCircle(this.x0 + c * this.sp, this.y0 + r * this.sp, DOT);
     this.makeChips();
