@@ -148,7 +148,7 @@ const OPENERS = ['slate', 'crane', 'raise', 'adieu', 'roast'];
 
 function createWordBot(style: WordStyle): Bot<WordMove> {
   return {
-    chooseMove(generic: GameState<WordMove>, seat: Seat, rng: Rng): WordMove {
+    chooseMove(generic: GameState<WordMove>, _seat: Seat, rng: Rng): WordMove {
       const state = generic as WordState;
       const view = wordViewFor(state);
       if (style.opens && view.guesses.length === 0) return wordGuess(OPENERS[rng.int(OPENERS.length)]!);

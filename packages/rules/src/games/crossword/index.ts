@@ -138,7 +138,7 @@ export const crossViewFor = (state: CrossState): CrossView => ({
  */
 function createCrossBot(tidy: boolean): Bot<CrossMove> {
   return {
-    chooseMove(generic: GameState<CrossMove>, seat: Seat, rng: Rng): CrossMove {
+    chooseMove(generic: GameState<CrossMove>, _seat: Seat, rng: Rng): CrossMove {
       const state = generic as CrossState;
       // The list of moves is every letter in every square now, so the autoplayer picks the right
       // one itself rather than leaning on the list to have done the thinking.

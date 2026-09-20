@@ -1,6 +1,12 @@
 #!/bin/bash
 # Names bound with const/let that nothing else in the file mentions, which is what typecheck
 # fails on and precheck.sh cannot see. Test files count: an unused helper in one has failed CI.
+#
+# It does NOT see unused function parameters, and typecheck fails on those too: three bots
+# stopped using `seat` and cost a CI run. Catching them needs each function's own body, because
+# the name is usually still used elsewhere in the file, and two goes at that by brace matching
+# flagged a dozen parameters in files that compile perfectly well. A check that cries wolf gets
+# ignored, so this says what it cannot see instead. When you change a signature, read it.
 # Usage: scripts/unused-scan.sh <file ...>
 python3 - "$@" <<'PY'
 import re, sys, os

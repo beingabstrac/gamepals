@@ -146,7 +146,7 @@ export const groupsViewFor = (state: GroupsState): GroupsView => ({ left: state.
  */
 function createGroupsBot(wrongFirst: number): Bot<GroupMove> {
   return {
-    chooseMove(generic: GameState<GroupMove>, seat: Seat, rng: Rng): GroupMove {
+    chooseMove(generic: GameState<GroupMove>, _seat: Seat, rng: Rng): GroupMove {
       const state = generic as GroupsState;
       const right = state.right();
       if (!right.length) throw new Error('No legal moves');
