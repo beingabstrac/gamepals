@@ -58,9 +58,11 @@ import {
   wordGuessGame,
   wordSearchGame,
   crosswordGame,
+  wordLadderGame,
   type WordState,
   type SearchState,
   type CrossState,
+  type LadderState,
   rummy,
   type RummyState,
   tripeaks,
@@ -148,6 +150,7 @@ import { GIN_COLORS, GIN_NAMES, GIN_SIZE, ginResult, ginStatus, GinScene } from 
 import { WORD_COLORS, WORD_NAMES, WORD_SIZE, wordResult, wordStatus, WordScene } from './word-guess/WordScene';
 import { SEARCH_COLORS, SEARCH_NAMES, SEARCH_SIZE, searchResult, searchStatus, SearchScene } from './word-search/SearchScene';
 import { CROSS_COLORS, CROSS_NAMES, CROSS_SIZE, crossResult, crossStatus, CrossScene } from './crossword/CrossScene';
+import { LADDER_COLORS, LADDER_NAMES, LADDER_SIZE, ladderResult, ladderStatus, LadderScene } from './word-ladder/LadderScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1174,6 +1177,31 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => crossResult(state as CrossState),
     moveCue: () => 'place',
     createScene: (session) => new CrossScene(session),
+  }),
+  entry({
+    definition: wordLadderGame,
+    tagline: 'One letter at a time',
+    minutes: '4 min',
+    hint: 'Type a word one letter different',
+    levels: [
+      { id: 'short', label: 'Three letters' },
+      { id: 'medium', label: 'Four letters' },
+      { id: 'long', label: 'Five letters' },
+    ],
+    howTo: {
+      goal: 'Climb from the first word to the last, changing one letter at a time.',
+      controls: 'Type a word and press Enter. Every rung must be a real word, and the letters stay where they are. Take a rung back with the button, or Backspace on an empty row.',
+      win: 'Reach the word at the top. Par is the shortest ladder there is.',
+      tip: 'A word you would never guess is often the bridge. If you are stuck, take a rung back and try a different letter first.',
+    },
+    sideNames: () => LADDER_NAMES,
+    sideColors: () => LADDER_COLORS,
+    size: LADDER_SIZE,
+    color: DARK.grape,
+    status: (state) => ladderStatus(state as LadderState),
+    resultText: (state) => ladderResult(state as LadderState),
+    moveCue: () => 'place',
+    createScene: (session) => new LadderScene(session),
   }),
   entry({
     definition: slidingPuzzle,

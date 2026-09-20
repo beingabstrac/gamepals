@@ -186,7 +186,21 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     already in turns the corner, the clue for the word you are in sits above the grid, typing runs
     on by itself, and wrong letters stay quiet until you press Check my letters, because being told
     straight away takes the puzzle away.
-- [ ] **W2 Word more:** Word Ladder, Word Groups, Anagram Hunt
+- **W2 Word more.** Three games, so three loops.
+  - [x] **W2a Word Ladder (2026-09-20):** 47 games. Carroll's Doublets, 1877. Three lengths as
+    levels, and the lists were measured before a line was written: three and four letters come from
+    the crossword's clue dictionary (194 of 216 and 481 of 582 in one connected piece) and five
+    from the Word Guess answers (1,207 of 2,332). The clue dictionary's own five-letter words are
+    useless for this, 86 of 833, which is cheap to find out now and expensive later. No new word
+    list: every word already ships for another game. Par is the real shortest, checked in the tests
+    by a search that does not know what the generator claimed.
+    **A random walk is not an easy bot.** The weak tiers first picked any rung at all and never
+    arrived, so they now go by which word looks most like the target, which is how a person plays
+    badly. A ladder can also be climbed into a corner where every neighbour is used up, so taking a
+    rung back is a move in the rules, and the bots take it.
+  - [ ] **W2b Word Groups:** sixteen words, four secret groups of four, four wrong guesses allowed.
+    The whole game is in the overlaps, so the groups have to be written, not generated.
+  - [ ] **W2c Anagram Hunt:** one set of letters, find every word in it, the long one uses them all.
 - [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery

@@ -29,6 +29,7 @@ const GAMES = [
   'Word Guess',
   'Word Search',
   'Mini Crossword',
+  'Word Ladder',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

@@ -775,6 +775,46 @@ function CrosswordArt() {
   );
 }
 
+function WordLadderArt() {
+  const rows = [
+    { word: 'CAT', fill: COLORS.grape, ink: '#fff' },
+    { word: 'COT', fill: COLORS.grape, ink: '#fff' },
+    { word: 'COG', fill: '#fff', ink: INK },
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {rows.map((row, r) =>
+        [...row.word].map((letter, i) => (
+          <g key={`${r}${i}`}>
+            <rect
+              x={18 + i * 23}
+              y={20 + r * 23}
+              width="19"
+              height="19"
+              rx="5"
+              fill={row.fill}
+              stroke={row.fill === '#fff' ? '#E6E1F3' : row.fill}
+              stroke-width="2.5"
+            />
+            <text
+              x={27.5 + i * 23}
+              y={29.5 + r * 23}
+              font-family="Fredoka, sans-serif"
+              font-weight="600"
+              font-size="12"
+              text-anchor="middle"
+              dominant-baseline="central"
+              fill={row.ink}
+            >
+              {letter}
+            </text>
+          </g>
+        )),
+      )}
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1062,6 +1102,7 @@ const ART: Record<string, () => JSX.Element> = {
   'word-guess': WordGuessArt,
   'word-search': WordSearchArt,
   'mini-crossword': CrosswordArt,
+  'word-ladder': WordLadderArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
