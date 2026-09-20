@@ -118,6 +118,8 @@ interface Target extends Point {
 
 export class DominoScene extends Scene {
   private sprites = new Map<number, GameObjects.Graphics>();
+  /** Where each tile is already on its way to, so a re-sync does not restart the journey. */
+  private headingTo = new Map<number, string>();
   private handSpots = new Map<number, Point>();
   private endPoints: Partial<Record<Side, Point>> = {};
   private chips!: GameObjects.Graphics;
@@ -256,6 +258,7 @@ export class DominoScene extends Scene {
       if (!targets.has(tile)) {
         g.destroy();
         this.sprites.delete(tile);
+        this.headingTo.delete(tile);
       }
     }
     for (const [tile, t] of targets) {
@@ -267,7 +270,15 @@ export class DominoScene extends Scene {
         this.sprites.set(tile, g);
       }
       drawTile(g, t.a, t.b, t.w, t.h, t.outline);
+      const heading = `${t.x},${t.y},${t.angle}`;
+      // Only start a new journey when the destination has actually changed. Every state change
+      // calls sync, and killing an in-flight tween to restart it from where it had got to meant a
+      // tile never arrived when play was quick: the gallery showed every domino still sitting on
+      // its player's chip with the table empty, and the scene measured them all at y=22.
+      const already = this.headingTo.get(tile) === heading && this.tweens.getTweensOf(g).length > 0;
+      if (already) continue;
       this.tweens.killTweensOf(g);
+      this.headingTo.set(tile, heading);
       if (animate) this.tweens.add({ targets: g, x: t.x, y: t.y, angle: t.angle, duration: 260, ease: 'Back.easeOut' });
       else g.setPosition(t.x, t.y).setAngle(t.angle);
     }
@@ -468,6 +479,7 @@ export class DominoScene extends Scene {
       case 'deal':
         for (const g of this.sprites.values()) g.destroy();
         this.sprites.clear();
+        this.headingTo.clear();
         this.pending = null;
         this.cursor = null;
         this.revealed = null;

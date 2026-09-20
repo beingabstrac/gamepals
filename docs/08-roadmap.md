@@ -219,7 +219,16 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     right letter listed, when typing wrong ones is the game), and Word Search listed a line one way
     round. All four fixed, each with a test that fails on the old code, and the contract is now
     written into `GameState` and CLAUDE.md.
-  - **The gallery now settles before it shoots (2026-09-20).** Reviewing the older games' pictures,
+  - **Dominoes never put its tiles on the table (found 2026-09-21).** The first settled gallery shot
+  showed a domino sitting on every player's name with the board empty and the scores already at 8
+  and 7 points. Reading the scene got nowhere worth trusting, so the scene was made to report its
+  chip band and the span of its tile sprites: every sprite measured at y=22, which is exactly the
+  chip row. Every state change calls `sync`, and `sync` killed each tile's in-flight tween and
+  started it again from where it had got to, so when play was quick a tile never finished the 260ms
+  journey from the player's chip to the board. It now only starts a new journey when the
+  destination has actually changed. Worst in the fast builds, which is why the gallery is where it
+  showed up, but wrong at any speed.
+- **The gallery now settles before it shoots (2026-09-20).** Reviewing the older games' pictures,
   Dominoes appeared to draw tiles across the players' names and Rummy to show a seat with a card
   count and no cards. Both turned out to be unjudgeable rather than wrong: the shot is taken at a
   fixed 3,500ms, and a domino halfway from a player's chip to the table is pixel-identical to a
