@@ -1405,3 +1405,40 @@ h2,
 :root[data-look='room'] .tile .art svg {
   filter: none;
 }
+
+/* The name is the sign over the shop, so it gets a board of its own and the outlined letters
+   every casual game uses: white fill, thick warm stroke, a shadow under it. */
+:root[data-look='room'] .hero {
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #ffffff 0%, #fff6e2 55%, #ffeac6 100%);
+  border: 3px solid var(--gold);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.95), 0 8px 0 #e8bf7d, 0 16px 24px rgba(120, 76, 24, 0.26);
+}
+
+:root[data-look='room'] .logo {
+  white-space: nowrap;
+  font-size: clamp(1.5rem, 7.5vw, 2.1rem);
+  color: #ffffff;
+  -webkit-text-stroke: 4px #d9892a;
+  paint-order: stroke fill;
+  text-shadow: 0 3px 0 rgba(160, 96, 20, 0.35);
+}
+
+:root[data-look='room'] .logo span {
+  color: #ffd766;
+}
+
+:root[data-look='room'] .tagline {
+  font-size: 0.76rem;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+:root[data-look='room'] .mascot {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 4px 6px rgba(120, 76, 24, 0.35));
+}
