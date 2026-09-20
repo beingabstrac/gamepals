@@ -1,5 +1,6 @@
 import { BOARD_SIZE, type Slide, type Tile, type Twenty48State } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -148,10 +149,25 @@ export class Twenty48Scene extends Scene {
     const { x, y } = cellPos(tile.index);
     const style = styleFor(tile.value);
     const g = this.add.graphics();
-    g.fillStyle(0x2b2a3a, 0.08);
-    g.fillRoundedRect(-CELL / 2, -CELL / 2 + 5, CELL, CELL, 22);
-    g.fillStyle(toHex(style.fill), 1);
-    g.fillRoundedRect(-CELL / 2, -CELL / 2, CELL, CELL, 22);
+    if (ROOM) {
+      // A tile is a moulded block: a shadow, a lip in its own colour, a lit face and a highlight.
+      const fill = toHex(style.fill);
+      g.fillStyle(0x7a4a14, 0.2);
+      g.fillRoundedRect(-CELL / 2, -CELL / 2 + 8, CELL, CELL, 22);
+      g.fillStyle(fill, 1);
+      g.fillRoundedRect(-CELL / 2, -CELL / 2 + 4, CELL, CELL, 22);
+      g.fillStyle(0xffffff, 0.26);
+      g.fillRoundedRect(-CELL / 2, -CELL / 2, CELL, CELL, 22);
+      g.fillStyle(fill, 1);
+      g.fillRoundedRect(-CELL / 2 + 3, -CELL / 2 + 3, CELL - 6, CELL - 6, 19);
+      g.fillStyle(0xffffff, 0.3);
+      g.fillRoundedRect(-CELL / 2 + 8, -CELL / 2 + 7, CELL - 16, CELL * 0.3, 12);
+    } else {
+      g.fillStyle(0x2b2a3a, 0.08);
+      g.fillRoundedRect(-CELL / 2, -CELL / 2 + 5, CELL, CELL, 22);
+      g.fillStyle(toHex(style.fill), 1);
+      g.fillRoundedRect(-CELL / 2, -CELL / 2, CELL, CELL, 22);
+    }
     const size = tile.value < 100 ? 60 : tile.value < 1000 ? 50 : 40;
     const label = sharpText(this, 0, 2, String(tile.value), size, style.text);
     const view = this.add.container(x, y, [g, label]);
@@ -165,14 +181,20 @@ export class Twenty48Scene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    g.fillStyle(0xe7e1f5, 1);
+    g.fillStyle(ROOM ? 0xe9cfa0 : 0xe7e1f5, 1);
     g.fillRoundedRect(0, 8, SIZE, SIZE - 8, 32);
-    g.fillStyle(0xf3effb, 1);
+    if (ROOM) g.fillGradientStyle(0xfffdf6, 0xfffdf6, 0xfff0d4, 0xfff0d4, 1);
+    else g.fillStyle(0xf3effb, 1);
     g.fillRoundedRect(0, 0, SIZE, SIZE - 8, 32);
     for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
       const { x, y } = cellPos(i);
-      g.fillStyle(0xe7e1f5, 1);
+      // An empty cell is a hollow, so it is darker at the top where the tray overhangs it.
+      g.fillStyle(ROOM ? 0xecd7ac : 0xe7e1f5, 1);
       g.fillRoundedRect(x - CELL / 2, y - CELL / 2, CELL, CELL, 22);
+      if (ROOM) {
+        g.fillStyle(0xd8bd8a, 0.55);
+        g.fillRoundedRect(x - CELL / 2, y - CELL / 2, CELL, CELL * 0.22, 14);
+      }
     }
   }
 }
