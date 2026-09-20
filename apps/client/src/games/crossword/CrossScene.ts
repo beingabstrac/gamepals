@@ -19,6 +19,8 @@ const H = 940;
 export const CROSS_SIZE = { width: W, height: H };
 
 const CELL = 108;
+/** As wide as a clue may be before it is shrunk to fit. */
+const CLUE_WIDTH = 580;
 const GRID = CELL * SIDE;
 const GRID_TOP = 150;
 const GRID_LEFT = (W - GRID) / 2;
@@ -200,7 +202,7 @@ export class CrossScene extends Scene {
 
     if (slot) {
       this.where.setText(`${slot.number} ${slot.down ? 'Down' : 'Across'}`);
-      this.clueLine.setText(state.clueFor(slot));
+      this.setClue(state.clueFor(slot));
     }
     const asked = state.checked;
     this.askText.setText(asked ? 'Wrong letters are in red' : 'Check my letters').setColor(asked ? COLORS.soft : COLORS.sky);
@@ -209,6 +211,24 @@ export class CrossScene extends Scene {
       box.lineStyle(2, toHex(DARK.sky), 1);
       box.strokeRoundedRect(W / 2 - 150, this.askText.y - 26, 300, 52, 26);
     }
+  }
+
+  /**
+   * A clue is one line, shrunk until it fits. "It shoots arrows, or you take one on stage" is
+   * forty-two characters and runs off both sides of the grid at the size the short ones use.
+   */
+  private setClue(clue: string): void {
+    this.clueLine.setFontSize(32).setText(clue);
+    let size = 32;
+    while (this.clueLine.width > CLUE_WIDTH && size > 18) {
+      size -= 2;
+      this.clueLine.setFontSize(size);
+    }
+  }
+
+  /** The widest the clue line ever gets, against the room it has, for the layout check. */
+  clueCheck(): { widest: number; room: number } {
+    return { widest: Math.round(this.clueLine.width), room: CLUE_WIDTH };
   }
 }
 

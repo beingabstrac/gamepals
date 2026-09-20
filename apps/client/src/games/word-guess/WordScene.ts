@@ -7,13 +7,15 @@ import { fitCamera, sharpText } from '../crisp';
 import { onKeys } from '../keys';
 
 const W = 640;
-const H = 900;
+const H = 880;
 export const WORD_SIZE = { width: W, height: H };
 
-const CELL = 84;
-const GAP = 10;
-const GRID_TOP = 40;
-const KEYS_TOP = 620;
+const CELL = 78;
+const GAP = 9;
+const GRID_TOP = 30;
+/** The line that says "Not a word we know" gets a band of its own between grid and keyboard. */
+const SAY_Y = 575;
+const KEYS_TOP = 610;
 const KEY_H = 74;
 const ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
 /** Right where it should be, in the word somewhere else, not in the word at all. */
@@ -54,7 +56,7 @@ export class WordScene extends Scene {
         this.cellText.push(sharpText(this, x, y, '', 46, COLORS.ink).setDepth(2));
       }
     }
-    this.banner = sharpText(this, W / 2, KEYS_TOP - 34, '', 26, COLORS.soft).setDepth(4);
+    this.banner = sharpText(this, W / 2, SAY_Y, '', 26, COLORS.soft).setDepth(4);
     this.drawKeys();
     this.draw();
 
@@ -67,8 +69,16 @@ export class WordScene extends Scene {
   private onMove(): void {
     this.typed = '';
     this.draw();
-    const state = this.state;
-    if (state.result) this.say(state.won ? 'Got it!' : `It was ${state.secret.toUpperCase()}`);
+    // Nothing said at the end: the result sheet already says it, and saying it twice put the
+    // words on the board.
+  }
+
+  /**
+   * Where the grid ends and where the line under it sits, for the layout check. They shipped
+   * 8px apart once, so "Got it!" was printed inside an empty square of the grid.
+   */
+  bannerCheck(): { gridBottom: number; sayTop: number; keysTop: number } {
+    return { gridBottom: cellAt(TRIES - 1, 0).y + CELL / 2, sayTop: SAY_Y - 16, keysTop: KEYS_TOP };
   }
 
   private draw(): void {
