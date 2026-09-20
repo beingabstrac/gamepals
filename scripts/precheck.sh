@@ -1,6 +1,7 @@
 #!/bin/bash
 # The checks that can run without node_modules, for the mistakes CI keeps catching:
-# duplicate rules exports, duplicate art functions or tile keys, imports nothing uses,
+# duplicate rules exports, duplicate art functions or tile keys, imports nothing uses, names
+# the client imports from the rules barrel that it never exports,
 # games missing from a test list, and the rules tests. Run before pushing.
 # Usage: scripts/precheck.sh [rules test paths ...]
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -49,6 +50,54 @@ if bad:
     sys.exit(1)
 print('  ok')
 PYEOF
+
+echo "== names the client imports from @gamepals/rules but the barrel never exports"
+REPO="$REPO" python3 - <<'BARRELEOF' || fail=1
+import os, re, sys
+repo = os.environ['REPO']
+rules = os.path.join(repo, 'packages/rules/src')
+
+def resolve(base, rel):
+    path = os.path.normpath(os.path.join(os.path.dirname(base), rel))
+    for candidate in (path + '.ts', os.path.join(path, 'index.ts')):
+        if os.path.isfile(candidate): return candidate
+    return None
+
+seen, names = set(), set()
+
+def walk(path):
+    if not path or path in seen: return
+    seen.add(path)
+    text = open(path).read()
+    for star in re.finditer(r"export \* from '([^']+)';", text):
+        walk(resolve(path, star.group(1)))
+    for listed in re.finditer(r"export (?:type )?\{([^}]*)\}", text):
+        for part in listed.group(1).split(','):
+            part = part.strip().replace('type ', '')
+            if ' as ' in part: part = part.split(' as ')[-1].strip()
+            if part: names.add(part)
+    for named in re.finditer(r"^export (?:declare )?(?:const|function|class|type|interface|enum) ([A-Za-z0-9_]+)", text, re.M):
+        names.add(named.group(1))
+
+walk(os.path.join(rules, 'index.ts'))
+
+missing = []
+for root, _, files in os.walk(os.path.join(repo, 'apps/client/src')):
+    for name in files:
+        if not name.endswith(('.ts', '.tsx')): continue
+        path = os.path.join(root, name)
+        for imp in re.finditer(r"import\s*(?:type\s*)?\{([^}]*)\}\s*from\s*'@gamepals/rules';", open(path).read()):
+            for part in imp.group(1).split(','):
+                part = part.strip().replace('type ', '')
+                if ' as ' in part: part = part.split(' as ')[0].strip()
+                if part and part not in names:
+                    missing.append(os.path.relpath(path, repo) + ': ' + part)
+if missing:
+    print('  MISSING from the rules barrel:')
+    for line in missing: print('   ', line)
+    sys.exit(1)
+print('  ok:', len(names), 'names exported')
+BARRELEOF
 
 echo "== every game present in all six test lists"
 REPO="$REPO" node -e '

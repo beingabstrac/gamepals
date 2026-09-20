@@ -2,6 +2,9 @@ import { createRng, type Rng } from '../../core/rng';
 import type { Bot, BotTier, GameDefinition, GameResult, GameState, Seat } from '../../core/types';
 import { ALLOWED, ANSWERS, isWord } from './words';
 
+// The dictionary travels with the game: the scene asks it whether a typed word is real.
+export { isWord } from './words';
+
 /**
  * Word Guess (docs/games/word-guess.md). Six goes at a five-letter word. Every guess says which
  * letters are right and in the right place, which are in the word somewhere else, and which are
