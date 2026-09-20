@@ -1,6 +1,6 @@
 import { LADDERS, SNAKES, type SnakesEvent, type SnakesMove, type SnakesState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { ROOM_TONES, tone } from '../../look';
+import { ROOM_TONES, tone, ROOM } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -260,12 +260,17 @@ export class SnakesScene extends Scene {
       const { x, y } = squarePoint(square);
       const col = Math.floor(x / CELL);
       const row = Math.floor(y / CELL);
-      const fill = square === 100 ? toHex(COLORS.sunny) : (col + row) % 2 ? 0xfff1dc : 0xffffff;
+      const fill = square === 100 ? toHex(COLORS.sunny) : (col + row) % 2 ? (ROOM ? 0xfde9c4 : 0xfff1dc) : (ROOM ? 0xfffdf6 : 0xffffff);
       g.fillStyle(fill, 1);
       g.fillRoundedRect(x - CELL / 2 + 2, y - CELL / 2 + 2, CELL - 4, CELL - 4, 10);
+      if (ROOM) {
+        // Printed squares on a board, each catching a little light along its top edge.
+        g.fillStyle(0xffffff, 0.5);
+        g.fillRoundedRect(x - CELL / 2 + 3, y - CELL / 2 + 3, CELL - 6, (CELL - 6) * 0.28, 8);
+      }
       sharpText(this, x - CELL / 2 + 15, y - CELL / 2 + 13, String(square), 14, COLORS.ink).setAlpha(square === 100 ? 1 : 0.45);
     }
-    g.fillStyle(0xf3efe6, 1);
+    g.fillStyle(ROOM ? 0xf7e6c6 : 0xf3efe6, 1);
     g.fillRoundedRect(W / 2 - 130, BOARD + 12, 260, TRAY - 20, 26);
     sharpText(this, W / 2 - 170, BOARD + TRAY / 2, 'Start', 16, COLORS.ink).setAlpha(0.4);
 
