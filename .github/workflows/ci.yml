@@ -59,6 +59,31 @@ jobs:
         with:
           name: web-build
           path: apps/client/dist
+      # The portal build (docs/08 M12d): the same game with no service worker, for CrazyGames,
+      # Poki, GameDistribution and itch.io. Paths are already relative, so this is a folder that
+      # can be zipped and uploaded the day there is an account to upload it to.
+      - name: Build for the portals
+        working-directory: apps/client
+        run: VITE_PORTAL=1 pnpm build --outDir dist-portal
+      - name: Check the portal build is really portal shaped
+        working-directory: apps/client
+        run: |
+          set -e
+          # A portal serves the game from its own origin, so ours must not install a worker there,
+          # and some portals reject a build that does. Assert it rather than trust the flag.
+          if grep -rq "serviceWorker" dist-portal/assets 2>/dev/null; then
+            echo "The portal build still registers a service worker"; exit 1
+          fi
+          if [ -f dist-portal/sw.js ]; then echo "The portal build shipped a service worker"; exit 1; fi
+          # Nothing may be fetched from an absolute path: the portal decides where this is served.
+          if grep -oE 'src="/[^"]*"|href="/[^"]*"' dist-portal/index.html; then
+            echo "The portal build has absolute paths"; exit 1
+          fi
+          echo "portal build ok: $(find dist-portal -type f | wc -l) files"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portal-build
+          path: apps/client/dist-portal
 
   e2e:
     needs: check

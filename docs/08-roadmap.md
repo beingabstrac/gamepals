@@ -87,6 +87,17 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - **Nothing claims what has not shipped.** The subtitle I first drafted said "Online Pals", which would have been a false store claim until M16; the footer line I first wrote said "No ads", which M10 would falsify. Both are gone. The listing doc opens with what to re-check when ads, Pro and online land.
   - **Still on the owner:** a support address (both stores demand one, and I will not publish a personal address without being asked), and `app-ads.txt`, which needs an AdMob publisher ID. That file is a public statement about who may sell our ad inventory, so a placeholder is worse than nothing.
 - [ ] **M12d The web channel:** portal builds (CrazyGames, Poki, GameDistribution) and an itch.io page, using the portal SDKs instead of AdMob. Ponder Club is not in the App Store at all and does fine, so this is not a consolation prize and it does not wait for M9.
+  - [x] **The build itself (2026-09-21).** `VITE_PORTAL=1 pnpm build` produces a portal folder, and
+    CI builds it on every push and keeps it as the `portal-build` artifact. It registers no service
+    worker, because a portal serves the game from its own origin and some portals reject a build
+    that installs one, and CI asserts that rather than trusting the flag: no `serviceWorker` in the
+    bundle, no `sw.js`, no absolute paths in the HTML. Asset paths were already relative, so the
+    game itself needed no changes.
+  - [ ] **The portal SDKs.** Deliberately not written yet. Each portal's SDK loads from that
+    portal's own origin and only behaves inside their frame, so an adapter written now could not be
+    run against anything and would be a guess dressed as progress. It goes behind the existing
+    `AdProvider` seam the day there is an account. **Owner:** a CrazyGames, Poki or itch.io account
+    is all that is missing; the build is ready to upload.
 - [ ] **Launch 1.0:** Android, iOS, iPad, Mac (iPad app), web; about 35 games
   - **The catalogue stopped being the constraint on 2026-09-19, at M20a.** There are 51 games
     against a launch target of about 35. Everything between here and a launch is either waiting on

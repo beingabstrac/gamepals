@@ -5,7 +5,7 @@ import '@fontsource/nunito/700.css';
 import { render } from 'preact';
 import { App } from './App';
 import { SELFTEST } from './autoplay';
-import { NATIVE, storage } from './platform';
+import { NATIVE, PORTAL, storage } from './platform';
 import { cue } from './feedback';
 import './styles.css';
 
@@ -23,7 +23,7 @@ void storage.init().finally(() => {
 });
 
 // Web only: an installable app that opens with no connection. The native apps already carry every file.
-if (!NATIVE && !SELFTEST && 'serviceWorker' in navigator) {
+if (!NATIVE && !SELFTEST && !PORTAL && 'serviceWorker' in navigator) {
   void import('virtual:pwa-register').then(({ registerSW }) => registerSW({ immediate: true }));
   // A new build used to wait for a second visit, so a deploy could sit behind yesterday's cache
   // for a day. When the new worker takes over, reload once, but never in the middle of a game.

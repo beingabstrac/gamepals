@@ -6,6 +6,15 @@ import { Capacitor } from '@capacitor/core';
  */
 export const NATIVE = Capacitor.isNativePlatform();
 
+/**
+ * A build for a game portal (`VITE_PORTAL=1`), for CrazyGames, Poki, GameDistribution and itch.io
+ * (docs/08 M12d). The page runs inside somebody else's iframe, so it registers no service worker:
+ * a portal serves the game from its own origin and a worker of ours has no business there, and
+ * some portals reject a build that installs one. The portal's own SDK replaces AdMob when there is
+ * an account to test one against; until then this flag is what everything else hangs off.
+ */
+export const PORTAL = import.meta.env.VITE_PORTAL === '1';
+
 // ---------- Storage: native Preferences in the apps (iOS may wipe WebView storage), localStorage on the web.
 
 const cache = new Map<string, string>();
