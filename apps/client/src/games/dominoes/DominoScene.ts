@@ -197,17 +197,22 @@ export class DominoScene extends Scene {
   }
 
   /**
-   * The chips and the tiles, for the layout check. A settled gallery shot showed a domino sitting
-   * on every player's name with the table empty, which is either a real overlap or something the
-   * picture cannot tell apart from one. This measures it rather than guessing.
+   * Where the tiles have come to rest, for the board check. "Nothing overlaps anything" is the
+   * wrong question here: a tile is meant to fly from its owner's chip to the board, so it passes
+   * through the chip row every time one is played, and a check that forbids that forbids the
+   * animation. The right question is whether tiles ever arrive. They did not: sync restarted
+   * every in-flight tween, so the board stayed empty and every domino sat on a name.
    */
-  layoutCheck(): { name: string; top: number; bottom: number }[] {
-    const ys = [...this.sprites.values()].map((g) => g.y);
-    return [
-      { name: 'chips', top: 22 - 17, bottom: 22 + 17 },
-      // No tiles on the board yet is not an overlap, so an empty board reports the table top.
-      { name: 'tiles', top: ys.length ? Math.min(...ys) - TH : 44, bottom: ys.length ? Math.max(...ys) + TH : 45 },
-    ];
+  boardCheck(): { onBoard: number; onChips: number; laid: number } {
+    let onBoard = 0;
+    let onChips = 0;
+    for (const g of this.sprites.values()) {
+      // Still travelling is neither: only where a tile settles says anything.
+      if (this.tweens.getTweensOf(g).length > 0) continue;
+      if (g.y <= 22 + TH) onChips++;
+      else onBoard++;
+    }
+    return { onBoard, onChips, laid: this.state.line.length };
   }
 
   private chipPos(seat: number): Point {

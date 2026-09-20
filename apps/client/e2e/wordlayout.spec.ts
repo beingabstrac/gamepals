@@ -32,7 +32,7 @@ async function open(page: Page, name: string): Promise<void> {
   await expect(page.locator('.board canvas')).toBeVisible();
 }
 
-const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Dominoes'];
+const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths'];
 
 for (const name of BANDED) {
   test(`${name}: nothing is drawn on top of anything else`, async ({ page }) => {
@@ -69,4 +69,34 @@ test('Mini Crossword: no clue runs off the sides', async ({ page }) => {
     expect(report.widest, `look ${look + 1}: the clue is wider than the board`).toBeLessThanOrEqual(report.room);
     await page.waitForTimeout(700);
   }
+});
+
+/**
+ * Dominoes is not in the band list above, because its pieces are supposed to move across it: a
+ * tile flies from its owner's chip to the board every time one is played. What it owes instead is
+ * that they arrive. They did not for a long time, because every state change restarted the tween,
+ * so tiles crawled a few pixels and stayed on their owner's name with the board empty.
+ */
+test('Dominoes: played tiles end up on the board, not on the players', async ({ page }) => {
+  await open(page, 'Dominoes');
+  let bestOnBoard = 0;
+  let worstOnChips = 0;
+  let laid = 0;
+  for (let look = 0; look < 6; look++) {
+    await page.waitForTimeout(900);
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as
+        | { boardCheck?: () => { onBoard: number; onChips: number; laid: number } }
+        | undefined;
+      return scene?.boardCheck ? scene.boardCheck() : null;
+    });
+    if (!report) break;
+    bestOnBoard = Math.max(bestOnBoard, report.onBoard);
+    worstOnChips = Math.max(worstOnChips, report.onChips);
+    laid = Math.max(laid, report.laid);
+  }
+  if (laid === 0) return; // Nothing was played in the time we watched, so there is nothing to say.
+  expect(bestOnBoard, `${laid} tiles played and none ever settled on the board`).toBeGreaterThan(0);
+  expect(worstOnChips, 'tiles came to rest on a player rather than the board').toBe(0);
 });
