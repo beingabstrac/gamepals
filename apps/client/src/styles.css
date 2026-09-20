@@ -378,6 +378,34 @@ h2,
   font-weight: 600;
 }
 
+/* The one line that says what the game is, always on. */
+.how-goal {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 6px;
+  align-items: start;
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+/* Everything else is behind this, because the page's job is picking chairs and pressing Play. */
+.how-more {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--soft);
+}
+
+.how-more:active {
+  transform: translateY(1px);
+}
+
+.how-to ul[hidden] {
+  display: none;
+}
+
 .how-to ul {
   margin: 0;
   padding: 0;
@@ -1606,4 +1634,36 @@ h2,
   width: 44px;
   height: 44px;
   flex: none;
+}
+
+/* ---------- The game's page, tightened ---------- */
+
+:root[data-look='room'] .screen.setup {
+  gap: 12px;
+}
+
+:root[data-look='room'] .setup .table {
+  width: min(100%, 330px);
+}
+
+:root[data-look='room'] .how-goal {
+  color: #4a3020;
+}
+
+:root[data-look='room'] .how-more {
+  color: #b8762a;
+}
+
+:root[data-look='room'] .setup .hint {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* The "coming soon" line is a footnote, not a headline. */
+:root[data-look='room'] .soon-pill {
+  font-size: 0.74rem;
+  opacity: 0.75;
+  padding: 6px 12px;
+  box-shadow: none;
+  border-color: #f0dcb4;
 }

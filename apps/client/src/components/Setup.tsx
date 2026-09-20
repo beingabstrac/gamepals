@@ -154,6 +154,8 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
   const [choices, setChoices] = useState(() => loadChoices(id, minPlayers, maxPlayers));
   const [picking, setPicking] = useState<number | null>(null);
   const [level, setLevel] = useState(() => loadLevel(id, entry.levels));
+  // The rules are reference, not the job: the goal shows, the rest opens when asked for.
+  const [rulesOpen, setRulesOpen] = useState(false);
 
   useEffect(() => {
     if (!level) return;
@@ -291,12 +293,15 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
       )}
 
       <section class="how-to" aria-label="How to play">
-        <h2>How to play</h2>
-        <ul>
-          <li>
-            <span aria-hidden="true">🎯</span>
-            <span>{entry.howTo.goal}</span>
-          </li>
+        <p class="how-goal">
+          <span aria-hidden="true">🎯</span>
+          <span>{entry.howTo.goal}</span>
+        </p>
+        <button class="how-more" aria-expanded={rulesOpen} onClick={() => setRulesOpen(!rulesOpen)}>
+          {rulesOpen ? 'Hide the rules' : 'How to play'}
+          <span aria-hidden="true">{rulesOpen ? ' ▴' : ' ▾'}</span>
+        </button>
+        <ul hidden={!rulesOpen}>
           <li>
             <span aria-hidden="true">👆</span>
             <span>{entry.howTo.controls}</span>
