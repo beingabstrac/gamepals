@@ -69,7 +69,7 @@ export class HandPrivacy {
     const label = this.seats[this.shown]?.label ?? 'You';
     const back = this.scene.add.graphics();
     // The cover is a piece of the room's furniture, not a blue card.
-    back.fillStyle(ROOM ? 0x3b2312 : toHex(DARK.sky), 1);
+    back.fillStyle(ROOM ? 0x37a8f0 : toHex(DARK.sky), 1);
     back.fillRoundedRect(-this.where.width / 2, -150, this.where.width, 300, 28);
     this.panel = this.scene.add
       .container(this.where.x, this.where.y, [

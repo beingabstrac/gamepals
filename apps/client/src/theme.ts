@@ -16,23 +16,22 @@ const FLAT = {
 } as const;
 
 /**
- * The same palette for the games room: the hues stay, so a red player is still red and a blue one
- * is still blue, but everything is deeper and warmer so it belongs on wood and felt. Changing it
- * here re-tones every board, every piece and every picture at once, which is why it lives in one
- * place rather than in forty-three scenes.
+ * The playroom palette: the same candy hues, warmed and enriched rather than muted. Brightness was
+ * never the problem with the flat look, flatness was, so the colours stay cheerful and the depth
+ * comes from gradients, highlights, lips and shadows. One edit re-tones forty-three scenes.
  */
 const ROOM_PALETTE = {
-  tomato: '#C13A38',
-  sunny: '#DFA62C',
-  mint: '#1E9A69',
-  sky: '#3E72B8',
-  grape: '#6B51B8',
-  peach: '#CE7530',
-  bubblegum: '#B8477C',
-  ink: '#241D16',
-  soft: '#7B6A55',
-  paper: '#F6EAD2',
-  line: '#D8C29A',
+  tomato: '#FF5B4A',
+  sunny: '#FFC64B',
+  mint: '#35C47F',
+  sky: '#37A8F0',
+  grape: '#8A63F0',
+  peach: '#FF9A3C',
+  bubblegum: '#FF5FA8',
+  ink: '#4A3020',
+  soft: '#9A7B5E',
+  paper: '#FFF8E8',
+  line: '#F2DFBC',
 } as const;
 
 export const COLORS = ROOM ? ROOM_PALETTE : FLAT;
@@ -49,13 +48,13 @@ const FLAT_DARK = {
 
 /** A darker shade of each color, for lips, inner rings and outlines. */
 const ROOM_DARK = {
-  tomato: '#8E2724',
-  sunny: '#A87A18',
-  mint: '#146F4C',
-  sky: '#2B5288',
-  grape: '#4C3888',
-  peach: '#9A5520',
-  bubblegum: '#8A3159',
+  tomato: '#D93A2C',
+  sunny: '#E0952A',
+  mint: '#1E9A5F',
+  sky: '#1F80C4',
+  grape: '#6941C8',
+  peach: '#DE7420',
+  bubblegum: '#DB3E86',
 } as const;
 
 export const DARK = ROOM ? ROOM_DARK : FLAT_DARK;

@@ -64,20 +64,20 @@ export function placeAt(view: CardView, x: number, y: number, depth: number): vo
 export function makeCard(scene: Scene, card: number, cw: number, ch: number): CardView {
   const scale = cw / 88;
   const shadow = scene.add.graphics();
-  shadow.fillStyle(0x000000, ROOM ? 0.3 : 0.14);
+  shadow.fillStyle(ROOM ? 0x7a4a14 : 0x2b2a3a, ROOM ? 0.26 : 0.14);
   shadow.fillRoundedRect(-cw / 2, -ch / 2 + 4, cw, ch, 12);
 
   const back = scene.add.graphics();
   // Green backs on green felt would be one flat shape, so the games room deals a red pack.
-  back.fillStyle(ROOM ? 0x9c2f2f : toHex(DARK.mint), 1);
+  back.fillStyle(ROOM ? 0xff5b4a : toHex(DARK.mint), 1);
   back.fillRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
   if (ROOM) {
-    back.fillStyle(0x7a2020, 1);
+    back.fillStyle(0xe03b30, 1);
     back.fillRoundedRect(-cw / 2 + 5, -ch / 2 + 5, cw - 10, ch - 10, 9);
   }
-  back.lineStyle(3, ROOM ? 0xe8c98a : 0xffffff, ROOM ? 0.85 : 0.9);
+  back.lineStyle(3, ROOM ? 0xffe6a8 : 0xffffff, ROOM ? 0.95 : 0.9);
   back.strokeRoundedRect(-cw / 2 + 7, -ch / 2 + 7, cw - 14, ch - 14, 8);
-  back.fillStyle(ROOM ? 0xe8c98a : 0xffffff, ROOM ? 0.4 : 0.35);
+  back.fillStyle(ROOM ? 0xffe6a8 : 0xffffff, ROOM ? 0.5 : 0.35);
   for (let row = 0; row < 4; row++)
     for (let col = 0; col < 3; col++) back.fillCircle((-20 + col * 20) * scale, (-36 + row * 24) * scale, 4 * scale);
 
@@ -85,9 +85,9 @@ export function makeCard(scene: Scene, card: number, cw: number, ch: number): Ca
   const rank = rankOf(card);
   const suit = SUIT_SYMBOLS[suitOf(card)]!;
   const face = scene.add.graphics();
-  face.fillStyle(ROOM ? 0xfbf4e4 : 0xffffff, 1);
+  face.fillStyle(ROOM ? 0xfffdf6 : 0xffffff, 1);
   face.fillRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
-  face.lineStyle(2, ROOM ? 0xcdb992 : 0xdcd6ee, 1);
+  face.lineStyle(2, ROOM ? 0xf0d9a8 : 0xdcd6ee, 1);
   face.strokeRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
   const parts: GameObjects.GameObject[] = [
     face,

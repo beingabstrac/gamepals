@@ -47,7 +47,7 @@ type Point = { x: number; y: number };
 function drawPiece(g: GameObjects.Graphics, piece: number, scale = 1): void {
   const white = colorOf(piece) === 0;
   const fill = white ? WHITE_PIECE : BLACK_PIECE;
-  const line = white ? INK : (ROOM ? 0x8b7a5c : 0xf3efe6);
+  const line = white ? INK : (ROOM ? 0xffe3b0 : 0xf3efe6);
   const s = scale;
   const path = (points: readonly (readonly [number, number])[]) => {
     g.beginPath();
@@ -233,18 +233,18 @@ export class ChessScene extends Scene {
       g.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL);
       if (ROOM) {
         // Light falls from the top, so every square is a shade brighter at its top edge.
-        g.fillStyle(0xffffff, dark ? 0.07 : 0.16);
+        g.fillStyle(0xffffff, dark ? 0.16 : 0.3);
         g.fillRect(x - CELL / 2, y - CELL / 2, CELL, CELL * 0.38);
-        g.fillStyle(0x000000, 0.08);
+        g.fillStyle(0x7a4a14, 0.07);
         g.fillRect(x - CELL / 2, y + CELL * 0.26, CELL, CELL * 0.24);
       }
     }
     if (ROOM) {
       // The board is sunk into its frame, so the frame casts a shadow onto the top two rows.
-      g.fillStyle(0x000000, 0.16);
-      g.fillRect(PAD, PAD, W - PAD * 2, 10);
-      g.fillStyle(0x000000, 0.1);
-      g.fillRect(PAD, PAD, 10, H - PAD * 2);
+      g.fillStyle(0x7a4a14, 0.14);
+      g.fillRect(PAD, PAD, W - PAD * 2, 9);
+      g.fillStyle(0x7a4a14, 0.09);
+      g.fillRect(PAD, PAD, 9, H - PAD * 2);
       g.lineStyle(2, ROOM_COLORS.brassDark, 0.9);
       g.strokeRect(PAD - 1, PAD - 1, W - PAD * 2 + 2, H - PAD * 2 + 2);
     }
@@ -288,7 +288,7 @@ export class ChessScene extends Scene {
       const { x, y } = this.center(square);
       if (ROOM) {
         // A piece standing on a board throws a shadow, and that is most of what makes it look solid.
-        g.fillStyle(0x000000, 0.28);
+        g.fillStyle(0x7a4a14, 0.24);
         g.fillEllipse(x + 3, y + CELL * 0.3, CELL * 0.56, CELL * 0.18);
       }
       g.save();
