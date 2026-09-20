@@ -844,6 +844,37 @@ function WordGroupsArt() {
   );
 }
 
+function AnagramHuntArt() {
+  const letters = ['A', 'N', 'G', 'R', 'M', 'A', 'S'];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {letters.map((letter, i) => {
+        const angle = (i / letters.length) * Math.PI * 2 - Math.PI / 2;
+        const x = 50 + Math.cos(angle) * 28;
+        const y = 52 + Math.sin(angle) * 28;
+        return (
+          <g key={letter + i}>
+            <rect x={x - 10} y={y - 8} width="20" height="19" rx="6" fill={DARK.peach} />
+            <rect x={x - 10} y={y - 10} width="20" height="19" rx="6" fill={COLORS.peach} />
+            <text
+              x={x}
+              y={y}
+              font-family="Fredoka, sans-serif"
+              font-weight="600"
+              font-size="13"
+              text-anchor="middle"
+              dominant-baseline="central"
+              fill="#fff"
+            >
+              {letter}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1133,6 +1164,7 @@ const ART: Record<string, () => JSX.Element> = {
   'mini-crossword': CrosswordArt,
   'word-ladder': WordLadderArt,
   'word-groups': WordGroupsArt,
+  'anagram-hunt': AnagramHuntArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

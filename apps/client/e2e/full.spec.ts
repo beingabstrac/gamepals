@@ -31,6 +31,7 @@ const GAMES = [
   'Mini Crossword',
   'Word Ladder',
   'Word Groups',
+  'Anagram Hunt',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

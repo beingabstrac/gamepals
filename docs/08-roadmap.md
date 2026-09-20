@@ -212,7 +212,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     right letter listed, when typing wrong ones is the game), and Word Search listed a line one way
     round. All four fixed, each with a test that fails on the old code, and the contract is now
     written into `GameState` and CLAUDE.md.
-  - [ ] **W2c Anagram Hunt:** one set of letters, find every word in it, the long one uses them all.
+  - [x] **W2c Anagram Hunt (2026-09-20):** 49 games, and W2 is done. Seven letters, words of three
+    or more hiding in them, one using all seven. Seven because six is not a game, and that was
+    measured before building: against the words we already ship, a five-letter base hides a median
+    of three findable words, six hides six, seven hides fifteen. A five-letter base left more than
+    half of all bases with fewer than four words in them.
+    Seven-letter words were the one thing our lists did not have, so 618 were written and the 440
+    that hide at least eight known words were kept; the test re-derives that property rather than
+    trusting the filter. What counts as a word is the clue dictionary plus the word search themes,
+    1,727 words people know, so nothing obscure is ever needed to clear a puzzle.
 - [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery

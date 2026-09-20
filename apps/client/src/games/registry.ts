@@ -60,11 +60,13 @@ import {
   crosswordGame,
   wordLadderGame,
   wordGroupsGame,
+  anagramHuntGame,
   type WordState,
   type SearchState,
   type CrossState,
   type LadderState,
   type GroupsState,
+  type HuntState,
   rummy,
   type RummyState,
   tripeaks,
@@ -154,6 +156,7 @@ import { SEARCH_COLORS, SEARCH_NAMES, SEARCH_SIZE, searchResult, searchStatus, S
 import { CROSS_COLORS, CROSS_NAMES, CROSS_SIZE, crossResult, crossStatus, CrossScene } from './crossword/CrossScene';
 import { LADDER_COLORS, LADDER_NAMES, LADDER_SIZE, ladderResult, ladderStatus, LadderScene } from './word-ladder/LadderScene';
 import { GROUPS_COLORS, GROUPS_NAMES, GROUPS_SIZE, groupsResult, groupsStatus, GroupsScene } from './word-groups/GroupsScene';
+import { HUNT_COLORS, HUNT_NAMES, HUNT_SIZE, huntResult, huntStatus, HuntScene } from './anagram-hunt/HuntScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1225,6 +1228,26 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => groupsResult(state as GroupsState),
     moveCue: () => 'place',
     createScene: (session) => new GroupsScene(session),
+  }),
+  entry({
+    definition: anagramHuntGame,
+    tagline: 'Seven letters, how many words',
+    minutes: '5 min',
+    hint: 'Type a word made from the letters',
+    howTo: {
+      goal: 'Make as many words as you can from the seven letters. One word uses all seven.',
+      controls: 'Tap the letters or type, then press Enter. Backspace takes a letter back, Space shuffles them. A letter can only be used as often as it appears.',
+      win: 'Find the number asked for and the puzzle is done.',
+      tip: 'Start with the three-letter words to see what the letters do. The long one is usually easier once a few are down.',
+    },
+    sideNames: () => HUNT_NAMES,
+    sideColors: () => HUNT_COLORS,
+    size: HUNT_SIZE,
+    color: DARK.peach,
+    status: (state) => huntStatus(state as HuntState),
+    resultText: (state) => huntResult(state as HuntState),
+    moveCue: () => 'place',
+    createScene: (session) => new HuntScene(session),
   }),
   entry({
     definition: slidingPuzzle,
