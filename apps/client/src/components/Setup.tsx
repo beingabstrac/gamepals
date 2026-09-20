@@ -212,7 +212,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
           <BackIcon />
         </button>
         <h1>{name}</h1>
-        <span />
+        <span class="mins topbar-mins">{entry.minutes}</span>
       </header>
 
       {entry.levels && (

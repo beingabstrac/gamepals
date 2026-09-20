@@ -118,6 +118,7 @@ function Home({ onPick }: { onPick(entry: AnyEntry): void }) {
             </span>
             <span class="title">{entry.definition.name}</span>
             <span class="small">{entry.tagline}</span>
+            <span class="mins">{entry.minutes}</span>
           </button>
         ))}
         {COMING_SOON.map((game, i) => (

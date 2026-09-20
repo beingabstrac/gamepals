@@ -105,6 +105,19 @@ The look that shipped first is flat candy with **no gradients** ([12](12-catalog
 - [ ] **L3c The pictures:** the forty-three shelf tiles redrawn for the room rather than re-tinted.
 - [ ] **L3d 🔑 The mark and the wordmark:** needs the name, which is the owner's call. Then look 1 comes out and the flag goes.
 
+## The model (decided 2026-09-20, from Ponder Club)
+[ponderclub.co](https://ponderclub.co) is two independent developers running a daily-puzzle site with about sixteen games. They take the opposite line from JindoBlu: calm, anti-doomscroll, "thoughtful games for restless minds", and they say out loud that they have no investors. What they prove, and what we copy:
+- **One lifetime unlock, never a subscription.** They sell "ad-free forever"; JindoBlu sells Remove Ads at $6.99. Two very different companies, same answer, so M11 leads with a one-time unlock and treats a subscription as an extra at most.
+- **The web is a real channel, not a consolation prize.** "We have a Web App for smartphones and tablets. We are not in the App Store." Our PWA already works offline; it does not have to wait for M9.
+- **A time on every game**, so a person knows whether they have time for it now.
+- **A daily puzzle, a countdown to the next one, and a streak** — with a switch to hide the streak, because a hook you cannot turn off is a trap.
+- **A shelf for games still in testing**, where scores do not count, so a new game can go out before it is finished.
+The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
+- [x] **D1 A time on every tile (2026-09-20):** all 43 games carry `minutes` in the registry, shown on the shelf and beside the game's name on its own page.
+- [ ] **D2 The daily and the streak:** one seeded puzzle a day across the solo games, a countdown to the next, a streak kept on the device, and a switch to hide it.
+- [ ] **D3 Ad-free forever:** the entitlement, the wording and the price, with a stub store until RevenueCat exists.
+- [ ] **D4 The testing shelf:** a "still cooking" row where scores are not kept.
+
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
 - [x] **M20a Cards B, hidden hands (2026-09-19):** Crazy Eights, 35 games, and the first game here where you hold cards nobody else may see. Two players get seven cards and three or four get five, a play matches suit or rank, an eight goes on anything and names the next suit, you draw until you can play, and the pile becomes a new deck when the deck runs out.
   - **Bots that cannot cheat, rather than bots asked not to.** `chooseMove` hands the bot a seat's *view* (its own cards, the pile, the suit in force, everyone's hand sizes, how deep the deck is) and never the state. A test shuffles the other hands and reverses the deck behind each of the four levels and checks the same move still comes out. Sea Battle's bot was written not to look, but nothing proved it; this one is proved.

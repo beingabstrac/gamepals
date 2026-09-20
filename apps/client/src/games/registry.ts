@@ -172,6 +172,12 @@ export interface EntryBase {
     readonly modes: readonly PlayMode[];
   };
   readonly tagline: string;
+  /**
+   * Roughly how long one game takes, in the words a person would use. Ponder Club puts this on
+   * every tile and it answers the question people actually have when they open a games app:
+   * have I got time for this right now.
+   */
+  readonly minutes: string;
   readonly howTo: HowTo;
   /** One line to get going, shown the first time this game is opened. Defaults to the
    *  first sentence of `howTo.controls`, which is already written as the thing to do first. */
@@ -232,6 +238,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ticTacToe,
     tagline: 'Three in a row wins',
+    minutes: '1 min',
     howTo: {
       goal: 'Get three of your marks in a row.',
       controls: 'Tap an empty square to put your mark there. On a keyboard: press 1 to 9, or move with the arrow keys and press Enter.',
@@ -247,6 +254,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: checkers,
     tagline: 'Jump, capture, crown a king',
+    minutes: '10 min',
     howTo: {
       goal: "Take all of the other player's pieces, or leave them with no move.",
       controls: 'Tap one of your pieces, then tap a glowing square. On a keyboard: arrow keys and Enter.',
@@ -279,6 +287,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: chess,
     tagline: 'The classic. Trap the king',
+    minutes: '15+ min',
     howTo: {
       goal: 'Trap the other king so that it cannot get out of attack: checkmate.',
       controls: 'Tap a piece, then tap a dot. Tap it again to put it down. On a keyboard: arrows move the ring, Enter picks up and puts down. A pawn reaching the far row asks what it becomes.',
@@ -310,6 +319,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: backgammon,
     tagline: 'Race your checkers home',
+    minutes: '12 min',
     howTo: {
       goal: 'Bring all 15 of your checkers home, then take them off before the other player does.',
       controls: 'Tap Roll, then tap a checker and tap where it goes. On a keyboard: Space or Enter rolls, arrows pick a point, Enter moves.',
@@ -342,6 +352,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: seaBattle,
     tagline: 'Hide your fleet, sink theirs',
+    minutes: '8 min',
     howTo: {
       goal: 'Find and sink all five of the other fleet before they sink yours.',
       controls: 'Place your ships on your own grid: tap a square to drop one, Turn to change its direction, or let us place them for you. Then tap a square on their waters to fire. On a keyboard: arrows move, Enter drops or fires, R turns.',
@@ -374,6 +385,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: reversi,
     tagline: 'Trap and flip, most discs wins',
+    minutes: '8 min',
     howTo: {
       goal: 'Finish the game with more discs of your color on the board.',
       controls: 'Tap a dot to place a disc. On a keyboard: arrow keys and Enter.',
@@ -409,6 +421,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: dotsAndBoxes,
     tagline: 'Close a box, take another turn',
+    minutes: '6 min',
     levels: [
       { id: 'small', label: '3 by 3' },
       { id: 'medium', label: '4 by 4' },
@@ -436,6 +449,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: mancala,
     tagline: 'Sow seeds, fill your store',
+    minutes: '6 min',
     levels: [
       { id: 'four', label: '4 seeds (classic)' },
       { id: 'three', label: '3 seeds' },
@@ -469,6 +483,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: snakesAndLadders,
     tagline: 'Climb ladders, dodge snakes',
+    minutes: '6 min',
     levels: [
       { id: 'classic', label: 'Exact roll to 100' },
       { id: 'quick', label: 'Quick finish' },
@@ -503,6 +518,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ultimateTtt,
     tagline: 'Nine boards, one big game',
+    minutes: '8 min',
     howTo: {
       goal: 'Win three small boards in a row on the big board.',
       controls: 'Tap a square in a glowing board. On a keyboard: move with the arrow keys and press Enter.',
@@ -533,6 +549,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: yatzy,
     tagline: 'Roll five dice, fill your card',
+    minutes: '8 min',
     howTo: {
       goal: 'Score the most points by filling all 15 boxes on your card.',
       controls: 'Tap Roll. Tap dice to keep them, then roll the rest again, up to 3 rolls. Then tap a box to score it. On a keyboard: Space or R rolls, 1 to 5 keep dice, Tab to a box and press Enter.',
@@ -570,6 +587,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: shutTheBox,
     tagline: 'Roll, then flip the tiles down',
+    minutes: '4 min',
     levels: [
       { id: 'nine', label: '9 tiles' },
       { id: 'twelve', label: '12 tiles' },
@@ -615,6 +633,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: dominoes,
     tagline: 'Match the ends, go out first',
+    minutes: '8 min',
     levels: [
       { id: 'draw-100', label: 'Draw, to 100' },
       { id: 'draw-50', label: 'Draw, to 50' },
@@ -655,6 +674,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: fourInARow,
     tagline: 'Drop discs, connect four',
+    minutes: '3 min',
     howTo: {
       goal: 'Line up four of your discs.',
       controls: 'Tap a column. Your disc drops to the lowest empty spot. On a keyboard: press 1 to 7, or pick with the arrow keys and press Enter.',
@@ -670,6 +690,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ludo,
     tagline: 'Race your four tokens home',
+    minutes: '10+ min',
     howTo: {
       goal: 'Move all four of your tokens around the board and into the middle.',
       controls: 'Tap Roll. Then tap a bouncing token to move it. On a keyboard: press R or Space to roll, then 1 to 4 to pick a token.',
@@ -692,6 +713,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: twenty48,
     tagline: 'Slide, merge, reach 2048',
+    minutes: '5 min',
     hint: 'Swipe to slide the tiles',
     howTo: {
       goal: 'Join tiles with the same number to make bigger numbers.',
@@ -713,6 +735,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: sudoku,
     tagline: 'Fill the grid with 1 to 9',
+    minutes: '10+ min',
     levels: SUDOKU_LEVELS.map((id) => ({ id, label: LEVEL_LABEL[id] })),
     howTo: {
       goal: 'Fill every empty square with a number from 1 to 9.',
@@ -744,6 +767,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: solitaire,
     tagline: 'Sort the deck, Ace to King',
+    minutes: '8 min',
     levels: [
       { id: 'draw1', label: 'Draw 1' },
       { id: 'draw3', label: 'Draw 3' },
@@ -777,6 +801,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: freecell,
     tagline: 'Every card face up, four cells to think with',
+    minutes: '8 min',
     howTo: {
       goal: 'Move all 52 cards onto the four piles at the top, each one suit from Ace up to King.',
       controls: 'Tap a card to send it to the best spot, or drag it where you want. The four free cells hold one card each. On a keyboard: arrow keys pick a card, Enter moves it.',
@@ -799,6 +824,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: spider,
     tagline: 'Build eight runs, King down to Ace',
+    minutes: '15 min',
     levels: [
       { id: 'one', label: 'One suit' },
       { id: 'two', label: 'Two suits' },
@@ -823,6 +849,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: pyramid,
     tagline: 'Pairs that add up to 13',
+    minutes: '5 min',
     howTo: {
       goal: 'Clear the whole pyramid by taking away pairs of cards that add up to 13.',
       controls: 'Tap a card, then tap the one that goes with it. A King goes on its own. Tap the deck to turn a card. On a keyboard: arrow keys pick a card, Enter takes it, D turns a card.',
@@ -842,6 +869,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: tripeaks,
     tagline: 'One up or one down, over and over',
+    minutes: '5 min',
     howTo: {
       goal: 'Clear all three peaks by taking cards one rank above or below the card on the pile.',
       controls: 'Tap any card that is one rank above or below the pile. Tap the deck to turn a card. On a keyboard: arrow keys pick a card, Enter takes it, D turns a card.',
@@ -861,6 +889,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: crazyEights,
     tagline: 'Match it, or play an eight',
+    minutes: '6 min',
     howTo: {
       goal: 'Be the first to get rid of all your cards.',
       controls: 'Tap a card that matches the pile by suit or by number. An eight goes on anything, and then you pick the next suit. Tap the deck when you have nothing. On a keyboard: arrows pick a card, Enter plays it, D draws.',
@@ -879,6 +908,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: goFish,
     tagline: 'Ask for a card, make a book',
+    minutes: '6 min',
     howTo: {
       goal: 'Collect four of a kind, over and over. Most books wins.',
       controls: 'Tap a card in your hand to pick that number, then tap the player you want it from. If they have none, tap the pool to go fishing. On a keyboard: arrows pick a number, Enter asks, D draws.',
@@ -898,6 +928,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: war,
     tagline: 'Turn it over. Highest wins',
+    minutes: '5 min',
     tryIt: 'Tap anywhere to turn the cards over.',
     howTo: {
       goal: 'Win all 52 cards.',
@@ -919,6 +950,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: oldMaid,
     tagline: 'Do not be left with the queen',
+    minutes: '5 min',
     howTo: {
       goal: 'Pair off all your cards. Do not be the one left holding the odd queen.',
       controls: 'Tap any card in the fan held out to you. If it matches one of yours, the pair goes down. On a keyboard: arrows pick a card in the fan, Enter takes it.',
@@ -937,6 +969,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: hearts,
     tagline: 'Points are bad. Dodge the queen',
+    minutes: '10 min',
     levels: [
       { id: 'hand', label: 'One hand' },
       { id: '50', label: 'To 50' },
@@ -966,6 +999,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: spades,
     tagline: 'Say what you will take, then take it',
+    minutes: '12 min',
     levels: [
       { id: 'hand', label: 'One hand' },
       { id: '200', label: 'To 200' },
@@ -991,6 +1025,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: callbreak,
     tagline: 'Call your tricks, then go and win them',
+    minutes: '10 min',
     levels: [
       { id: 'one', label: 'One round' },
       { id: 'five', label: 'Five rounds' },
@@ -1014,6 +1049,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: ginRummy,
     tagline: 'Make sets and runs, then knock',
+    minutes: '8 min',
     levels: [
       { id: 'hand', label: 'One hand' },
       { id: '100', label: 'Game to 100' },
@@ -1038,6 +1074,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: rummy,
     tagline: 'Sets and runs, and first one out wins',
+    minutes: '10 min',
     levels: [
       { id: 'hand', label: 'One deal' },
       { id: '100', label: 'Game to 100' },
@@ -1062,6 +1099,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: slidingPuzzle,
     tagline: 'Slide the tiles back in order',
+    minutes: '5 min',
     hint: 'Tap a tile next to the gap',
     levels: [
       { id: '3x3', label: '3 by 3' },
@@ -1085,6 +1123,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: colorSort,
     tagline: 'Pour until every tube is one color',
+    minutes: '4 min',
     levels: [
       { id: 'easy', label: 'Easy' },
       { id: 'medium', label: 'Medium' },
@@ -1114,6 +1153,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: echo,
     tagline: 'Watch, listen, repeat',
+    minutes: '3 min',
     hint: 'Watch the pads, then tap them back in order',
     levels: [
       { id: 'short', label: 'Short (8)' },
@@ -1153,6 +1193,7 @@ export const GAMES: readonly AnyEntry[] = [
   entry({
     definition: memory,
     tagline: 'Flip two, find the pairs',
+    minutes: '4 min',
     hint: 'Tap two cards to find a pair',
     levels: [
       { id: 'small', label: '12 cards' },
@@ -1190,6 +1231,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: airHockey,
     tagline: 'Fast 1-on-1, first to 7',
+    minutes: '3 min',
     howTo: {
       goal: 'Knock the puck into the other goal.',
       controls: 'Drag your paddle around your half of the table. On a keyboard: the arrow keys for the bottom player, W A S D for the top.',
@@ -1205,6 +1247,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: pingPong,
     tagline: 'Swipe to hit, first to 11',
+    minutes: '3 min',
     howTo: {
       goal: 'Hit the ball over the net so it bounces on the other side.',
       controls: 'When the ball bounces on your side, swipe toward the net. Swipe faster to hit harder. Swipe to serve too. On a keyboard: Left and Right move, Space hits (the top player uses A, D and Shift).',
@@ -1220,6 +1263,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: tugOfWar,
     tagline: 'Tap faster to pull them over',
+    minutes: '1 min',
     howTo: {
       goal: 'Pull the yellow knot over to your side.',
       controls: 'Tap your half of the screen as fast as you can. On a keyboard: Space for the bottom player, Shift for the top.',
@@ -1234,6 +1278,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: reflexRace,
     tagline: 'Wait for green, then tap first',
+    minutes: '1 min',
     howTo: {
       goal: 'Tap faster than the other player.',
       controls: 'Wait until the big circle turns green. Then tap your half. On a keyboard: Space for the bottom player, Shift for the top.',
@@ -1249,6 +1294,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: sumo,
     tagline: 'Shove them out of the ring',
+    minutes: '2 min',
     howTo: {
       goal: 'Push the other wrestler out of the ring.',
       controls: 'Hold and drag in your half to move. Tap to shove. On a keyboard: the arrow keys move and Space shoves (the top player uses W A S D and Shift).',
@@ -1264,6 +1310,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: penaltyKicks,
     tagline: 'Shoot, dive, five kicks each',
+    minutes: '2 min',
     howTo: {
       goal: 'Score more goals than the other player.',
       controls: 'Kicking: swipe toward the goal. Saving: drag to move, then flick left or right to dive. On a keyboard: hold Left or Right to aim or move, and press Space to kick or dive (the top player uses A, D and Shift).',
@@ -1279,6 +1326,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: snakeBattle,
     tagline: 'Trap them before they trap you',
+    minutes: '3 min',
     howTo: {
       goal: 'Make the other snake crash first.',
       controls: 'Tap the arrow buttons to turn left or right. On a keyboard: the arrow keys for the bottom snake, A and D for the top.',
@@ -1295,6 +1343,7 @@ export const GAMES: readonly AnyEntry[] = [
     kind: 'realtime',
     definition: classicSnake,
     tagline: "Eat, grow, don't crash",
+    minutes: '3 min',
     howTo: {
       goal: 'Steer the snake to the fruit. Every fruit makes it one longer.',
       controls: 'Swipe up, down, left or right to steer. On a keyboard: the arrow keys or W A S D.',
