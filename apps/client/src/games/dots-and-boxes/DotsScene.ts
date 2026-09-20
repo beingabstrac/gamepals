@@ -1,5 +1,6 @@
 import { drawLine, lineTotal, type DotsMove, type DotsState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -55,7 +56,7 @@ export class DotsScene extends Scene {
     const tray = this.add.graphics();
     tray.fillStyle(0xe6e0f4, 1);
     tray.fillRoundedRect(this.x0 - 28, this.y0 - 22, this.sp * this.n + 56, this.sp * this.n + 56, 28);
-    tray.fillStyle(0xffffff, 1);
+    tray.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     tray.fillRoundedRect(this.x0 - 28, this.y0 - 28, this.sp * this.n + 56, this.sp * this.n + 56, 28);
     this.boxLayer = this.add.graphics();
     this.lineLayer = this.add.graphics();
@@ -156,7 +157,7 @@ export class DotsScene extends Scene {
       const x = (W * (seat + 0.5)) / players;
       const width = Math.min(140, W / players - 12);
       const g = this.add.graphics();
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillRoundedRect(-width / 2, -28, width, 56, 28);
       g.lineStyle(4, toHex(DOTS_COLORS[seat]!), 1);
       g.strokeRoundedRect(-width / 2, -28, width, 56, 28);

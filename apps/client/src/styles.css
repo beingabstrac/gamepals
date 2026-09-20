@@ -1500,10 +1500,10 @@ h2,
   color: #3a2b1c;
 }
 
-/* The art inside each well is still drawn in candy colours. Redrawing forty-three pictures is a
-   job of its own, so until then they are warmed and taken down a notch to sit on parchment. */
+/* The pictures take their colours from `theme.ts`, which the room re-tones, so there is nothing
+   to filter here any more. A whisper of warmth keeps them sitting on the parchment. */
 :root[data-look='room'] .tile .art svg {
-  filter: saturate(0.72) contrast(0.96) sepia(0.16);
+  filter: saturate(0.94);
 }
 
 /* "Jump, capture, crown a ki…" reads worse than two tidy lines of the same height. */

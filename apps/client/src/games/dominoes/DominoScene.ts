@@ -1,5 +1,6 @@
 import { DOMINO_TILES, type DominoEvent, type DominoMove, type DominoState, type Placed } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -293,7 +294,7 @@ export class DominoScene extends Scene {
     const width = Math.min(200, W / state.players - 12);
     state.hands.forEach((hand, seat) => {
       const { x, y } = this.chipPos(seat);
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillRoundedRect(x - width / 2, y - 17, width, 34, 17);
       if (seat === state.currentSeat && !state.result) {
         g.lineStyle(4, SEAT_HEX[seat]!, 1);

@@ -1,5 +1,6 @@
 import { shutMove, type ShutEvent, type ShutMove, type ShutState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -34,9 +35,9 @@ const PIPS: Record<number, readonly (readonly [number, number])[]> = {
 
 function drawDie(g: GameObjects.Graphics, value: number): void {
   g.clear();
-  g.fillStyle(0xdcd6ee, 1);
+  g.fillStyle(tone(0xdcd6ee, ROOM_TONES.line), 1);
   g.fillRoundedRect(-DIE / 2, -DIE / 2 + 6, DIE, DIE, 18);
-  g.fillStyle(0xffffff, 1);
+  g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
   g.fillRoundedRect(-DIE / 2, -DIE / 2, DIE, DIE, 18);
   g.fillStyle(INK, 1);
   for (const [x, y] of PIPS[value] ?? []) g.fillCircle(x * 20, y * 20, 7.5);
@@ -174,7 +175,7 @@ export class ShutScene extends Scene {
       if (open) {
         g.fillStyle(0xe8dccb, 1);
         g.fillRoundedRect(-w / 2, -TILE_H / 2 + 7, w, TILE_H, 14);
-        g.fillStyle(0xffffff, 1);
+        g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
         g.fillRoundedRect(-w / 2, -TILE_H / 2, w, TILE_H, 14);
         if (picked) {
           g.lineStyle(5, SUNNY, 1);

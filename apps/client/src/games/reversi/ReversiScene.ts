@@ -1,5 +1,6 @@
 import { discOf, placeDisc, REVERSI_EMPTY, type ReversiEvent, type ReversiMove, type ReversiState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -12,7 +13,7 @@ const MARGIN = 32;
 const CELL = (SIZE - MARGIN * 2) / 8;
 const RADIUS = CELL * 0.4;
 const BOARD = toHex(COLORS.mint);
-const GRID = 0xfff4dc;
+const GRID = tone(0xfff4dc, ROOM_TONES.parchment);
 /** Dark discs are ink; light discs are white with a sky-blue lip, so "Light" still has a color. */
 const FACE = [toHex(COLORS.ink), 0xffffff];
 const LIP = [0x16151f, toHex(COLORS.sky)];

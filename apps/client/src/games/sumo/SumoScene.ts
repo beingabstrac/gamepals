@@ -15,6 +15,7 @@ import {
   type SumoState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
@@ -282,7 +283,7 @@ export class SumoScene extends Scene {
     g.lineStyle(18, STRAW, 1);
     g.strokeCircle(RING.x, RING.y, RING.radius + 8);
     // The two white start lines.
-    g.fillStyle(0xffffff, 1);
+    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillRoundedRect(RING.x - 36, RING.y + 40, 72, 8, 4);
     g.fillRoundedRect(RING.x - 36, RING.y - 48, 72, 8, 4);
   }

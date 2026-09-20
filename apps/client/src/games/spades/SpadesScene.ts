@@ -1,6 +1,6 @@
 import { spadesBid, spadesPlay, SPADES_SUIT, SUIT_SYMBOLS, suitOf, teamOf, type SpadesMove, type SpadesState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { tableFill, tableInk } from '../../look';
+import { tableFill, tableInk, ROOM_TONES, tone } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
@@ -187,7 +187,7 @@ export class SpadesScene extends Scene {
     if (state.phase !== 'bid' || !this.privacy.open || state.currentSeat !== this.privacy.shown) return;
     const parts: GameObjects.GameObject[] = [];
     const panel = this.add.graphics();
-    panel.fillStyle(0xffffff, 1);
+    panel.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     panel.fillRoundedRect(-W / 2 + 30, -74, W - 60, 148, 28);
     parts.push(panel, sharpText(this, 0, -46, 'How many tricks will you take?', 24, COLORS.soft));
     // Nil on its own at the left, then one to thirteen.

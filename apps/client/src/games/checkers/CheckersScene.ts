@@ -1,5 +1,6 @@
 import { CheckerPiece, isKing, ownerOf, type CheckersEvent, type CheckersMove, type CheckersState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -10,7 +11,7 @@ const SIZE = 640;
 export const CHECKERS_SIZE = { width: SIZE, height: SIZE };
 const MARGIN = 32;
 const CELL = (SIZE - MARGIN * 2) / 8;
-const LIGHT = 0xfff4dc;
+const LIGHT = tone(0xfff4dc, ROOM_TONES.parchment);
 const DARK_SQUARE = toHex(COLORS.mint);
 const LAST_MOVE = toHex(COLORS.sunny);
 const TARGET = 0xffffff;
@@ -86,7 +87,7 @@ export class CheckersScene extends Scene {
     const g = this.add.graphics();
     g.fillStyle(toHex(DARK.mint), 1);
     g.fillRoundedRect(8, 14, SIZE - 16, SIZE - 16, 28);
-    g.fillStyle(0xffffff, 1);
+    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillRoundedRect(8, 8, SIZE - 16, SIZE - 16, 28);
     for (let sq = 0; sq < 64; sq++) {
       const dark = (Math.floor(sq / 8) + (sq % 8)) % 2 === 1;

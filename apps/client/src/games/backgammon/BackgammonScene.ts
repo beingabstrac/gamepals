@@ -1,5 +1,6 @@
 import type { BackgammonEvent, BackgammonMove, BackgammonState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -22,7 +23,7 @@ const POINT_H = 232;
 const SEAT_HEX = BACKGAMMON_COLORS.map(toHex);
 const SEAT_DARK = [DARK.sky, DARK.tomato].map(toHex);
 const POINT_LIGHT = 0xffe9cf;
-const POINT_DARK = 0xc9b6f5;
+const POINT_DARK = tone(0xc9b6f5, ROOM_TONES.woodSquare);
 const SUNNY = toHex(COLORS.sunny);
 const INK = toHex(COLORS.ink);
 
@@ -243,7 +244,7 @@ export class BackgammonScene extends Scene {
     if (state.phase === 'move' && state.rolled.length) {
       state.rolled.forEach((value, i) => {
         const x = (state.currentSeat === 0 ? 470 : 150) + i * 62;
-        g.fillStyle(0xffffff, 1);
+        g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
         g.fillRoundedRect(x - 24, H / 2 - 24, 48, 48, 12);
         g.lineStyle(3, INK, 0.25);
         g.strokeRoundedRect(x - 24, H / 2 - 24, 48, 48, 12);

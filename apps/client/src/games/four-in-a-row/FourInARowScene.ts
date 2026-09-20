@@ -1,5 +1,6 @@
 import { cellIndex, COLS, ROWS, type FourInARowMove, type FourInARowState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -12,7 +13,7 @@ export const FOUR_IN_A_ROW_SIZE = { width: COLS * CELL, height: FACE_HEIGHT + LI
 
 const BOARD = toHex(COLORS.sky);
 const BOARD_LIP = toHex(DARK.sky);
-const HOLE = 0xeaf3ff;
+const HOLE = tone(0xeaf3ff, ROOM_TONES.parchment);
 const DISC = [toHex(COLORS.sunny), toHex(COLORS.tomato)];
 const DISC_RING = [toHex(DARK.sunny), toHex(DARK.tomato)];
 const RADIUS = CELL / 2 - 11;

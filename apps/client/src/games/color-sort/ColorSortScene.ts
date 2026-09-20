@@ -1,5 +1,6 @@
 import { pourMove, TUBE_SIZE, type ColorSortMove, type ColorSortState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -92,7 +93,7 @@ export class ColorSortScene extends Scene {
       const glass = this.add.graphics();
       glass.fillStyle(0x2b2a3a, 0.07);
       glass.fillRoundedRect(-TUBE_W / 2, -TUBE_H / 2 + 6, TUBE_W, TUBE_H, { tl: 10, tr: 10, bl: 32, br: 32 });
-      glass.fillStyle(0xffffff, 1);
+      glass.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       glass.fillRoundedRect(-TUBE_W / 2, -TUBE_H / 2, TUBE_W, TUBE_H, { tl: 10, tr: 10, bl: 32, br: 32 });
       glass.lineStyle(4, GLASS_LINE, 1);
       glass.strokeRoundedRect(-TUBE_W / 2, -TUBE_H / 2, TUBE_W, TUBE_H, { tl: 10, tr: 10, bl: 32, br: 32 });

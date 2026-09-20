@@ -1,5 +1,6 @@
 import { YATZY_FIRST_ROLL, yatzyRoll, type YatzyEvent, type YatzyMove, type YatzyState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -16,7 +17,7 @@ const GAP = 118;
 const REST_Y = 126;
 const KEPT_Y = 100;
 const INK = toHex(COLORS.ink);
-const LIP = 0xdcd6ee;
+const LIP = tone(0xdcd6ee, ROOM_TONES.line);
 const SUNNY = toHex(COLORS.sunny);
 const CONFETTI = [COLORS.tomato, COLORS.sunny, COLORS.mint, COLORS.sky, COLORS.grape, COLORS.bubblegum].map(toHex);
 
@@ -36,7 +37,7 @@ function drawFace(g: GameObjects.Graphics, value: number, kept: boolean): void {
   g.clear();
   g.fillStyle(LIP, 1);
   g.fillRoundedRect(-DIE / 2, -DIE / 2 + 7, DIE, DIE, 22);
-  g.fillStyle(0xffffff, 1);
+  g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
   g.fillRoundedRect(-DIE / 2, -DIE / 2, DIE, DIE, 22);
   if (kept) {
     g.lineStyle(6, SUNNY, 1);

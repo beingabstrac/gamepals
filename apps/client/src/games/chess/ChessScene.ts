@@ -19,7 +19,7 @@ import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
 import { arrow, isPress, onKeys } from '../keys';
-import { hex, ROOM, ROOM_COLORS } from '../../look';
+import { hex, ROOM, ROOM_COLORS, ROOM_TONES, tone } from '../../look';
 
 const W = 600;
 const H = 600;
@@ -223,7 +223,7 @@ export class ChessScene extends Scene {
     else {
       g.fillStyle(0xe9e4f5, 1);
       g.fillRoundedRect(0, 6, W, H - 12, 22);
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillRoundedRect(0, 0, W, H - 12, 22);
     }
     for (let square = 0; square < 64; square++) {
@@ -338,7 +338,7 @@ export class ChessScene extends Scene {
     const left = W / 2 - CELL * 2;
     g.fillStyle(0x2b2a3a, 0.35);
     g.fillRect(0, 0, W, H);
-    g.fillStyle(0xffffff, 1);
+    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillRoundedRect(left - 10, top - 18, CELL * 4 + 20, CELL + 36, 18);
     PROMOTIONS.forEach((type, i) => {
       const x = left + (i + 0.5) * CELL;

@@ -16,6 +16,7 @@ import {
   type Turn,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
@@ -210,7 +211,7 @@ export class SnakeScene extends Scene {
     for (const side of [-1, 1]) {
       const ex = head.x + fx * 5 + sx * side * 7;
       const ey = head.y + fy * 5 + sy * side * 7;
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillCircle(ex, ey, 5.5);
       g.fillStyle(0x2b2a3a, 1);
       if (crashed) {
@@ -272,7 +273,7 @@ export class SnakeScene extends Scene {
       g.arc(0, 4, 16, Math.PI * 1.1, Math.PI * 1.9, false);
       g.strokePath();
       const tipX = flip === 1 ? 14 : -14;
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillTriangle(tipX - 8, -6, tipX + 8, -6, tipX, 6);
       const view = this.add.container(spec.x, spec.y, [g]).setDepth(5).setAngle(spec.seat === 1 ? 180 : 0);
       // A bot doesn't need buttons: only show the controls of people who are playing.

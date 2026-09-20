@@ -47,3 +47,20 @@ export function switchLook(): void {
   else url.searchParams.set('look', '2');
   location.href = url.toString();
 }
+
+/** The materials a board is made of in the games room, for the colours scenes hardcode. */
+export const ROOM_TONES = {
+  /** The dark square of a chequered board. */
+  woodSquare: 0x9c6b41,
+  /** The light square, or any pale board face. */
+  parchment: 0xecd9b0,
+  /** Lines ruled on a board. */
+  line: 0xc6a878,
+  /** A panel or card lying on the table: cream paper, not white. */
+  panel: 0xf7ecd6,
+  water: 0x2b6e7a,
+  waterLine: 0x1d5560,
+} as const;
+
+/** `tone(flat, room)`: the colour to use for this look. */
+export const tone = (flat: number, room: number): number => (ROOM ? room : flat);

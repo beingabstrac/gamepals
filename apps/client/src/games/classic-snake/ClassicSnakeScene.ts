@@ -11,6 +11,7 @@ import {
   type Heading,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
@@ -216,7 +217,7 @@ export class ClassicSnakeScene extends Scene {
     for (const side of [-1, 1]) {
       const ex = head.x + fx * 6 + sx * side * 8;
       const ey = head.y + fy * 6 + sy * side * 8;
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillCircle(ex, ey, 6);
       g.fillStyle(0x2b2a3a, 1);
       if (crashed) {

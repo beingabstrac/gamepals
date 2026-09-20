@@ -1,5 +1,6 @@
 import { winningLine, type Cell, type TicTacToeMove, type TicTacToeState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -10,7 +11,7 @@ export const TIC_TAC_TOE_SIZE = { width: SIZE, height: SIZE };
 
 const CELL = SIZE / 3;
 const PAD = 40;
-const GRID_COLOR = 0xcdbff7;
+const GRID_COLOR = tone(0xcdbff7, ROOM_TONES.line);
 const SEAT_COLORS = [toHex(COLORS.tomato), toHex(COLORS.sky)];
 const INK = toHex(COLORS.ink);
 const MARK_RADIUS = CELL / 2 - 46;

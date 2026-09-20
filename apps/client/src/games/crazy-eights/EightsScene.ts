@@ -10,7 +10,7 @@ import {
   type EightsState,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { slotFill, tableFill, tableInk } from '../../look';
+import { slotFill, tableFill, tableInk, ROOM_TONES, tone } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
@@ -190,7 +190,7 @@ export class EightsScene extends Scene {
     if (this.asking === null) return;
     const parts: GameObjects.GameObject[] = [];
     const panel = this.add.graphics();
-    panel.fillStyle(0xffffff, 1);
+    panel.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     panel.fillRoundedRect(-230, -70, 460, 140, 28);
     parts.push(panel, sharpText(this, 0, -44, 'Which suit?', 24, COLORS.soft));
     for (let suit = 0; suit < 4; suit++) {

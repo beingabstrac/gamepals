@@ -100,7 +100,10 @@ The look that shipped first is flat candy with **no gradients** ([12](12-catalog
 - [x] **L2 The card room (2026-09-20):** all fifteen card and patience tables take their colour from the look, so in the room they are one green felt with cream writing and slots cut as darker patches of it. The pack is red there, because green backs on green felt are one flat shape, and the hand cover is walnut.
   - **Cream writing on a cream button is invisible**, which is what Solitaire's Undo and Hint became the moment the body text went light for the felt. Every cream panel now states its own ink: `.tool`, `.die`, `.pad-key`, `.picker`, `.score`, `.soon-pill`, `.edit-badge`, `.yatzy-cell`. Found by opening the game and looking, not by a test.
   - **A board sits on wood, not on more felt.** The page behind a game was the same green as the table, so the table had no edge. The game screen is walnut now and the felt reads as a thing lying on it.
-- [ ] **L3 The rest of the tables, the tile art and the mark:** the board and duel games, the shelf art redrawn in the same materials, the app mark and name to match, then look 1 comes out.
+- [ ] **L3a The palette, in one place:** every board, piece and picture re-toned by swapping the palette in `theme.ts` rather than editing forty-three scenes, plus the pastels that scenes hardcode.
+- [ ] **L3b Table by table:** each game's own surface given its material (boards in wood, felt or parchment), checked on a phone one at a time.
+- [ ] **L3c The pictures:** the forty-three shelf tiles redrawn for the room rather than re-tinted.
+- [ ] **L3d 🔑 The mark and the wordmark:** needs the name, which is the owner's call. Then look 1 comes out and the flag goes.
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
 - [x] **M20a Cards B, hidden hands (2026-09-19):** Crazy Eights, 35 games, and the first game here where you hold cards nobody else may see. Two players get seven cards and three or four get five, a play matches suit or rank, an eight goes on anything and names the next suit, you draw until you can play, and the pile becomes a new deck when the deck runs out.

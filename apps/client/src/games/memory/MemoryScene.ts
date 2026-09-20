@@ -1,5 +1,6 @@
 import { flipMove, MEMORY_SIZES, type MemoryEvent, type MemoryMove, type MemoryState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -176,7 +177,7 @@ export class MemoryScene extends Scene {
     for (let row = -1; row <= 1; row++) for (let col = -1; col <= 1; col++) back.fillCircle(col * w * 0.2, row * h * 0.2, Math.max(3, w * 0.035));
 
     const face = this.add.graphics();
-    face.fillStyle(0xffffff, 1);
+    face.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     face.fillRoundedRect(-w / 2, -h / 2, w, h, 16);
     face.lineStyle(3, 0xe6e0f4, 1);
     face.strokeRoundedRect(-w / 2, -h / 2, w, h, 16);
@@ -199,7 +200,7 @@ export class MemoryScene extends Scene {
       const x = (W * (seat + 0.5)) / players;
       const width = Math.min(136, W / players - 12);
       const g = this.add.graphics();
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillRoundedRect(-width / 2, -28, width, 56, 28);
       g.lineStyle(4, toHex(MEMORY_COLORS[seat]!), 1);
       g.strokeRoundedRect(-width / 2, -28, width, 56, 28);

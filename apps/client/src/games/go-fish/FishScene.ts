@@ -1,6 +1,6 @@
 import { askMove, FISH_DRAW, FISH_PASS, rankOf, type FishMove, type FishState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { tableFill, tableInk } from '../../look';
+import { tableFill, tableInk, ROOM_TONES, tone } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS } from '../../theme';
@@ -171,7 +171,7 @@ export class FishScene extends Scene {
     const parts: GameObjects.GameObject[] = [];
     const width = Math.min(W - 60, others.length * 200 + 40);
     const panel = this.add.graphics();
-    panel.fillStyle(0xffffff, 1);
+    panel.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     panel.fillRoundedRect(-width / 2, -78, width, 156, 28);
     parts.push(panel, sharpText(this, 0, -48, `Ask who for a ${RANKS[this.asking - 1]}?`, 24, COLORS.soft));
     others.forEach((seat, n) => {

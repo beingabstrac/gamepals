@@ -25,6 +25,7 @@ import {
   type Seat,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import { COLORS, DARK, toHex } from '../../theme';
 import type { RealtimeSceneOptions } from '../air-hockey/AirHockeyScene';
 import { fitCamera, sharpText } from '../crisp';
@@ -332,7 +333,7 @@ export class PenaltyScene extends Scene {
 
   private makeBall(): GameObjects.GameObject[] {
     const g = this.add.graphics();
-    g.fillStyle(0xffffff, 1);
+    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillCircle(0, 0, 12);
     g.lineStyle(2, 0xd9d3ea, 1);
     g.strokeCircle(0, 0, 12);
@@ -351,7 +352,7 @@ export class PenaltyScene extends Scene {
     g.fillStyle(0x2b2a3a, 0.14);
     g.fillEllipse(0, 6, 64, 40);
     if (keeper) {
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillCircle(-KEEPER_BODY - 8, -4, 13);
       g.fillCircle(KEEPER_BODY + 8, -4, 13);
       g.lineStyle(3, SEAT_DARK[seat]!, 1);
@@ -382,7 +383,7 @@ export class PenaltyScene extends Scene {
     g.lineStyle(1.5, 0xc9c2e6, 1);
     for (let x = x0 + 15; x < x1; x += 15) g.lineBetween(x, 0, x, back);
     for (let d = 10; d < Math.abs(back); d += 10) g.lineBetween(x0, Math.sign(back) * d, x1, Math.sign(back) * d);
-    g.fillStyle(0xffffff, 1);
+    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillRoundedRect(x0 - 8, Math.min(0, back) - 4, 12, Math.abs(back) + 8, 6);
     g.fillRoundedRect(x1 - 4, Math.min(0, back) - 4, 12, Math.abs(back) + 8, 6);
     g.fillRect(x0 - 4, -3, x1 - x0 + 8, 6);
@@ -403,7 +404,7 @@ export class PenaltyScene extends Scene {
       const dir = keeper === 1 ? 1 : -1;
       g.lineBetween(20, line, W - 20, line);
       g.strokeRect(70, Math.min(line, line + dir * 210), W - 140, 210);
-      g.fillStyle(0xffffff, 1);
+      g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
       g.fillCircle(GOAL_CENTER_X, SPOT_Y[keeper], 6);
     }
   }

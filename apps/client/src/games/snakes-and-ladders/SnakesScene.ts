@@ -1,5 +1,6 @@
 import { LADDERS, SNAKES, type SnakesEvent, type SnakesMove, type SnakesState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -251,9 +252,9 @@ export class SnakesScene extends Scene {
 
   private drawBoard(): void {
     const g = this.add.graphics();
-    g.fillStyle(0xe9e4f5, 1);
+    g.fillStyle(tone(0xe9e4f5, ROOM_TONES.line), 1);
     g.fillRoundedRect(0, 6, W, BOARD, 24);
-    g.fillStyle(0xffffff, 1);
+    g.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     g.fillRoundedRect(0, 0, W, BOARD, 24);
     for (let square = 1; square <= 100; square++) {
       const { x, y } = squarePoint(square);
@@ -315,7 +316,7 @@ export class SnakesScene extends Scene {
       for (const side of [-1, 1]) {
         const ex = h.x + (dx / d) * 4 + (-dy / d) * 6 * side;
         const ey = h.y + (dy / d) * 4 + (dx / d) * 6 * side;
-        snakes.fillStyle(0xffffff, 1);
+        snakes.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
         snakes.fillCircle(ex, ey, 4.5);
         snakes.fillStyle(INK, 1);
         snakes.fillCircle(ex + (dx / d) * 1.5, ey + (dy / d) * 1.5, 2.2);

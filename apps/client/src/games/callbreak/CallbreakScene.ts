@@ -12,7 +12,7 @@ import {
   type Played,
 } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
-import { tableFill, tableInk } from '../../look';
+import { tableFill, tableInk, ROOM_TONES, tone } from '../../look';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { COLORS } from '../../theme';
@@ -196,7 +196,7 @@ export class CallbreakScene extends Scene {
     if (state.phase !== 'call' || !this.privacy.open || state.currentSeat !== this.privacy.shown) return;
     const parts: GameObjects.GameObject[] = [];
     const panel = this.add.graphics();
-    panel.fillStyle(0xffffff, 1);
+    panel.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     panel.fillRoundedRect(-W / 2 + 30, -74, W - 60, 148, 28);
     parts.push(panel, sharpText(this, 0, -46, 'How many tricks will you take?', 24, COLORS.soft));
     for (let call = 1; call <= 13; call++) {

@@ -1,5 +1,6 @@
 import { slideMove, type SlidingMove, type SlidingState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -46,7 +47,7 @@ export class SlidingScene extends Scene {
     const frame = this.add.graphics();
     frame.fillStyle(0xe6e0f4, 1);
     frame.fillRoundedRect(0, 8, SIZE, SIZE - 8, 30);
-    frame.fillStyle(0xffffff, 1);
+    frame.fillStyle(tone(0xffffff, ROOM_TONES.panel), 1);
     frame.fillRoundedRect(0, 0, SIZE, SIZE - 8, 30);
     for (let cell = 0; cell < this.n * this.n; cell++) {
       const { x, y } = this.pos(cell);

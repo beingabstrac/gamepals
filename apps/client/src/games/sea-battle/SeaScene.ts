@@ -1,5 +1,6 @@
 import { cellsOf, seaCol, FLEET, fireMove, HIT, MISS, placeShip, seaRow, SEA_SIZE, type Placement, type SeaEvent, type SeaMove, type SeaBattleState } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
+import { ROOM_TONES, tone } from '../../look';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
@@ -18,8 +19,8 @@ export const SEA_COLORS = [COLORS.sky, COLORS.tomato];
 const LEFT = (W - GRID) / 2;
 const THEIRS_Y = 56;
 const MINE_Y = 430;
-const WATER = 0xdff1ff;
-const WATER_LINE = 0xb9d9f2;
+const WATER = tone(0xdff1ff, ROOM_TONES.water);
+const WATER_LINE = tone(0xb9d9f2, ROOM_TONES.waterLine);
 const SHIP = 0x8d93a8;
 const SHIP_DOWN = 0x4b4a5c;
 const SUNNY = toHex(COLORS.sunny);
