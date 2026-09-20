@@ -88,6 +88,13 @@ These block the milestones marked 🔑. Some have long lead times, so start them
   - **Still on the owner:** a support address (both stores demand one, and I will not publish a personal address without being asked), and `app-ads.txt`, which needs an AdMob publisher ID. That file is a public statement about who may sell our ad inventory, so a placeholder is worse than nothing.
 - [ ] **M12d The web channel:** portal builds (CrazyGames, Poki, GameDistribution) and an itch.io page, using the portal SDKs instead of AdMob. Ponder Club is not in the App Store at all and does fine, so this is not a consolation prize and it does not wait for M9.
 - [ ] **Launch 1.0:** Android, iOS, iPad, Mac (iPad app), web; about 35 games
+  - **The catalogue stopped being the constraint on 2026-09-19, at M20a.** There are 51 games
+    against a launch target of about 35. Everything between here and a launch is either waiting on
+    the owner (the name, the app ID, the store accounts, AdMob, RevenueCat, Cloudflare) or is
+    quality work on what already exists. Adding a fifty-second game is not progress towards
+    shipping, so the loop should prefer quality passes and the unblocked parts of M12d over new
+    games until the owner-side list moves. New games are still worth building when there is
+    nothing better; they are no longer the best thing available.
 
 ## Stage 3: online
 - [ ] **M13 🔑 Backend skeleton:** Cloudflare Worker + D1 + Durable Objects deployed from CI, Firebase guest sign-in, `IBackend` in the client, daily budget guard, backend tests in CI
@@ -212,7 +219,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     right letter listed, when typing wrong ones is the game), and Word Search listed a line one way
     round. All four fixed, each with a test that fails on the old code, and the contract is now
     written into `GameState` and CLAUDE.md.
-  - **The gallery caught the same mistake three times (2026-09-20).** The full matrix went green on
+  - **The gallery now settles before it shoots (2026-09-20).** Reviewing the older games' pictures,
+  Dominoes appeared to draw tiles across the players' names and Rummy to show a seat with a card
+  count and no cards. Both turned out to be unjudgeable rather than wrong: the shot is taken at a
+  fixed 3,500ms, and a domino halfway from a player's chip to the table is pixel-identical to a
+  domino drawn on top of a player's name. Rather than guess, or worse "fix" a shipped game on that
+  evidence, the gallery now waits for the scene's tweens to finish first, with a cap for the
+  real-time games that never settle. The visual audit of the older games waits for pictures worth
+  judging.
+- **The gallery caught the same mistake three times (2026-09-20).** The full matrix went green on
   eight screen types and the Android emulator, and then the pictures showed Word Groups printing
   "All four." across the last group bar, Anagram Hunt printing its count straight through the list
   of finds, and Word Ladder leaving an empty input row after the game was over. Word Guess had done

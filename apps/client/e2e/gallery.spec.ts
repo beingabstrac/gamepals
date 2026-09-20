@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 /**
  * Saves a picture of every game actually being played, for looking over how games read on a
@@ -15,6 +15,30 @@ const GAMES = [
 
 const slug = (name: string) => name.toLowerCase().replace(/\W+/g, '-');
 
+/**
+ * Wait until nothing is moving before taking the picture. A shot at a fixed moment catches
+ * whatever happened to be mid-flight: a domino halfway from a player's chip to the table looks
+ * exactly like a domino drawn on top of a player's name, and a card on its way to a pile looks
+ * like a card in the wrong place. Reviewing those pictures means guessing which it was, so the
+ * gallery now settles first. Real-time games never settle, so there is a cap.
+ */
+async function settle(page: Page): Promise<void> {
+  const quiet = await page
+    .waitForFunction(
+      () => {
+        const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: { tweens?: { getTweens(): unknown[] } }[] } } })
+          .gamepalsTestGame;
+        const scene = game?.scene.scenes[0];
+        return scene?.tweens ? scene.tweens.getTweens().length === 0 : true;
+      },
+      undefined,
+      { timeout: 4000 },
+    )
+    .catch(() => null);
+  // Nothing settled in time: a real-time game, so take it as it is rather than failing a shot.
+  if (!quiet) await page.waitForTimeout(200);
+}
+
 for (const name of GAMES) {
   test(`${name}: gallery shot @full`, async ({ page }, testInfo) => {
     // One screen type is enough for a gallery; eight would mean 240 pictures a run.
@@ -26,6 +50,7 @@ for (const name of GAMES) {
     await expect(page.locator('.board canvas')).toBeVisible();
     // Long enough for the deal and a few moves, short enough that quick games are not over.
     await page.waitForTimeout(3500);
+    await settle(page);
     await page.screenshot({ path: `screenshots/${testInfo.project.name}/${slug(name)}.png` });
   });
 }
