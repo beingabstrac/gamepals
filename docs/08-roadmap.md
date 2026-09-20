@@ -303,6 +303,18 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
   Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
   eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
+  - [x] **The whole class swept, not sampled (2026-09-21).** The bug is not "things move", it is
+    "the scene keeps its own idea of where things are", and that is a grep rather than a gallery
+    review. Every scene in all fifty-one games, sorted:
+    - **Drains a queue of events one at a time** (unbounded lag, the actual bug): Snakes & Ladders
+      and Shut the Box. Both fixed, both answer `boardCheck()`, one test covers them.
+    - **Keeps a copy of the board and walks it**: Mancala only. Safe, because every sowing ends by
+      snapping back to the state rather than trusting its own arithmetic, and it now says so with
+      a `boardCheck()` that allows a drift of exactly zero.
+    - **Keeps a counter or a record of what it drew last**: Four in a Row, Tic-Tac-Toe, Ultimate,
+      Sudoku, Anagram Hunt. Not mirrors, nothing to drift.
+    - **Draws straight from the state**: everything else, Ludo and Backgammon included, which is
+      why both looked right.
   - [x] **Shut the Box (2026-09-21).** Found by looking for the shape rather than at more pictures:
     only two scenes drain a queue of events one at a time, and the other one was Snakes & Ladders.
     Same unbounded lag, same fix, same `boardCheck()`, and one test now covers both. Ludo looked

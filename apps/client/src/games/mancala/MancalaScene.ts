@@ -174,6 +174,18 @@ export class MancalaScene extends Scene {
     this.tweens.add({ targets: this.banner, alpha: 0, delay: 900, duration: 300 });
   }
 
+  /**
+   * The seeds the board is showing against the seeds the state holds, for the board check.
+   * Mancala keeps a copy of the pits and walks it as the hopper lands, which is the shape that
+   * broke Snakes & Ladders and Shut the Box. It is safe here because every animation ends by
+   * snapping back to the state rather than trusting its own arithmetic, and this is what says so.
+   */
+  boardCheck(): { behind: number; walking: boolean } {
+    const truth = this.state.pits;
+    const behind = this.shown.reduce((worst, seeds, pit) => Math.max(worst, Math.abs(seeds - (truth[pit] ?? 0))), 0);
+    return { behind, walking: this.busy };
+  }
+
   private onChange(): void {
     const event = this.state.last;
     if (!event) {

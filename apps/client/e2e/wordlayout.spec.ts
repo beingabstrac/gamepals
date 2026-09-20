@@ -110,6 +110,9 @@ for (const { name, limit } of [
   { name: 'Snakes & Ladders', limit: 6 },
   // Shut the Box plays each roll out in turn and had the same unbounded queue.
   { name: 'Shut the Box', limit: 2 },
+  // Mancala keeps a copy of the pits and walks it as the hopper lands. It snaps back to the state
+  // at the end of every sowing, so it should never settle behind at all.
+  { name: 'Mancala', limit: 0 },
 ]) {
   test(`${name}: the board keeps up with the score line`, async ({ page }) => {
     await open(page, name);
