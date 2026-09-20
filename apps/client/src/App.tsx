@@ -8,6 +8,7 @@ import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
 import { dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
+import { ProSheet, usePro } from './components/Pro';
 import { onBackButton } from './platform';
 
 type Screen =
@@ -159,8 +160,11 @@ function SettingsToggles() {
 }
 
 function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entry: AnyEntry, seed: number): void }) {
+  const [shop, setShop] = useState(false);
+  const { pro: hasPro } = usePro();
   return (
     <div class="screen">
+      {shop && <ProSheet onClose={() => setShop(false)} />}
       <header class="hero">
         <span class="mascot">
           <Mascot />
@@ -209,6 +213,10 @@ function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entr
       </div>
 
       <footer class="shelf-foot">
+        <button class="foot-link" onClick={() => setShop(true)}>
+          {hasPro ? 'You have Pro' : 'Go Pro'}
+        </button>
+        <span aria-hidden="true">·</span>
         {/* Ships inside the apps too, so it opens with no connection. */}
         <a href="./privacy.html">Privacy</a>
         <span aria-hidden="true">·</span>

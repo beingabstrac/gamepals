@@ -1,6 +1,7 @@
 import { AUTO, Game, Scale } from 'phaser';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS, INSPECT } from '../autoplay';
+import { maybeInterstitial } from '../ads';
 import { finishDaily } from '../daily';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
@@ -61,6 +62,9 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
         setRivalry(record(rivalryKey, seats, after.result));
         // Today's puzzle only counts when it is actually finished.
         if (daily) finishDaily();
+        // Between games is the only place an interstitial is ever allowed, and the rules in
+        // ads.ts decide whether this one is even a candidate.
+        void maybeInterstitial();
       }
       if (after.result) cue(outcomeOf(after.result, seats));
       else cue(entry.moveCue?.(before, after) ?? (seats[before.currentSeat]?.kind === 'bot' ? 'botPlace' : 'place'));

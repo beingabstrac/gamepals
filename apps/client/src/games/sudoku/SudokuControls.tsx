@@ -1,3 +1,4 @@
+import { watchFor } from '../../ads';
 import { HINT_MOVE, type SudokuMove, type SudokuState } from '@gamepals/rules';
 import { useEffect, useState } from 'preact/hooks';
 import type { Session } from '../../session';
@@ -33,7 +34,16 @@ export function SudokuControls({ session }: { session: Session<SudokuMove> }) {
         <button class={ui.notes ? 'tool on' : 'tool'} aria-pressed={ui.notes} onClick={() => ui.toggleNotes()}>
           Notes
         </button>
-        <button class="tool" disabled={state.hintsLeft === 0} onClick={() => ui.hint()} aria-label={`Hint, ${state.hintsLeft} left`}>
+        <button
+          class="tool"
+          onClick={() => {
+            // Out of hints: Pro gets one anyway, everybody else is asked whether they want to
+            // watch for it. Nothing is ever taken without asking (docs/08 M10).
+            if (state.hintsLeft > 0) ui.hint();
+            else void watchFor('sudoku hint').then((earned) => earned && ui.hint());
+          }}
+          aria-label={state.hintsLeft > 0 ? `Hint, ${state.hintsLeft} left` : 'Hint, watch to earn one'}
+        >
           Hint <span class="badge">{state.hintsLeft}</span>
         </button>
       </div>
