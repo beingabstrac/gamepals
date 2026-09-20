@@ -10,6 +10,7 @@ import { AUTOPLAY, autoplaySeats } from './autoplay';
 import { DAILY_GAMES, dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
 import { ProSheet, usePro } from './components/Pro';
 import { ArchiveSheet } from './components/Archive';
+import { StatsSheet } from './components/Stats';
 import { onBackButton } from './platform';
 
 type Screen =
@@ -177,10 +178,20 @@ function SettingsToggles() {
 function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entry: AnyEntry, seed: number, key?: string): void }) {
   const [shop, setShop] = useState(false);
   const [past, setPast] = useState(false);
+  const [stats, setStats] = useState(false);
   const { pro: hasPro } = usePro();
   return (
     <div class="screen">
       {shop && <ProSheet onClose={() => setShop(false)} />}
+      {stats && (
+        <StatsSheet
+          onClose={() => setStats(false)}
+          onGoPro={() => {
+            setStats(false);
+            setShop(true);
+          }}
+        />
+      )}
       {past && (
         <ArchiveSheet
           onClose={() => setPast(false)}
@@ -244,6 +255,10 @@ function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entr
       <footer class="shelf-foot">
         <button class="foot-link" onClick={() => setShop(true)}>
           {hasPro ? 'You have Pro' : 'Go Pro'}
+        </button>
+        <span aria-hidden="true">·</span>
+        <button class="foot-link" onClick={() => setStats(true)}>
+          Your stats
         </button>
         <span aria-hidden="true">·</span>
         {/* Ships inside the apps too, so it opens with no connection. */}

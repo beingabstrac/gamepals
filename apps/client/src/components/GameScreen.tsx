@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { AUTOPLAY, AUTOPLAY_BOT_DELAY_MS, INSPECT } from '../autoplay';
 import { maybeInterstitial } from '../ads';
 import { finishDaily, finishPast, todayKey } from '../daily';
+import { recordGame } from '../stats';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
@@ -60,6 +61,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
       if (after.result && counted.current !== (session as Session<unknown>)) {
         counted.current = session as Session<unknown>;
         setRivalry(record(rivalryKey, seats, after.result));
+        recordGame(entry.definition.id, seats, after.result);
         // Today's puzzle only counts when it is actually finished, and an old one never
         // counts towards the streak, only towards the tick in the archive.
         if (dailyKey === todayKey()) finishDaily(dailyKey);

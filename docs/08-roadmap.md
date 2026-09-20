@@ -137,8 +137,16 @@ The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
     enough to catch up after a busy few days, and the rest is one of the three things Pro gives.
     Finishing an old day ticks it and does nothing to the streak: a streak that can be topped up by
     playing last Tuesday is not a streak. PRO_GIVES is down from five lines to three, all true.
-  - [ ] **D3b Stats and streak history:** games played, current and best streak, per-game bests,
-    with a taster free and the full history behind Pro. Only then does that line go back on the page.
+  - [x] **D3b Stats and streak history (2026-09-20):** nothing was being counted, so this had to
+    build the counting as well as the page. `stats.ts` records every finished game, in the
+    real-time games too, and only when a person was in a seat: a build with bots in every chair is
+    a test run, and counting those would have every number come from CI rather than from anybody.
+    The sheet shows games finished, won, how many of the forty-six have been tried, days played and
+    the daily streak, all free, with the game-by-game list cut to three until Pro. Per-game best
+    scores are not here and are not promised: that needs every game to say what its score is, and
+    that hook belongs with M14, where the server has to check the same number by replaying the move
+    log. With the counting real, the stats line goes back on the shop page, which is now four lines
+    and four truths.
   - **The price is the owner's, and the evidence points down, not up.** Our placeholder lifetime is
     $14.99. JindoBlu sells Remove Ads at **$6.99** against 413K ratings, with a brand, an install
     base and years of reviews. We have none of those. Asking more than double a proven price with

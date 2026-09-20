@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
+import { recordGame } from '../stats';
 import { DPR } from '../games/crisp';
 import type { RealtimeEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
@@ -59,6 +60,8 @@ export function RealtimeGameScreen({ entry, seats, onExit }: Props) {
             setResult(final);
             setCoach(false);
             setRivalry(record(rivalryKey, seats, final));
+            // The real-time games count towards your record too: Air Hockey is a game you played.
+            recordGame(entry.definition.id, seats, final);
             cue(outcomeOf(final, seats));
           },
           onCue: cue,

@@ -34,12 +34,13 @@ export const OFFERS: readonly Offer[] = [
  * to list five things of which one was true: nothing gated a level, there was no archive, and
  * there were no stats, and a paywall that promises what it does not do is how refunds and
  * one-star reviews are earned. Levels stay free for everybody, because taking away what people
- * already have is worse than not charging for it. Stats go back on this list in D3b.
+ * already have is worse than not charging for it, and that line stayed off.
  */
 export const PRO_GIVES: readonly string[] = [
   'No ads, ever',
   'Hints and undo without watching anything',
   "Every day's puzzle, all the way back",
+  'Your record for every game, not just the top few',
 ];
 
 export interface ProState {
