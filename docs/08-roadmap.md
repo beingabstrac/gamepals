@@ -125,7 +125,9 @@ The look stays the playroom (docs/12 Part 4). This is the model, not the paint.
 
 ## Stage 5: cover the field (decided 2026-09-20)
 Both competitors' catalogues, and what neither of them has. [JindoBlu](https://apps.apple.com/us/app/2-player-games-offline-games/id1465731199) names Ping Pong, Spinner War, Air Hockey, Snakes, Pool, Tic Tac Toe, Penalty Kicks, Sumo, mini golf, racing cars, sword duels, chess, paint fight, archery, tug of war, whack a mole, memory, maths, solitaire and jigsaw. [Ponder Club](https://ponderclub.co) runs a mini crossword, a word search, a themed-grouping game, a word ladder, an anagram hunt, a Wordle-alike, a 2048-alike, a digit slider, sudoku, a minesweeper, a numbers-target game, flood-it, solitaire, mahjong solitaire and a code breaker. We already have 18 of those. These are the rest, named our own way ([03 §4](03-game-catalog.md#4-trademark-safe-naming)), three or four to a milestone.
-- [ ] **W1 Word daily:** Word Guess, Word Search, Mini Crossword (5x5)
+- [x] **W1a Word Guess (2026-09-20):** 44 games, and the first word game. Six goes at a five-letter word, a coloured keyboard, a row that shakes when the word is not one we know, and the repeated-letter rule that most copies get wrong. Two public-domain lists: 2,332 answers, 8,585 words you may type. The secret comes from the seed, so it slots into the daily.
+- [ ] **W1b Word Search**
+- [ ] **W1c Mini Crossword (5x5):** needs clues, which needs a source. Decide between a hand-written set and a permissive dictionary before starting.
 - [ ] **W2 Word more:** Word Ladder, Word Groups, Anagram Hunt
 - [ ] **N1 Numbers:** Digit Shift, Target Number, Quick Maths (duel)
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw

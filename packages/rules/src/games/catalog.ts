@@ -35,6 +35,7 @@ import { ticTacToe } from './tic-tac-toe';
 import { twenty48 } from './twenty48';
 import { ultimateTtt } from './ultimate-ttt';
 import { war } from './war';
+import { wordGuessGame } from './word-guess';
 import { yatzy } from './yatzy';
 
 /** A game looked up by id, where the kind of move no longer matters. */
@@ -63,6 +64,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       callbreak,
       ginRummy,
       rummy,
+      wordGuessGame,
       memory,
       slidingPuzzle,
       colorSort,

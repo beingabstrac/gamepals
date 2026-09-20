@@ -55,6 +55,8 @@ import {
   type CallbreakState,
   ginRummy,
   type GinState,
+  wordGuessGame,
+  type WordState,
   rummy,
   type RummyState,
   tripeaks,
@@ -139,6 +141,7 @@ import { HEARTS_COLORS, HEARTS_NAMES, HEARTS_SIZE, heartsStatus, HeartsScene } f
 import { SPADES_COLORS, SPADES_NAMES, SPADES_SIZE, spadesResult, spadesStatus, SpadesScene } from './spades/SpadesScene';
 import { CALLBREAK_COLORS, CALLBREAK_NAMES, CALLBREAK_SIZE, callbreakStatus, CallbreakScene } from './callbreak/CallbreakScene';
 import { GIN_COLORS, GIN_NAMES, GIN_SIZE, ginResult, ginStatus, GinScene } from './gin-rummy/GinScene';
+import { WORD_COLORS, WORD_NAMES, WORD_SIZE, wordResult, wordStatus, WordScene } from './word-guess/WordScene';
 import { RUMMY_COLORS, RUMMY_NAMES, RUMMY_SIZE, rummyResult, rummyStatus, RummyScene } from './rummy/RummyScene';
 import { PyramidControls } from './pyramid/PyramidControls';
 import { PYRAMID_SIZE, pyramidStatus, PyramidScene } from './pyramid/PyramidScene';
@@ -1095,6 +1098,25 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (before, after) =>
       (after as RummyState).table.length > (before as RummyState).table.length ? 'go' : 'place',
     createScene: (session) => new RummyScene(session),
+  }),
+  entry({
+    definition: wordGuessGame,
+    tagline: 'Six goes at the word of the day',
+    minutes: '3 min',
+    howTo: {
+      goal: 'Find the five-letter word in six goes.',
+      controls: 'Type a word and press Enter. Green means the letter is in the right place, yellow means it is in the word somewhere else, grey means it is not in the word. On a phone, use the keyboard on screen.',
+      win: 'Guess the word before the six goes run out.',
+      tip: 'Start with a word full of common letters. A letter can show up twice, and the colours tell you when it does not.',
+    },
+    sideNames: () => WORD_NAMES,
+    sideColors: () => WORD_COLORS,
+    size: WORD_SIZE,
+    color: DARK.mint,
+    status: (state) => wordStatus(state as WordState),
+    resultText: (state) => wordResult(state as WordState),
+    moveCue: () => 'place',
+    createScene: (session) => new WordScene(session),
   }),
   entry({
     definition: slidingPuzzle,

@@ -26,6 +26,7 @@ const GAMES = [
   'Callbreak',
   'Gin Rummy',
   'Rummy',
+  'Word Guess',
   'Memory',
   'Sliding Puzzle',
   'Color Sort',

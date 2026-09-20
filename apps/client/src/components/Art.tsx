@@ -682,6 +682,37 @@ function RummyArt() {
   );
 }
 
+function WordGuessArt() {
+  const tile = (x: number, fill: string, letter: string, ink: string) => (
+    <g key={x}>
+      <rect x={x} y="34" width="26" height="32" rx="7" fill={fill} stroke={fill === '#fff' ? '#E6E1F3' : fill} stroke-width="2.5" />
+      <text
+        x={x + 13}
+        y="51"
+        font-family="Fredoka, sans-serif"
+        font-weight="600"
+        font-size="18"
+        text-anchor="middle"
+        dominant-baseline="central"
+        fill={ink}
+      >
+        {letter}
+      </text>
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {tile(8, COLORS.mint, 'W', '#fff')}
+      {tile(38, '#fff', 'O', INK)}
+      {tile(68, COLORS.sunny, 'D', '#fff')}
+      <rect x="8" y="72" width="26" height="8" rx="4" fill="#E6E1F3" />
+      <rect x="38" y="72" width="26" height="8" rx="4" fill="#E6E1F3" />
+      <rect x="68" y="72" width="26" height="8" rx="4" fill="#E6E1F3" />
+      <rect x="8" y="20" width="86" height="8" rx="4" fill="#E6E1F3" />
+    </svg>
+  );
+}
+
 function SudokuArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -966,6 +997,7 @@ const ART: Record<string, () => JSX.Element> = {
   callbreak: CallbreakArt,
   'gin-rummy': GinRummyArt,
   rummy: RummyArt,
+  'word-guess': WordGuessArt,
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,

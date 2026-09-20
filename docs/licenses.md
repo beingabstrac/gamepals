@@ -15,3 +15,6 @@ Every third-party asset, font, sound, word list and code dependency with a licen
 - `chess.js` (rules) — confirm license is permissive.
 - `tonnetto` (TS chess engine, reference only) — confirm license.
 - Kenney packs — CC0; record each pack when downloaded.
+
+## Word lists
+- **ENABLE** (Enhanced North American Benchmark Lexicon, Alan Beale), public domain, via [dolph/dictionary](https://github.com/dolph/dictionary). Used for Word Guess: `popular.txt` for the answers, `enable1.txt` for what may be typed. Packed into `packages/rules/src/games/word-guess/words.ts`; nothing is fetched at runtime.
