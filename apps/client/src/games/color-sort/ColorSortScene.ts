@@ -221,7 +221,7 @@ export class ColorSortScene extends Scene {
       // Undo: everything back in place.
       this.tubes.forEach((tube, i) => {
         this.tweens.killTweensOf(tube);
-        tube.setPosition(this.spots[i]!.x, this.spots[i]!.y).setAngle(0);
+        tube.setPosition(this.spots[i]!.x, this.spots[i]!.y).setAngle(0).setScale(1).setDepth(0);
         this.drawLayers(i);
       });
       return;
@@ -233,8 +233,9 @@ export class ColorSortScene extends Scene {
     const from = this.spots[pour.from]!;
     const to = this.spots[pour.to]!;
     const tilt = to.x >= from.x ? 38 : -38;
+    this.settleTubes(pour.from);
     this.tweens.killTweensOf(source);
-    source.setDepth(5);
+    source.setScale(1).setAngle(0).setDepth(5);
     this.tweens.add({
       targets: source,
       x: from.x + (to.x - from.x) * 0.55,
@@ -267,6 +268,20 @@ export class ColorSortScene extends Scene {
         }
         if (state.result) this.celebrate();
       },
+    });
+  }
+
+  /**
+   * Puts every tube that is not pouring back where it belongs. `killTweensOf` takes the entry pop
+   * and any unfinished return with it, so a tube caught inside the opening stagger kept whatever
+   * size its tween died at: the gallery caught two tubes smaller than the third and one left
+   * hanging above its place. A tube with a tween still running is left alone to finish.
+   */
+  private settleTubes(pouring: number): void {
+    this.tubes.forEach((tube, i) => {
+      if (i === pouring || this.tweens.getTweensOf(tube).length > 0) return;
+      const spot = this.spots[i]!;
+      tube.setPosition(spot.x, spot.y).setAngle(0).setScale(1).setDepth(0);
     });
   }
 

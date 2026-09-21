@@ -92,8 +92,13 @@ export function makeCard(scene: Scene, card: number, cw: number, ch: number): Ca
   // A card in a fan shows only the strip down to the next card's top edge, and two glyphs stacked
   // do not fit in it: the suit was cut off on every covered card in Solitaire, FreeCell and Spider,
   // which in Spider is the one thing you have to read. Ten gets a smaller rank so the two clear.
-  const rankText = sharpText(scene, -cw / 2 + 15 * scale, -ch / 2 + 18 * scale, RANKS[rank - 1]!, (rank === 10 ? 20 : 26) * scale, color).setFontStyle('bold');
-  const suitText = sharpText(scene, -cw / 2 + 33 * scale, -ch / 2 + 18 * scale, suit, 17 * scale, color);
+  //
+  // It is kept as narrow as those glyph sizes allow, because a hand fans the other way: a card in
+  // a hand shows the strip from its left edge to the next card, so a wide index clips there
+  // instead. At this width it reaches 0.41 of the card, so a hand has to pass about twenty cards
+  // before the suit goes. Only Old Maid deals that many, and Old Maid is played on rank alone.
+  const rankText = sharpText(scene, -cw / 2 + 14 * scale, -ch / 2 + 18 * scale, RANKS[rank - 1]!, (rank === 10 ? 18 : 26) * scale, color).setFontStyle('bold');
+  const suitText = sharpText(scene, -cw / 2 + 30 * scale, -ch / 2 + 18 * scale, suit, 16 * scale, color);
   const parts: GameObjects.GameObject[] = [face, rankText, suitText];
   if (rank > 10) {
     // Picture cards: the letter in a bubble of the suit's color.

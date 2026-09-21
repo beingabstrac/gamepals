@@ -437,6 +437,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   The layout declares what it will leave (`indexStep`) and the check measures the real text
   against it, so the number cannot drift away from the card face in silence. Proven red first, on
   both engines, before any of it was fixed.
+  - **The fix had a cost in the other direction, measured rather than guessed.** A hand fans
+    sideways, so a card there shows the strip from its left edge to the next card, and a wider
+    index clips *there* instead. Laying rank beside suit took the index from 0.33 of a card's
+    width to 0.455, which moves the hand size at which a suit disappears from about 24 cards down
+    to about 18. Tightening the glyphs brought it back to 0.41, or about 20 cards. Hearts, Spades
+    and Callbreak deal 13, Rummy and Gin peak near 14, so none of them can reach it. Only Old Maid
+    does, dealing 26 to each of two players, and Old Maid already clipped before any of this and is
+    played on rank alone. The real answer for a hand too wide to fan is to shrink its cards rather
+    than overlap them further, which is a milestone and not a patch.
   - **Pyramid is the counter-example that makes the finding specific:** it overlaps cards from
     below, so every top-left index stays visible. This was never a card problem, it was a
     column problem, and only three games have columns.
@@ -448,6 +457,21 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     animation. Neither is filed, because both are exactly the kind of picture that has been wrong
     every time today. Both are worth a check of their own: "the pill and the labels agree once
     the board is settled", and "the tubes are one size and centred once the board is settled".
+
+- [ ] **Q4 The board finishes the move before the sheet says how it ended.** `GameScreen` renders
+  the result sheet the moment `state.result` is set, and the board is still animating the move
+  that caused it. Four in a Row says "Nova (Yellow) wins!" with the winning disc still in the air,
+  one row above the gap it is falling into. Every game that settles a move has this: the falling
+  disc, the flying domino, the walking token, the sliding tile, the pouring tube. The reveal is
+  given away before it happens.
+  The same missing signal weakens the gallery. `settle()` waits for tweens to go quiet, but Four
+  in a Row drops its disc with gravity in `update()` and never tweens at all, so settle sees a
+  still scene and photographs a disc in mid-air. Every real-time scene is in the same position:
+  air hockey, ping pong, both snakes, sumo, tug of war, penalty kicks.
+  One mechanism answers both: an optional `busy()` a scene can offer, meaning "I am still showing
+  the last move". The sheet waits for it, capped at something like 1.2s so a stuck scene can never
+  swallow the result, and the gallery waits for it too. Worth doing before the store screenshots,
+  because a screenshot of a half-finished move is not a screenshot of the game.
 
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
