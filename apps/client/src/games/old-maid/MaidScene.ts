@@ -1,4 +1,5 @@
 import { MAID_QUEEN, rankOf, takeMove, type MaidMove, type MaidState } from '@gamepals/rules';
+import { playerName } from '../../outcome';
 import { Scene, type GameObjects } from 'phaser';
 import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
@@ -249,8 +250,6 @@ export const maidResult = (state: MaidState, labels: readonly string[], sides: r
   const loser = state.hands.findIndex((hand) => hand.length);
   if (loser === -1) return undefined;
   const card = state.hands[loser]![0]!;
-  const label = labels[loser] ?? 'Somebody';
-  const side = sides[loser];
-  const name = side && side !== label ? `${label} (${side})` : label;
+  const name = playerName(labels, sides, loser);
   return rankOf(card) === MAID_QUEEN ? `${name} is the old maid!` : `${name} is left holding it!`;
 };

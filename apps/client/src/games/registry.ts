@@ -105,6 +105,7 @@ import type { Scene } from 'phaser';
 import type { ComponentType } from 'preact';
 import type { Session } from '../session';
 import type { SoundName } from '../sfx';
+import { playerName } from '../outcome';
 import { storage } from '../platform';
 import { COLORS, DARK } from '../theme';
 import { AIR_HOCKEY_COLORS, AIR_HOCKEY_SIZE, AirHockeyScene, type RealtimeSceneOptions } from './air-hockey/AirHockeyScene';
@@ -655,10 +656,11 @@ export const GAMES: readonly AnyEntry[] = [
       const now = who ? `${who}${what}` : `${what[0]!.toUpperCase()}${what.slice(1)}`;
       return done.length ? `${now}. Scores: ${done.join(', ')}` : now;
     },
-    resultText: (state) => {
+    resultText: (state, names) => {
       const s = state as ShutState;
-      const names = yatzyNames(s.scores.length);
-      if (s.last?.kind === 'shut' && s.last.shutBox) return s.scores.length === 1 ? 'You shut the box!' : `${names[s.last.seat]} shut the box!`;
+      const sides = yatzyNames(s.scores.length);
+      if (s.last?.kind === 'shut' && s.last.shutBox)
+        return s.scores.length === 1 ? 'You shut the box!' : `${playerName(names, sides, s.last.seat)} shut the box!`;
       return s.scores.length === 1 ? `You finished with ${s.scores[0]} points` : undefined;
     },
     moveCue: (_before, after) => {

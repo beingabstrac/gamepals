@@ -265,7 +265,10 @@ export class ColorSortScene extends Scene {
           duration: 200,
           delay: 90,
           ease: 'Quad.easeInOut',
-          onComplete: () => source.setDepth(0),
+          // Say where it lands, for the same reason the squash does: after the last pour of a
+          // finished game nothing else runs, so a tween that only almost arrives leaves the tube
+          // hanging there for good.
+          onComplete: () => source.setPosition(from.x, from.y).setAngle(0).setScale(1).setDepth(0),
         });
         const done = state.tubes[pour.to]!;
         if (done.length === TUBE_SIZE && done.every((c) => c === done[0])) {
@@ -321,7 +324,16 @@ export class ColorSortScene extends Scene {
 
   private celebrate(): void {
     this.tubes.forEach((tube, i) => {
-      this.tweens.add({ targets: tube, y: this.spots[i]!.y - 34, duration: 220, delay: 300 + i * 70, yoyo: true, ease: 'Sine.easeOut' });
+      const spot = this.spots[i]!;
+      this.tweens.add({
+        targets: tube,
+        y: spot.y - 34,
+        duration: 220,
+        delay: 300 + i * 70,
+        yoyo: true,
+        ease: 'Sine.easeOut',
+        onComplete: () => tube.setY(spot.y),
+      });
     });
   }
 
@@ -330,7 +342,9 @@ export class ColorSortScene extends Scene {
     const [from, to] = move.slice(1).split(':').map(Number) as [number, number];
     [from, to].forEach((i, k) => {
       const tube = this.tubes[i];
-      if (tube) this.tweens.add({ targets: tube, y: this.spots[i]!.y - 16, duration: 160, delay: k * 360, yoyo: true, repeat: 1, ease: 'Sine.easeOut' });
+      if (!tube) return;
+      const spot = this.spots[i]!;
+      this.tweens.add({ targets: tube, y: spot.y - 16, duration: 160, delay: k * 360, yoyo: true, repeat: 1, ease: 'Sine.easeOut', onComplete: () => tube.setY(spot.y) });
     });
   }
 }

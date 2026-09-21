@@ -37,3 +37,20 @@ export function resultTitle(result: GameResult, seats: readonly SeatController[]
   if (you && !shared && isPerson(seats, result.winners[0]!)) return 'You win! 🎉';
   return `${who} ${shared ? 'share the win' : names[0] === 'You' ? 'win' : 'wins'}! 🎉`;
 }
+
+/**
+ * What to call a player in a line a game writes for itself: "Nova (Blue)", the same shape
+ * `resultTitle` uses, falling back to the side's own name when there is nothing else.
+ *
+ * Three games have now shipped a result that named a colour while the running score directly
+ * under it named the person. Hearts said "Yellow wins with 0", Old Maid said "Purple is the old
+ * maid!", Shut the Box said "Blue shut the box!", each above a line reading "Nova 0 · Pip 1 ·
+ * Zed 0 · Bo 1". `resultText` is handed the seat names; the trap is that it is the second
+ * parameter and a one-argument arrow silently drops it.
+ */
+export function playerName(names: readonly string[], sides: readonly string[], seat: number): string {
+  const label = names[seat];
+  const side = sides[seat];
+  if (!label) return side ?? `Player ${seat + 1}`;
+  return side && side !== label ? `${label} (${side})` : label;
+}

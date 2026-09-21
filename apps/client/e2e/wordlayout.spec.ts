@@ -233,40 +233,43 @@ test('Color Sort: every settled tube is its proper size, in its proper place', a
 });
 
 /**
- * A result that names somebody has to name somebody at this table. Old Maid was handed the side
- * colours instead of the players, so the sheet read "Purple is the old maid!" directly above a
- * running score reading "Nova 0 · Pip 1 · Zed 1 · Bo 1": the same person, named two ways, one
- * line apart. The running score is the list of who is actually here, so the heading is checked
- * against it rather than against anything this test knows on its own.
+ * A result that names somebody has to name somebody at this table. Three games have shipped one
+ * that named a colour instead: Hearts said "Yellow wins with 0", Old Maid "Purple is the old
+ * maid!", Shut the Box "Blue shut the box!", each directly above a running score reading
+ * "Nova 0 · Pip 1 · Zed 0 · Bo 1". The seat names are the second parameter of `resultText` and a
+ * one-argument arrow drops them without a word. The running score is the list of who is actually
+ * here, so the heading is held against it rather than against anything this test knows itself.
  */
-test('Old Maid: the result names a player at this table', async ({ page }) => {
-  test.setTimeout(120_000);
-  await open(page, 'Old Maid');
-  const title = page.locator('.result-title');
-  await expect(title).toBeVisible({ timeout: 90_000 });
-  const heading = (await title.textContent()) ?? '';
-  const tally = (await page.locator('.rivalry-score').textContent()) ?? '';
-  // "Nova 0 · Pip 1 · Zed 1 · Bo 1" -> the names, without their counts.
-  const players = tally
-    .split('·')
-    .map((part) => part.trim().replace(/\s+-?\d+$/, ''))
-    .filter(Boolean);
-  expect(players.length, `no players to check against, tally was "${tally}"`).toBeGreaterThan(1);
-  expect(players.some((name) => heading.includes(name)), `"${heading}" names nobody in "${tally}"`).toBe(true);
+for (const game of ['Old Maid', 'Shut the Box']) {
+  test(`${game}: the result names a player at this table`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await open(page, game);
+    const title = page.locator('.result-title');
+    await expect(title).toBeVisible({ timeout: 90_000 });
+    const heading = (await title.textContent()) ?? '';
+    const tally = (await page.locator('.rivalry-score').textContent()) ?? '';
+    // "Nova 0 · Pip 1 · Zed 1 · Bo 1" -> the names, without their counts.
+    const players = tally
+      .split('·')
+      .map((part) => part.trim().replace(/\s+-?\d+$/, ''))
+      .filter(Boolean);
+    expect(players.length, `no players to check against, tally was "${tally}"`).toBeGreaterThan(1);
+    expect(players.some((player) => heading.includes(player)), `"${heading}" names nobody in "${tally}"`).toBe(true);
 
-  // While a sheet is up: the confetti must not land on the line that says who won. The sheet had
-  // no stacking order of its own and the burst is at 10, so pieces sat on the headline.
-  const order = await page.evaluate(() => {
-    const layer = (name: string) => {
-      const el = document.querySelector(name);
-      return el ? Number(getComputedStyle(el).zIndex) || 0 : null;
-    };
-    return { sheet: layer('.result-sheet'), confetti: layer('.confetti') };
+    // While a sheet is up: the confetti must not land on the line that says who won. The sheet had
+    // no stacking order of its own and the burst is at 10, so pieces sat on the headline.
+    const order = await page.evaluate(() => {
+      const layer = (selector: string) => {
+        const el = document.querySelector(selector);
+        return el ? Number(getComputedStyle(el).zIndex) || 0 : null;
+      };
+      return { sheet: layer('.result-sheet'), confetti: layer('.confetti') };
+    });
+    if (order.confetti !== null) {
+      expect(order.sheet ?? 0, 'confetti is drawn over the result sheet').toBeGreaterThan(order.confetti);
+    }
   });
-  if (order.confetti !== null) {
-    expect(order.sheet ?? 0, 'confetti is drawn over the result sheet').toBeGreaterThan(order.confetti);
-  }
-});
+}
 
 /**
  * Every card in your hand is either where the layout put it or on its way there. One that is
