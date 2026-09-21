@@ -188,6 +188,20 @@ export class UltimateScene extends Scene {
     }
   }
 
+  /**
+   * Which board the scene is telling you to play in, against which one the rules say. A settled
+   * shot had the top-middle board glowing under a line reading "play in the right board", and the
+   * two come from the same field, so either I misread the picture or something is out of step.
+   * `lit` is what is drawn, `active` is what the rules hold, and the test also reads the status
+   * line, because the line is HTML and the glow is canvas and only a check sees both at once.
+   */
+  activeCheck(): { lit: number[]; active: number | null } {
+    const state = this.state;
+    const open = state.boards.filter((mark) => mark === null).length;
+    const anywhere = state.liveBoards.length >= open;
+    return { lit: anywhere ? [] : state.liveBoards, active: state.active };
+  }
+
   private draw(): void {
     const state = this.state;
     const g = this.layer.clear();

@@ -221,3 +221,32 @@ test('offline: a game starts and plays with the network cut', async ({ page, con
   await context.setOffline(false);
   expect(errors).toEqual([]);
 });
+
+/**
+ * The glow and the line have to agree. A settled gallery shot had the top-middle board glowing
+ * under a status reading "play in the right board", which are boards 1 and 5. Both come from the
+ * same field, so this reads the canvas and the HTML at the same moment and says whether they
+ * really disagree or whether the picture caught them a beat apart.
+ */
+test('Ultimate Tic-Tac-Toe: the glowing board is the one the line names', async ({ page }) => {
+  const NAMES = ['top-left', 'top', 'top-right', 'left', 'middle', 'right', 'bottom-left', 'bottom', 'bottom-right'];
+  await page.goto('/?autoplay=3');
+  await page.getByRole('button', { name: /^Ultimate Tic-Tac-Toe/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+
+  for (let look = 0; look < 8; look++) {
+    await page.waitForTimeout(500);
+    const both = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as { activeCheck?: () => { lit: number[]; active: number | null } } | undefined;
+      const pill = document.querySelector('.turn-pill');
+      return scene?.activeCheck ? { ...scene.activeCheck(), line: pill?.textContent ?? '' } : null;
+    });
+    if (!both) break;
+    if (both.active === null || both.lit.length !== 1) continue;
+    const named = NAMES[both.active]!;
+    expect(both.lit[0], `the line says "${both.line.trim()}" and the glow is on board ${both.lit[0]}`).toBe(both.active);
+    expect(both.line, `the glow is on the ${named} board`).toContain(named);
+  }
+});

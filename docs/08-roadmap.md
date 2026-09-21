@@ -399,6 +399,11 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   way up for each player, which is right with two people and silly against a bot: there is nobody
   on the other side of the phone, so it was the same words printed twice in the middle. One copy
   now unless a person is sitting there.
+- **Answered: the Callbreak card was innocent (2026-09-21).** The census came back green on both
+  engines, so the face-down card at an empty seat was the last trick sitting where it was won,
+  counted in `state.trick` like every other card. Fourth time today a picture looked wrong and the
+  game was right, and the first time I asked before deciding. The check stays: it says what the
+  scene draws against what the rules hold, which is worth having in every card game.
 - **Open question: one face-down card in Callbreak (2026-09-21).** The settled end-of-game shot
   shows a single card back at Pip's side of the table with every hand empty. Other seats' hands
   are drawn face-down near their trick spot, so a card there means a card still in a hand after
