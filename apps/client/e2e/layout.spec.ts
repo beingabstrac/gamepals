@@ -6,6 +6,33 @@ import { expect, test, type Page } from '@playwright/test';
  */
 const GAMES = ['Tic-Tac-Toe', 'Four in a Row', 'Ludo', '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks', 'Crazy Eights', 'Go Fish', 'War', 'Old Maid', 'Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy', 'Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Memory', 'Sliding Puzzle', 'Color Sort', 'Echo', 'Classic Snake', 'Checkers', 'Chess', 'Backgammon', 'Sea Battle', 'Reversi', 'Dots & Boxes', 'Mancala', 'Snakes & Ladders', 'Ultimate Tic-Tac-Toe', 'Yatzy', 'Shut the Box', 'Dominoes', 'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle'];
 
+/**
+ * Any text on the game screen that does not fit the box holding it. Yatzy's score card was cutting
+ * half its row names down to "Two p..." and "Bonus ...", and nothing noticed for as long as it has
+ * shipped, because the checks here look at `.board` and a game's own controls are HTML underneath
+ * it. This looks at all of it.
+ *
+ * An element that scrolls is doing it on purpose and is left alone; so is one whose child simply
+ * sits wider, which is a layout decision rather than lost text. What is reported is a box that
+ * holds more text than it shows.
+ */
+async function textThatDoesNotFit(page: Page): Promise<string[]> {
+  return page.evaluate(() =>
+    [...document.querySelectorAll('.screen *')].flatMap((node) => {
+      const el = node as HTMLElement;
+      if (!el.offsetParent && el.tagName !== 'TH') return [];
+      // Only boxes whose own text is the thing overflowing.
+      const text = [...el.childNodes].some((child) => child.nodeType === 3 && child.textContent?.trim());
+      if (!text) return [];
+      const style = getComputedStyle(el);
+      if (style.overflowX === 'auto' || style.overflowX === 'scroll') return [];
+      if (el.scrollWidth <= el.clientWidth + 1) return [];
+      const label = (el.textContent ?? '').trim().slice(0, 40);
+      return [`${el.className || el.tagName}: "${label}"`];
+    }),
+  );
+}
+
 async function noSidewaysScroll(page: Page, where: string): Promise<void> {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow, `${where} scrolls sideways by ${overflow}px`).toBeLessThanOrEqual(1);
@@ -63,6 +90,8 @@ for (const name of GAMES) {
       await button.scrollIntoViewIfNeeded();
       await expect(button).toBeInViewport();
     }
+    // And nothing the game writes is wider than the box it is written in.
+    expect(await textThatDoesNotFit(page), `${name}: text that does not fit`).toEqual([]);
   });
 }
 
