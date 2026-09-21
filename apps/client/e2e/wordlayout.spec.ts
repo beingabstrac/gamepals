@@ -164,3 +164,33 @@ for (const name of ['Solitaire', 'FreeCell', 'Spider']) {
     expect(tight, `${name}: covered cards cut their own index off (shortest step ${worst})`).toBe(0);
   });
 }
+
+/**
+ * A sliding tile is born at scale 0 and popped up on a stagger. `animate` killed every tween on a
+ * tile it was about to move, the entry pop included, so a tile that moved inside that window slid
+ * to the right square and stayed invisible for the rest of the game: the gallery caught a 3x3
+ * puzzle showing four tiles of eight at move 83. Nothing ever put the board back in agreement
+ * with the state, because only the tiles named in the last move were ever touched.
+ */
+test('Sliding Puzzle: every tile the state has is on the board and visible', async ({ page }) => {
+  test.setTimeout(90_000);
+  await open(page, 'Sliding Puzzle');
+  let settled = 0;
+  let missing = 0;
+  let adrift = 0;
+  for (let look = 0; look < 8; look++) {
+    await page.waitForTimeout(700);
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as { boardCheck?: () => { settled: number; shown: number; placed: number } } | undefined;
+      return scene?.boardCheck ? scene.boardCheck() : null;
+    });
+    if (!report) break;
+    settled += report.settled;
+    missing += report.settled - report.shown;
+    adrift += report.settled - report.placed;
+  }
+  expect(settled, 'no tile ever came to rest, so nothing was measured').toBeGreaterThan(20);
+  expect(missing, 'tiles came to rest invisible').toBe(0);
+  expect(adrift, 'tiles came to rest off their square').toBe(0);
+});

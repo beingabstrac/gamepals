@@ -139,6 +139,29 @@ export class SlidingScene extends Scene {
     this.tweens.add({ targets: cam, scrollX: cam.scrollX - dx * 4, scrollY: cam.scrollY - dy * 4, duration: 60, yoyo: true });
   }
 
+  /**
+   * Whether every tile the state says is on the board is actually on the board, and visible.
+   * Tiles are born at scale 0 and popped up on a stagger, and `animate` used to kill every tween
+   * on a moving tile, the entry pop included: a tile that moved inside that window stayed at
+   * scale 0 for the rest of the game. A settled tile is the only one worth asking about, because
+   * one in flight is allowed to be anywhere.
+   */
+  boardCheck(): { settled: number; shown: number; placed: number } {
+    let settled = 0;
+    let shown = 0;
+    let placed = 0;
+    this.state.tiles.forEach((tile, cell) => {
+      if (!tile) return;
+      const view = this.views.get(tile);
+      if (!view || this.tweens.getTweensOf(view).length > 0) return;
+      settled++;
+      if (view.scaleX > 0.5 && view.scaleY > 0.5 && view.alpha > 0.5) shown++;
+      const { x, y } = this.pos(cell);
+      if (Math.abs(view.x - x) < 2 && Math.abs(view.y - y) < 2) placed++;
+    });
+    return { settled, shown, placed };
+  }
+
   private animate(): void {
     const state = this.state;
     state.last.forEach((step, i) => {

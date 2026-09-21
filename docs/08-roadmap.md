@@ -419,6 +419,36 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   twice, a settle landing in a gap between hops, and nine games that were hiding themselves on
   purpose. The way to answer it is a check that says where every one of the fifty-two cards is,
   which is worth having for all the card games and is a loop of its own.
+- [x] **Q3 A fanned card shows enough of itself to be read (2026-09-21).** Solitaire, FreeCell and
+  Spider fan a column so each card shows one strip: its own top edge down to where the next card
+  starts. The corner index has to fit in that strip. It did not, in any of the three, even before
+  any squeeze: the check came back 38, 36 and 30 against an index reaching about 55, so the suit
+  was cut off on every covered card in every column, always. In Spider a run has to be all one
+  suit, so the one thing you have to read was the one thing missing. Every game still played and
+  finished, which is why nothing had ever said a word; the gallery showed it.
+  Rank over suit needs about 55 units and no fan can afford that, so the index now runs along the
+  top of the card, rank then suit. That brings it to about 34, which all three existing steps
+  already clear, so nothing grew and no column got shorter. Ten gets a smaller rank so the glyphs
+  do not meet.
+  The squeeze was the other half of it. It shrank face-down and face-up steps by one factor,
+  spending scarce room equally on cards that say nothing and cards you have to read. Face-down
+  cards give up their space first now, down to a sliver, and a face-up card loses part of its
+  index only after that is gone. FreeCell has nothing face down and just gets a floor.
+  The layout declares what it will leave (`indexStep`) and the check measures the real text
+  against it, so the number cannot drift away from the card face in silence. Proven red first, on
+  both engines, before any of it was fixed.
+  - **Pyramid is the counter-example that makes the finding specific:** it overlaps cards from
+    below, so every top-left index stays visible. This was never a card problem, it was a
+    column problem, and only three games have columns.
+  - **Two questions this sweep raised and did not answer.** War shows "15 to 37" in the pill while
+    the labels beside the decks read "Pip: 36" and "Nova: 16": both read the same `state.counts`
+    with no cache between them, so the likeliest cause is a one-frame skew between the canvas and
+    the DOM in a composited screenshot, which no player would see. Colour Sort ends with its tubes
+    at different sizes and seemingly off-centre, which matches completed tubes running a finish
+    animation. Neither is filed, because both are exactly the kind of picture that has been wrong
+    every time today. Both are worth a check of their own: "the pill and the labels agree once
+    the board is settled", and "the tubes are one size and centred once the board is settled".
+
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel
