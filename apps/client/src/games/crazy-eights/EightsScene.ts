@@ -15,6 +15,7 @@ import type { Session } from '../../session';
 import { COLORS, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, makeCard, placeAt, setFace, slideTo, type CardView } from '../cards/view';
+import { labelReport, type LabelReport } from '../cards/labels';
 import { HandPrivacy } from '../cards/privacy';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -103,7 +104,7 @@ export class EightsScene extends Scene {
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
       const x = (W / (seats + 1)) * (seat + 1);
-      this.seatText.push(sharpText(this, x, 46, '', 22, '#2f76b0').setDepth(4000));
+      this.seatText.push(sharpText(this, x, 28, '', 22, '#2f76b0').setDepth(4000));
     }
   }
 
@@ -310,6 +311,12 @@ export class EightsScene extends Scene {
    * cards are face up. The promise is that nobody sees a hand that is not theirs, and a canvas
    * cannot be asked that from the outside.
    */
+  /** Test mode only: whether any seat label runs off the table, sits on a card or touches another. */
+  labelCheck(): LabelReport {
+    const cards = [...this.spots.values()].map((spot) => ({ x: spot.x, y: spot.y, w: CW, h: CH }));
+    return labelReport(this.seatText, cards, W, H);
+  }
+
   handCheck(): { shown: number; covered: boolean; faceUp: number } {
     const mine = this.state.hands[this.privacy.shown] ?? [];
     return {

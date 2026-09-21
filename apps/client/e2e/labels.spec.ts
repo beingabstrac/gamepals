@@ -21,7 +21,7 @@ async function labelCheck(page: Page): Promise<LabelReport | null> {
   });
 }
 
-for (const name of ['Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy', 'Go Fish']) {
+for (const name of ['Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy', 'Go Fish', 'Crazy Eights', 'Old Maid']) {
   test(`${name}: every seat name is on the table and clear of the cards`, async ({ page }) => {
     await page.goto('/?autoplay=4');
     await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();

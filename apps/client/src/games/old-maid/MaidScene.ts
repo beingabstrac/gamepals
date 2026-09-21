@@ -5,6 +5,7 @@ import type { Session } from '../../session';
 import { COLORS } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { makeCard, placeAt, RANKS, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
+import { labelReport, type LabelReport } from '../cards/labels';
 import { HandPrivacy } from '../cards/privacy';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -59,7 +60,7 @@ export class MaidScene extends Scene {
     this.banner = sharpText(this, W / 2, OFFER_Y + CH / 2 + 30, '', 26, '#7a4dae').setDepth(4000);
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
-      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 48, '', 21, '#7a4dae').setDepth(4000));
+      this.seatText.push(sharpText(this, (W / (seats + 1)) * (seat + 1), 30, '', 21, '#7a4dae').setDepth(4000));
     }
     for (let card = 0; card < 52; card++) {
       const view = makeCard(this, card, CW, CH);
@@ -219,6 +220,12 @@ export class MaidScene extends Scene {
   }
 
   /** Test mode only: whose hand is on screen, whether it is covered, and how much of it shows. */
+  /** Test mode only: whether any seat label runs off the table, sits on a card or touches another. */
+  labelCheck(): LabelReport {
+    const cards = [...this.spots.values()].map((spot) => ({ x: spot.x, y: spot.y, w: CW, h: CH }));
+    return labelReport(this.seatText, cards, W, H);
+  }
+
   handCheck(): { shown: number; covered: boolean; faceUp: number } {
     const mine = this.state.hands[this.privacy.shown] ?? [];
     return { shown: this.privacy.shown, covered: this.privacy.covered, faceUp: mine.filter((card) => this.views.get(card)?.up).length };
