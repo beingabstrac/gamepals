@@ -82,7 +82,10 @@ export class FishScene extends Scene {
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
       const x = (W / (seats + 1)) * (seat + 1);
-      this.seatText.push(sharpText(this, x, 40, '', seats > 3 ? 18 : 21, '#2f76b0').setDepth(4000).setAlign('center'));
+      // Two lines of it, so y is the middle of both. The seat cards start at 55 (y 112, height
+      // 113), so a label centred at 40 reached 63 and sat on them: the new check said so before
+      // this shipped, which is the first time one of these caught a change on the way in.
+      this.seatText.push(sharpText(this, x, 26, '', seats > 3 ? 17 : 19, '#2f76b0').setDepth(4000).setAlign('center'));
     }
   }
 

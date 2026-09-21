@@ -373,6 +373,9 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   `labelReport` gained a third list, `touching`, because it knew about labels off the table and
   labels on cards but not about labels on each other, and Go Fish had no `labelCheck` at all. It
   has one now and is in `labels.spec.ts` with the other five.
+  **And it immediately caught the fix**: two lines are twice as tall, so a label centred at 40
+  reached 63 while the seat cards start at 56. Moved up to 26. The first list caught the original
+  bug and the second caught my repair of it, in the same run.
 - **Spades never said who was partnered with whom (2026-09-21).** The scoreboard read "Blue 71 ·
   Red -60" over four seats named Nova, Pip, Zed and Bo, and the result said "Blue wins" with
   nothing on screen tying a name to a side. In a partnership game that is the one thing the board
