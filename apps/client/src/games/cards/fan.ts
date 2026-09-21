@@ -10,6 +10,13 @@
 const DOWN_MIN = 6;
 
 /**
+ * How far a face-up card has to step for its corner index to clear, for a card of this width.
+ * The layout declares this; `fanReport` measures the real text and says so if the declaration is
+ * wrong, so the number cannot quietly drift away from the card face.
+ */
+export const indexStep = (cw: number): number => (36 * cw) / 88;
+
+/**
  * The step under each card in a column, given the room the column has.
  *
  * Face-down cards give up their space first. Squeezing both kinds by the same factor, which is

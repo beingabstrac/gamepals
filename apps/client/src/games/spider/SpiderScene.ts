@@ -4,7 +4,7 @@ import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, flipTo, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
-import { fanReport } from '../cards/fan';
+import { fanReport, fanSteps, indexStep } from '../cards/fan';
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -55,14 +55,18 @@ function layout(state: SpiderState, done: readonly number[]): Map<number, Spot> 
   done.forEach((card, i) => spots.set(card, { x: 16 + CW / 2 + Math.floor(i / 13) * 34, y: FOOT_Y, up: true, depth: 100 + i, source: null }));
   state.columns.forEach((column, c) => {
     const run = state.runLength(c);
-    const steps = column.cards.slice(0, -1).map((_, i) => (i < column.down ? DOWN_STEP : UP_STEP));
-    const total = steps.reduce((a, b) => a + b, 0);
-    const squeeze = total > ROOM ? ROOM / total : 1;
+    const steps = fanSteps(
+      column.cards.slice(0, -1).map((_, i) => i < column.down),
+      ROOM,
+      DOWN_STEP,
+      UP_STEP,
+      indexStep(CW),
+    );
     let y = TAB_Y;
     column.cards.forEach((card, i) => {
       const movable = i >= column.cards.length - run;
       spots.set(card, { x: colX(c), y, up: i >= column.down, depth: 300 + c * 30 + i, source: movable ? { column: c, index: i } : null });
-      y += (steps[i] ?? 0) * squeeze;
+      y += steps[i] ?? 0;
     });
   });
   return spots;

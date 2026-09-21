@@ -13,7 +13,7 @@ import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
-import { fanReport } from '../cards/fan';
+import { fanReport, indexStep } from '../cards/fan';
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -74,8 +74,11 @@ function layout(state: FreeCellState): Map<number, Spot> {
   });
   state.columns.forEach((cards, c) => {
     const run = grabbable(state, c);
+    // Nothing here is face down, so there is no slack to take from elsewhere: the step just has
+    // to stay above the index for as long as the column fits at all.
     const total = Math.max(0, cards.length - 1) * STEP;
-    const squeeze = total > ROOM ? ROOM / total : 1;
+    const floor = indexStep(CW);
+    const squeeze = total > ROOM ? Math.max(ROOM / total, Math.min(1, floor / STEP)) : 1;
     const inRun = state.runLength(c);
     cards.forEach((card, i) => {
       // Only the run at the bottom of a column can be picked up, and only as far as the cells carry.
