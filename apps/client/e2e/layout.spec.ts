@@ -67,6 +67,27 @@ for (const name of GAMES) {
 }
 
 /**
+ * Text that is cut off is worse than text that wraps: "Two p..." and "Bonus ..." tell you nothing.
+ * The Yatzy card is the worst case, fifteen row names against four columns of scores on a phone,
+ * and the gallery caught half of them ellipsised. This asks the page whether any of its own labels
+ * are clipped, which is a thing the DOM knows and a screenshot only hints at.
+ */
+test('Yatzy: no row name is cut off', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /^Yatzy/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.yatzy-card')).toBeVisible();
+  const clipped = await page.evaluate(() =>
+    [...document.querySelectorAll('.yatzy-card th.box')].flatMap((cell) => {
+      const box = cell as HTMLElement;
+      // A cell whose text is wider than the cell is showing an ellipsis instead of a word.
+      return box.scrollWidth > box.clientWidth + 1 ? [`${box.textContent}`] : [];
+    }),
+  );
+  expect(clipped, 'these row names are cut off').toEqual([]);
+});
+
+/**
  * Big screens should use the room rather than centring a phone layout in it. The store
  * screenshots showed the board sitting in the middle third of a landscape tablet with empty
  * space either side, and none of the checks above said a word, because nothing overflowed.

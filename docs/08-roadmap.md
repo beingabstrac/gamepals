@@ -310,6 +310,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     reskin, both of which we already ship. Rule: each game must clearly be its own game. This one
     does not get built until there is a design that is not one of those two, and inventing that is
     a loop of its own rather than a rushed third of this one.
+- **Yatzy's score card was cutting its own row names off (2026-09-21).** "Two p...", "Bonus ...",
+  and every label past Sixes is long enough to lose its ending on a phone: the name column was 38%
+  of the width with `text-overflow: ellipsis`, against fifteen rows and four columns of scores.
+  Names wrap now. The layout spec asks the page whether any of its labels are clipped, which the
+  DOM knows exactly and a screenshot only hints at.
+  **The gap it came through:** the spec checks that `.board` fits and that nothing scrolls
+  sideways, and a game's own controls are HTML *below* the board, so nothing was looking at them.
+  Yatzy's card is also taller than a phone, which may be right for a fifteen-row table and is not
+  something to change on a hunch. Worth measuring across every game before deciding.
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel

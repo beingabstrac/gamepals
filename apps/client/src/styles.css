@@ -1059,14 +1059,16 @@ h2,
   text-align: center;
 }
 
+/* The row name wraps rather than being cut off. "Two p..." and "Bonus ..." tell you nothing, and
+   every label past Sixes is long enough to lose its ending on a phone: "Three of a kind",
+   "Small straight", "Full house". Two short lines beat one clipped one. */
 .yatzy-card th.box {
-  width: 38%;
-  padding-left: 8px;
+  width: 34%;
+  padding: 2px 6px 2px 8px;
   text-align: left;
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.15;
+  hyphens: auto;
 }
 
 .yatzy-card thead th {
