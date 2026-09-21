@@ -127,10 +127,9 @@ test('Yatzy: no row name is wider than its cell', async ({ page }) => {
  *   sixteen games   1.03x to 1.14x   a footer and some margins past the fold
  *   Yatzy           1.58x, 1.81x     a different thing entirely
  *
- * A tenth of a screen is the house style rather than a defect, so the line is drawn at 1.2x:
- * loose enough that the ordinary overshoot is not noise, tight enough that another Yatzy is
- * caught the day it appears. Tightening the ordinary case is a real piece of work and wants doing
- * on purpose, not smuggled in as a test threshold.
+ * Q2 then fixed the cause rather than the symptom: the board takes the height that is left
+ * instead of 64vh whatever else is on screen. So the line is back at 1.02x, which is what "every
+ * game fits portrait and landscape" actually means.
  *
  * One test, so the answer arrives as one list rather than fifty failures, and one that says how
  * long it needs, because fifty-one games do not fit in the sixty seconds a test gets by default.
@@ -150,7 +149,7 @@ test('how far each game runs past the bottom of the screen', async ({ page }) =>
       const doc = document.documentElement;
       return Math.round((doc.scrollHeight / doc.clientHeight) * 100) / 100;
     });
-    if (over > 1.2) tall.push(`${name} ${over}x`);
+    if (over > 1.02) tall.push(`${name} ${over}x`);
   }
   expect(tall, 'games much taller than the screen').toEqual([]);
 });

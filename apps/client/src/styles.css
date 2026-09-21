@@ -710,6 +710,36 @@ h2,
   margin: 0 auto;
 }
 
+/**
+ * A game screen is one screen (docs/08 Q2). Measured on a 664px phone: the fixed chrome came to
+ * 190px and the board claimed 64vh on top of it, which is 615, leaving 49px for a controls row
+ * that wants 48 to 66. So sixteen games ran a tenth of a screen past the bottom and no game with
+ * a bare board did.
+ *
+ * The board now takes the height that is left rather than a fixed slice of the viewport: the play
+ * area is given what the topbar does not use, and the board shrinks inside it. `min-height: 0` is
+ * the part that matters, because a flex item will not shrink below its content without it, and
+ * the content here is a canvas. `max-height` stays as a cap so a board does not sprawl on a tall
+ * screen, and the board never grows past its aspect ratio because it is allowed to shrink only.
+ *
+ * Scoped to the game screen on purpose: `.screen` is also the home shelf, which is a long list of
+ * fifty-one tiles and must go on scrolling.
+ */
+.game-screen {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.game-screen .play-area {
+  flex: 1;
+  min-height: 0;
+}
+
+.game-screen .board {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
 .board canvas {
   touch-action: none;
 }

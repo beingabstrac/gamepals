@@ -330,7 +330,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   also keeps the dice on screen while you hunt for a box, and the check is drawn at 1.2x: loose
   enough not to fail on the ordinary overshoot, tight enough to catch the next Yatzy. Tightening
   that ordinary 1.1x is real work and should be done on purpose, not smuggled in as a threshold.
-- [ ] **Q2 The board should take the space that is left, not a fixed slice of it.** Sixteen games
+- [x] **Q2 The board takes the space that is left, not a fixed slice of it (2026-09-21).** Sixteen games
   run 1.03x to 1.14x past the bottom of the screen. Measured, and it is arithmetic rather than a
   mystery, on a 664px phone viewport:
 
@@ -351,11 +351,14 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   `min-height: 0`) inside a game screen that is one viewport tall, so it shrinks to fit instead of
   claiming 64% whatever else is there. **Why it is a milestone and not a line in this loop:**
   `.screen` is shared with the home shelf, which is a long scrolling list and must not be pinned
-  to one viewport, so the change has to be scoped to `.game-screen`, and the flex chain runs
-  `.screen` to `.play-area` to `.board`. It cannot be tried locally (no node_modules on the Mac),
-  so every attempt costs a CI run, and a wrong one moves the board on all fifty-one games. Worth
-  doing deliberately with the gallery open, not squeezed into the end of another loop. The 1.2x
-  check guards the outliers until then.
+  to one viewport, so the change is scoped to `.game-screen`. The game screen is one viewport
+  tall, the play area takes what the topbar leaves, and the board shrinks inside it. `min-height:
+  0` is the part that does the work, because a flex item will not shrink below its content and
+  the content here is a canvas. The board is allowed to shrink but not grow, so it never sprawls
+  past its aspect ratio, and `max-height: 64vh` stays as a cap for tall screens.
+  The height check is back at 1.02x, which is what the rule in CLAUDE.md actually says. Verified
+  by the measurement that found it and by the gallery, because a board that fits and a board that
+  looks right are two different claims.
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel
