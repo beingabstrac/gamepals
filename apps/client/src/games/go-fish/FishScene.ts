@@ -5,6 +5,7 @@ import type { Session } from '../../session';
 import { COLORS } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { makeCard, placeAt, RANKS, setFace, slideTo, type CardView } from '../cards/view';
+import { labelReport, type LabelReport } from '../cards/labels';
 import { HandPrivacy } from '../cards/privacy';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -81,7 +82,7 @@ export class FishScene extends Scene {
     const seats = this.session.seats.length;
     for (let seat = 0; seat < seats; seat++) {
       const x = (W / (seats + 1)) * (seat + 1);
-      this.seatText.push(sharpText(this, x, 44, '', 21, '#2f76b0').setDepth(4000));
+      this.seatText.push(sharpText(this, x, 40, '', seats > 3 ? 18 : 21, '#2f76b0').setDepth(4000).setAlign('center'));
     }
   }
 
@@ -153,7 +154,9 @@ export class FishScene extends Scene {
     this.session.seats.forEach((seat, i) => {
       const books = state.books[i]!.length;
       const you = i === this.privacy.shown && this.privacy.open;
-      this.seatText[i]?.setText(`${you ? 'You' : seat.label}: ${state.counts[i]} · ${books} book${books === 1 ? '' : 's'}`);
+      // Two lines. Four of these across a 760px table gives each one 152px, and
+      // "Nova: 4 · 3 books" on one line wants nearer 190, so they ran into each other.
+      this.seatText[i]?.setText(`${you ? 'You' : seat.label}\n${state.counts[i]} · ${books} book${books === 1 ? '' : 's'}`);
     });
     this.privacy.draw();
     this.drawAskButtons();
@@ -292,6 +295,12 @@ export class FishScene extends Scene {
   }
 
   /** Test mode only: whose hand is on screen, whether it is covered, and how much of it shows. */
+  /** Test mode only: whether any seat label runs off the table, sits on a card or touches another. */
+  labelCheck(): LabelReport {
+    const cards = [...this.spots.values()].map((spot) => ({ x: spot.x, y: spot.y, w: CW, h: CH }));
+    return labelReport(this.seatText, cards, W, H);
+  }
+
   handCheck(): { shown: number; covered: boolean; faceUp: number } {
     const mine = this.state.hands[this.privacy.shown] ?? [];
     return { shown: this.privacy.shown, covered: this.privacy.covered, faceUp: mine.filter((card) => this.views.get(card)?.up).length };

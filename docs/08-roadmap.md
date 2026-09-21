@@ -359,6 +359,13 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   The height check is back at 1.02x, which is what the rule in CLAUDE.md actually says. Verified
   by the measurement that found it and by the gallery, because a board that fits and a board that
   looks right are two different claims.
+- **Go Fish ran its seat names into each other (2026-09-21).** "Nova: 4 · 3 books Pip: 5 · 2
+  books" with no gap anywhere: four labels spread evenly across a 760px table gives each 152px,
+  and the text wants nearer 190. On the table, clear of every card, and unreadable. Names sit over
+  their counts now, on two lines and a size smaller when there are four players.
+  `labelReport` gained a third list, `touching`, because it knew about labels off the table and
+  labels on cards but not about labels on each other, and Go Fish had no `labelCheck` at all. It
+  has one now and is in `labels.spec.ts` with the other five.
 - **Spades never said who was partnered with whom (2026-09-21).** The scoreboard read "Blue 71 ·
   Red -60" over four seats named Nova, Pip, Zed and Bo, and the result said "Blue wins" with
   nothing on screen tying a name to a side. In a partnership game that is the one thing the board

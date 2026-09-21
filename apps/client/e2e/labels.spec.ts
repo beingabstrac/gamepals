@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * Seat names against the table they sit on. In Hearts, Spades and Callbreak the two seats at the
+ * Seat names against the table they sit on, and against each other. In Hearts, Spades and Callbreak the two seats at the
  * sides had their names centred 76px from the edge, so a name like "Pip · bid 5 · won 0" ran off
  * the table and sat on top of that seat's face-down pile. Every test passed for two milestones:
  * the page did not scroll, the board fitted, no card went missing. Only a screenshot showed it.
@@ -10,6 +10,7 @@ import { expect, test, type Page } from '@playwright/test';
 interface LabelReport {
   outside: string[];
   over: string[];
+  touching: string[];
 }
 
 async function labelCheck(page: Page): Promise<LabelReport | null> {
@@ -20,7 +21,7 @@ async function labelCheck(page: Page): Promise<LabelReport | null> {
   });
 }
 
-for (const name of ['Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy']) {
+for (const name of ['Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy', 'Go Fish']) {
   test(`${name}: every seat name is on the table and clear of the cards`, async ({ page }) => {
     await page.goto('/?autoplay=4');
     await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
@@ -36,6 +37,7 @@ for (const name of ['Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy']) {
       if (!report) break;
       expect(report.outside, `look ${look + 1}: names off the table`).toEqual([]);
       expect(report.over, `look ${look + 1}: names on top of a card`).toEqual([]);
+      expect(report.touching, `look ${look + 1}: names running into each other`).toEqual([]);
       looked++;
     }
     expect(looked, 'the scene answered labelCheck at least once').toBeGreaterThan(0);
