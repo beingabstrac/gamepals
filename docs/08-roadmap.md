@@ -359,6 +359,14 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   The height check is back at 1.02x, which is what the rule in CLAUDE.md actually says. Verified
   by the measurement that found it and by the gallery, because a board that fits and a board that
   looks right are two different claims.
+- **Spades never said who was partnered with whom (2026-09-21).** The scoreboard read "Blue 71 ·
+  Red -60" over four seats named Nova, Pip, Zed and Bo, and the result said "Blue wins" with
+  nothing on screen tying a name to a side. In a partnership game that is the one thing the board
+  has to say. Every seat label now carries its side and is coloured by it, the way Ludo's status
+  line has always read "Pip (Green) is thinking".
+  **The first version of this was a new line under the scoreboard, and it would have landed on the
+  top seat's label at y=78.** Caught by checking before pushing rather than by a screenshot after,
+  which is the first time today that has happened.
 - **Hearts called the winner by a name that was nowhere on the table (2026-09-21).** The result
   read "Yellow wins with 0" over a board labelled Nova, Pip, Zed and Bo, and the status line said
   "Hearts broken · Yellow lowest" while the scene's own shout said "Nova takes 2". Two naming

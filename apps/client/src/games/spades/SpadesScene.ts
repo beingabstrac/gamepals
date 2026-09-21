@@ -165,7 +165,17 @@ export class SpadesScene extends Scene {
       const you = i === this.privacy.shown && this.privacy.open;
       const bid = state.bids[i]!;
       const said = bid < 0 ? '…' : bid === 0 ? 'nil' : String(bid);
-      this.seatText[this.place(i)]?.setText(`${you ? 'You' : seat.label} · bid ${said} · won ${state.won[i]}`);
+      /**
+       * Every seat says its side, and is coloured by it. A partnership game that never says who
+       * is partnered with whom is asking a lot: the scoreboard read "Blue 71 · Red -60" over four
+       * seats named Nova, Pip, Zed and Bo, and nothing on screen tied a name to a side. Said in
+       * the label rather than in a row of its own, because the top seat's label sits at y=78 and
+       * a new line under the scoreboard lands on top of it.
+       */
+      const side = SPADES_TEAMS[teamOf(i)]!;
+      this.seatText[this.place(i)]
+        ?.setText(`${you ? 'You' : seat.label} (${side}) · bid ${said} · won ${state.won[i]}`)
+        .setColor(SPADES_COLORS[i]!);
     });
     const contracts = state.contracts;
     const teamWon = state.teamWon;
@@ -173,6 +183,7 @@ export class SpadesScene extends Scene {
       `${SPADES_TEAMS[0]} ${state.scores[0]} (${teamWon[0]}/${contracts[0]}, ${state.bags[0]} bags)   ·   ` +
         `${SPADES_TEAMS[1]} ${state.scores[1]} (${teamWon[1]}/${contracts[1]}, ${state.bags[1]} bags)`,
     );
+
     this.privacy.draw();
     this.drawBids();
     if (this.ring?.visible) this.showKeyFocus();
