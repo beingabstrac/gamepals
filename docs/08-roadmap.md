@@ -399,6 +399,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   way up for each player, which is right with two people and silly against a bot: there is nobody
   on the other side of the phone, so it was the same words printed twice in the middle. One copy
   now unless a person is sitting there.
+- **Open question: one face-down card in Callbreak (2026-09-21).** The settled end-of-game shot
+  shows a single card back at Pip's side of the table with every hand empty. Other seats' hands
+  are drawn face-down near their trick spot, so a card there means a card still in a hand after
+  the last trick, which should not happen. It could equally be the last trick gathering, or a
+  sprite left behind, which is the Dominoes shape. **Not filed as a bug**, because every time
+  today I have decided what a picture meant without measuring I have been wrong: mid-animation
+  twice, a settle landing in a gap between hops, and nine games that were hiding themselves on
+  purpose. The way to answer it is a check that says where every one of the fifty-two cards is,
+  which is worth having for all the card games and is a loop of its own.
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel
