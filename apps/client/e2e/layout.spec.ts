@@ -119,6 +119,29 @@ test('Yatzy: no row name is wider than its cell', async ({ page }) => {
 });
 
 /**
+ * How far each game runs past the bottom of the screen. Yatzy's score card does, which may be
+ * right for a fifteen-row table, but nobody has ever measured the rest, and "every game fits
+ * portrait and landscape" is a rule in CLAUDE.md that nothing checks. One test so the answer
+ * arrives as one list rather than fifty failures.
+ */
+test('how far each game runs past the bottom of the screen', async ({ page }) => {
+  const tall: string[] = [];
+  for (const name of GAMES) {
+    await page.goto('/');
+    await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
+    await page.getByRole('button', { name: 'Play', exact: true }).click();
+    await expect(page.locator('.board canvas')).toBeVisible();
+    await page.waitForTimeout(150);
+    const over = await page.evaluate(() => {
+      const doc = document.documentElement;
+      return Math.round((doc.scrollHeight / doc.clientHeight) * 100) / 100;
+    });
+    if (over > 1.02) tall.push(`${name} ${over}x`);
+  }
+  expect(tall, 'games taller than the screen').toEqual([]);
+});
+
+/**
  * Big screens should use the room rather than centring a phone layout in it. The store
  * screenshots showed the board sitting in the middle third of a landscape tablet with empty
  * space either side, and none of the checks above said a word, because nothing overflowed.
