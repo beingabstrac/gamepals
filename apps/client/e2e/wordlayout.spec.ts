@@ -194,3 +194,34 @@ test('Sliding Puzzle: every tile the state has is on the board and visible', asy
   expect(missing, 'tiles came to rest invisible').toBe(0);
   expect(adrift, 'tiles came to rest off their square').toBe(0);
 });
+
+/**
+ * Colour Sort tubes are born at scale 0 and popped up on a stagger of up to 400ms, and the pour
+ * calls killTweensOf on the tube it is about to swing, which takes the entry pop with it. A tube
+ * caught inside that window keeps whatever size its tween died at, and the undo path put position
+ * and angle back but never scale. The gallery caught two tubes smaller than the third and one
+ * hanging above its place; the same shape of bug as the sliding tiles, found by grep rather than
+ * by looking.
+ */
+test('Color Sort: every settled tube is its proper size, in its proper place', async ({ page }) => {
+  test.setTimeout(90_000);
+  await open(page, 'Color Sort');
+  let settled = 0;
+  let shrunk = 0;
+  let adrift = 0;
+  for (let look = 0; look < 8; look++) {
+    await page.waitForTimeout(700);
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as { boardCheck?: () => { settled: number; shown: number; placed: number } } | undefined;
+      return scene?.boardCheck ? scene.boardCheck() : null;
+    });
+    if (!report) break;
+    settled += report.settled;
+    shrunk += report.settled - report.shown;
+    adrift += report.settled - report.placed;
+  }
+  expect(settled, 'no tube ever came to rest, so nothing was measured').toBeGreaterThan(20);
+  expect(shrunk, 'tubes came to rest at the wrong size').toBe(0);
+  expect(adrift, 'tubes came to rest away from their place').toBe(0);
+});

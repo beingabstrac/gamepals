@@ -162,14 +162,28 @@ export class SlidingScene extends Scene {
     return { settled, shown, placed };
   }
 
+  /**
+   * Every tile goes where the state says it is, not just the ones that moved. `killTweensOf` takes
+   * the entry pop with it, so a tile moved inside the opening stagger used to slide to the right
+   * square at scale 0 and stay invisible for the rest of the game. A tile that has been played is
+   * on the board, so it is told so; one still popping in is left to finish.
+   */
   private animate(): void {
     const state = this.state;
-    state.last.forEach((step, i) => {
-      const view = this.views.get(step.tile);
+    const moved = new Map(state.last.map((step, i) => [step.tile, i]));
+    state.tiles.forEach((tile, cell) => {
+      if (!tile) return;
+      const view = this.views.get(tile);
       if (!view) return;
-      const { x, y } = this.pos(step.to);
-      this.tweens.killTweensOf(view);
-      this.tweens.add({ targets: view, x, y, duration: SLIDE_MS, delay: i * 12, ease: 'Quad.easeOut' });
+      const { x, y } = this.pos(cell);
+      const order = moved.get(tile);
+      if (order !== undefined) {
+        this.tweens.killTweensOf(view);
+        view.setScale(1);
+        this.tweens.add({ targets: view, x, y, duration: SLIDE_MS, delay: order * 12, ease: 'Quad.easeOut' });
+      } else if (this.tweens.getTweensOf(view).length === 0) {
+        view.setPosition(x, y).setScale(1);
+      }
     });
     if (state.result) {
       // Solved: a pop wave rolls from the top-left tile to the last one.

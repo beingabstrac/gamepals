@@ -270,6 +270,25 @@ export class ColorSortScene extends Scene {
     });
   }
 
+  /**
+   * Whether every tube that has come to rest is its proper size and in its proper place. A tube
+   * picked up sits one LIFT higher, which is a place; anything else is a tween that died.
+   */
+  boardCheck(): { settled: number; shown: number; placed: number } {
+    let settled = 0;
+    let shown = 0;
+    let placed = 0;
+    this.tubes.forEach((tube, i) => {
+      if (this.tweens.getTweensOf(tube).length > 0) return;
+      settled++;
+      if (Math.abs(tube.scaleX - 1) < 0.05 && Math.abs(tube.scaleY - 1) < 0.05) shown++;
+      const spot = this.spots[i]!;
+      const up = spot.y - tube.y;
+      if (Math.abs(tube.x - spot.x) < 2 && up >= -2 && up <= LIFT + 2 && Math.abs(tube.angle) < 1) placed++;
+    });
+    return { settled, shown, placed };
+  }
+
   private celebrate(): void {
     this.tubes.forEach((tube, i) => {
       this.tweens.add({ targets: tube, y: this.spots[i]!.y - 34, duration: 220, delay: 300 + i * 70, yoyo: true, ease: 'Sine.easeOut' });
