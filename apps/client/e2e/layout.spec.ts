@@ -126,7 +126,10 @@ test('Yatzy: no row name is wider than its cell', async ({ page }) => {
  * fifty-one games do not fit in the sixty seconds a test gets by default. CLAUDE.md says exactly
  * that about tests that walk whole games, and I wrote this one without it.
  */
-test('how far each game runs past the bottom of the screen', { timeout: 300_000 }, async ({ page }) => {
+test('how far each game runs past the bottom of the screen', async ({ page }) => {
+  // Playwright wants this inside the test; `{ timeout }` beside the name is vitest's way, which is
+  // what the rules tests use and what I reached for first.
+  test.setTimeout(300_000);
   const tall: string[] = [];
   for (const name of GAMES) {
     await page.goto('/');
