@@ -322,8 +322,14 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   220px column: the phone was never the hard case.
   **The gap it came through:** the spec checks that `.board` fits and that nothing scrolls
   sideways, and a game's own controls are HTML *below* the board, so nothing was looking at them.
-  Yatzy's card is also taller than a phone, which may be right for a fifteen-row table and is not
-  something to change on a hunch. Worth measuring across every game before deciding.
+  Every game's text is now checked against the box holding it, and across all fifty-one it came
+  back clean: Yatzy was the only one.
+  **And the height was measured rather than guessed at.** Sixteen games run 1.03x to 1.14x past
+  the bottom of the screen, which is a footer and some margins and is the house style; Yatzy ran
+  1.58x on a desktop window and 1.81x on a phone. So the card scrolls inside itself now, which
+  also keeps the dice on screen while you hunt for a box, and the check is drawn at 1.2x: loose
+  enough not to fail on the ordinary overshoot, tight enough to catch the next Yatzy. Tightening
+  that ordinary 1.1x is real work and should be done on purpose, not smuggled in as a threshold.
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel

@@ -1045,6 +1045,16 @@ h2,
 
 /* ---------- Yatzy score card ---------- */
 
+/* Measured: the Yatzy screen was 1.58x the height of a desktop window and 1.81x a phone, against
+   1.03x to 1.14x for every other game. Fifteen rows and four columns of scores will not fit under
+   a board on a phone and should not try; what it must not do is push the dice off the screen, so
+   the card scrolls inside itself and the page does not. */
+.yatzy-card-box {
+  max-height: 46vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .yatzy-card {
   width: 100%;
   border-collapse: separate;

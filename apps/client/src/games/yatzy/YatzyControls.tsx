@@ -64,41 +64,46 @@ export function YatzyControls({ session }: { session: Session<YatzyMove> }) {
           </button>
         </div>
       )}
-      <table class="yatzy-card">
-        <thead>
-          <tr>
-            <th />
-            {seats.map((s) => (
-              <th key={s} scope="col" class={s === seat && !state.result ? 'turn' : undefined} style={`--side: ${colors[s]}`}>
-                {names[s]}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {[0, 1, 2, 3, 4, 5].map(row)}
-          <tr class="sum">
-            <th class="box" scope="row">Bonus (63+)</th>
-            {seats.map((s) => {
-              const upper = upperSum(state.cards[s]!);
-              return (
+      {/* The card scrolls inside itself rather than taking the page with it, so the dice stay on
+          screen while you look for a box to fill. Fifteen rows against four columns is nearly
+          twice the height of a phone. */}
+      <div class="yatzy-card-box">
+        <table class="yatzy-card">
+          <thead>
+            <tr>
+              <th />
+              {seats.map((s) => (
+                <th key={s} scope="col" class={s === seat && !state.result ? 'turn' : undefined} style={`--side: ${colors[s]}`}>
+                  {names[s]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[0, 1, 2, 3, 4, 5].map(row)}
+            <tr class="sum">
+              <th class="box" scope="row">Bonus (63+)</th>
+              {seats.map((s) => {
+                const upper = upperSum(state.cards[s]!);
+                return (
+                  <td key={s}>
+                    <span class="yatzy-cell sum" style={`--side: ${colors[s]}`}>{upper >= YATZY_BONUS_AT ? YATZY_BONUS : `${upper}/${YATZY_BONUS_AT}`}</span>
+                  </td>
+                );
+              })}
+            </tr>
+            {[6, 7, 8, 9, 10, 11, 12, 13, 14].map(row)}
+            <tr class="sum total">
+              <th class="box" scope="row">Total</th>
+              {seats.map((s) => (
                 <td key={s}>
-                  <span class="yatzy-cell sum" style={`--side: ${colors[s]}`}>{upper >= YATZY_BONUS_AT ? YATZY_BONUS : `${upper}/${YATZY_BONUS_AT}`}</span>
+                  <span class="yatzy-cell sum" style={`--side: ${colors[s]}`}>{totalOf(state.cards[s]!)}</span>
                 </td>
-              );
-            })}
-          </tr>
-          {[6, 7, 8, 9, 10, 11, 12, 13, 14].map(row)}
-          <tr class="sum total">
-            <th class="box" scope="row">Total</th>
-            {seats.map((s) => (
-              <td key={s}>
-                <span class="yatzy-cell sum" style={`--side: ${colors[s]}`}>{totalOf(state.cards[s]!)}</span>
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
