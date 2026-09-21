@@ -1002,7 +1002,7 @@ export const GAMES: readonly AnyEntry[] = [
     size: MAID_SIZE,
     color: COLORS.grape,
     status: (state) => maidStatus(state as MaidState),
-    resultText: (state) => maidResult(state as MaidState, MAID_NAMES),
+    resultText: (state, names) => maidResult(state as MaidState, names, MAID_NAMES),
     moveCue: (before, after) => ((after as MaidState).pairs.some((n, i) => n > ((before as MaidState).pairs[i] ?? 0)) ? 'go' : 'tap'),
     createScene: (session) => new MaidScene(session),
   }),

@@ -238,11 +238,19 @@ export const maidStatus = (state: MaidState): string | undefined => {
   return `${left} cards left`;
 };
 
-export const maidResult = (state: MaidState, labels: readonly string[]): string | undefined => {
+/**
+ * Who was left holding it, named the way every other game names a player: "Nova (Purple)". This
+ * used to be handed the colours instead of the people, so the sheet said "Purple is the old maid!"
+ * directly above a running score reading "Nova 0 · Pip 1 · Zed 1 · Bo 1", naming the same player
+ * two different ways in the same breath.
+ */
+export const maidResult = (state: MaidState, labels: readonly string[], sides: readonly string[]): string | undefined => {
   if (!state.result) return undefined;
   const loser = state.hands.findIndex((hand) => hand.length);
   if (loser === -1) return undefined;
   const card = state.hands[loser]![0]!;
-  const name = labels[loser] ?? 'Somebody';
+  const label = labels[loser] ?? 'Somebody';
+  const side = sides[loser];
+  const name = side && side !== label ? `${label} (${side})` : label;
   return rankOf(card) === MAID_QUEEN ? `${name} is the old maid!` : `${name} is left holding it!`;
 };

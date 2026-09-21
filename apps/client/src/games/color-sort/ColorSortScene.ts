@@ -289,19 +289,29 @@ export class ColorSortScene extends Scene {
    * Whether every tube that has come to rest is its proper size and in its proper place. A tube
    * picked up sits one LIFT higher, which is a place; anything else is a tween that died.
    */
-  boardCheck(): { settled: number; shown: number; placed: number } {
+  boardCheck(): { settled: number; shown: number; placed: number; worst: string } {
     let settled = 0;
     let shown = 0;
     let placed = 0;
+    // What the wrong size actually was, because a tube left at 0 never got its entry pop and one
+    // left near 0.95 came back from a squash that started before the pop had finished. They are
+    // different faults and the number is the only thing that tells them apart.
+    let worst = '';
+    let worstOff = 0;
     this.tubes.forEach((tube, i) => {
       if (this.tweens.getTweensOf(tube).length > 0) return;
       settled++;
-      if (Math.abs(tube.scaleX - 1) < 0.05 && Math.abs(tube.scaleY - 1) < 0.05) shown++;
+      const off = Math.max(Math.abs(tube.scaleX - 1), Math.abs(tube.scaleY - 1));
+      if (off < 0.05) shown++;
+      else if (off > worstOff) {
+        worstOff = off;
+        worst = `tube ${i} at ${tube.scaleX.toFixed(2)}x${tube.scaleY.toFixed(2)}`;
+      }
       const spot = this.spots[i]!;
       const up = spot.y - tube.y;
       if (Math.abs(tube.x - spot.x) < 2 && up >= -2 && up <= LIFT + 2 && Math.abs(tube.angle) < 1) placed++;
     });
-    return { settled, shown, placed };
+    return { settled, shown, placed, worst };
   }
 
   private celebrate(): void {
