@@ -73,3 +73,30 @@ test('Gin Rummy: the turn line stays readable while moves come quickly', async (
   expect(seen.length, 'the turn line is on screen').toBeGreaterThan(0);
   expect(Math.min(...seen), `turn line opacity over a stretch of play: ${seen.map((n) => n.toFixed(2)).join(', ')}`).toBeGreaterThan(0.5);
 });
+
+/**
+ * Where every card is. A settled shot of a finished Callbreak showed one face-down card at a seat
+ * whose hand was empty, and a picture cannot tell the last trick sitting where it was won from a
+ * sprite nobody cleared. This asks the scene instead: what it is drawing against what the rules
+ * say exists, and whether anything is still visible that the layout has no place for.
+ */
+test('Callbreak: every card drawn is a card the rules say is there', async ({ page }) => {
+  await page.goto('/?autoplay=3');
+  await page.getByRole('button', { name: /^Callbreak/ }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect(page.locator('.board canvas')).toBeVisible();
+
+  for (let look = 0; look < 6; look++) {
+    await page.waitForTimeout(900);
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as
+        | { cardCheck?: () => { drawn: number; held: number; orphans: number } }
+        | undefined;
+      return scene?.cardCheck ? scene.cardCheck() : null;
+    });
+    if (!report) break;
+    expect(report.drawn, `look ${look + 1}: cards drawn against cards held`).toBe(report.held);
+    expect(report.orphans, `look ${look + 1}: cards still on screen with nowhere to be`).toBe(0);
+  }
+});

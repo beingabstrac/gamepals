@@ -321,6 +321,21 @@ export class CallbreakScene extends Scene {
   }
 
   /** Test mode only: whether any seat label runs off the table or sits on a card. */
+  /**
+   * Every card the scene is drawing, against every card the state says is somewhere. A settled
+   * end-of-game shot showed one face-down card at a seat whose hand was empty, which is either
+   * the last trick sitting where it was won or a sprite nobody cleared, and a picture cannot tell
+   * those apart. This can: `drawn` is what has a place on the table, `held` is what the rules say
+   * exists, and `orphans` is anything still visible that the layout no longer has a place for.
+   */
+  cardCheck(): { drawn: number; held: number; orphans: number } {
+    const state = this.state;
+    const held = state.hands.reduce((count, hand) => count + hand.length, 0) + state.trick.length;
+    let orphans = 0;
+    for (const [card, view] of this.views) if (!this.spots.has(card) && view.box.visible) orphans++;
+    return { drawn: this.spots.size, held, orphans };
+  }
+
   labelCheck(): LabelReport {
     const cards = [...this.spots.values()].map((spot) => ({ x: spot.x, y: spot.y, w: CW, h: CH }));
     return labelReport(this.seatText, cards, W, H);
