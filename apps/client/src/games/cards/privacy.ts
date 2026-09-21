@@ -31,8 +31,16 @@ export class HandPrivacy {
     return this.seats.filter((seat) => seat.kind === 'human').length;
   }
 
-  /** Is this hand its owner's to look at right now? */
+  /**
+   * Is this hand its owner's to look at right now?
+   *
+   * With nobody at the table the answer is yes. A build with bots in every seat has no person to
+   * keep a hand from, and hiding it there only means the gallery, which is the one thing that can
+   * see a game the tests cannot, photographs a row of face-down cards. Real play always has at
+   * least one person, so this never loosens anything a player would notice.
+   */
   get open(): boolean {
+    if (this.people === 0) return true;
     return !this.hidden && this.seats[this.shown]?.kind === 'human';
   }
 

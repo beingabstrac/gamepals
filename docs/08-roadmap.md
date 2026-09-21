@@ -359,6 +359,13 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   The height check is back at 1.02x, which is what the rule in CLAUDE.md actually says. Verified
   by the measurement that found it and by the gallery, because a board that fits and a board that
   looks right are two different claims.
+- **The gallery could not see nine games at all (2026-09-21).** Sea Battle drew two empty grids
+  under a line reading "Red to fire. 4 of their ships left", which looked like a serious bug and
+  was the game working exactly as written: with bots in every seat there is no person whose view
+  to show, so it showed none. Every hidden-hand card game does the same thing more quietly, and
+  the gallery has been photographing rows of face-down cards for as long as it has existed.
+  Privacy with nobody to hide from is just a blank screen, so a table with no people now shows
+  everything. Real play always has at least one person, so nothing a player would notice changed.
 - **Go Fish ran its seat names into each other (2026-09-21).** "Nova: 4 · 3 books Pip: 5 · 2
   books" with no gap anywhere: four labels spread evenly across a 760px table gives each 152px,
   and the text wants nearer 190. On the table, clear of every card, and unreadable. Names sit over

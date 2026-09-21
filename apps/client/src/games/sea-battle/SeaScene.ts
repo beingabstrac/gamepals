@@ -52,12 +52,18 @@ export class SeaScene extends Scene {
     return this.session.seats.flatMap((seat, i) => (seat.kind === 'human' ? [i] : []));
   }
 
-  /** Whose grids are on show. With one person it is always theirs; with two, only after they tap. */
+  /**
+   * Whose grids are on show. With one person it is always theirs; with two, only after they tap;
+   * with nobody, everything, because there is no one to keep it from. Sea Battle hides more than
+   * any other game here, so with bots in every seat it drew two empty grids under a line reading
+   * "Red to fire, 4 of their ships left" and the gallery could tell nothing about it at all.
+   */
   private viewer(): number | null {
     const people = this.people();
+    if (people.length === 0) return this.state.currentSeat;
     if (people.length === 1) return people[0]!;
     const seat = this.state.currentSeat;
-    return people.length > 1 && this.revealed === seat ? seat : null;
+    return this.revealed === seat ? seat : null;
   }
 
   private covered(): boolean {
