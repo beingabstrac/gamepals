@@ -68,11 +68,13 @@ for (const name of GAMES) {
 
 /**
  * Text that is cut off is worse than text that wraps: "Two p..." and "Bonus ..." tell you nothing.
- * The Yatzy card is the worst case, fifteen row names against four columns of scores on a phone,
- * and the gallery caught half of them ellipsised. This asks the page whether any of its own labels
- * are clipped, which is a thing the DOM knows and a screenshot only hints at.
+ * The Yatzy card is the worst case, fifteen row names against four columns of scores, and the
+ * gallery caught half of them ellipsised on a phone. This asks the page whether any name is wider
+ * than the cell holding it, which covers both ways that goes wrong: cut off when the cell hides
+ * its overflow, and spilling over the scores when it does not. A landscape screen puts the whole
+ * card in a 220px column, so it is the harder case, not the phone.
  */
-test('Yatzy: no row name is cut off', async ({ page }) => {
+test('Yatzy: no row name is wider than its cell', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /^Yatzy/ }).click();
   await page.getByRole('button', { name: 'Play', exact: true }).click();
@@ -80,11 +82,11 @@ test('Yatzy: no row name is cut off', async ({ page }) => {
   const clipped = await page.evaluate(() =>
     [...document.querySelectorAll('.yatzy-card th.box')].flatMap((cell) => {
       const box = cell as HTMLElement;
-      // A cell whose text is wider than the cell is showing an ellipsis instead of a word.
+      // Wider than the cell means either an ellipsis or a spill onto the scores next to it.
       return box.scrollWidth > box.clientWidth + 1 ? [`${box.textContent}`] : [];
     }),
   );
-  expect(clipped, 'these row names are cut off').toEqual([]);
+  expect(clipped, 'these row names do not fit their cell').toEqual([]);
 });
 
 /**

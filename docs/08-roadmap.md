@@ -313,8 +313,13 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
 - **Yatzy's score card was cutting its own row names off (2026-09-21).** "Two p...", "Bonus ...",
   and every label past Sixes is long enough to lose its ending on a phone: the name column was 38%
   of the width with `text-overflow: ellipsis`, against fifteen rows and four columns of scores.
-  Names wrap now. The layout spec asks the page whether any of its labels are clipped, which the
-  DOM knows exactly and a screenshot only hints at.
+  Names wrap now, and break when a word cannot fit at all. The layout spec asks the page whether
+  any name is wider than the cell holding it, which the DOM knows exactly and a screenshot only
+  hints at.
+  **The first fix was half a fix, and the check said so.** Removing the ellipsis stopped the names
+  being cut off and started them spilling across the scores instead, which is not an improvement.
+  The iPhone passed and the desktop failed, because a landscape screen puts the whole card in a
+  220px column: the phone was never the hard case.
   **The gap it came through:** the spec checks that `.board` fits and that nothing scrolls
   sideways, and a game's own controls are HTML *below* the board, so nothing was looking at them.
   Yatzy's card is also taller than a phone, which may be right for a fifteen-row table and is not

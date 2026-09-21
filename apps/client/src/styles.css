@@ -1061,14 +1061,17 @@ h2,
 
 /* The row name wraps rather than being cut off. "Two p..." and "Bonus ..." tell you nothing, and
    every label past Sixes is long enough to lose its ending on a phone: "Three of a kind",
-   "Small straight", "Full house". Two short lines beat one clipped one. */
+   "Small straight", "Full house". Two short lines beat one clipped one.
+   `anywhere` is the safety net: on a landscape screen the whole card sits in a 220px column, and
+   without it a word that cannot fit spills across the scores instead of being cut off, which is
+   not an improvement. It only breaks a word when there is no other way. */
 .yatzy-card th.box {
   width: 34%;
   padding: 2px 6px 2px 8px;
   text-align: left;
   font-weight: 600;
   line-height: 1.15;
-  hyphens: auto;
+  overflow-wrap: anywhere;
 }
 
 .yatzy-card thead th {
