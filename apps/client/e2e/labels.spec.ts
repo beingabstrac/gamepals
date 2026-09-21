@@ -57,14 +57,18 @@ test('Gin Rummy: the turn line stays readable while moves come quickly', async (
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect(page.locator('.board canvas')).toBeVisible();
 
+  // Sample straight away and then between moves. The pill is there from the first render, and
+  // waiting first meant a hand that finished inside the window left nothing to look at: a
+  // finished game has no turn line, correctly, and the test read that as the line being missing.
   const seen: number[] = [];
   for (let look = 0; look < 6; look++) {
-    await page.waitForTimeout(400);
     const opacity = await page.evaluate(() => {
       const pill = document.querySelector('.turn-pill');
       return pill ? Number(getComputedStyle(pill).opacity) : -1;
     });
     if (opacity >= 0) seen.push(opacity);
+    if (await page.locator('.result-sheet').isVisible()) break;
+    await page.waitForTimeout(400);
   }
   expect(seen.length, 'the turn line is on screen').toBeGreaterThan(0);
   expect(Math.min(...seen), `turn line opacity over a stretch of play: ${seen.map((n) => n.toFixed(2)).join(', ')}`).toBeGreaterThan(0.5);
