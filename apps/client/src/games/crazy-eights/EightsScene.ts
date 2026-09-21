@@ -317,12 +317,30 @@ export class EightsScene extends Scene {
     return labelReport(this.seatText, cards, W, H);
   }
 
-  handCheck(): { shown: number; covered: boolean; faceUp: number } {
+  /**
+   * The hand, and whether all of it is actually on the table. Every card I hold is either where
+   * the layout put it or on its way there; one that is neither has been lost. The gallery caught
+   * a hand of ten with two cards showing, sitting at exactly the places a ten-card fan gives its
+   * fifth and sixth cards, which says the layout was right and the cards never arrived.
+   */
+  handCheck(): { shown: number; covered: boolean; faceUp: number; held: number; arrived: number; moving: number } {
     const mine = this.state.hands[this.privacy.shown] ?? [];
+    let arrived = 0;
+    let moving = 0;
+    for (const card of mine) {
+      const view = this.views.get(card);
+      const spot = this.spots.get(card);
+      if (!view || !spot) continue;
+      if (this.tweens.getTweensOf(view.box).length > 0 || view.sliding) moving++;
+      else if (Math.abs(view.box.x - spot.x) < 2 && Math.abs(view.box.y - (spot.y - spot.lift)) < 2) arrived++;
+    }
     return {
       shown: this.privacy.shown,
       covered: this.privacy.covered,
       faceUp: mine.filter((card) => this.views.get(card)?.up).length,
+      held: mine.length,
+      arrived,
+      moving,
     };
   }
 

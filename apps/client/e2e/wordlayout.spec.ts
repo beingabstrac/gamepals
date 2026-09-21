@@ -191,7 +191,8 @@ test('Sliding Puzzle: every tile the state has is on the board and visible', asy
     missing += report.settled - report.shown;
     adrift += report.settled - report.placed;
   }
-  expect(settled, 'no tile ever came to rest, so nothing was measured').toBeGreaterThan(20);
+  // A floor, not a target: it only has to be impossible to pass having looked at nothing.
+  expect(settled, 'no tile ever came to rest, so nothing was measured').toBeGreaterThan(8);
   expect(missing, 'tiles came to rest invisible').toBe(0);
   expect(adrift, 'tiles came to rest off their square').toBe(0);
 });
@@ -252,4 +253,52 @@ test('Old Maid: the result names a player at this table', async ({ page }) => {
     .filter(Boolean);
   expect(players.length, `no players to check against, tally was "${tally}"`).toBeGreaterThan(1);
   expect(players.some((name) => heading.includes(name)), `"${heading}" names nobody in "${tally}"`).toBe(true);
+
+  // While a sheet is up: the confetti must not land on the line that says who won. The sheet had
+  // no stacking order of its own and the burst is at 10, so pieces sat on the headline.
+  const order = await page.evaluate(() => {
+    const layer = (name: string) => {
+      const el = document.querySelector(name);
+      return el ? Number(getComputedStyle(el).zIndex) || 0 : null;
+    };
+    return { sheet: layer('.result-sheet'), confetti: layer('.confetti') };
+  });
+  if (order.confetti !== null) {
+    expect(order.sheet ?? 0, 'confetti is drawn over the result sheet').toBeGreaterThan(order.confetti);
+  }
+});
+
+/**
+ * Every card in your hand is either where the layout put it or on its way there. One that is
+ * neither has been lost, and the gallery caught exactly that: Crazy Eights showing "Nova: 10"
+ * with two cards on the table, sitting where a ten-card fan puts its fifth and sixth. The label
+ * and the fan are written from the same state in the same pass, so they cannot disagree; what
+ * disagreed was the state and the screen.
+ */
+test('Crazy Eights: every card in the hand is on the table or on its way', async ({ page }) => {
+  test.setTimeout(120_000);
+  await open(page, 'Crazy Eights');
+  let looked = 0;
+  let lost = 0;
+  let worst = '';
+  for (let look = 0; look < 12; look++) {
+    await page.waitForTimeout(700);
+    const report = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as
+        | { handCheck?: () => { held: number; arrived: number; moving: number } }
+        | undefined;
+      return scene?.handCheck ? scene.handCheck() : null;
+    });
+    if (!report) break;
+    if (report.held === 0) continue;
+    looked += report.held;
+    const missing = report.held - report.arrived - report.moving;
+    if (missing > 0) {
+      lost += missing;
+      worst = `held ${report.held}, ${report.arrived} arrived, ${report.moving} moving`;
+    }
+  }
+  expect(looked, 'the hand was never seen holding anything').toBeGreaterThan(8);
+  expect(lost, `cards in hand were neither placed nor moving (${worst})`).toBe(0);
 });

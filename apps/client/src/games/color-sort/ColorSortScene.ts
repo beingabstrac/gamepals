@@ -250,7 +250,12 @@ export class ColorSortScene extends Scene {
         this.drawLayers(pour.from);
         this.drawLayers(pour.to);
         const target = this.tubes[pour.to]!;
-        this.tweens.add({ targets: target, scaleY: 0.95, duration: 70, yoyo: true, ease: 'Quad.easeOut' });
+        // Both of these yoyo on the same tube's scale, and the finished-run pop below starts while
+        // the squash is still coming back, so each one's "return to where I started" lands on a
+        // value the other left behind. Every engine but Chromium and the emulator caught a tube
+        // resting at exactly 1.00x0.95, the squash's far point. They now say where they end
+        // instead of trusting the yoyo, because after the last pour nothing comes to tidy up.
+        this.tweens.add({ targets: target, scaleY: 0.95, duration: 70, yoyo: true, ease: 'Quad.easeOut', onComplete: () => target.setScale(1) });
         this.tweens.add({ targets: stream, alpha: 0, duration: 200, delay: 60, onComplete: () => stream.destroy() });
         this.tweens.add({
           targets: source,
@@ -264,7 +269,7 @@ export class ColorSortScene extends Scene {
         });
         const done = state.tubes[pour.to]!;
         if (done.length === TUBE_SIZE && done.every((c) => c === done[0])) {
-          this.tweens.add({ targets: target, scale: 1.08, duration: 140, yoyo: true, delay: 120, ease: 'Back.easeOut' });
+          this.tweens.add({ targets: target, scale: 1.08, duration: 140, yoyo: true, delay: 120, ease: 'Back.easeOut', onComplete: () => target.setScale(1) });
         }
         if (state.result) this.celebrate();
       },

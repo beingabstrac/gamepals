@@ -955,6 +955,10 @@ h2,
   transform: translateX(-50%);
   box-shadow: 0 8px 0 var(--line), 0 24px 48px rgba(43, 42, 58, 0.16);
   animation: slide-up 520ms var(--spring) both;
+  /* Above the confetti. The sheet had no stacking order at all, so pieces landed on the line that
+     says who won: "Pip wins with 0." with a square of it covered. The burst still fills the rest
+     of the screen, which is the whole point of it. */
+  z-index: 20;
 }
 
 .result-title {

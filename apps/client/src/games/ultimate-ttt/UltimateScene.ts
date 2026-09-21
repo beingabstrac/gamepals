@@ -18,7 +18,22 @@ const GRID = 0xcdbff7;
 const SUNNY = toHex(COLORS.sunny);
 
 /** Where the small boards are, for plain-language messages. */
-export const BOARD_NAMES = ['top-left', 'top', 'top-right', 'left', 'middle', 'right', 'bottom-left', 'bottom', 'bottom-right'];
+/**
+ * How the status line names each small board. The middle row and column say "middle" rather than
+ * standing alone, because "play in the right board" reads as "the correct board" and "play in the
+ * top board" does not say which of the three.
+ */
+export const BOARD_NAMES = [
+  'top-left',
+  'top-middle',
+  'top-right',
+  'middle-left',
+  'middle',
+  'middle-right',
+  'bottom-left',
+  'bottom-middle',
+  'bottom-right',
+];
 
 const boardOrigin = (board: number) => ({ x: (board % 3) * BIG, y: Math.floor(board / 3) * BIG });
 function squareCenter(square: number): { x: number; y: number } {

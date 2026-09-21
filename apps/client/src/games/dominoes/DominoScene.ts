@@ -128,6 +128,7 @@ export class DominoScene extends Scene {
   private cover!: GameObjects.Graphics;
   private coverText!: GameObjects.Text;
   private banner!: GameObjects.Text;
+  private bannerPlate!: GameObjects.Graphics;
   private ring!: GameObjects.Graphics;
   private pending: number | null = null;
   private cursor: number | null = null;
@@ -185,7 +186,11 @@ export class DominoScene extends Scene {
     this.ends = this.add.graphics().setDepth(1);
     this.cover = this.add.graphics().setDepth(20);
     this.coverText = sharpText(this, W / 2, HAND_Y, '', 22, COLORS.ink).setDepth(21);
-    this.banner = sharpText(this, W / 2, LINE_TOP + LINE_H / 2, '', 30, COLORS.ink).setDepth(30).setAlpha(0).setStroke('#ffffff', 10);
+    // The rows of tiles are centred in the line area and so is the banner, so with an odd number
+    // of rows it lands on the middle one every time and the message is read through the pips. It
+    // gets a plate of its own to sit on: there is no band inside the table the rows never reach.
+    this.bannerPlate = this.add.graphics().setDepth(29).setAlpha(0);
+    this.banner = sharpText(this, W / 2, LINE_TOP + LINE_H / 2, '', 30, COLORS.ink).setDepth(30).setAlpha(0);
     this.ring = focusRing(this, HW + 14, HH + 14, 12);
 
     this.input.on('pointerdown', (p: { worldX: number; worldY: number }) => this.tap(p.worldX, p.worldY));
@@ -440,9 +445,18 @@ export class DominoScene extends Scene {
 
   private shout(text: string, hold = 900): void {
     this.tweens.killTweensOf(this.banner);
+    this.tweens.killTweensOf(this.bannerPlate);
     this.banner.setText(text).setAlpha(1).setScale(0.6);
+    const w = this.banner.width + 44;
+    const h = this.banner.height + 22;
+    this.bannerPlate.clear();
+    this.bannerPlate.fillStyle(0xffffff, 1);
+    this.bannerPlate.fillRoundedRect(W / 2 - w / 2, LINE_TOP + LINE_H / 2 - h / 2, w, h, h / 2);
+    this.bannerPlate.lineStyle(3, INK, 0.12);
+    this.bannerPlate.strokeRoundedRect(W / 2 - w / 2, LINE_TOP + LINE_H / 2 - h / 2, w, h, h / 2);
+    this.bannerPlate.setAlpha(1);
     this.tweens.add({ targets: this.banner, scale: 1, duration: 240, ease: 'Back.easeOut' });
-    this.tweens.add({ targets: this.banner, alpha: 0, delay: hold, duration: 280 });
+    this.tweens.add({ targets: [this.banner, this.bannerPlate], alpha: 0, delay: hold, duration: 280 });
   }
 
   private onChange(): void {

@@ -121,3 +121,31 @@ describe('mancala bots', () => {
     expect(zedWins).toBeGreaterThanOrEqual(8);
   });
 });
+
+describe('mancala conservation', () => {
+  /**
+   * Seeds are never made and never destroyed: sowing moves them, capturing moves them, and the
+   * sweep at the end moves them. So the fourteen pits always hold the same total they started
+   * with. A gallery picture of a finished board showed six seeds where there should have been
+   * forty-eight, which is either the rules losing them or the board drawing them wrong, and this
+   * says which.
+   */
+  it('never loses a seed, from the deal to the last move', () => {
+    for (const level of ['three', 'four', 'six'] as const) {
+      const start = newMancala(level);
+      const total = start.pits.reduce((a, b) => a + b, 0);
+      for (let seed = 0; seed < 12; seed++) {
+        const rng = createRng(seed);
+        let state: MancalaState = start;
+        let guard = 0;
+        while (!state.result && guard++ < 400) {
+          const moves = state.legalMoves(state.currentSeat);
+          if (moves.length === 0) break;
+          state = state.apply(rng.pick(moves));
+          expect(state.pits.reduce((a, b) => a + b, 0), `${level}, seed ${seed}, move ${guard}`).toBe(total);
+        }
+        expect(state.pits.reduce((a, b) => a + b, 0), `${level}, seed ${seed}, at the end`).toBe(total);
+      }
+    }
+  });
+});

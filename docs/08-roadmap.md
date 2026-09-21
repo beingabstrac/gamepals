@@ -472,6 +472,26 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   the last move". The sheet waits for it, capped at something like 1.2s so a stuck scene can never
   swallow the result, and the gallery waits for it too. Worth doing before the store screenshots,
   because a screenshot of a half-finished move is not a screenshot of the game.
+  - **A third symptom, and the one that reaches the store.** The status line is HTML and the board
+    is canvas, and a screenshot composites both. Twice today a picture showed them one move apart:
+    War's pill read "15 to 37" beside labels reading 36 and 16, and Ultimate's line named the
+    middle-right board while the top-middle one glowed. Both pairs are written from the same field
+    in the same pass, so neither can disagree in the app; what disagrees is the canvas frame
+    against the DOM paint, sixteen milliseconds no player will ever see. The gallery will
+    photograph it, and per M12 these pictures become the store screenshots, so a listing could
+    show a caption that contradicts its own board. The capture has to wait for a canvas frame
+    after the last state change, not just for the tweens to go quiet.
+
+- [ ] **Q5 A message never sits on the thing it is about.** Four word scenes printed their status
+  line through their own content and were fixed with `layoutCheck`. The same fault is spread
+  through the games that shout: Dominoes centres its banner in the tile area and centres the tile
+  rows there too, so with an odd number of rows "Red goes out: +14" is read through the pips
+  (given a plate to sit on for now, because no band inside that table is free); Yatzy's shout
+  shares `REST_Y` with the resting dice; Old Maid's "Pairs down" line runs behind the last card;
+  Go Fish draws its message under the cards, in the lane they travel; Tug of War puts "Ready..."
+  on the centre flag. None of these has a check, because `layoutCheck` was only ever given to the
+  word games. The question is the same one for all of them and so is the answer: say where the
+  bands are, and let nothing land on a band that carries meaning.
 
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
