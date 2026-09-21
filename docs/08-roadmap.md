@@ -399,6 +399,12 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   way up for each player, which is right with two people and silly against a bot: there is nobody
   on the other side of the phone, so it was the same words printed twice in the middle. One copy
   now unless a person is sitting there.
+- **Answered: I misread the Ultimate board (2026-09-21).** The glow and the status line agree,
+  on both engines. The top-middle board I was sure was lit was not the one lit, and boards 1 and 5
+  in a nine-board grid are easier to confuse in a screenshot than they look. Fifth picture today
+  that was fine. The check stays and now counts its comparisons, because it skips any moment when
+  the player may go anywhere, and a run that skipped all eight looks would have passed having
+  compared nothing.
 - **Answered: the Callbreak card was innocent (2026-09-21).** The census came back green on both
   engines, so the face-down card at an empty seat was the last trick sitting where it was won,
   counted in `state.trick` like every other card. Fourth time today a picture looked wrong and the

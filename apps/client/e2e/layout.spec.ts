@@ -235,6 +235,10 @@ test('Ultimate Tic-Tac-Toe: the glowing board is the one the line names', async 
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect(page.locator('.board canvas')).toBeVisible();
 
+  // Counted, because this skips any look where the player may go anywhere and there is no one
+  // board to name. A run that skipped all eight would pass having checked nothing, which is the
+  // shape of check I have thrown away twice today.
+  let compared = 0;
   for (let look = 0; look < 8; look++) {
     await page.waitForTimeout(500);
     const both = await page.evaluate(() => {
@@ -248,5 +252,7 @@ test('Ultimate Tic-Tac-Toe: the glowing board is the one the line names', async 
     const named = NAMES[both.active]!;
     expect(both.lit[0], `the line says "${both.line.trim()}" and the glow is on board ${both.lit[0]}`).toBe(both.active);
     expect(both.line, `the glow is on the ${named} board`).toContain(named);
+    compared++;
   }
+  expect(compared, 'never caught a moment with one board to name, so nothing was compared').toBeGreaterThan(0);
 });
