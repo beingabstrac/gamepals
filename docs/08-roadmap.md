@@ -359,6 +359,13 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   The height check is back at 1.02x, which is what the rule in CLAUDE.md actually says. Verified
   by the measurement that found it and by the gallery, because a board that fits and a board that
   looks right are two different claims.
+- **Quick Maths, looked at rather than tested (2026-09-21).** Two things a passing suite had
+  nothing to say about. Between questions the four answer pads were drawn empty, which reads as
+  something that failed to render rather than a game waiting for the next sum, so they are not
+  drawn at all until there is something to answer. And the sum is written twice, once the right
+  way up for each player, which is right with two people and silly against a bot: there is nobody
+  on the other side of the phone, so it was the same words printed twice in the middle. One copy
+  now unless a person is sitting there.
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel

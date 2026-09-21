@@ -58,11 +58,14 @@ export class QuickMathsScene extends Scene {
     this.pads = this.add.graphics();
     const seats = this.options.seats;
 
-    // The sum twice, once the right way up for each player, so nobody reads it upside down.
+    // The sum twice, once the right way up for each player, so nobody reads it upside down. Only
+    // for seats a person is in: against a bot there is nobody on the other side of the phone, so
+    // a second copy is not a courtesy, it is the same words printed twice in the middle.
+    const people = seats.filter((seat) => seat.kind === 'human').length;
     this.sums = [0, 1].map((seat) =>
-      sharpText(this, W / 2, seat === 0 ? H / 2 + 42 : H / 2 - 42, '', 56, COLORS.ink).setAngle(
-        facing(seats, seat as Seat),
-      ),
+      sharpText(this, W / 2, seat === 0 ? H / 2 + 42 : H / 2 - 42, '', 56, COLORS.ink)
+        .setAngle(facing(seats, seat as Seat))
+        .setVisible(people === 0 ? seat === 0 : isPerson(seats, seat as Seat)),
     );
     // Outside the answer pads, not on them: at y = H - 56 the score sat on the bottom-left button.
     this.scoreTexts = [0, 1].map((seat) =>
@@ -206,6 +209,10 @@ export class QuickMathsScene extends Scene {
       for (let i = 0; i < ANSWER_COUNT; i++) {
         const box = this.buttonBox(seat, i);
         const live = asking && !locked;
+        // Nothing to answer yet means no pads at all. Four empty outlined boxes between questions
+        // read as something that failed to draw rather than as a game waiting for the next sum.
+        this.buttons[seat]![i]!.setVisible(asking);
+        if (!asking) continue;
         g.fillStyle(0xd9d4e8, 1);
         g.fillRoundedRect(box.x, box.y + 5, BUTTON_W, BUTTON_H, 20);
         g.fillStyle(live ? 0xffffff : 0xefecf6, 1);
@@ -214,7 +221,7 @@ export class QuickMathsScene extends Scene {
         g.strokeRoundedRect(box.x, box.y, BUTTON_W, BUTTON_H, 20);
         this.buttons[seat]![i]!
           .setPosition(box.x + BUTTON_W / 2, box.y + BUTTON_H / 2)
-          .setText(asking ? String(question.choices[i] ?? '') : '')
+          .setText(String(question.choices[i] ?? ''))
           .setColor(live ? COLORS.ink : COLORS.soft);
       }
     }
