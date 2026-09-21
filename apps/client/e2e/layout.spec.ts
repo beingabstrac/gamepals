@@ -122,9 +122,11 @@ test('Yatzy: no row name is wider than its cell', async ({ page }) => {
  * How far each game runs past the bottom of the screen. Yatzy's score card does, which may be
  * right for a fifteen-row table, but nobody has ever measured the rest, and "every game fits
  * portrait and landscape" is a rule in CLAUDE.md that nothing checks. One test so the answer
- * arrives as one list rather than fifty failures.
+ * arrives as one list rather than fifty failures, and one that says how long it needs, because
+ * fifty-one games do not fit in the sixty seconds a test gets by default. CLAUDE.md says exactly
+ * that about tests that walk whole games, and I wrote this one without it.
  */
-test('how far each game runs past the bottom of the screen', async ({ page }) => {
+test('how far each game runs past the bottom of the screen', { timeout: 300_000 }, async ({ page }) => {
   const tall: string[] = [];
   for (const name of GAMES) {
     await page.goto('/');
