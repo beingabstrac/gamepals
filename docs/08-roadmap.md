@@ -492,6 +492,12 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   on the centre flag. None of these has a check, because `layoutCheck` was only ever given to the
   word games. The question is the same one for all of them and so is the answer: say where the
   bands are, and let nothing land on a band that carries meaning.
+  - **A wording nit found in the same sweep, deliberately not fixed blind.** Spades' team header
+    reads "Red 44 (8/4, 4 bags)", which is won-over-bid and reads naturally as bid-over-won: as
+    "bid 8, won 4" it would be a hand set by four, not a 44-point one. The seat lines under it
+    already say "bid 3 · won 5" and are perfectly clear. Every unambiguous rewording is longer,
+    the line already carries two teams across 800 units, and whether it still fits is a thing to
+    measure rather than guess, so it belongs with whoever can see the render.
 
 - [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
@@ -502,6 +508,29 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
   Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
   eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
+  - [x] **Seven more scenes answer, and all fifty-one were looked at (2026-09-21).** A full pass
+    over the gallery, one game at a time. New checks: `fanCheck()` on Solitaire, FreeCell and
+    Spider (is a covered card readable), `boardCheck()` on Sliding Puzzle and Colour Sort (is
+    every piece its proper size, in its proper place), `handCheck()` extended on Crazy Eights
+    (every card in hand is placed or on its way, and one that is neither is lost), and a check
+    that a result names somebody at this table, covering Old Maid and Shut the Box against the
+    running score. The rules also gained a seed-conservation invariant for Mancala, which is not
+    a scene check but was worth having once the question came up.
+    **Looked at and found correct**, with the arithmetic checked by hand where there was any:
+    Sudoku (all 27 groups), Mini Crossword (all ten entries and the numbering), Word Search (all
+    six words), Word Ladder, Word Guess, Anagram Hunt, Word Groups, Target Number, Quick Maths,
+    Hearts (a shot moon, scored right), Spades (bids, tricks and bags all reconcile), Callbreak
+    (every call and its 0.1s), Gin Rummy (a legal knock with three deadwood), Rummy, Go Fish,
+    TriPeaks, Pyramid, 2048, Chess, Checkers, Reversi, Ludo, Backgammon, Sea Battle, Dots & Boxes,
+    Memory, Echo, Tic-Tac-Toe, Snakes & Ladders, Yatzy, Mancala, Dominoes, Classic Snake, Snake
+    Battle, Penalty Kicks, Air Hockey, Ping Pong, Sumo, Tug of War, Reflex Race, Colour Sort,
+    Sliding Puzzle, War, Old Maid, Crazy Eights, Spider, Solitaire, FreeCell, Ultimate.
+    **Seven looked wrong and were not**, each checked in the code before being written off:
+    Pyramid's part-cleared triangle, Mancala's forty-two missing seeds (the end sweep mid-hop),
+    Yatzy's single die (four still falling), War's off-by-one, Ultimate's board (a frame skew),
+    Quick Maths' unflipped text (no people to face), and Four in a Row's floating disc (a
+    physics drop, caught in the air). That is seven out of seven where the picture alone would
+    have sent me the wrong way.
   - [x] **The whole class swept, not sampled (2026-09-21).** The bug is not "things move", it is
     "the scene keeps its own idea of where things are", and that is a grep rather than a gallery
     review. Every scene in all fifty-one games, sorted:
