@@ -359,6 +359,14 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   The height check is back at 1.02x, which is what the rule in CLAUDE.md actually says. Verified
   by the measurement that found it and by the gallery, because a board that fits and a board that
   looks right are two different claims.
+- **Hearts called the winner by a name that was nowhere on the table (2026-09-21).** The result
+  read "Yellow wins with 0" over a board labelled Nova, Pip, Zed and Bo, and the status line said
+  "Hearts broken · Yellow lowest" while the scene's own shout said "Nova takes 2". Two naming
+  schemes in one game, and nothing on screen tying them together. The cause is the contract:
+  `status` and `resultText` were handed the state and nothing else, so they could only reach the
+  colour list, while the scene has the session and uses the seat labels. Both callbacks now get
+  the seat names as well. Ludo had it right all along and is the model: "Pip (Green) is thinking",
+  which says who and which colour at once.
 - **Quick Maths, looked at rather than tested (2026-09-21).** Two things a passing suite had
   nothing to say about. Between questions the four answer pads were drawn empty, which reads as
   something that failed to render rather than a game waiting for the next sum, so they are not

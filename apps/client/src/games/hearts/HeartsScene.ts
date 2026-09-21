@@ -320,10 +320,10 @@ export class HeartsScene extends Scene {
   }
 }
 
-export const heartsStatus = (state: HeartsState): string | undefined => {
+export const heartsStatus = (state: HeartsState, names: readonly string[] = []): string | undefined => {
   if (state.result) return undefined;
   if (state.phase === 'pass') return 'Pick three to pass';
   const low = Math.min(...state.scores);
   const leader = state.scores.indexOf(low);
-  return state.broken ? `Hearts broken · ${HEARTS_NAMES[leader]} lowest` : `Hearts not broken yet`;
+  return state.broken ? `Hearts broken · ${names[leader] ?? HEARTS_NAMES[leader]} lowest` : `Hearts not broken yet`;
 };

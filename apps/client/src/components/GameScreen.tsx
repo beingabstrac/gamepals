@@ -104,9 +104,12 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
   const names = entry.sideNames(seats.length);
   const sideColors = entry.sideColors(seats.length);
   const sideName = (seat: number) => `${seats[seat]?.label} (${names[seat] ?? seat + 1})`;
+  // What each seat is called at this table, for a game that writes its own status or result and
+  // should call people the same thing its board does.
+  const seatNames = seats.map((seat, i) => seat.label ?? names[i] ?? `Player ${i + 1}`);
   const Controls = entry.Controls;
   const thinking = session.thinkingSeat !== null || seats[state.currentSeat]?.kind === 'bot';
-  const custom = entry.status?.(state);
+  const custom = entry.status?.(state, seatNames);
 
   const rematch = () => {
     // Rotate seats so a different side starts each game.
@@ -148,7 +151,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
       </div>
       {state.result && (
         <ResultSheet
-          title={entry.resultText?.(state) ?? resultTitle(state.result, seats, sideName)}
+          title={entry.resultText?.(state, seatNames) ?? resultTitle(state.result, seats, sideName)}
           outcome={outcomeOf(state.result, seats)}
           score={scoreLine(rivalry, seats)}
           streak={streakLine(rivalry)}

@@ -236,10 +236,14 @@ export interface GameEntry<M = unknown> extends EntryBase {
   /** How to play in one short line, shown under the board until the first move. For games
    *  where the controls are not obvious from looking (swipe, drag) and there are no buttons. */
   readonly hint?: string;
-  /** Replaces "X to move" (e.g. a score for solo puzzles); undefined keeps the default. */
-  status?(state: GameState<M>): string | undefined;
+  /**
+   * Replaces "X to move" (e.g. a score for solo puzzles); undefined keeps the default.
+   * `names` is what each seat is called at this table, so a game can say the same thing its own
+   * board says. Hearts printed "Yellow wins with 0" over a table labelled Nova, Pip, Zed and Bo.
+   */
+  status?(state: GameState<M>, names: readonly string[]): string | undefined;
   /** Replaces the result headline (e.g. "No more moves. 2,340 points"); undefined keeps the default. */
-  resultText?(state: GameState<M>): string | undefined;
+  resultText?(state: GameState<M>, names: readonly string[]): string | undefined;
   createScene(session: Session<M>): Scene;
 }
 
@@ -1022,11 +1026,14 @@ export const GAMES: readonly AnyEntry[] = [
     sideColors: () => HEARTS_COLORS,
     size: HEARTS_SIZE,
     color: DARK.tomato,
-    status: (state) => heartsStatus(state as HeartsState),
-    resultText: (state) => {
+    // The people at this table, not the colours: the board says "Nova takes 2" and the result
+    // used to say "Yellow wins with 0", with nothing on screen tying the two together.
+    status: (state, names) => heartsStatus(state as HeartsState, names),
+    resultText: (state, names) => {
       const s2 = state as HeartsState;
       const low = Math.min(...s2.scores);
-      return `${HEARTS_NAMES[s2.scores.indexOf(low)]} wins with ${low}.`;
+      const seat = s2.scores.indexOf(low);
+      return `${names[seat] ?? HEARTS_NAMES[seat]} wins with ${low}.`;
     },
     moveCue: (before, after) =>
       (after as HeartsState).trick.length === 0 && (before as HeartsState).trick.length > 0 ? 'go' : 'place',
