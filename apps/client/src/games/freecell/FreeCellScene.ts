@@ -13,6 +13,7 @@ import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
+import { fanReport } from '../cards/fan';
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -30,6 +31,7 @@ const topX = (slot: number) => spotX(slot) + (slot < CELLS ? -LEAN : LEAN);
 const TOP_Y = 14 + CH / 2;
 const TAB_Y = TOP_Y + CH + 30;
 const STEP = 36;
+const ROOM = H - 14 - CH / 2 - TAB_Y;
 const MOVE_MS = 200;
 const DRAG_MIN = 10;
 const TABLE = 0xc9e3ff;
@@ -73,8 +75,7 @@ function layout(state: FreeCellState): Map<number, Spot> {
   state.columns.forEach((cards, c) => {
     const run = grabbable(state, c);
     const total = Math.max(0, cards.length - 1) * STEP;
-    const room = H - 14 - CH / 2 - TAB_Y;
-    const squeeze = total > room ? room / total : 1;
+    const squeeze = total > ROOM ? ROOM / total : 1;
     const inRun = state.runLength(c);
     cards.forEach((card, i) => {
       // Only the run at the bottom of a column can be picked up, and only as far as the cells carry.
@@ -195,6 +196,20 @@ export class FreeCellScene extends Scene {
   }
 
   /** Moves every card to where the state says it belongs. */
+  /**
+   * Whether a covered card still shows its corner index. A card with another on top of it shows
+   * only the strip down to the next card's top edge, and the fan stepped less far than the index
+   * reaches, so every card but the bottom of a column showed a rank with its suit cut off.
+   */
+  fanCheck(): { checked: number; tight: number; worst: number } {
+    const index = [...this.views.values()][0]?.index ?? 0;
+    // Every card in a FreeCell column is face up, so every covered one has to stay readable.
+    const columns = this.state.columns.map((cards) => ({
+      cards: cards.map((card) => ({ y: this.spots.get(card)!.y, up: true })),
+    }));
+    return fanReport(columns, index, ROOM);
+  }
+
   private sync(animate: boolean, deal = false): void {
     this.banner?.setVisible(false);
     this.spots = layout(this.state);

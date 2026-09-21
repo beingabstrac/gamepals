@@ -17,6 +17,11 @@ export interface CardView {
   sliding?: boolean;
   /** The face this card is turning to, so a second look does not start the turn again. */
   flipTarget?: boolean;
+  /**
+   * How far below the card's top edge the corner index reaches, measured off the real text rather
+   * than copied by hand, so a fan can ask whether it is stepping far enough to leave it readable.
+   */
+  readonly index: number;
 }
 
 /**
@@ -83,11 +88,9 @@ export function makeCard(scene: Scene, card: number, cw: number, ch: number): Ca
   face.fillRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
   face.lineStyle(2, 0xdcd6ee, 1);
   face.strokeRoundedRect(-cw / 2, -ch / 2, cw, ch, 12);
-  const parts: GameObjects.GameObject[] = [
-    face,
-    sharpText(scene, -cw / 2 + 17 * scale, -ch / 2 + 19 * scale, RANKS[rank - 1]!, (rank === 10 ? 22 : 27) * scale, color).setFontStyle('bold'),
-    sharpText(scene, -cw / 2 + 17 * scale, -ch / 2 + 43 * scale, suit, 20 * scale, color),
-  ];
+  const rankText = sharpText(scene, -cw / 2 + 17 * scale, -ch / 2 + 19 * scale, RANKS[rank - 1]!, (rank === 10 ? 22 : 27) * scale, color).setFontStyle('bold');
+  const suitText = sharpText(scene, -cw / 2 + 17 * scale, -ch / 2 + 43 * scale, suit, 20 * scale, color);
+  const parts: GameObjects.GameObject[] = [face, rankText, suitText];
   if (rank > 10) {
     // Picture cards: the letter in a bubble of the suit's color.
     const bubble = scene.add.graphics();
@@ -100,7 +103,8 @@ export function makeCard(scene: Scene, card: number, cw: number, ch: number): Ca
   const front = scene.add.container(0, 0, parts);
   const box = scene.add.container(0, 0, [shadow, back, front]);
   front.setVisible(false);
-  return { box, front, back, up: false };
+  const index = Math.max(rankText.y + rankText.height / 2, suitText.y + suitText.height / 2) + ch / 2;
+  return { box, front, back, up: false, index };
 }
 
 export function setFace(view: CardView, up: boolean): void {

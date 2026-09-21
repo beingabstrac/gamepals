@@ -131,3 +131,36 @@ for (const { name, limit } of [
     expect(worst, `${name}: the board settled this far behind the state`).toBeLessThanOrEqual(limit);
   });
 }
+
+/**
+ * A card with another card on top of it shows one strip: from its own top edge down to where the
+ * next card starts. The corner index has to fit in that strip, or the card goes quiet. All three
+ * fanning games stepped less far than their index reached, so a covered card showed its rank with
+ * the suit below it cut off, and in Spider, where a run has to be all one suit, that is the one
+ * thing you need to read. A screenshot showed it; no test could, because every game still played
+ * and finished perfectly well with unreadable cards.
+ */
+for (const name of ['Solitaire', 'FreeCell', 'Spider']) {
+  test(`${name}: a covered card still shows its suit`, async ({ page }) => {
+    test.setTimeout(90_000);
+    await open(page, name);
+    let tight = 0;
+    let checked = 0;
+    let worst = Infinity;
+    for (let look = 0; look < 8; look++) {
+      await page.waitForTimeout(700);
+      const report = await page.evaluate(() => {
+        const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+        const scene = game?.scene.scenes[0] as { fanCheck?: () => { checked: number; tight: number; worst: number } } | undefined;
+        return scene?.fanCheck ? scene.fanCheck() : null;
+      });
+      if (!report) break;
+      tight += report.tight;
+      checked += report.checked;
+      if (report.checked > 0) worst = Math.min(worst, report.worst);
+    }
+    // Without this a green tick could mean the fan was never looked at, which is no tick at all.
+    expect(checked, `${name}: no covered card was ever measured`).toBeGreaterThan(20);
+    expect(tight, `${name}: covered cards cut their own index off (shortest step ${worst})`).toBe(0);
+  });
+}

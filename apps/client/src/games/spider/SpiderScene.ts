@@ -4,6 +4,7 @@ import { applySpeed } from '../../autoplay';
 import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { drawSlot, flipTo, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
+import { fanReport } from '../cards/fan';
 import { hintBusFor, type HintBus } from '../cards/hintBus';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 
@@ -19,6 +20,7 @@ const TAB_Y = 16 + CH / 2;
 const DOWN_STEP = 15;
 const UP_STEP = 30;
 const FOOT_Y = H - CH / 2 - 14;
+const ROOM = FOOT_Y - CH / 2 - 18 - TAB_Y;
 const MOVE_MS = 200;
 const DRAG_MIN = 10;
 const TABLE = 0xffe2c4;
@@ -55,8 +57,7 @@ function layout(state: SpiderState, done: readonly number[]): Map<number, Spot> 
     const run = state.runLength(c);
     const steps = column.cards.slice(0, -1).map((_, i) => (i < column.down ? DOWN_STEP : UP_STEP));
     const total = steps.reduce((a, b) => a + b, 0);
-    const room = FOOT_Y - CH / 2 - 18 - TAB_Y;
-    const squeeze = total > room ? room / total : 1;
+    const squeeze = total > ROOM ? ROOM / total : 1;
     let y = TAB_Y;
     column.cards.forEach((card, i) => {
       const movable = i >= column.cards.length - run;
@@ -140,6 +141,19 @@ export class SpiderScene extends Scene {
       this.views.set(card, view);
     }
     return view;
+  }
+
+  /**
+   * Whether a covered card still shows its corner index. A card with another on top of it shows
+   * only the strip down to the next card's top edge, and the fan stepped less far than the index
+   * reaches, so every card but the bottom of a column showed a rank with its suit cut off.
+   */
+  fanCheck(): { checked: number; tight: number; worst: number } {
+    const index = [...this.views.values()][0]?.index ?? 0;
+    const columns = this.state.columns.map((column) => ({
+      cards: column.cards.map((card) => ({ y: this.spots.get(card)!.y, up: this.spots.get(card)!.up })),
+    }));
+    return fanReport(columns, index, ROOM);
   }
 
   private sync(animate: boolean, deal = false): void {

@@ -4,6 +4,7 @@ import type { Session } from '../../session';
 import { fitCamera, sharpText } from '../crisp';
 import { applySpeed } from '../../autoplay';
 import { drawSlot, flipTo, jitter, makeCard, placeAt, setFace, slideTo, stopSlide, type CardView } from '../cards/view';
+import { fanReport } from '../cards/fan';
 import { focusRing, isPress, moveRing, onKeys } from '../keys';
 import { solitaireUiFor, type SolitaireUi } from './ui';
 
@@ -21,6 +22,7 @@ const DOWN_STEP = 18;
 const UP_STEP = 38;
 const MOVE_MS = 230;
 const DRAG_MIN = 10;
+const ROOM = H - 12 - CH / 2 - TAB_Y;
 const TABLE = 0xbdeed6;
 const SLOT = 0x8fdcb6;
 
@@ -59,8 +61,7 @@ function layout(state: SolitaireState): Map<number, Spot> {
   state.tableau.forEach((column, c) => {
     const steps = column.cards.slice(0, -1).map((_, i) => (i < column.down ? DOWN_STEP : UP_STEP));
     const total = steps.reduce((a, b) => a + b, 0);
-    const room = H - 12 - CH / 2 - TAB_Y;
-    const squeeze = total > room ? room / total : 1;
+    const squeeze = total > ROOM ? ROOM / total : 1;
     let y = TAB_Y;
     column.cards.forEach((card, i) => {
       const up = i >= column.down;
@@ -135,6 +136,19 @@ export class SolitaireScene extends Scene {
     const view = makeCard(this, card, CW, CH);
     view.box.setPosition(colX(0), TOP_Y);
     return view;
+  }
+
+  /**
+   * Whether a covered card still shows its corner index. A card with another on top of it shows
+   * only the strip down to the next card's top edge, and the fan stepped less far than the index
+   * reaches, so every card but the bottom of a column showed a rank with its suit cut off.
+   */
+  fanCheck(): { checked: number; tight: number; worst: number } {
+    const index = [...this.views.values()][0]?.index ?? 0;
+    const columns = this.state.tableau.map((column) => ({
+      cards: column.cards.map((card) => ({ y: this.spots.get(card)!.y, up: this.spots.get(card)!.up })),
+    }));
+    return fanReport(columns, index, ROOM);
   }
 
   /** Moves every card to where the state says it belongs. */
