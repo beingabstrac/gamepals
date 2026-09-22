@@ -458,7 +458,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     every time today. Both are worth a check of their own: "the pill and the labels agree once
     the board is settled", and "the tubes are one size and centred once the board is settled".
 
-- [ ] **Q4 The board finishes the move before the sheet says how it ended.** `GameScreen` renders
+- [x] **Q4 The board finishes the move before the sheet says how it ended (2026-09-22).** `GameScreen` renders
   the result sheet the moment `state.result` is set, and the board is still animating the move
   that caused it. Four in a Row says "Nova (Yellow) wins!" with the winning disc still in the air,
   one row above the gap it is falling into. Every game that settles a move has this: the falling
@@ -482,7 +482,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     show a caption that contradicts its own board. The capture has to wait for a canvas frame
     after the last state change, not just for the tweens to go quiet.
 
-- [ ] **Q5 A message never sits on the thing it is about.** Four word scenes printed their status
+- [x] **Q5 A message never sits on the thing it is about (2026-09-22).** Four word scenes printed their status
   line through their own content and were fixed with `layoutCheck`. The same fault is spread
   through the games that shout: Dominoes centres its banner in the tile area and centres the tile
   rows there too, so with an odd number of rows "Red goes out: +14" is read through the pips
@@ -492,6 +492,26 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   on the centre flag. None of these has a check, because `layoutCheck` was only ever given to the
   word games. The question is the same one for all of them and so is the answer: say where the
   bands are, and let nothing land on a band that carries meaning.
+  - **Two of the five were real; the other three were cards in the air (2026-09-22).** Checked at
+    rest, which is the only state worth asking about, because a piece crossing a message on its
+    way somewhere is the animation working. Dominoes centres its rows in the same band it centres
+    its banner in, so an odd number of rows puts the round-end line through the pips every time:
+    real, and given a plate because no band in that table is ever free. Yatzy's shout went at
+    REST_Y with the dice: real, and moved under them, because there a free band exists and a
+    message should not cover what it is about when it does not have to. Old Maid's banner sits at
+    336 against an offered card spanning 193 to 306, and Go Fish's at 247 against a pool spanning
+    273 to 386; both are clear, and the pictures that accused them had a card in flight. Mapping
+    the Go Fish shot back to scene coordinates put the offending card at 169 to 259, nowhere near
+    where a pool card rests. Tug of War covers its centre marker only while the marker is at the
+    centre and nothing has happened yet.
+  - **The Yatzy check passed before it failed, and that is the lesson (2026-09-22).** The first
+    version asked from outside every 250ms and came back green on both engines. The window is a
+    sliver: the shout lingers over a second while the next roll lifts the dice above the tray
+    within a few hundred milliseconds, so a poll sees plenty of shouts and almost never one with
+    the dice at rest. A guard that only insisted on seeing a shout was satisfied entirely by the
+    harmless ones. Moved into the scene, recorded at the instant the shout is said, it failed
+    immediately and printed the numbers. Proving a check red is not enough on its own if the
+    check is sampling: it has to sample where the thing happens.
   - **A wording nit found in the same sweep, deliberately not fixed blind.** Spades' team header
     reads "Red 44 (8/4, 4 bags)", which is won-over-bid and reads naturally as bid-over-won: as
     "bid 8, won 4" it would be a hand set by four, not a 44-point one. The seat lines under it
