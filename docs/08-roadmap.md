@@ -472,6 +472,23 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   the last move". The sheet waits for it, capped at something like 1.2s so a stuck scene can never
   swallow the result, and the gallery waits for it too. Worth doing before the store screenshots,
   because a screenshot of a half-finished move is not a screenshot of the game.
+  - **Verified, and half-verified (2026-09-22).** The milestone-end matrix went green on all eight
+    engines and produced the gallery. Four in a Row proves the sheet half: the winning four sits
+    on the board, highlighted, with nothing in the air, where the same shot used to catch a disc
+    mid-fall under a sheet that had already named the winner.
+    The picture half was still wrong and not for the reason written below. War's pill read
+    "19 to 33" beside a label reading "Nova: 20" with two animation frames already being waited
+    for, so the canvas is not lagging the DOM: the game is simply still being played. A move lands
+    between settle returning and the shot being taken, the line redraws at once, the canvas waits
+    for its frame, and the picture catches the gap. No number of frames fixes a thing that keeps
+    moving. The gallery now waits for a quiet window instead, reading the move count either side
+    of the frames it is about to photograph and trying again if it moved.
+    That fix is **not yet seen working**: the gallery only runs under `@full`, which a push skips,
+    and a second eight-engine dispatch to re-check one screenshot is not worth about two hundred
+    CI minutes when the Monday weekly run does it for nothing. Nothing downstream is waiting on it.
+    Worth naming the pattern: this is the Yatzy shout mistake in different clothes. Both times the
+    measurement went where it was convenient rather than where the thing happens, and both times
+    the convenient version looked rigorous enough to trust.
   - **A third symptom, and the one that reaches the store.** The status line is HTML and the board
     is canvas, and a screenshot composites both. Twice today a picture showed them one move apart:
     War's pill read "15 to 37" beside labels reading 36 and 16, and Ultimate's line named the
