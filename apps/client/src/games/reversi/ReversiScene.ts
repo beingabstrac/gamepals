@@ -20,7 +20,8 @@ const LIP = [0x16151f, toHex(COLORS.sky)];
 const center = (sq: number) => ({ x: MARGIN + (sq % 8) * CELL + CELL / 2, y: MARGIN + Math.floor(sq / 8) * CELL + CELL / 2 });
 
 export class ReversiScene extends Scene {
-  private discs = new Map<number, { view: GameObjects.Container; face: GameObjects.Graphics }>();
+  /** The disc drawn on each square, and which way up it is currently painted. */
+  private discs = new Map<number, { view: GameObjects.Container; face: GameObjects.Graphics; seat: 0 | 1 }>();
   private dots!: GameObjects.Graphics;
   private banner!: GameObjects.Text;
   private cursor = 27;
@@ -91,6 +92,40 @@ export class ReversiScene extends Scene {
     for (const [r, c] of [[2, 2], [2, 6], [6, 2], [6, 6]]) g.fillCircle(MARGIN + c! * CELL, MARGIN + r! * CELL, 5);
   }
 
+  /**
+   * Whether the discs on screen are the discs the rules say are there, the right way up. A disc's
+   * colour lives in its Graphics and nowhere else, so the scene now records which way it painted
+   * each one: a flip that never landed is the fault worth catching here and a disc that is merely
+   * present would not show it.
+   */
+  boardCheck(): { settled: number; wrong: number; note: string } {
+    const board = this.state.board;
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    board.forEach((cell, sq) => {
+      const disc = this.discs.get(sq);
+      if (cell === REVERSI_EMPTY) {
+        if (disc) {
+          wrong++;
+          note = `a disc is drawn on square ${sq}, which the rules say is empty`;
+        }
+        return;
+      }
+      if (!disc) {
+        wrong++;
+        note = `no disc is drawn on square ${sq}, which the rules say has one`;
+        return;
+      }
+      settled++;
+      if (disc.seat !== cell) {
+        wrong++;
+        note = `the disc on square ${sq} is painted for seat ${disc.seat} and the rules say seat ${cell}`;
+      }
+    });
+    return { settled, wrong, note };
+  }
+
   private paint(face: GameObjects.Graphics, seat: 0 | 1): void {
     face.clear();
     face.fillStyle(LIP[seat]!, 1);
@@ -106,7 +141,7 @@ export class ReversiScene extends Scene {
     this.paint(face, seat);
     const { x, y } = center(sq);
     const view = this.add.container(x, y, [face]).setDepth(2);
-    this.discs.set(sq, { view, face });
+    this.discs.set(sq, { view, face, seat });
     if (!instant) {
       // Drop in from above with a bounce.
       view.setY(y - 60).setScale(1.25).setAlpha(0);
@@ -176,6 +211,7 @@ export class ReversiScene extends Scene {
         ease: 'Quad.easeIn',
         onComplete: () => {
           this.paint(disc.face, seat);
+          disc.seat = seat;
           this.tweens.add({ targets: disc.view, scaleX: 1, duration: 110, ease: 'Back.easeOut' });
         },
       });

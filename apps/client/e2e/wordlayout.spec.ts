@@ -389,7 +389,7 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
  * move that was dropped never catches up, which is the Checkers bug this found; a move still in
  * the air catches up a few hundred milliseconds later.
  */
-for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War']) {
+for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War', 'Reversi']) {
   test(`${game}: what is drawn catches up with what the rules say`, async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, game);
@@ -398,13 +398,17 @@ for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War'])
     for (let look = 0; look < 30; look++) {
       const report = await page.evaluate(() => {
         const phaser = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
-        const scene = phaser?.scene.scenes[0] as { boardCheck?: () => { settled: number; wrong: number; note: string } } | undefined;
-        return scene?.boardCheck ? scene.boardCheck() : null;
+        const scenes = phaser?.scene.scenes ?? [];
+        const scene = scenes[0] as { boardCheck?: () => { settled: number; wrong: number; note: string } } | undefined;
+        // Say what was there when there is no answer. Class names are mangled in a built app, so
+        // the useful facts are whether the game exists at all and how many scenes it is running.
+        if (!scene?.boardCheck) return { settled: 0, wrong: 0, note: `no boardCheck: game ${phaser ? 'yes' : 'no'}, ${scenes.length} scene(s)`, asked: false };
+        return { ...scene.boardCheck(), asked: true };
       });
       // A scene that has not finished starting has no answer yet, which is not the same as a wrong
       // one: `scenes[0]` is briefly empty after the canvas appears. Keep asking.
       if (report) {
-        if (report.wrong === 0 && report.settled > agreedOn) agreedOn = report.settled;
+        if (report.asked && report.wrong === 0 && report.settled > agreedOn) agreedOn = report.settled;
         if (report.note) note = report.note;
         if (agreedOn > 8) break;
       }
