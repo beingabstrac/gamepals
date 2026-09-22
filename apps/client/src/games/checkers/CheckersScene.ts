@@ -112,17 +112,23 @@ export class CheckersScene extends Scene {
   }
 
   /**
-   * Whether the pieces on screen are the pieces the rules say are on the board. A piece in the
-   * middle of a slide is keyed to the square it left until it lands, so the "nothing is missing"
-   * half only runs when the scene is still; otherwise every move would look like a gap.
+   * Whether the pieces on screen are the pieces the rules say are on the board.
+   *
+   * Only worth asking while the scene is still. The rules apply a whole jump at once and the board
+   * plays it out hop by hop, taking each captured piece off as its hop lands, so mid-jump the
+   * screen legitimately holds pieces the rules have already removed. `busy` is the thing to ask,
+   * not the tween list: the hops are counter tweens that drive `setPosition` themselves, so they
+   * never appear against the piece and `getTweensOf` reports a moving piece as settled. That is
+   * what this check got wrong first time round, and it reported two perfectly healthy captures as
+   * ghosts on an empty square.
    */
   boardCheck(): { settled: number; wrong: number; note: string } {
     const board = this.state.board;
     let settled = 0;
     let wrong = 0;
     let note = '';
+    if (this.busy) return { settled, wrong, note };
     for (const [square, view] of this.pieces) {
-      if (this.tweens.getTweensOf(view).length > 0) continue;
       settled++;
       if (board[square] === CheckerPiece.empty) {
         wrong++;
@@ -135,14 +141,12 @@ export class CheckersScene extends Scene {
         note = `the piece on square ${square} sits away from it`;
       }
     }
-    if (this.tweens.getTweens().length === 0) {
-      board.forEach((piece, square) => {
-        if (piece !== CheckerPiece.empty && !this.pieces.has(square)) {
-          wrong++;
-          note = `no piece is drawn on square ${square}, which the rules say has one`;
-        }
-      });
-    }
+    board.forEach((piece, square) => {
+      if (piece !== CheckerPiece.empty && !this.pieces.has(square)) {
+        wrong++;
+        note = `no piece is drawn on square ${square}, which the rules say has one`;
+      }
+    });
     return { settled, wrong, note };
   }
 
