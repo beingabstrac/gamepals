@@ -118,9 +118,12 @@ export class ReversiScene extends Scene {
         return;
       }
       settled++;
-      if (disc.seat !== cell) {
+      // The board stores a disc, not a seat: `discOf` is the translation, and comparing the two
+      // straight was wrong in a way that read plausibly, complaining that a square held "seat 2"
+      // in a game that has only seats 0 and 1.
+      if (discOf(disc.seat) !== cell) {
         wrong++;
-        note = `the disc on square ${sq} is painted for seat ${disc.seat} and the rules say seat ${cell}`;
+        note = `the disc on square ${sq} is painted for seat ${disc.seat} and the rules say disc ${cell}`;
       }
     });
     return { settled, wrong, note };

@@ -290,16 +290,25 @@ export class MemoryScene extends Scene {
     let wrong = 0;
     let note = '';
     this.state.owner.forEach((owner, card) => {
-      if (owner >= 0) return;
       const view = this.cards[card];
       const spot = this.spots[card];
       if (!view || !spot) {
         wrong++;
-        note = `card ${card} is still in play and is not drawn`;
+        note = `card ${card} is not drawn at all`;
         return;
       }
       if (this.tweens.getTweensOf(view.box).length > 0) return;
       settled++;
+      if (owner >= 0) {
+        // A won pair flies to the scorer's chip, shrinks and is hidden. Asking only about the
+        // cards still in play left nothing to count at all: four bots that remember everything
+        // clear the board before the first look, so every card was owned and every one skipped.
+        if (view.box.visible && view.box.scale > 0.5) {
+          wrong++;
+          note = `card ${card} has been won by seat ${owner} and is still sitting on the table`;
+        }
+        return;
+      }
       if (Math.abs(view.box.x - spot.x) > 2 || Math.abs(view.box.y - spot.y) > 2) {
         wrong++;
         note = `card ${card} rests at ${Math.round(view.box.x)},${Math.round(view.box.y)} and belongs at ${Math.round(spot.x)},${Math.round(spot.y)}`;
