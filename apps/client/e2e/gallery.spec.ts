@@ -26,10 +26,17 @@ async function settle(page: Page): Promise<void> {
   const quiet = () =>
     page.waitForFunction(
       () => {
-        const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: { tweens?: { getTweens(): unknown[] } }[] } } })
-          .gamepalsTestGame;
+        const game = (
+          window as unknown as {
+            gamepalsTestGame?: { scene: { scenes: { busy?: () => boolean; tweens?: { getTweens(): unknown[] } }[] } };
+          }
+        ).gamepalsTestGame;
         const scene = game?.scene.scenes[0];
-        return scene?.tweens ? scene.tweens.getTweens().length === 0 : true;
+        if (!scene) return true;
+        // A scene that moves things itself in `update()` rather than by tweening says so; to the
+        // tween list it looks perfectly still while a disc is halfway down a column.
+        if (typeof scene.busy === 'function') return !scene.busy();
+        return scene.tweens ? scene.tweens.getTweens().length === 0 : true;
       },
       undefined,
       { timeout: 4000 },
@@ -47,6 +54,14 @@ async function settle(page: Page): Promise<void> {
     }
     if (look === 0) await page.waitForTimeout(280);
   }
+  // The status line is HTML and the board is canvas, and a shot composites both. Phaser draws on
+  // an animation frame, so without waiting for one the canvas in the picture can be a frame behind
+  // the line above it: War's pill read "15 to 37" beside labels reading 36 and 16, and Ultimate's
+  // line named one board while a different one glowed. Sixteen milliseconds nobody would ever see,
+  // except that these pictures become the store screenshots.
+  await page.evaluate(
+    () => new Promise<void>((done) => requestAnimationFrame(() => requestAnimationFrame(() => done()))),
+  );
 }
 
 for (const name of GAMES) {

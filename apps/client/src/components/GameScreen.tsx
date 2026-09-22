@@ -7,6 +7,7 @@ import { recordGame } from '../stats';
 import { cue } from '../feedback';
 import { isFirstPlay, markPlayed, tryItLine } from '../firstplay';
 import { keyFor, load, record, scoreLine, streakLine, type Rivalry } from '../rivalry';
+import { sceneBusy } from '../games/busy';
 import { DPR } from '../games/crisp';
 import { isCooking, type GameEntry } from '../games/registry';
 import { outcomeOf, resultTitle } from '../outcome';
@@ -29,6 +30,9 @@ interface Props {
 
 const newSeed = () => Math.floor(Math.random() * 0xffffffff);
 
+/** Longest the result sheet will wait for the board; a stuck scene must never swallow it. */
+const RESULT_WAIT_MS = 1200;
+
 export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSeed, dailyKey, onExit }: Props) {
   const [seats, setSeats] = useState(initialSeats);
   const [seed, setSeed] = useState(fixedSeed ?? newSeed);
@@ -40,6 +44,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
   const [coach, setCoach] = useState(() => isFirstPlay(entry.definition.id));
   // One game, one entry in the score, however many times the screen renders.
   const counted = useRef<Session<unknown> | null>(null);
+  const gameRef = useRef<Game | null>(null);
 
   const session = useMemo(
     () => new Session(entry.definition, seats, seed, AUTOPLAY ? AUTOPLAY_BOT_DELAY_MS : entry.botDelayMs, variant),
@@ -79,7 +84,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
       if (session.moves.length > 0) setCoach(false);
       before = after;
     });
-    const game = new Game({
+    const game: Game = new Game({
       type: AUTO,
       parent: host.current!,
       // Rendered at the screen's pixel density; scenes zoom their camera to match (games/crisp.ts).
@@ -92,13 +97,40 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
     });
     // Test mode only: lets e2e ask a scene whether what it has drawn still matches the rules.
     if (AUTOPLAY || INSPECT) (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame = game;
+    gameRef.current = game;
     return () => {
       unsubscribe();
       session.dispose();
       if (AUTOPLAY || INSPECT) delete (window as unknown as { gamepalsTestGame?: Game }).gamepalsTestGame;
+      gameRef.current = null;
       game.destroy(true);
     };
   }, [session, entry, seats, rivalryKey]);
+
+  // The sheet waits for the board to finish the move that ended the game, so the reveal is not
+  // given away before it happens: Four in a Row said who had won over a disc still in the air.
+  // The cap is a safety net and not the usual path, because a scene that settles in a few hundred
+  // milliseconds gets there long before it; a scene that celebrates with tweens, like the patience
+  // win cascades, takes the whole beat, which is the right length to watch one.
+  const [boardReady, setBoardReady] = useState(false);
+  const finished = Boolean(session.state.result);
+  useEffect(() => {
+    if (!finished) {
+      setBoardReady(false);
+      return;
+    }
+    let stopped = false;
+    const began = performance.now();
+    const look = () => {
+      if (stopped) return;
+      if (!sceneBusy(gameRef.current) || performance.now() - began > RESULT_WAIT_MS) setBoardReady(true);
+      else requestAnimationFrame(look);
+    };
+    requestAnimationFrame(look);
+    return () => {
+      stopped = true;
+    };
+  }, [finished]);
 
   const { state } = session;
   const names = entry.sideNames(seats.length);
@@ -149,7 +181,7 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
         {/* First time at this game: one line to get you going, gone as soon as you move. */}
         {coach && !state.result && <p class="coach">{tryItLine(entry.howTo.controls, entry.tryIt)}</p>}
       </div>
-      {state.result && (
+      {state.result && boardReady && (
         <ResultSheet
           title={entry.resultText?.(state, seatNames) ?? resultTitle(state.result, seats, sideName)}
           outcome={outcomeOf(state.result, seats)}
