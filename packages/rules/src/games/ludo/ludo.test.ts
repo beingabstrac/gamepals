@@ -136,3 +136,25 @@ describe('ludo bots', () => {
     expect(expertWins).toBeGreaterThan(games * 0.55);
   });
 });
+
+/**
+ * Four tokens each, from the yard to home and at every point between. A token that fell out of the
+ * list would simply stop existing, and nothing else in the rules would notice.
+ */
+describe('ludo conservation', () => {
+  it('always has four tokens for every player', () => {
+    for (let seed = 0; seed < 12; seed++) {
+      const rng = createRng(seed);
+      const players = 2 + (seed % 3);
+      let state = ludo.newGame({ players }, seed) as LudoState;
+      for (let move = 0; move < 400 && !state.result; move++) {
+        expect(state.tokens.length, `seed ${seed}, move ${move}`).toBe(players);
+        for (const list of state.tokens) expect(list.length, `seed ${seed}, move ${move}`).toBe(4);
+        for (const list of state.tokens) for (const at of list) expect(at >= YARD && at <= HOME, `seed ${seed}: token at ${at}`).toBe(true);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves)) as LudoState;
+      }
+    }
+  });
+});

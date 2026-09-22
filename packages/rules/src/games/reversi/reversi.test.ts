@@ -109,3 +109,26 @@ describe('reversi bots', () => {
     expect(zedWins).toBeGreaterThanOrEqual(6);
   });
 });
+
+/**
+ * Every move puts exactly one disc down and never lifts one: a pass changes nothing, and anything
+ * else adds one and only one. Flipping turns a disc over, which is not the same as removing it.
+ */
+describe('reversi conservation', () => {
+  it('adds exactly one disc a move, and never takes one away', () => {
+    const count = (state: ReversiState) => state.board.filter((cell) => cell !== E).length;
+    for (let seed = 0; seed < 16; seed++) {
+      const rng = createRng(seed);
+      let state = newReversi();
+      expect(count(state)).toBe(4);
+      for (let move = 0; move < 80 && !state.result; move++) {
+        const before = count(state);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        const chosen = rng.pick(moves);
+        state = state.apply(chosen);
+        expect(count(state), `seed ${seed}, move ${move}`).toBe(chosen === REVERSI_PASS ? before : before + 1);
+      }
+    }
+  });
+});

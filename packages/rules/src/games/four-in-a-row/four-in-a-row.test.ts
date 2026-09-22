@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { replay, toMoveLog } from '../../core/replay';
 import { createRng } from '../../core/rng';
 import type { BotTier, GameState } from '../../core/types';
-import { fourInARow, FourInARowState, type FourInARowMove } from './index';
+import { cellIndex, COLS, fourInARow, FourInARowState, ROWS, type FourInARowMove } from './index';
 
 const config = { players: 2 };
 
@@ -78,6 +78,39 @@ describe('four-in-a-row bots', () => {
     for (let seed = 0; seed < 2; seed++) {
       expect(playBots(['expert', 'easy'], seed).result?.winners).not.toContain(1);
       expect(playBots(['easy', 'expert'], seed).result?.winners).not.toContain(0);
+    }
+  });
+});
+
+/**
+ * Gravity: a disc rests on the one below it or on the floor, and `heights` counts what is in each
+ * column. A gallery picture showed a disc hanging over two empty cells, which turned out to be one
+ * caught in mid-drop by a camera that could not see it was still falling. The board itself can say
+ * whether that is ever true of the state, which the picture never could.
+ */
+describe('four in a row gravity', () => {
+  it('never leaves a disc hanging, and heights always match the board', () => {
+    for (let seed = 0; seed < 20; seed++) {
+      const rng = createRng(seed);
+      let state = fourInARow.newGame({ players: 2 }, seed) as FourInARowState;
+      for (let move = 0; move < 60 && !state.result; move++) {
+        for (let col = 0; col < COLS; col++) {
+          let filled = 0;
+          let seenGap = false;
+          for (let row = 0; row < ROWS; row++) {
+            const here = state.board[cellIndex(col, row)];
+            if (here === null) seenGap = true;
+            else {
+              filled++;
+              expect(seenGap, `seed ${seed}, move ${move}: a disc hangs over a gap in column ${col}`).toBe(false);
+            }
+          }
+          expect(state.heights[col], `seed ${seed}, move ${move}, column ${col}`).toBe(filled);
+        }
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves)) as FourInARowState;
+      }
     }
   });
 });

@@ -134,3 +134,29 @@ describe('checkers bots', () => {
     expect(boWins).toBeGreaterThanOrEqual(5);
   });
 });
+
+/**
+ * Pieces are captured, never conjured. A man crowning becomes a king in the same square and so
+ * keeps the count the same, and neither side can ever have more than the twelve it was dealt.
+ */
+describe('checkers conservation', () => {
+  it('never gives either side a piece back', () => {
+    const black = (s: CheckersState) => s.board.filter((p) => p === P.blackMan || p === P.blackKing).length;
+    const red = (s: CheckersState) => s.board.filter((p) => p === P.redMan || p === P.redKing).length;
+    for (let seed = 0; seed < 16; seed++) {
+      const rng = createRng(seed);
+      let state = newCheckers();
+      expect(black(state)).toBe(12);
+      expect(red(state)).toBe(12);
+      for (let move = 0; move < 120 && !state.result; move++) {
+        const wasBlack = black(state);
+        const wasRed = red(state);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+        expect(black(state), `seed ${seed}, move ${move}: black`).toBeLessThanOrEqual(wasBlack);
+        expect(red(state), `seed ${seed}, move ${move}: red`).toBeLessThanOrEqual(wasRed);
+      }
+    }
+  });
+});
