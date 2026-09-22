@@ -125,3 +125,30 @@ describe('memory bots', () => {
     expect(novaWins).toBeGreaterThan(games * 0.7);
   });
 });
+
+/**
+ * Every picture is on exactly two cards, and a card that has been won stays won by the player who
+ * won it. A symbol appearing an odd number of times would make the board unwinnable.
+ */
+describe('memory invariants', () => {
+  it('pairs every symbol, and never takes a card back', () => {
+    for (const size of ['small', 'medium', 'large'] as const) {
+      for (let seed = 0; seed < 6; seed++) {
+        const rng = createRng(seed);
+        let state = newMemory(2, seed, size);
+        const counts = new Map<number, number>();
+        for (const symbol of state.symbols) counts.set(symbol, (counts.get(symbol) ?? 0) + 1);
+        for (const [symbol, seen] of counts) expect(seen, `size ${size}, seed ${seed}, symbol ${symbol}`).toBe(2);
+        for (let move = 0; move < 300 && !state.result; move++) {
+          const owner = [...state.owner];
+          const moves = state.legalMoves(state.currentSeat);
+          if (moves.length === 0) break;
+          state = state.apply(rng.pick(moves));
+          owner.forEach((who, card) => {
+            if (who >= 0) expect(state.owner[card], `size ${size}, seed ${seed}, move ${move}, card ${card}`).toBe(who);
+          });
+        }
+      }
+    }
+  });
+});

@@ -6,6 +6,7 @@ import {
   chess,
   chessFromFen,
   ChessState,
+  KING,
   KNIGHT,
   newChess,
   perft,
@@ -163,5 +164,31 @@ describe('chess bots', () => {
     }
     const count = (color: number) => state.board.filter((p) => p !== 0 && (p & 8 ? 1 : 0) === color).reduce((sum, p) => sum + worth[p & 7]!, 0);
     expect(count(0)).toBeGreaterThan(count(1));
+  });
+});
+
+/**
+ * Two kings, always. A king is the one piece that is never captured, so a position without both of
+ * them is not a chess position at all, and pieces otherwise only ever leave the board: a promotion
+ * replaces a pawn where it stands rather than adding anything.
+ */
+describe('chess invariants', () => {
+  it('always has both kings, and never gains a piece', () => {
+    for (let seed = 0; seed < 12; seed++) {
+      const rng = createRng(seed);
+      let state = newChess();
+      let most = state.position.board.filter((piece) => piece !== 0).length;
+      expect(most).toBe(32);
+      for (let move = 0; move < 120 && !state.result; move++) {
+        const kings = state.position.board.filter((piece) => piece !== 0 && typeOf(piece) === KING).length;
+        expect(kings, `seed ${seed}, move ${move}`).toBe(2);
+        const pieces = state.position.board.filter((piece) => piece !== 0).length;
+        expect(pieces, `seed ${seed}, move ${move}`).toBeLessThanOrEqual(most);
+        most = pieces;
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
   });
 });
