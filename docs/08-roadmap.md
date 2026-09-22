@@ -519,7 +519,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     the line already carries two teams across 800 units, and whether it still fits is a thing to
     measure rather than guess, so it belongs with whoever can see the render.
 
-- [ ] **Q1 Every scene answers for itself.** Dominoes and Snakes & Ladders were both broken from
+- [x] **Q1 Every scene answers for itself (2026-09-22).** Dominoes and Snakes & Ladders were both broken from
   the day they shipped, both invisible to a green pipeline, and both found by looking at a picture.
   Thirty-four scenes still answer no question about themselves. The ones with pieces that travel
   are the risk, because the failure is always the same: an animation that cannot keep up with the
@@ -528,6 +528,36 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
   Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
   eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
+  - [x] **Closed, and smaller than its own description said (2026-09-22).** "Thirty-four scenes
+    answer nothing" counted scenes rather than risk. The drift class only exists where a scene
+    keeps persistent pieces keyed to a board: Chess and Backgammon redraw every piece from the
+    state on each change and keep no per-piece view, so they cannot drift and a check there would
+    compare the state with itself, which is the vacuous kind. Tic-Tac-Toe, Four in a Row, Dots &
+    Boxes and both snakes are the same. Sudoku's notes and Dots & Boxes' initials destroy and
+    rebuild their entry wholesale rather than walking a copy. The real-time games keep sprites,
+    but the sprite is the state and has nothing to disagree with. That left seven: Pyramid,
+    TriPeaks, Checkers, Ludo, Memory, War and Reversi, all of which now answer.
+    **One real bug, in Checkers, and it was a bad one.** The piece map is keyed by square and only
+    re-keyed when a move lands, so a move arriving while the last was still hopping looked up a
+    piece still recorded on the square it had left, found nothing, and returned without drawing
+    anything. Not queued, not retried: dropped, with the board a move behind the rules for the
+    rest of the game. Bots at speed do it readily and two people tapping quickly would too. A move
+    in the air is finished immediately now when the next arrives.
+    **Reversi needed a change to be answerable at all**: a disc's colour lived only in its
+    Graphics, so the scene could not say which way it had painted one. It records that now,
+    because a flip that never landed is the fault worth catching and presence alone sails past it.
+    **The question had to change too.** Asking whether the board matches at every instant failed
+    five games at once, TriPeaks among them on a run where nothing about TriPeaks had changed: at
+    speed the animations chain end to end, so a sample almost always lands inside one and a piece
+    in flight is not a piece in the wrong place. I tried to carve the flights out with busy flags
+    and tween lists and kept meeting another mechanism that appeared in neither. Convergence
+    separates them cleanly and needs to know nothing about how a scene animates: a dropped move
+    never catches up, a flying one catches up a few hundred milliseconds later.
+    **Four of my own checks were wrong before the game ever was**, each a shape or a unit I
+    assumed instead of read: counter tweens that move a piece without appearing against it, a
+    scene list briefly empty after the canvas appears, a board that stores discs where I compared
+    seats, and a Memory board already swept clean before the first look. All four were found by
+    making the test report what it saw, and I reached for that two guesses too late every time.
   - [x] **Nineteen games say what can never happen to them (2026-09-22).** Cheaper than a scene
     check and a different question: not "is the board drawing the state" but "can the state itself
     be wrong". Pure rules, so precheck runs them on the spot and none of it costs a CI minute.
