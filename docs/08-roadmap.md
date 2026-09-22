@@ -528,7 +528,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
   Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
   eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
-  - [x] **Fourteen games say what can never happen to them (2026-09-22).** Cheaper than a scene
+  - [x] **Nineteen games say what can never happen to them (2026-09-22).** Cheaper than a scene
     check and a different question: not "is the board drawing the state" but "can the state itself
     be wrong". Pure rules, so precheck runs them on the spot and none of it costs a CI minute.
     Conservation for Solitaire, Old Maid, Hearts, Spades, Callbreak, Rummy, Dominoes and Colour
@@ -542,6 +542,16 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     counts pairs rather than listing cards, so I was summing integers as card ids. Dominoes threw
     because I had the arguments the wrong way round. Each took seconds to find because there was
     no browser between the question and the answer.
+    Then five more: Ultimate never changes a mark or un-wins a small board, Sudoku never lets a
+    given change or moves the solution underneath the player, Sea Battle keeps both fleets still
+    and never lets a fired square change its mind, Chess always has both kings and never gains a
+    piece, Memory pairs every symbol and never takes a card back. Five of the nineteen tests were
+    wrong on first write, all five mine misreading a field: `passing` holds cards still in a hand,
+    `pairs` counts rather than lists, `shots` is a square per cell rather than a list of shots,
+    and twice I had an argument order or a size type wrong. **That ratio is the argument for this
+    layer.** A quarter of first drafts misread the state, every one cost seconds, and the same
+    misreadings arriving through a screenshot earlier in the same loop cost the better part of an
+    hour each and twice pointed at the wrong fix.
   - [x] **Seven more scenes answer, and all fifty-one were looked at (2026-09-21).** A full pass
     over the gallery, one game at a time. New checks: `fanCheck()` on Solitaire, FreeCell and
     Spider (is a covered card readable), `boardCheck()` on Sliding Puzzle and Colour Sort (is
