@@ -401,10 +401,13 @@ for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War'])
         const scene = phaser?.scene.scenes[0] as { boardCheck?: () => { settled: number; wrong: number; note: string } } | undefined;
         return scene?.boardCheck ? scene.boardCheck() : null;
       });
-      if (!report) break;
-      if (report.wrong === 0 && report.settled > agreedOn) agreedOn = report.settled;
-      if (report.note) note = report.note;
-      if (agreedOn > 8) break;
+      // A scene that has not finished starting has no answer yet, which is not the same as a wrong
+      // one: `scenes[0]` is briefly empty after the canvas appears. Keep asking.
+      if (report) {
+        if (report.wrong === 0 && report.settled > agreedOn) agreedOn = report.settled;
+        if (report.note) note = report.note;
+        if (agreedOn > 8) break;
+      }
       await page.waitForTimeout(250);
     }
     expect(agreedOn, `${game}: the board never agreed with the rules. Last complaint: ${note}`).toBeGreaterThan(8);
