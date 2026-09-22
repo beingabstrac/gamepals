@@ -53,6 +53,9 @@ export class YatzyScene extends Scene {
   private seen: YatzyEvent | null = null;
   private hint!: GameObjects.Text;
   private banner!: GameObjects.Text;
+  /** How many times the scene has shouted, and the worst place it ever did it. */
+  private shouts = 0;
+  private clash = '';
 
   constructor(private readonly session: Session<YatzyMove>) {
     super('yatzy');
@@ -136,19 +139,27 @@ export class YatzyScene extends Scene {
    * The dice band is measured off where they actually are rather than off `REST_Y`, because a
    * kept die sits higher and a rolling one is above the tray altogether.
    */
-  layoutCheck(): { name: string; top: number; bottom: number }[] {
-    const bands: { name: string; top: number; bottom: number }[] = [];
-    const tops = this.dice.map((die) => die.y - DIE / 2);
-    const bottoms = this.dice.map((die) => die.y + DIE / 2);
-    if (tops.length) bands.push({ name: 'dice', top: Math.min(...tops), bottom: Math.max(...bottoms) });
-    // A message nobody can see is not on top of anything.
-    if (this.banner.alpha > 0.05) {
-      bands.push({ name: 'shout', top: this.banner.y - this.banner.height / 2, bottom: this.banner.y + this.banner.height / 2 });
+  /**
+   * Whether the shout has ever landed on the dice, recorded at the instant it is said rather than
+   * sampled afterwards. The first version of this asked from the outside every 250ms and came back
+   * green, because the window is narrow: the shout lingers for over a second while the next
+   * player's roll lifts the dice above the tray within a few hundred milliseconds, so a poll sees
+   * plenty of shouts and almost never sees one with the dice still at rest. The moment that
+   * matters is the moment it is said, so that is where it is measured.
+   */
+  private recordShout(): void {
+    this.shouts++;
+    const top = Math.min(...this.dice.map((die) => die.y - DIE / 2));
+    const bottom = Math.max(...this.dice.map((die) => die.y + DIE / 2));
+    const shoutTop = this.banner.y - this.banner.height / 2;
+    const shoutBottom = this.banner.y + this.banner.height / 2;
+    if (shoutTop < bottom && top < shoutBottom) {
+      this.clash = `shout (${Math.round(shoutTop)}-${Math.round(shoutBottom)}) on dice (${Math.round(top)}-${Math.round(bottom)})`;
     }
-    if (this.hint.alpha > 0.05) {
-      bands.push({ name: 'hint', top: this.hint.y - this.hint.height / 2, bottom: this.hint.y + this.hint.height / 2 });
-    }
-    return bands;
+  }
+
+  layoutCheck(): { shouts: number; clash: string } {
+    return { shouts: this.shouts, clash: this.clash };
   }
 
   /** Kept dice sit lifted with a sunny outline; the rest rest on the tray. */
@@ -168,6 +179,7 @@ export class YatzyScene extends Scene {
     this.time.delayedCall(delay, () => {
       this.tweens.killTweensOf(this.banner);
       this.banner.setText(text).setAlpha(1).setScale(0.6);
+      this.recordShout();
       this.tweens.add({ targets: this.banner, scale: 1, duration: 240, ease: 'Back.easeOut' });
       this.tweens.add({ targets: this.banner, alpha: 0, delay: 800, duration: 280 });
     });

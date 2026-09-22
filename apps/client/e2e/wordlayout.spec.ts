@@ -361,24 +361,18 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
   let shouts = 0;
   let clash = '';
   for (let look = 0; look < 24; look++) {
-    const bands = await page.evaluate(() => {
+    const report = await page.evaluate(() => {
       const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
-      const scene = game?.scene.scenes[0] as { layoutCheck?: () => { name: string; top: number; bottom: number }[] } | undefined;
+      const scene = game?.scene.scenes[0] as { layoutCheck?: () => { shouts: number; clash: string } } | undefined;
       return scene?.layoutCheck ? scene.layoutCheck() : null;
     });
-    if (!bands) break;
-    if (bands.some((band) => band.name === 'shout')) {
-      shouts++;
-      for (const a of bands) {
-        for (const b of bands) {
-          if (a.name >= b.name) continue;
-          if (a.top < b.bottom && b.top < a.bottom) clash = `${a.name} (${Math.round(a.top)}-${Math.round(a.bottom)}) on ${b.name} (${Math.round(b.top)}-${Math.round(b.bottom)})`;
-        }
-      }
-    }
-    if (shouts > 3 && !clash) break;
-    await page.waitForTimeout(250);
+    if (!report) break;
+    shouts = report.shouts;
+    clash = report.clash;
+    if (clash) break;
+    if (shouts > 6) break;
+    await page.waitForTimeout(400);
   }
-  expect(shouts, 'the shout was never caught on screen, so nothing was checked').toBeGreaterThan(0);
-  expect(clash, `a band was drawn on another: ${clash}`).toBe('');
+  expect(shouts, 'the scene never shouted, so nothing was checked').toBeGreaterThan(0);
+  expect(clash, `the shout was drawn on the dice it is about: ${clash}`).toBe('');
 });
