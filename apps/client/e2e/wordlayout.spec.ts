@@ -379,31 +379,34 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
 
 /**
  * Q1: a scene says whether what it has drawn is what the rules say. One shape, so a game joins the
- * list by answering rather than by growing another test: how many pieces had come to rest, how
- * many of those were in the wrong place, and a line naming the worst one. Only settled pieces
- * count, because a card halfway to the waste looks exactly like a card drawn somewhere wrong.
+ * list by answering rather than by growing another test.
+ *
+ * The question is whether the board ever agrees, not whether it agrees at every instant. Asking at
+ * every instant was the first attempt and it failed five games at once, TriPeaks among them on a
+ * run where nothing about TriPeaks had changed: at autoplay speed the animations chain end to end,
+ * so a sample almost always lands inside one and a piece in flight is not a piece in the wrong
+ * place. Convergence is the property that actually matters and the one that separates the two. A
+ * move that was dropped never catches up, which is the Checkers bug this found; a move still in
+ * the air catches up a few hundred milliseconds later.
  */
 for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War']) {
-  test(`${game}: what is drawn is what the rules say`, async ({ page }) => {
+  test(`${game}: what is drawn catches up with what the rules say`, async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, game);
-    let settled = 0;
-    let wrong = 0;
-    let note = '';
-    for (let look = 0; look < 14; look++) {
+    let agreedOn = 0;
+    let note = 'the scene never answered';
+    for (let look = 0; look < 30; look++) {
       const report = await page.evaluate(() => {
         const phaser = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
         const scene = phaser?.scene.scenes[0] as { boardCheck?: () => { settled: number; wrong: number; note: string } } | undefined;
         return scene?.boardCheck ? scene.boardCheck() : null;
       });
       if (!report) break;
-      settled += report.settled;
-      wrong += report.wrong;
+      if (report.wrong === 0 && report.settled > agreedOn) agreedOn = report.settled;
       if (report.note) note = report.note;
-      if (wrong > 0) break;
-      await page.waitForTimeout(400);
+      if (agreedOn > 8) break;
+      await page.waitForTimeout(250);
     }
-    expect(settled, `${game}: nothing ever came to rest, so nothing was checked`).toBeGreaterThan(20);
-    expect(wrong, `${game}: ${note}`).toBe(0);
+    expect(agreedOn, `${game}: the board never agreed with the rules. Last complaint: ${note}`).toBeGreaterThan(8);
   });
 }

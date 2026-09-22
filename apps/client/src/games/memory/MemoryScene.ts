@@ -289,7 +289,6 @@ export class MemoryScene extends Scene {
     let settled = 0;
     let wrong = 0;
     let note = '';
-    if (this.time.now < this.blockedUntil) return { settled, wrong, note };
     this.state.owner.forEach((owner, card) => {
       if (owner >= 0) return;
       const view = this.cards[card];
