@@ -284,8 +284,10 @@ test('Crazy Eights: every card in the hand is on the table or on its way', async
   let looked = 0;
   let lost = 0;
   let worst = '';
-  for (let look = 0; look < 12; look++) {
-    await page.waitForTimeout(700);
+  // Look first and wait afterwards. Waiting first missed the deal, and on the quicker engine the
+  // shown seat had already gone out by the time the first sample landed, so the whole test passed
+  // over an empty hand and failed on its own guard.
+  for (let look = 0; look < 20; look++) {
     const report = await page.evaluate(() => {
       const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
       const scene = game?.scene.scenes[0] as
@@ -294,13 +296,16 @@ test('Crazy Eights: every card in the hand is on the table or on its way', async
       return scene?.handCheck ? scene.handCheck() : null;
     });
     if (!report) break;
-    if (report.held === 0) continue;
-    looked += report.held;
-    const missing = report.held - report.arrived - report.moving;
-    if (missing > 0) {
-      lost += missing;
-      worst = `held ${report.held}, ${report.arrived} arrived, ${report.moving} moving`;
+    if (report.held > 0) {
+      looked += report.held;
+      const missing = report.held - report.arrived - report.moving;
+      if (missing > 0) {
+        lost += missing;
+        worst = `held ${report.held}, ${report.arrived} arrived, ${report.moving} moving`;
+      }
     }
+    if (looked > 40) break;
+    await page.waitForTimeout(300);
   }
   expect(looked, 'the hand was never seen holding anything').toBeGreaterThan(8);
   expect(lost, `cards in hand were neither placed nor moving (${worst})`).toBe(0);
