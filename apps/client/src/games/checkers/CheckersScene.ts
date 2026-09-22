@@ -111,6 +111,41 @@ export class CheckersScene extends Scene {
     return view;
   }
 
+  /**
+   * Whether the pieces on screen are the pieces the rules say are on the board. A piece in the
+   * middle of a slide is keyed to the square it left until it lands, so the "nothing is missing"
+   * half only runs when the scene is still; otherwise every move would look like a gap.
+   */
+  boardCheck(): { settled: number; wrong: number; note: string } {
+    const board = this.state.board;
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    for (const [square, view] of this.pieces) {
+      if (this.tweens.getTweensOf(view).length > 0) continue;
+      settled++;
+      if (board[square] === CheckerPiece.empty) {
+        wrong++;
+        note = `a piece is drawn on square ${square}, which the rules say is empty`;
+        continue;
+      }
+      const { x, y } = center(square);
+      if (Math.abs(view.x - x) > 2 || Math.abs(view.y - y) > 2) {
+        wrong++;
+        note = `the piece on square ${square} sits away from it`;
+      }
+    }
+    if (this.tweens.getTweens().length === 0) {
+      board.forEach((piece, square) => {
+        if (piece !== CheckerPiece.empty && !this.pieces.has(square)) {
+          wrong++;
+          note = `no piece is drawn on square ${square}, which the rules say has one`;
+        }
+      });
+    }
+    return { settled, wrong, note };
+  }
+
   private makeCrown(): GameObjects.Graphics {
     const crown = this.add.graphics();
     crown.fillStyle(CROWN, 1);

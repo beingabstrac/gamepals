@@ -126,6 +126,27 @@ export class TriPeaksScene extends Scene {
     this.banner = sharpText(this, W / 2, FOOT_Y + CH / 2 + 20, '', 24, '#3f9e73').setVisible(false).setDepth(4000);
   }
 
+  /**
+   * Whether every card that has come to rest is where the layout put it. A card still travelling
+   * is allowed to be anywhere, which is the whole reason a settled shot is the only one worth
+   * judging: a card halfway to the waste looks exactly like a card drawn in the wrong place.
+   */
+  boardCheck(): { settled: number; wrong: number; note: string } {
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    for (const [card, spot] of this.spots) {
+      const view = this.views.get(card);
+      if (!view || view.sliding || this.tweens.getTweensOf(view.box).length > 0) continue;
+      settled++;
+      if (Math.abs(view.box.x - spot.x) > 2 || Math.abs(view.box.y - spot.y) > 2) {
+        wrong++;
+        note = `card ${card} rests at ${Math.round(view.box.x)},${Math.round(view.box.y)} and belongs at ${Math.round(spot.x)},${Math.round(spot.y)}`;
+      }
+    }
+    return { settled, wrong, note };
+  }
+
   private sync(animate: boolean, deal = false): void {
     const state = this.state;
     this.spots = layout(state);

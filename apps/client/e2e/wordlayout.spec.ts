@@ -376,3 +376,34 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
   expect(shouts, 'the scene never shouted, so nothing was checked').toBeGreaterThan(0);
   expect(clash, `the shout was drawn on the dice it is about: ${clash}`).toBe('');
 });
+
+/**
+ * Q1: a scene says whether what it has drawn is what the rules say. One shape, so a game joins the
+ * list by answering rather than by growing another test: how many pieces had come to rest, how
+ * many of those were in the wrong place, and a line naming the worst one. Only settled pieces
+ * count, because a card halfway to the waste looks exactly like a card drawn somewhere wrong.
+ */
+for (const game of ['Pyramid', 'TriPeaks', 'Checkers']) {
+  test(`${game}: what is drawn is what the rules say`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await open(page, game);
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    for (let look = 0; look < 14; look++) {
+      const report = await page.evaluate(() => {
+        const phaser = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+        const scene = phaser?.scene.scenes[0] as { boardCheck?: () => { settled: number; wrong: number; note: string } } | undefined;
+        return scene?.boardCheck ? scene.boardCheck() : null;
+      });
+      if (!report) break;
+      settled += report.settled;
+      wrong += report.wrong;
+      if (report.note) note = report.note;
+      if (wrong > 0) break;
+      await page.waitForTimeout(400);
+    }
+    expect(settled, `${game}: nothing ever came to rest, so nothing was checked`).toBeGreaterThan(20);
+    expect(wrong, `${game}: ${note}`).toBe(0);
+  });
+}
