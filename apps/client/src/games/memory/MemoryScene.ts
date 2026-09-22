@@ -279,6 +279,36 @@ export class MemoryScene extends Scene {
     this.refreshScores();
   }
 
+  /**
+   * Whether every card still on the table is drawn on its square. A matched pair flies to the
+   * scorer's chip and shrinks away, so a card the rules have given to somebody is no longer
+   * expected anywhere: only the ones still in play are asked about. `blockedUntil` is the scene's
+   * own way of saying it is mid-animation and is the right thing to wait for.
+   */
+  boardCheck(): { settled: number; wrong: number; note: string } {
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    if (this.time.now < this.blockedUntil) return { settled, wrong, note };
+    this.state.owner.forEach((owner, card) => {
+      if (owner >= 0) return;
+      const view = this.cards[card];
+      const spot = this.spots[card];
+      if (!view || !spot) {
+        wrong++;
+        note = `card ${card} is still in play and is not drawn`;
+        return;
+      }
+      if (this.tweens.getTweensOf(view.box).length > 0) return;
+      settled++;
+      if (Math.abs(view.box.x - spot.x) > 2 || Math.abs(view.box.y - spot.y) > 2) {
+        wrong++;
+        note = `card ${card} rests at ${Math.round(view.box.x)},${Math.round(view.box.y)} and belongs at ${Math.round(spot.x)},${Math.round(spot.y)}`;
+      }
+    });
+    return { settled, wrong, note };
+  }
+
   /** A found pair pops, then flies to the scorer's chip and shrinks away. */
   private collect(cards: readonly number[], seat: number): void {
     this.blockedUntil = this.time.now + 700;

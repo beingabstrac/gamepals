@@ -70,6 +70,45 @@ export class WarScene extends Scene {
     if (state.legalMoves(state.currentSeat).includes(WAR_FLIP)) this.session.play(WAR_FLIP);
   }
 
+  /**
+   * Whether every card is drawn where the rules keep it: down on its owner's stack, or out in the
+   * middle if it has been turned over this round. The question is which pile a card is on, not
+   * which pixel: a stack is a fan and the middle is a row, so exact positions are the layout's
+   * business and only the side it landed on says whether the board agrees with the rules.
+   */
+  boardCheck(): { settled: number; wrong: number; note: string } {
+    const state = this.state;
+    const shown = state.last?.shown ?? [[], []];
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    const look = (card: number, where: string, ok: (x: number, y: number) => boolean) => {
+      const view = this.views.get(card);
+      if (!view) {
+        wrong++;
+        note = `card ${card} belongs ${where} and is not drawn`;
+        return;
+      }
+      if (view.sliding || this.tweens.getTweensOf(view.box).length > 0) return;
+      settled++;
+      if (!ok(view.box.x, view.box.y)) {
+        wrong++;
+        note = `card ${card} belongs ${where} and rests at ${Math.round(view.box.x)},${Math.round(view.box.y)}`;
+      }
+    };
+    for (const seat of [0, 1]) {
+      const stackY = STACK_Y[seat]!;
+      const battleY = BATTLE_Y[seat]!;
+      state.stacks[seat]!.forEach((card) =>
+        look(card, `on seat ${seat}'s stack`, (x, y) => Math.abs(x - STACK_X) < 4 && Math.abs(y - stackY) < 60),
+      );
+      shown[seat]!.forEach((card) =>
+        look(card, `in the middle for seat ${seat}`, (x, y) => Math.abs(y - battleY) < 4 && Math.abs(x - BATTLE_X) < 220),
+      );
+    }
+    return { settled, wrong, note };
+  }
+
   private sync(animate: boolean): void {
     const state = this.state;
     const shown = state.last?.shown ?? [[], []];

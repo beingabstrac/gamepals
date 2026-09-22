@@ -1,5 +1,5 @@
 import { CheckerPiece, isKing, ownerOf, type CheckersEvent, type CheckersMove, type CheckersState } from '@gamepals/rules';
-import { Scene, type GameObjects } from 'phaser';
+import { Scene, type GameObjects, type Time, type Tweens } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera } from '../crisp';
@@ -28,6 +28,10 @@ export class CheckersScene extends Scene {
   private marks!: GameObjects.Graphics;
   private selected: number | null = null;
   private busy = false;
+  /** The tail of a move still playing out: finishing it early is how a fast follow-up survives. */
+  private finish: (() => void) | null = null;
+  private finishTimer?: Time.TimerEvent;
+  private hopTweens: Tweens.Tween[] = [];
   private cursor = 57;
   private ring!: GameObjects.Graphics;
 
@@ -251,8 +255,27 @@ export class CheckersScene extends Scene {
     this.animate(event);
   }
 
-  /** Slide a step, or hop jump by jump; taken pieces pop off; a crown drops on a new king. */
+  /** Finishes a move that is still hopping, so the board is in order before the next one starts. */
+  private finishPending(): void {
+    const finish = this.finish;
+    if (!finish) return;
+    this.finish = null;
+    this.finishTimer?.remove();
+    finish();
+  }
+
+  /**
+   * Slide a step, or hop jump by jump; taken pieces pop off; a crown drops on a new king.
+   *
+   * A move can arrive while the last one is still in the air, and bots at speed do exactly that.
+   * The piece map is keyed by square and is only re-keyed when a move lands, so the new move used
+   * to look up a piece that was still recorded on the square it had left, find nothing, and return
+   * without drawing anything at all. The move was dropped and the board stayed a move behind the
+   * rules for the rest of the game. So the last move is finished first, immediately, rather than
+   * waited for.
+   */
   private animate(event: CheckersEvent): void {
+    this.finishPending();
     const view = this.pieces.get(event.path[0]!);
     if (!view) return;
     this.busy = true;
@@ -263,7 +286,7 @@ export class CheckersScene extends Scene {
     hops.forEach((sq, i) => {
       const from = i === 0 ? center(event.path[0]!) : center(hops[i - 1]!);
       const to = center(sq);
-      this.tweens.addCounter({
+      this.hopTweens.push(this.tweens.addCounter({
         from: 0,
         to: 1,
         delay: i * HOP_MS,
@@ -300,12 +323,24 @@ export class CheckersScene extends Scene {
           }
           this.tweens.add({ targets: view, scaleX: 1.12, scaleY: 0.88, duration: 60, yoyo: true });
         },
-      });
+      }));
     });
-    this.time.delayedCall(hops.length * HOP_MS + 40, () => {
+    this.finish = () => {
+      for (const hop of this.hopTweens) hop.remove();
+      this.hopTweens = [];
       const end = event.path[event.path.length - 1]!;
-      view.setDepth(2);
+      const landed = center(end);
+      view.setPosition(landed.x, landed.y).setDepth(2);
       this.pieces.set(end, view);
+      // Only bites when a hop never got to run its own tidy-up, which is the interrupted case: a
+      // piece taken in the normal way has already left the map and is flying off the board.
+      for (const square of event.captured) {
+        const taken = this.pieces.get(square);
+        if (!taken) continue;
+        this.pieces.delete(square);
+        this.tweens.killTweensOf(taken);
+        taken.destroy();
+      }
       if (event.crowned) {
         const crown = this.makeCrown();
         crown.setY(-90).setAlpha(0);
@@ -316,7 +351,8 @@ export class CheckersScene extends Scene {
       this.busy = false;
       this.drawMarks();
       if (this.state.result) this.celebrate();
-    });
+    };
+    this.finishTimer = this.time.delayedCall(hops.length * HOP_MS + 40, () => this.finishPending());
   }
 
   private celebrate(): void {

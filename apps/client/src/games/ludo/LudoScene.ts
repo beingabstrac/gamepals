@@ -1,4 +1,4 @@
-import { absoluteSquare, HOME, LAST_TRACK, SAFE_SQUARES, YARD, type LudoEvent, type LudoMove, type LudoState } from '@gamepals/rules';
+import { absoluteSquare, HOME, LAST_TRACK, SAFE_SQUARES, YARD, type LudoEvent, type LudoMove, type LudoState, type Seat } from '@gamepals/rules';
 import { Scene, type GameObjects } from 'phaser';
 import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
@@ -90,6 +90,8 @@ function drawStar(g: GameObjects.Graphics, x: number, y: number, radius: number,
 
 export class LudoScene extends Scene {
   private tokens: GameObjects.Container[][] = [];
+  /** True from the first hop of a move until the board has been put back in order. */
+  private walking = false;
   private handledEvent: LudoEvent | null = null;
 
   constructor(private readonly session: Session<LudoMove>) {
@@ -157,6 +159,7 @@ export class LudoScene extends Scene {
   }
 
   private animate(event: LudoEvent): void {
+    this.walking = true;
     this.clearHighlights();
     const state = this.state;
     const color = state.colorOf(event.seat);
@@ -210,10 +213,52 @@ export class LudoScene extends Scene {
       if (event.captured.length > 0) this.cameras.main.shake(180, 0.006);
       if (event.to === HOME) this.tweens.add({ targets: mover, scale: 1.4, duration: 160, yoyo: true, ease: 'Back.easeOut' });
       this.time.delayedCall(event.captured.length > 0 ? 540 : 0, () => {
+        this.walking = false;
         this.layout();
         this.updateHighlights();
       });
     });
+  }
+
+  /**
+   * Still showing the last move, for the result sheet and the gallery. The hops are counter tweens
+   * that move the token themselves, so they never show up against it, and legal tokens bob on an
+   * endless tween while a person chooses: neither the tween list nor a per-token look can tell you
+   * whether a move is still playing out. A flag can.
+   */
+  busy(): boolean {
+    return this.walking;
+  }
+
+  /**
+   * Whether every token is drawn where the rules put it. `tokenPoint` is a pure function of the
+   * progress the state holds, so this is the board against the rules rather than against its own
+   * layout. Tokens sharing a square fan out by a few units, which is why the tolerance is loose;
+   * a cell is 40 across, so a token on the wrong square misses by far more than the fan.
+   */
+  boardCheck(): { settled: number; wrong: number; note: string } {
+    let settled = 0;
+    let wrong = 0;
+    let note = '';
+    if (this.walking) return { settled, wrong, note };
+    const state = this.state;
+    state.tokens.forEach((list, seat) => {
+      list.forEach((progress, token) => {
+        const container = this.tokens[seat]?.[token];
+        if (!container) {
+          wrong++;
+          note = `seat ${seat} token ${token} is not drawn at all`;
+          return;
+        }
+        settled++;
+        const point = tokenPoint(state.colorOf(seat as Seat), progress, token);
+        if (Math.abs(container.x - point.x) > 20 || Math.abs(container.y - point.y) > 12) {
+          wrong++;
+          note = `seat ${seat} token ${token} is at ${Math.round(container.x)},${Math.round(container.y)} and the rules put it at ${Math.round(point.x)},${Math.round(point.y)}`;
+        }
+      });
+    });
+    return { settled, wrong, note };
   }
 
   /** Places every token, fanning out tokens that share a spot. */

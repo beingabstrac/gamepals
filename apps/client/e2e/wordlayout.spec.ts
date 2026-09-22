@@ -383,7 +383,7 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
  * many of those were in the wrong place, and a line naming the worst one. Only settled pieces
  * count, because a card halfway to the waste looks exactly like a card drawn somewhere wrong.
  */
-for (const game of ['Pyramid', 'TriPeaks', 'Checkers']) {
+for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War']) {
   test(`${game}: what is drawn is what the rules say`, async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, game);
