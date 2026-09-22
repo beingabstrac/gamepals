@@ -59,9 +59,29 @@ async function settle(page: Page): Promise<void> {
   // the line above it: War's pill read "15 to 37" beside labels reading 36 and 16, and Ultimate's
   // line named one board while a different one glowed. Sixteen milliseconds nobody would ever see,
   // except that these pictures become the store screenshots.
-  await page.evaluate(
-    () => new Promise<void>((done) => requestAnimationFrame(() => requestAnimationFrame(() => done()))),
-  );
+  //
+  // Two frames is not enough on its own, which the gallery proved: War still came back with a pill
+  // reading "19 to 33" beside a label reading "Nova: 20". The board is not lagging, the game is
+  // still being played. A move lands between settle returning and the shot being taken, the line
+  // above the board redraws at once and the canvas waits for its frame, and the picture catches
+  // the gap. So the wait is for a quiet window rather than a frame count: no move may land across
+  // the frames we are about to photograph in.
+  for (let tries = 0; tries < 12; tries++) {
+    const steady = await page.evaluate(
+      () =>
+        new Promise<boolean>((done) => {
+          const moves = () => {
+            const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+            const scene = game?.scene.scenes[0] as { session?: { moves?: unknown[] } } | undefined;
+            return scene?.session?.moves?.length ?? -1;
+          };
+          const before = moves();
+          requestAnimationFrame(() => requestAnimationFrame(() => done(moves() === before)));
+        }),
+    );
+    if (steady) return;
+    await page.waitForTimeout(120);
+  }
 }
 
 for (const name of GAMES) {
