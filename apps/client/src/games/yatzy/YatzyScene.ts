@@ -15,6 +15,8 @@ const DIE = 92;
 const GAP = 118;
 const REST_Y = 126;
 const KEPT_Y = 100;
+/** Under the dice, clear of their lowest reach and inside the tray. */
+const SHOUT_Y = 197;
 const INK = toHex(COLORS.ink);
 const LIP = 0xdcd6ee;
 const SUNNY = toHex(COLORS.sunny);
@@ -85,7 +87,11 @@ export class YatzyScene extends Scene {
         .on('pointerdown', () => this.toggle(i));
     }
     this.hint = sharpText(this, W / 2, H - 14, 'Tap dice to keep them', 17, COLORS.ink).setAlpha(0);
-    this.banner = sharpText(this, W / 2, REST_Y, '', 40, COLORS.ink).setDepth(10).setAlpha(0).setStroke('#ffffff', 10);
+    // Below the dice, not across them. The dice reach 172 at their lowest (REST_Y plus half of
+    // DIE) and the tray ends at 218, so there are 46 units to work with, which a 40pt line and its
+    // stroke do not fit into: the check measured that one at 56 tall. This one is small enough to
+    // sit in the gap and still be twice the hint.
+    this.banner = sharpText(this, W / 2, SHOUT_Y, '', 28, COLORS.ink).setDepth(10).setAlpha(0).setStroke('#ffffff', 6);
 
     // Keyboard: 1 to 5 keep dice, Space or R rolls (a focused button handles its own Space).
     onKeys(this, (key) => {
@@ -153,9 +159,13 @@ export class YatzyScene extends Scene {
     const bottom = Math.max(...this.dice.map((die) => die.y + DIE / 2));
     const shoutTop = this.banner.y - this.banner.height / 2;
     const shoutBottom = this.banner.y + this.banner.height / 2;
-    if (shoutTop < bottom && top < shoutBottom) {
-      this.clash = `shout (${Math.round(shoutTop)}-${Math.round(shoutBottom)}) on dice (${Math.round(top)}-${Math.round(bottom)})`;
-    }
+    const say = (name: string, a: number, b: number) =>
+      `shout (${Math.round(shoutTop)}-${Math.round(shoutBottom)}) on ${name} (${Math.round(a)}-${Math.round(b)})`;
+    if (shoutTop < bottom && top < shoutBottom) this.clash = say('dice', top, bottom);
+    // Moving it down puts it near the hint, so that is worth asking about too.
+    const hintTop = this.hint.y - this.hint.height / 2;
+    const hintBottom = this.hint.y + this.hint.height / 2;
+    if (this.hint.alpha > 0.05 && shoutTop < hintBottom && hintTop < shoutBottom) this.clash = say('hint', hintTop, hintBottom);
   }
 
   layoutCheck(): { shouts: number; clash: string } {
