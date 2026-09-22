@@ -82,3 +82,27 @@ describe('sliding puzzle rules', () => {
     expect((fresh as SlidingState).tiles).toEqual(newSliding(11, '4x4').tiles);
   });
 });
+
+/**
+ * A slide moves one tile into the space, which cannot change the parity of the layout, so a puzzle
+ * that started solvable stays solvable to the end. The deal is already checked; this says no move
+ * can ever strand a player in a position they cannot finish from.
+ */
+describe('sliding puzzle solvability', () => {
+  it('stays a permutation, and stays solvable, after every move', () => {
+    for (const level of SLIDING_LEVELS) {
+      for (let seed = 0; seed < 8; seed++) {
+        const rng = createRng(seed);
+        let state = newSliding(seed, level);
+        for (let move = 0; move < 120 && !state.result; move++) {
+          const sorted = [...state.tiles].sort((a, b) => a - b);
+          expect(sorted, `${level}, seed ${seed}, move ${move}`).toEqual(sorted.map((_, i) => i));
+          expect(isSolvableLayout(state.tiles, state.n), `${level}, seed ${seed}, move ${move}`).toBe(true);
+          const moves = state.legalMoves(0);
+          if (moves.length === 0) break;
+          state = state.apply(rng.pick(moves));
+        }
+      }
+    }
+  });
+});

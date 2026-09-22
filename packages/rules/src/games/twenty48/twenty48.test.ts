@@ -104,3 +104,26 @@ describe('2048 rules', () => {
     expect(smart).toBeGreaterThan(random);
   });
 });
+
+/**
+ * Every tile on the board is a power of two, because the only two ways one comes to exist are a
+ * spawn, which is a 2 or a 4, and a merge, which doubles. A tile of any other value would mean
+ * something had added where it should have doubled.
+ */
+describe('2048 tile values', () => {
+  it('only ever holds powers of two', () => {
+    for (let seed = 0; seed < 16; seed++) {
+      const rng = createRng(seed);
+      let state = newTwenty48(seed);
+      for (let move = 0; move < 400 && !state.result; move++) {
+        for (const tile of state.tiles) {
+          expect(tile.value, `seed ${seed}, move ${move}`).toBeGreaterThanOrEqual(2);
+          expect(Number.isInteger(Math.log2(tile.value)), `seed ${seed}, move ${move}: value ${tile.value}`).toBe(true);
+        }
+        const moves = state.legalMoves(0);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});

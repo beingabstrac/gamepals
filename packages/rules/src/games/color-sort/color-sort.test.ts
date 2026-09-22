@@ -87,3 +87,28 @@ describe('color sort deals and solver', () => {
     expect(replayed.tubes).toEqual(state.tubes);
   });
 });
+
+/**
+ * Liquid is poured from one tube to another, never made and never spilled, so every colour is in
+ * the puzzle exactly as many times as a full tube holds however far along it is.
+ */
+describe('color sort conservation', () => {
+  it('keeps exactly one tube of every colour', () => {
+    for (const level of COLOR_SORT_LEVELS) {
+      for (let seed = 0; seed < 8; seed++) {
+        const rng = createRng(seed);
+        let state = newColorSort(seed, level);
+        const colours = new Set(state.tubes.flat());
+        for (let move = 0; move < 200 && !state.result; move++) {
+          const counts = new Map<number, number>();
+          for (const colour of state.tubes.flat()) counts.set(colour, (counts.get(colour) ?? 0) + 1);
+          expect([...counts.keys()].sort(), `${level}, seed ${seed}, move ${move}`).toEqual([...colours].sort());
+          for (const [colour, seen] of counts) expect(seen, `${level}, seed ${seed}, move ${move}, colour ${colour}`).toBe(TUBE_SIZE);
+          const moves = state.legalMoves(0);
+          if (moves.length === 0) break;
+          state = state.apply(rng.pick(moves));
+        }
+      }
+    }
+  });
+});

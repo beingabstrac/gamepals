@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { replay, toMoveLog } from '../../core/replay';
 import { createRng } from '../../core/rng';
 import type { BotTier, Seat } from '../../core/types';
-import { DOMINO_TILES, dominoes, DominoState, handSize, newDominoes, pipsOf, playTile, tileIndex, type DominoLevel, type DominoMove, type Placed } from './index';
+import { DOMINO_LEVELS, DOMINO_TILES, dominoes, DominoState, handSize, newDominoes, pipsOf, playTile, tileIndex, type DominoLevel, type DominoMove, type Placed } from './index';
 
 const T = (a: number, b: number) => tileIndex(a, b);
 
@@ -151,5 +151,28 @@ describe('dominoes bots', () => {
       if (state.result?.winners[0] === novaSeat) wins++;
     }
     expect(wins).toBeGreaterThan(3);
+  });
+});
+
+/**
+ * Twenty-eight tiles, once each, spread between the hands, the line and the boneyard. A tile in
+ * two places at once, or in none, is the kind of thing a shuffle or a draw gets wrong quietly.
+ */
+describe('dominoes conservation', () => {
+  it('keeps all twenty-eight tiles, once each', () => {
+    for (const level of DOMINO_LEVELS) {
+      for (let seed = 0; seed < 8; seed++) {
+        const rng = createRng(seed);
+        let state = newDominoes(2 + (seed % 3), seed, level);
+        for (let move = 0; move < 300 && !state.result; move++) {
+          const all = [...state.hands.flat(), ...state.line.map((p) => p.tile), ...state.boneyard];
+          expect(all.length, `${level}, seed ${seed}, move ${move}`).toBe(DOMINO_TILES.length);
+          expect(new Set(all).size, `${level}, seed ${seed}, move ${move}`).toBe(DOMINO_TILES.length);
+          const moves = state.legalMoves(state.currentSeat);
+          if (moves.length === 0) break;
+          state = state.apply(rng.pick(moves));
+        }
+      }
+    }
   });
 });

@@ -528,6 +528,20 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   anything on top of anything"), a few games to a loop, highest risk first: Ludo, Backgammon,
   Solitaire, Spider, FreeCell, Pyramid, TriPeaks, War, Memory, Checkers, Four in a Row. Audited by
   eye so far and clean: Ludo, Backgammon, Rummy, and the seven built this week.
+  - [x] **Fourteen games say what can never happen to them (2026-09-22).** Cheaper than a scene
+    check and a different question: not "is the board drawing the state" but "can the state itself
+    be wrong". Pure rules, so precheck runs them on the spot and none of it costs a CI minute.
+    Conservation for Solitaire, Old Maid, Hearts, Spades, Callbreak, Rummy, Dominoes and Colour
+    Sort, joining Spider, War and Mancala. Gravity for Four in a Row, which is the one that
+    started it: a picture showed a disc hanging over two empty cells and only the state could ever
+    say whether that is true of the game rather than of one frame. A disc adds one and lifts none in
+    Reversi; neither side gets a piece back in Checkers; four tokens a player in Ludo; a permutation
+    that stays solvable after every slide in Sliding Puzzle; powers of two in 2048.
+    **Three came back red and all three were the test, not the rules.** Hearts counted 55 because
+    `passing` holds cards still sitting in their owner's hand. Old Maid counted 9 because `pairs`
+    counts pairs rather than listing cards, so I was summing integers as card ids. Dominoes threw
+    because I had the arguments the wrong way round. Each took seconds to find because there was
+    no browser between the question and the answer.
   - [x] **Seven more scenes answer, and all fifty-one were looked at (2026-09-21).** A full pass
     over the gallery, one game at a time. New checks: `fanCheck()` on Solitaire, FreeCell and
     Spider (is a covered card readable), `boardCheck()` on Sliding Puzzle and Colour Sort (is
