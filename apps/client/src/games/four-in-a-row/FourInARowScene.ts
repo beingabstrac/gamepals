@@ -104,6 +104,15 @@ export class FourInARowScene extends Scene {
     this.draw(null);
   }
 
+  /**
+   * A disc falling under gravity is not a tween, so nothing else can tell. Without this the result
+   * sheet says who won while the winning disc is still a row above the gap it is falling into, and
+   * the gallery photographs it there.
+   */
+  busy(): boolean {
+    return this.drop !== null;
+  }
+
   private makeDisc(seat: number, x: number, y: number): GameObjects.Container {
     return this.add.container(x, y, [
       this.add.circle(0, 0, RADIUS, DISC[seat]),

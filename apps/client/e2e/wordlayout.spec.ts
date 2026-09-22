@@ -305,3 +305,41 @@ test('Crazy Eights: every card in the hand is on the table or on its way', async
   expect(looked, 'the hand was never seen holding anything').toBeGreaterThan(8);
   expect(lost, `cards in hand were neither placed nor moving (${worst})`).toBe(0);
 });
+
+/**
+ * The sheet must not say how a game ended while the move that ended it is still in the air.
+ * Four in a Row drops its disc under gravity rather than with a tween, so nothing could tell:
+ * the gallery caught "Nova (Yellow) wins!" over a disc floating a row above the gap it was
+ * falling into, with the four it completes not yet on the board.
+ *
+ * Asking after the fact would be a race, because the disc lands in a few hundred milliseconds
+ * either way. So the page records the answer at the moment the sheet first appears, which is the
+ * only moment the question is about.
+ */
+test('Four in a Row: the sheet waits for the board to finish the move', async ({ page }) => {
+  test.setTimeout(120_000);
+  await open(page, 'Four in a Row');
+  await page.evaluate(() => {
+    const win = window as unknown as {
+      __sheetBusy?: boolean | null;
+      gamepalsTestGame?: { scene: { scenes: { busy?: () => boolean; tweens?: { getTweens(): unknown[] } }[] } };
+    };
+    win.__sheetBusy = null;
+    const look = () => {
+      if (win.__sheetBusy !== null) return true;
+      if (!document.querySelector('.result-title')) return false;
+      const scene = win.gamepalsTestGame?.scene.scenes[0];
+      win.__sheetBusy = typeof scene?.busy === 'function' ? scene.busy() : (scene?.tweens?.getTweens().length ?? 0) > 0;
+      return true;
+    };
+    if (look()) return;
+    const watch = new MutationObserver(() => {
+      if (look()) watch.disconnect();
+    });
+    watch.observe(document.body, { childList: true, subtree: true });
+  });
+  await expect(page.locator('.result-title')).toBeVisible({ timeout: 90_000 });
+  const busy = await page.evaluate(() => (window as unknown as { __sheetBusy?: boolean | null }).__sheetBusy);
+  expect(busy, 'the sheet appeared before the board caught up, so nothing recorded').not.toBeNull();
+  expect(busy, 'the sheet said how the game ended while the board was still showing the move').toBe(false);
+});
