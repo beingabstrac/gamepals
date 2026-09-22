@@ -157,3 +157,38 @@ describe('sea battle bots', () => {
     expect(nova).toBeLessThan(pip);
   });
 });
+
+/**
+ * A fleet is placed once and never moves, and no square is fired at twice. A repeated shot would
+ * be a wasted turn the rules handed out for free.
+ */
+describe('sea battle permanence', () => {
+  it('keeps both fleets still and never fires at the same square twice', () => {
+    for (let seed = 0; seed < 12; seed++) {
+      const rng = createRng(seed);
+      let state = newSeaBattle();
+      let placed: string | null = null;
+      let before: readonly (readonly number[])[] | null = null;
+      for (let move = 0; move < 300 && !state.result; move++) {
+        if (state.phase === 'fire') {
+          const here = JSON.stringify(state.fleets);
+          if (placed === null) placed = here;
+          expect(here, `seed ${seed}, move ${move}`).toBe(placed);
+          // `shots` is a square per cell rather than a list of shots fired, so the question is
+          // whether a square that has been fired at ever changes its mind.
+          if (before) {
+            before.forEach((board, seat) =>
+              board.forEach((mark, cell) => {
+                if (mark !== 0) expect(state.shots[seat]?.[cell], `seed ${seed}, move ${move}, seat ${seat}, cell ${cell}`).toBe(mark);
+              }),
+            );
+          }
+          before = state.shots;
+        }
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});

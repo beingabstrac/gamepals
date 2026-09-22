@@ -125,3 +125,29 @@ describe('ultimate tic-tac-toe bots', () => {
     expect(wins).toBeGreaterThan(2);
   });
 });
+
+/**
+ * A mark is put down and never taken back or changed, and a small board that has been won stays
+ * won. Either of those going wrong would rewrite a game already played.
+ */
+describe('ultimate tic-tac-toe permanence', () => {
+  it('never changes a cell or un-wins a board', () => {
+    for (let seed = 0; seed < 24; seed++) {
+      const rng = createRng(seed);
+      let state = newUltimate();
+      for (let move = 0; move < 100 && !state.result; move++) {
+        const cells = state.cells;
+        const boards = state.boards;
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+        cells.forEach((mark, i) => {
+          if (mark !== null) expect(state.cells[i], `seed ${seed}, move ${move}, cell ${i}`).toBe(mark);
+        });
+        boards.forEach((won, i) => {
+          if (won !== null) expect(state.boards[i], `seed ${seed}, move ${move}, board ${i}`).toBe(won);
+        });
+      }
+    }
+  });
+});

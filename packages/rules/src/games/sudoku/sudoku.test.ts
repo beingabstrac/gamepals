@@ -162,3 +162,30 @@ describe('sudoku play', () => {
     }
   });
 });
+
+/**
+ * A given is part of the puzzle, not part of the answer: nothing a player does can change one.
+ * The solution the puzzle was built from does not move either.
+ */
+describe('sudoku givens', () => {
+  it('never lets a given change, and never moves the solution', () => {
+    for (const level of SUDOKU_LEVELS) {
+      for (let seed = 0; seed < 6; seed++) {
+        const rng = createRng(seed);
+        let state = newSudoku(seed, level);
+        const givens = [...state.givens];
+        const solution = [...state.solution];
+        for (let move = 0; move < 120 && !state.result; move++) {
+          expect([...state.givens], `${level}, seed ${seed}, move ${move}`).toEqual(givens);
+          expect([...state.solution], `${level}, seed ${seed}, move ${move}`).toEqual(solution);
+          givens.forEach((given, i) => {
+            if (given !== 0) expect(state.values[i], `${level}, seed ${seed}, move ${move}, cell ${i}`).toBe(given);
+          });
+          const moves = state.legalMoves(0);
+          if (moves.length === 0) break;
+          state = state.apply(rng.pick(moves));
+        }
+      }
+    }
+  });
+});
