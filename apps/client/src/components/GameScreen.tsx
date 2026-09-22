@@ -31,7 +31,21 @@ interface Props {
 const newSeed = () => Math.floor(Math.random() * 0xffffffff);
 
 /** Longest the result sheet will wait for the board; a stuck scene must never swallow it. */
-const RESULT_WAIT_MS = 1200;
+/**
+ * How long the result sheet will wait for the board.
+ *
+ * A scene that answers `busy()` is believed, so its cap only has to catch a scene that is actually
+ * stuck: Four in a Row's disc falls 640 units at a gravity of 5200 and bounces twice at a
+ * restitution of 0.3, which is about 900ms of honest settling before a slow frame on a busy runner
+ * stretches it, and a cap of 1.2s left so little headroom that the sheet beat the disc on one
+ * engine and not the other.
+ *
+ * A scene that only has tweens to go on gets a much shorter one, because that answer is a guess:
+ * the patience win cascades tween for seconds and are a celebration rather than a move, and
+ * nobody should wait out a celebration to be told they won.
+ */
+const DECLARED_WAIT_MS = 3000;
+const GUESSED_WAIT_MS = 900;
 
 export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSeed, dailyKey, onExit }: Props) {
   const [seats, setSeats] = useState(initialSeats);
@@ -123,7 +137,8 @@ export function GameScreen({ entry, seats: initialSeats, variant, seed: fixedSee
     const began = performance.now();
     const look = () => {
       if (stopped) return;
-      if (!sceneBusy(gameRef.current) || performance.now() - began > RESULT_WAIT_MS) setBoardReady(true);
+      const { busy, declared } = sceneBusy(gameRef.current);
+      if (!busy || performance.now() - began > (declared ? DECLARED_WAIT_MS : GUESSED_WAIT_MS)) setBoardReady(true);
       else requestAnimationFrame(look);
     };
     requestAnimationFrame(look);

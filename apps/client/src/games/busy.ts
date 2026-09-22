@@ -17,9 +17,12 @@ export interface BusyScene extends Scene {
  * Two things ask: the result sheet, which should not say how a game ended while the move that
  * ended it is still in the air, and the gallery, whose pictures become the store screenshots.
  */
-export function sceneBusy(game: Game | null | undefined): boolean {
+export function sceneBusy(game: Game | null | undefined): { busy: boolean; declared: boolean } {
   const scene = game?.scene.scenes[0] as BusyScene | undefined;
-  if (!scene) return false;
-  if (typeof scene.busy === 'function') return scene.busy();
-  return scene.tweens ? scene.tweens.getTweens().length > 0 : false;
+  if (!scene) return { busy: false, declared: false };
+  if (typeof scene.busy === 'function') return { busy: scene.busy(), declared: true };
+  // A guess, and worth saying so: a running tween is "something is moving", which is not the same
+  // as "the move is still landing". A patience win cascade tweens for seconds and is a
+  // celebration, not a move, so whoever is waiting should not hang on this answer for long.
+  return { busy: scene.tweens ? scene.tweens.getTweens().length > 0 : false, declared: false };
 }

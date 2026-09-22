@@ -127,6 +127,30 @@ export class YatzyScene extends Scene {
     this.session.play(state.rollsUsed === 0 ? YATZY_FIRST_ROLL : yatzyRoll(this.table.keep));
   }
 
+  /**
+   * The bands this scene draws in. The shout goes at `REST_Y` and so do the dice, and scoring
+   * clears every keep first, so all five are sitting exactly where the message lands: "+24 Fours"
+   * is read through the dice it is about, every single time a box is taken. Only a gallery shot
+   * that happened to catch a roll mid-air made it look innocent.
+   *
+   * The dice band is measured off where they actually are rather than off `REST_Y`, because a
+   * kept die sits higher and a rolling one is above the tray altogether.
+   */
+  layoutCheck(): { name: string; top: number; bottom: number }[] {
+    const bands: { name: string; top: number; bottom: number }[] = [];
+    const tops = this.dice.map((die) => die.y - DIE / 2);
+    const bottoms = this.dice.map((die) => die.y + DIE / 2);
+    if (tops.length) bands.push({ name: 'dice', top: Math.min(...tops), bottom: Math.max(...bottoms) });
+    // A message nobody can see is not on top of anything.
+    if (this.banner.alpha > 0.05) {
+      bands.push({ name: 'shout', top: this.banner.y - this.banner.height / 2, bottom: this.banner.y + this.banner.height / 2 });
+    }
+    if (this.hint.alpha > 0.05) {
+      bands.push({ name: 'hint', top: this.hint.y - this.hint.height / 2, bottom: this.hint.y + this.hint.height / 2 });
+    }
+    return bands;
+  }
+
   /** Kept dice sit lifted with a sunny outline; the rest rest on the tray. */
   private placeDice(): void {
     const state = this.state;

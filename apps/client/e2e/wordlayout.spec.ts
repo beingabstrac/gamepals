@@ -348,3 +348,37 @@ test('Four in a Row: the sheet waits for the board to finish the move', async ({
   expect(busy, 'the sheet appeared before the board caught up, so nothing recorded').not.toBeNull();
   expect(busy, 'the sheet said how the game ended while the board was still showing the move').toBe(false);
 });
+
+/**
+ * Yatzy shouts what a box was worth at `REST_Y`, and scoring clears every keep first, so all five
+ * dice are sitting at `REST_Y` too: "+24 Fours" is read through the dice it is about, every time
+ * a box is taken. The gallery caught a roll mid-air and so it looked innocent; the constants say
+ * otherwise. Only the eight word and number games were ever given a `layoutCheck`.
+ */
+test('Yatzy: the shout does not land on the dice it is about', async ({ page }) => {
+  test.setTimeout(120_000);
+  await open(page, 'Yatzy');
+  let shouts = 0;
+  let clash = '';
+  for (let look = 0; look < 24; look++) {
+    const bands = await page.evaluate(() => {
+      const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+      const scene = game?.scene.scenes[0] as { layoutCheck?: () => { name: string; top: number; bottom: number }[] } | undefined;
+      return scene?.layoutCheck ? scene.layoutCheck() : null;
+    });
+    if (!bands) break;
+    if (bands.some((band) => band.name === 'shout')) {
+      shouts++;
+      for (const a of bands) {
+        for (const b of bands) {
+          if (a.name >= b.name) continue;
+          if (a.top < b.bottom && b.top < a.bottom) clash = `${a.name} (${Math.round(a.top)}-${Math.round(a.bottom)}) on ${b.name} (${Math.round(b.top)}-${Math.round(b.bottom)})`;
+        }
+      }
+    }
+    if (shouts > 3 && !clash) break;
+    await page.waitForTimeout(250);
+  }
+  expect(shouts, 'the shout was never caught on screen, so nothing was checked').toBeGreaterThan(0);
+  expect(clash, `a band was drawn on another: ${clash}`).toBe('');
+});
