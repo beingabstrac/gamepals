@@ -133,3 +133,30 @@ describe('old maid bots', () => {
     }
   });
 });
+
+/**
+ * Cards are moved, never made and never destroyed, so every one of them is somewhere at every
+ * point in a game. Mancala's seeds had the same invariant written for them after a picture made
+ * it look as though forty-two had gone missing; they had not, but the test was worth having
+ * whatever the picture meant. This is the same question asked of the deck.
+ */
+describe('old maid conservation', () => {
+  it('never loses a card, from the deal to the last pair', () => {
+    for (let seed = 0; seed < 12; seed++) {
+      const rng = createRng(seed);
+      let state = newMaid(seed, 2 + (seed % 3));
+      // `pairs` counts the pairs each seat has laid down, it does not list their cards, so the
+      // cards off the table are two per pair rather than one per entry.
+      const dealt = () => state.hands.flat().length + state.pairs.reduce((a, b) => a + b, 0) * 2;
+      const total = dealt();
+      for (let move = 0; move < 400 && !state.result; move++) {
+        const inHand = state.hands.flat();
+        expect(dealt(), `seed ${seed}, move ${move}`).toBe(total);
+        expect(new Set(inHand).size, `seed ${seed}, move ${move}`).toBe(inHand.length);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});

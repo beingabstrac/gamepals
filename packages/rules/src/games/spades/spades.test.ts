@@ -159,3 +159,29 @@ describe('spades bots and matches', () => {
     }
   });
 });
+
+/**
+ * Cards are moved, never made and never destroyed, so every one of them is somewhere at every
+ * point in a game. Mancala's seeds had the same invariant written for them after a picture made
+ * it look as though forty-two had gone missing; they had not, but the test was worth having
+ * whatever the picture meant. This is the same question asked of the deck.
+ */
+describe('spades conservation', () => {
+  it('never loses a card while a hand is played out', () => {
+    for (let seed = 0; seed < 8; seed++) {
+      const rng = createRng(seed);
+      let state = newSpades(seed);
+      const deal = state.tricks.length;
+      for (let move = 0; move < 60 && !state.result; move++) {
+        // Only within one deal: a fresh deal puts every card back in a hand and starts again.
+        if (state.tricks.length < deal) break;
+        const all = [...state.hands.flat(), ...state.trick.map((p) => p.card), ...state.tricks.flat().map((p) => p.card)];
+        expect(all.length, `seed ${seed}, move ${move}`).toBe(52);
+        expect(new Set(all).size, `seed ${seed}, move ${move}`).toBe(52);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});

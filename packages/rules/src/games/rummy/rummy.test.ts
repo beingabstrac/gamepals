@@ -239,3 +239,26 @@ describe('rummy bots and matches', () => {
     expect(expert.chooseMove(state, 0, createRng(1))).toBe(rummyDrawDiscard);
   });
 });
+
+/**
+ * Cards are moved, never made and never destroyed, so every one of them is somewhere at every
+ * point in a game. Mancala's seeds had the same invariant written for them after a picture made
+ * it look as though forty-two had gone missing; they had not, but the test was worth having
+ * whatever the picture meant. This is the same question asked of the deck.
+ */
+describe('rummy conservation', () => {
+  it('never loses a card while a hand is played out', () => {
+    for (let seed = 0; seed < 8; seed++) {
+      const rng = createRng(seed);
+      let state = newRummy(seed, 2 + (seed % 3));
+      for (let move = 0; move < 200 && !state.result; move++) {
+        const all = [...state.hands.flat(), ...state.stock, ...state.discard, ...state.table.flatMap((m) => m.cards)];
+        expect(all.length, `seed ${seed}, move ${move}`).toBe(52);
+        expect(new Set(all).size, `seed ${seed}, move ${move}`).toBe(52);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});

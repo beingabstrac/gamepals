@@ -185,3 +185,32 @@ describe('hearts matches and bots', () => {
     }
   });
 });
+
+/**
+ * Cards are moved, never made and never destroyed, so every one of them is somewhere at every
+ * point in a game. Mancala's seeds had the same invariant written for them after a picture made
+ * it look as though forty-two had gone missing; they had not, but the test was worth having
+ * whatever the picture meant. This is the same question asked of the deck.
+ */
+describe('hearts conservation', () => {
+  it('never loses a card while a hand is played out', () => {
+    for (let seed = 0; seed < 8; seed++) {
+      const rng = createRng(seed);
+      let state = newHearts(seed);
+      const deal = state.tricks.length;
+      for (let move = 0; move < 60 && !state.result; move++) {
+        // Only within one deal: a fresh deal puts every card back in a hand and starts again.
+        if (state.tricks.length < deal) break;
+        // `passing` is the three cards a seat has chosen, and they are still in that seat's hand
+        // until the pass resolves, so counting both double-counts them: the union is the question.
+        const held = [...state.hands.flat(), ...state.trick.map((p) => p.card), ...state.tricks.flat().map((p) => p.card)];
+        expect(new Set([...held, ...state.passing.flat()]).size, `seed ${seed}, move ${move}`).toBe(52);
+        // Outside the pass, nothing is held aside, so the count has to be exact as well as complete.
+        if (state.passing.every((chosen) => chosen.length === 0)) expect(held.length, `seed ${seed}, move ${move}`).toBe(52);
+        const moves = state.legalMoves(state.currentSeat);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});

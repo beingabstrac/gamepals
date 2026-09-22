@@ -160,3 +160,26 @@ describe('solitaire bots', () => {
     expect(move).not.toBe(DRAW_MOVE);
   });
 });
+
+/**
+ * Cards are moved, never made and never destroyed, so every one of them is somewhere at every
+ * point in a game. Mancala's seeds had the same invariant written for them after a picture made
+ * it look as though forty-two had gone missing; they had not, but the test was worth having
+ * whatever the picture meant. This is the same question asked of the deck.
+ */
+describe('solitaire conservation', () => {
+  it('never loses a card, from the deal to wherever the walk ends', () => {
+    for (let seed = 0; seed < 12; seed++) {
+      const rng = createRng(seed);
+      let state = newSolitaire(seed, seed % 2 === 0 ? 1 : 3);
+      for (let move = 0; move < 300 && !state.result; move++) {
+        const all = [...state.stock, ...state.waste, ...state.foundations.flat(), ...state.tableau.flatMap((c) => c.cards)];
+        expect(all.length, `seed ${seed}, move ${move}`).toBe(52);
+        expect(new Set(all).size, `seed ${seed}, move ${move}`).toBe(52);
+        const moves = state.legalMoves(0);
+        if (moves.length === 0) break;
+        state = state.apply(rng.pick(moves));
+      }
+    }
+  });
+});
