@@ -28,6 +28,8 @@ const STOP = 0.004;
 /** The longest step, and how far a ball may move in one: small enough that no hit is ever missed. */
 const MAX_STEP = 4;
 const STEP_TRAVEL = BALL_R * 0.4;
+/** Most passes over the contacts in one step; a packed rack settles in a handful. */
+const CONTACT_PASSES = 8;
 /** A shot that has not come to rest in this long is stopped where it is. */
 const MAX_MS = 30_000;
 /** Animation frames are kept this often, in table time. */
@@ -146,33 +148,41 @@ export function simulate(start: readonly (TablePoint | null)[], vx: number, vy: 
         cushion();
       }
     }
-    for (let a = 0; a < n; a++) {
-      if (!on[a]) continue;
-      for (let b = a + 1; b < n; b++) {
-        if (!on[b]) continue;
-        const dx = x[b]! - x[a]!;
-        const dy = y[b]! - y[a]!;
-        const d2 = dx * dx + dy * dy;
-        if (d2 >= 4 * BALL_R * BALL_R) continue;
-        const d = Math.sqrt(d2) || 1e-9;
-        const nx = dx / d;
-        const ny = dy / d;
-        // Push them apart first, so a ball can never sit inside another.
-        const overlap = (2 * BALL_R - d) / 2;
-        x[a] -= nx * overlap;
-        y[a] -= ny * overlap;
-        x[b] += nx * overlap;
-        y[b] += ny * overlap;
-        const closing = (ux[a]! - ux[b]!) * nx + (uy[a]! - uy[b]!) * ny;
-        if (closing <= 0) continue;
-        // Equal masses: the speed along the line between them is shared out, losing a little.
-        const k = (closing * (1 + RESTITUTION)) / 2;
-        ux[a] -= k * nx;
-        uy[a] -= k * ny;
-        ux[b] += k * nx;
-        uy[b] += k * ny;
-        events.push({ t, kind: 'hit', a, b, speed: closing });
+    // Contacts are resolved in passes until none is still closing, so a hit travels right through
+    // a packed rack in one step. Done once in ball-number order, how a break spread depended on
+    // which numbered ball sat where: the same break at the same speed scattered 307 to 776mm.
+    for (let pass = 0; pass < CONTACT_PASSES; pass++) {
+      let pushed = false;
+      for (let a = 0; a < n; a++) {
+        if (!on[a]) continue;
+        for (let b = a + 1; b < n; b++) {
+          if (!on[b]) continue;
+          const dx = x[b]! - x[a]!;
+          const dy = y[b]! - y[a]!;
+          const d2 = dx * dx + dy * dy;
+          if (d2 >= 4 * BALL_R * BALL_R) continue;
+          const d = Math.sqrt(d2) || 1e-9;
+          const nx = dx / d;
+          const ny = dy / d;
+          // Push them apart, so a ball can never sit inside another.
+          const overlap = (2 * BALL_R - d) / 2;
+          x[a] -= nx * overlap;
+          y[a] -= ny * overlap;
+          x[b] += nx * overlap;
+          y[b] += ny * overlap;
+          const closing = (ux[a]! - ux[b]!) * nx + (uy[a]! - uy[b]!) * ny;
+          if (closing <= 1e-9) continue;
+          // Equal masses: the speed along the line between them is shared out, losing a little.
+          const k = (closing * (1 + RESTITUTION)) / 2;
+          ux[a] -= k * nx;
+          uy[a] -= k * ny;
+          ux[b] += k * nx;
+          uy[b] += k * ny;
+          if (pass === 0) events.push({ t, kind: 'hit', a, b, speed: closing });
+          pushed = true;
+        }
       }
+      if (!pushed) break;
     }
     if (frames && t >= nextFrame) {
       keep();
