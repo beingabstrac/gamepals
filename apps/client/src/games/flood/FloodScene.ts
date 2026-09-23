@@ -238,7 +238,7 @@ export class FloodScene extends Scene {
     const g = this.add.graphics().setDepth(5).setPosition(cx, cy);
     const s = Math.min(this.cell * 0.34, 20);
     g.fillStyle(0xffffff, 1);
-    if (seat === 0) g.fillPoints(starPoints(s), true);
+    if (seat === 0) fillStar(g, s);
     else {
       g.fillCircle(0, 0, s * 0.95);
       g.fillStyle(INK, 1);
@@ -266,7 +266,7 @@ export class FloodScene extends Scene {
       g.fillCircle(-radius * 0.36, -radius * 0.36, radius * 0.2);
       const star = this.add.graphics();
       star.fillStyle(0xffffff, 1);
-      star.fillPoints(starPoints(radius * 0.46), true);
+      fillStar(star, radius * 0.46);
       const cross = this.add.graphics();
       cross.lineStyle(radius * 0.16, INK, 1);
       const k = radius * 0.4;
@@ -419,12 +419,15 @@ const backOut = (t: number): number => {
   return 1 + (k + 1) * (t - 1) ** 3 + k * (t - 1) ** 2;
 };
 
-function starPoints(radius: number): { x: number; y: number }[] {
-  const points: { x: number; y: number }[] = [];
+/** A five-pointed star, filled in whatever colour the graphics has set. */
+function fillStar(g: GameObjects.Graphics, radius: number): void {
+  g.beginPath();
   for (let i = 0; i < 10; i++) {
     const a = -Math.PI / 2 + (i * Math.PI) / 5;
     const r = i % 2 === 0 ? radius : radius * 0.45;
-    points.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
+    if (i === 0) g.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+    else g.lineTo(Math.cos(a) * r, Math.sin(a) * r);
   }
-  return points;
+  g.closePath();
+  g.fillPath();
 }
