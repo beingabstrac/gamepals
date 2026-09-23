@@ -117,6 +117,8 @@ import {
   DRAW_GOES,
   guessPerson,
   type PersonState,
+  ur,
+  type UrState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -230,6 +232,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { UR_COLORS, UR_NAMES, UR_SIZE, UrScene, urStatus } from './ur/UrScene';
 import { PERSON_COLORS, PERSON_SIZE, PersonScene, personStatus } from './guess-person/PersonScene';
 import { DRAW_COLORS, DRAW_SIZE, drawResult, DrawScene, drawStatus } from './draw-guess/DrawScene';
 import { CHARADES_COLORS, CHARADES_SIZE, charadesResult, CharadesScene, charadesStatus } from './charades/CharadesScene';
@@ -889,6 +892,25 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => personStatus(state as PersonState, names),
     moveCue: () => 'tap',
     createScene: (session) => new PersonScene(session),
+  }),
+  entry({
+    definition: ur,
+    tagline: 'The oldest board game we know',
+    minutes: '10 min',
+    howTo: {
+      goal: 'Race all seven of your pieces round the board and off the end before the other player.',
+      controls: 'Tap to throw the four dice, then tap a glowing piece to move it that many squares. Your pieces go down your own side, up the middle and back into your side. On a keyboard: Space throws, number keys or arrows and Enter move.',
+      win: 'The first to bring all seven pieces home wins.',
+      tip: 'A flower square gives you another throw. Landing on the other player in the middle row sends their piece back to the start, except on the middle flower, where a piece is safe.',
+    },
+    sideNames: () => UR_NAMES,
+    sideColors: () => UR_COLORS,
+    size: UR_SIZE,
+    color: DARK.sunny,
+    botDelayMs: 650,
+    status: (state, names) => urStatus(state as UrState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new UrScene(session),
   }),
   entry({
     definition: fourInARow,

@@ -37,6 +37,7 @@ import { sudoku } from './sudoku';
 import { ticTacToe } from './tic-tac-toe';
 import { guessPerson } from './guess-person';
 import { twenty48 } from './twenty48';
+import { ur } from './ur';
 import { ultimateTtt } from './ultimate-ttt';
 import { war } from './war';
 import { wordGuessGame } from './word-guess';
@@ -88,6 +89,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       pool,
       miniGolf,
       guessPerson,
+      ur,
     ] as unknown as AnyTurnGame[]
   ).map((game) => [game.id, game]),
 );

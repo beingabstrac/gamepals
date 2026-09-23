@@ -1393,6 +1393,27 @@ function GuessPersonArt() {
   );
 }
 
+function UrArt() {
+  // The board on end: the long middle row, the two short ends, a flower and two pieces.
+  const cells: [number, number][] = [];
+  for (let row = 0; row < 8; row++) for (let col = 0; col < 3; col++) if (col === 1 || row <= 1 || row >= 4) cells.push([col, row]);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="28" y="4" width="44" height="94" rx="8" fill="#E6E0F4" />
+      {cells.map(([col, row]) => (
+        <rect key={`${col}-${row}`} x={31 + col * 13} y={7 + row * 11} width="12" height="10" rx="2.5" fill={col === 1 ? COLORS.sunny : '#fff'} />
+      ))}
+      {[[37, 12], [37, 84], [50, 51], [63, 12], [63, 84]].map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="3.2" fill={COLORS.bubblegum} />
+      ))}
+      <circle cx="50" cy="29" r="5" fill={COLORS.sky} />
+      <circle cx="50" cy="73" r="5" fill={COLORS.tomato} />
+      <circle cx="16" cy="60" r="7" fill={COLORS.sky} />
+      <circle cx="84" cy="40" r="7" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1641,6 +1662,7 @@ const ART: Record<string, () => JSX.Element> = {
   charades: CharadesArt,
   'draw-guess': DrawGuessArt,
   'guess-person': GuessPersonArt,
+  ur: UrArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

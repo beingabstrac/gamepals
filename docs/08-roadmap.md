@@ -805,7 +805,11 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M23b Charades:** the holder puts the phone on their forehead, the table acts or describes the word and taps Got it or Pass; a minute a go, one or two goes each, 160 words of our own. Tap now; tilt later, since it needs a motion permission on iPhones.
   - [ ] **M23c Draw & Guess:** one person draws the secret word while the table shouts; Got it asks who called it and both score. Eighty seconds, five inks, hold to peek, 140 words of our own.
   - [ ] **M23d Guess the Person:** 24 faces of our own, twelve yes or no questions the phone answers, faces tip over, a wrong name loses. vs bot or two people passing the phone.
-- [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi
+- [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi. Split one game per loop.
+  - [ ] **M24a Royal Game of Ur:** Finkel's rules, the board stood on end to fit a phone, four pyramid dice, pieces hop square by square.
+  - [ ] **M24b Senet**
+  - [ ] **M24c Nine Men's Morris**
+  - [ ] **M24d Pachisi**
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
 - [ ] **M27 Puzzles A:** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them)
