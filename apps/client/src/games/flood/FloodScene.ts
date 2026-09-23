@@ -239,11 +239,7 @@ export class FloodScene extends Scene {
     const s = Math.min(this.cell * 0.34, 20);
     g.fillStyle(0xffffff, 1);
     if (seat === 0) fillStar(g, s);
-    else {
-      g.fillCircle(0, 0, s * 0.95);
-      g.fillStyle(INK, 1);
-      g.fillCircle(s * 0.42, -s * 0.28, s * 0.72);
-    }
+    else fillMoon(g, s);
     this.tweens.add({ targets: g, scale: { from: 0.4, to: 1 }, duration: 420, ease: 'Back.easeOut' });
   }
 
@@ -418,6 +414,40 @@ const backOut = (t: number): number => {
   const k = 1.7;
   return 1 + (k + 1) * (t - 1) ** 3 + k * (t - 1) ** 2;
 };
+
+/**
+ * A crescent: a disc with a bite out of it. The bite has to be cut, not painted over in ink, or the
+ * moon reads as an eye. The outline is the disc's edge where the bite is not, then back along the
+ * bite's edge where the disc is.
+ */
+function fillMoon(g: GameObjects.Graphics, radius: number): void {
+  const bite = { x: radius * 0.5, y: -radius * 0.32, r: radius * 0.78 };
+  const steps = 64;
+  const points: { x: number; y: number }[] = [];
+  // Round the disc, starting at the bite, so the part it keeps comes out in one piece.
+  const start = Math.atan2(bite.y, bite.x);
+  for (let i = 0; i <= steps; i++) {
+    const a = start + (i / steps) * Math.PI * 2;
+    const p = { x: Math.cos(a) * radius, y: Math.sin(a) * radius };
+    if (Math.hypot(p.x - bite.x, p.y - bite.y) >= bite.r) points.push(p);
+  }
+  // Round the bite, starting on the side away from the disc, keeping only the part inside it.
+  const inner: { x: number; y: number }[] = [];
+  const out = Math.atan2(bite.y, bite.x);
+  for (let i = 0; i <= steps; i++) {
+    const a = out + (i / steps) * Math.PI * 2;
+    const p = { x: bite.x + Math.cos(a) * bite.r, y: bite.y + Math.sin(a) * bite.r };
+    if (Math.hypot(p.x, p.y) <= radius) inner.push(p);
+  }
+  const end = points[points.length - 1]!;
+  const near = (p: { x: number; y: number }) => Math.hypot(p.x - end.x, p.y - end.y);
+  if (inner.length && near(inner[0]!) > near(inner[inner.length - 1]!)) inner.reverse();
+  const outline = [...points, ...inner];
+  g.beginPath();
+  outline.forEach((p, i) => (i === 0 ? g.moveTo(p.x, p.y) : g.lineTo(p.x, p.y)));
+  g.closePath();
+  g.fillPath();
+}
 
 /** A five-pointed star, filled in whatever colour the graphics has set. */
 function fillStar(g: GameObjects.Graphics, radius: number): void {

@@ -653,7 +653,17 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     row was set `hidden`, and `.quick-starts { display: flex }` beat the attribute, so solo games showed
     three buttons that did nothing. A global `[hidden] { display: none !important }` settles it for good;
     checked live on Sweeper (row hidden) and Chess (row shown).
-  - [ ] **P1b Flood:** fill the board from a corner in one colour within a move limit
+  - [x] **P1b Flood (2026-09-23):** 53 games. Fill the board from a corner in one colour within a move
+    limit, and a two-player duel from opposite corners where you cannot pick your own colour or the other
+    side's. The limit is our solver's count plus 4, 3 or 2 spare moves, so every board can be won; the
+    solver takes any colour it can finish off, otherwise the one that brings the farthest patch nearest
+    (Tatham's rule), and was measured first: 23.1 moves on 14 by 14 against the classic app's 25, in half
+    a millisecond. Your patch is drawn flat and joined, free squares as raised tiles, and the flood runs
+    as a wave from your corner. Checked live on both modes: a solo win, a duel lost 48 to 51 to a Medium
+    bot, and the rematch turning the board so the person in the second seat sits at the bottom. The moon
+    that marks the second corner first shipped as a white disc with an ink bite and read as an eye; it is
+    cut as a real crescent now. Two type errors reached CI (a `0 | -1` array, Phaser's `fillPoints`
+    wanting its own vector type), because typecheck cannot run on this machine.
   - [ ] **P1c Tile Match:** clear a stacked layout of tiles by matching free pairs, clearly its own game and not a Mahjong reskin
   - [ ] **P1d Jigsaw:** a picture cut into pieces and put back, pictures drawn by us
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery
