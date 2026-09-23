@@ -136,8 +136,9 @@ test('Yatzy: no row name is wider than its cell', async ({ page }) => {
  */
 test('how far each game runs past the bottom of the screen', async ({ page }) => {
   // Playwright wants this inside the test; `{ timeout }` beside the name is vitest's way, which is
-  // what the rules tests use and what I reached for first.
-  test.setTimeout(300_000);
+  // what the rules tests use and what I reached for first. Eight seconds a game, so it grows with the
+  // list: a flat 300s held for 51 games and ran out at 65 on the slow Android engine.
+  test.setTimeout(GAMES.length * 8_000);
   const tall: string[] = [];
   for (const name of GAMES) {
     await page.goto('/');
