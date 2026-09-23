@@ -80,6 +80,9 @@ import {
   flood,
   FLOOD_LEVELS,
   type FloodState,
+  tileMatch,
+  TILE_LEVELS,
+  type TileMatchState,
   type SweeperState,
   sudoku,
   SUDOKU_HINTS,
@@ -152,6 +155,8 @@ import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
 import { SweeperControls } from './sweeper/SweeperControls';
 import { SWEEPER_SIZE, SweeperScene } from './sweeper/SweeperScene';
 import { FLOOD_SIZE, FloodScene } from './flood/FloodScene';
+import { TileMatchControls } from './tile-match/TileMatchControls';
+import { TILE_MATCH_SIZE, TileMatchScene } from './tile-match/TileMatchScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -279,7 +284,8 @@ const duelSides = { sideNames: () => ['Blue', 'Red'], sideColors: () => DUEL_COL
 
 const FLOOD_LEVEL_LABEL: Record<(typeof FLOOD_LEVELS)[number], string> = { small: 'Small', medium: 'Medium', large: 'Large' };
 
-const SWEEPER_LEVEL_LABEL: Record<(typeof SWEEPER_LEVELS)[number], string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+/** Easy, Medium and Hard, for the puzzles that have those three and no more. */
+const THREE_LEVEL_LABEL: Record<(typeof SWEEPER_LEVELS)[number], string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 
 export const GAMES: readonly AnyEntry[] = [
   entry({
@@ -1332,7 +1338,7 @@ export const GAMES: readonly AnyEntry[] = [
     tagline: 'Find the mines by the numbers',
     minutes: '3 min',
     hint: 'Tap any square to start',
-    levels: SWEEPER_LEVELS.map((id) => ({ id, label: SWEEPER_LEVEL_LABEL[id] })),
+    levels: SWEEPER_LEVELS.map((id) => ({ id, label: THREE_LEVEL_LABEL[id] })),
     howTo: {
       goal: 'Uncover every square that is not a mine.',
       controls:
@@ -1390,6 +1396,35 @@ export const GAMES: readonly AnyEntry[] = [
     },
     moveCue: (_before, after) => ((after as FloodState).last.length > 0 ? undefined : 'tap'),
     createScene: (session) => new FloodScene(session),
+  }),
+  entry({
+    definition: tileMatch,
+    tagline: 'Three alike and they pop',
+    minutes: '4 min',
+    levels: TILE_LEVELS.map((id) => ({ id, label: THREE_LEVEL_LABEL[id] })),
+    howTo: {
+      goal: 'Clear every tile from the pile.',
+      controls: 'Tap a tile that nothing is lying on to move it to the tray. Three alike in the tray pop. On a keyboard: the arrow keys move, Enter takes a tile and U undoes.',
+      win: 'The pile and the tray are both empty.',
+      tip: 'Seven tiles in the tray with no three is a loss, so look at what is under a tile before you take it. You get three undos. Every pile can be cleared.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.bubblegum],
+    size: TILE_MATCH_SIZE,
+    color: DARK.bubblegum,
+    status: (state) => {
+      const s = state as TileMatchState;
+      if (s.result) return undefined;
+      return `${s.left} tile${s.left === 1 ? '' : 's'} left, ${s.tray.length} of 7 in the tray`;
+    },
+    resultText: (state) => {
+      const s = state as TileMatchState;
+      if (s.result?.winners.length) return 'Cleared! Every tile matched.';
+      return `The tray is full. ${s.left} tile${s.left === 1 ? ' was' : 's were'} left.`;
+    },
+    moveCue: (_before, after) => ((after as TileMatchState).last?.cleared.length ? 'place' : 'tap'),
+    Controls: TileMatchControls,
+    createScene: (session) => new TileMatchScene(session),
   }),
   entry({
     definition: colorSort,

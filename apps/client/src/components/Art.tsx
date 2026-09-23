@@ -1054,6 +1054,41 @@ function FloodArt() {
   );
 }
 
+function TileMatchArt() {
+  // A small pile with a cherry on top, and two cherries already waiting in the tray for the third.
+  const tile = (x: number, y: number, dim = false) => (
+    <g>
+      <rect x={x} y={y + 3} width="24" height="26" rx="6" fill="#D9D2EC" />
+      <rect x={x} y={y} width="24" height="26" rx="6" fill={COLORS.paper} stroke="#ECE8F5" stroke-width="1.5" />
+      {dim && <rect x={x} y={y} width="24" height="29" rx="6" fill={INK} opacity="0.3" />}
+    </g>
+  );
+  const cherry = (x: number, y: number, s = 1) => (
+    <g>
+      <path d={`M ${x - 3 * s} ${y + 1 * s} L ${x + 1 * s} ${y - 7 * s} L ${x + 4 * s} ${y + 1 * s}`} stroke={DARK.mint} stroke-width={1.6 * s} fill="none" />
+      <circle cx={x - 3.4 * s} cy={y + 3 * s} r={3.6 * s} fill={COLORS.tomato} />
+      <circle cx={x + 3.8 * s} cy={y + 3.6 * s} r={3.6 * s} fill={COLORS.tomato} />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {tile(18, 14, true)}
+      {tile(46, 14, true)}
+      {tile(32, 22)}
+      {cherry(44, 33)}
+      <circle cx="30" cy="27" r="5" fill={COLORS.sunny} opacity="0.5" />
+      <circle cx="67" cy="27" r="5" fill={COLORS.sky} opacity="0.5" />
+      <rect x="8" y="62" width="84" height="30" rx="12" fill="#E6E0F4" />
+      <rect x="8" y="60" width="84" height="30" rx="12" fill="#fff" />
+      {[0, 1, 2, 3].map((i) => (
+        <rect key={i} x={13 + i * 19.5} y="64" width="17" height="22" rx="5" fill={i < 2 ? COLORS.paper : '#F4F1FB'} stroke={i < 2 ? '#ECE8F5' : 'none'} />
+      ))}
+      {cherry(21.5, 74, 0.7)}
+      {cherry(41, 74, 0.7)}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1287,6 +1322,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sliding-puzzle': SlidingArt,
   sweeper: SweeperArt,
   flood: FloodArt,
+  'tile-match': TileMatchArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

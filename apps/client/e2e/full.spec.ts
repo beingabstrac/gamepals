@@ -38,6 +38,7 @@ const GAMES = [
   'Sliding Puzzle',
   'Sweeper',
   'Flood',
+  'Tile Match',
   'Color Sort',
   'Echo',
   'Classic Snake',

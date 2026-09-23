@@ -45,6 +45,7 @@ export * from './games/memory';
 export * from './games/sliding-puzzle';
 export * from './games/sweeper';
 export * from './games/flood';
+export * from './games/tile-match';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';
