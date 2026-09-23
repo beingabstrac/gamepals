@@ -1,5 +1,16 @@
 /* Game Pals — cute, soft, bubbly, flat (docs/12). No gradients: depth = solid lips + soft shadows. */
 
+/*
+ * The `hidden` attribute has to win. The browser's own rule for it is the weakest in the cascade,
+ * so any class that sets `display` quietly overrides it: `.quick-starts { display: flex }` meant
+ * the "vs Bot / Friends / Solo" row showed on every one-player game despite `hidden={solo}`, three
+ * buttons that all seated the same one person. The How-to list had hit the same thing and been
+ * patched alone; this is the one rule that stops it for everything.
+ */
+[hidden] {
+  display: none !important;
+}
+
 :root {
   --paper: #fffdf8;
   --card: #ffffff;
@@ -400,10 +411,6 @@ h2,
 
 .how-more:active {
   transform: translateY(1px);
-}
-
-.how-to ul[hidden] {
-  display: none;
 }
 
 .how-to ul {
