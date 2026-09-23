@@ -749,7 +749,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     a second, so "parries 30% of the time" meant always; the scene now hands it a roll that changes every
     0.4 seconds and a view of the other fencer a reaction late. With both bots hovering out of distance no
     bout ever ended, so each now commits to attacks of its own.
-- [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It. Split one game to a loop (2026-09-24), real
+- [x] **R1 Party reflex (2026-09-24, full eight green, run 35931865298):** Whack-a-Mole, Paint Fight, Grab It. Split one game to a loop (2026-09-24), real
   time, two players on one phone:
   - [x] **R1a Whack-a-Mole (2026-09-24):** 62 games. Nine holes each, the same moles at the same moments on
     both boards from the seed, 45 seconds, moles 1, golden 3, bombs minus 2 and a dizzy mallet. Bots see a
