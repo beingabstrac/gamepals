@@ -96,9 +96,13 @@ export class TileMatchScene extends Scene {
     this.events.once('shutdown', unsubscribe);
   }
 
-  /** Still showing the last move. See `apps/client/src/games/busy.ts`. */
+  /**
+   * Still showing the last move. See `apps/client/src/games/busy.ts`. A tile still in the air counts
+   * as well as the clock: Phaser's tweens smooth over lag and the scene clock does not, so on a slow
+   * or hidden page the clock can run out while a tile is still flying. Seen live with the pane hidden.
+   */
   busy(): boolean {
-    return this.time.now < this.busyUntil;
+    return this.time.now < this.busyUntil || this.flights.size > 0;
   }
 
   private boardPoint(tile: number): { x: number; y: number } {
@@ -258,7 +262,7 @@ export class TileMatchScene extends Scene {
   private shade(animate: boolean): void {
     const state = this.state;
     this.views.forEach((view, tile) => {
-      const alpha = state.onBoard[tile] && !state.isFree(tile) ? 0.34 : 0;
+      const alpha = state.onBoard[tile] && !state.isFree(tile) ? 0.28 : 0;
       if (view.shade.alpha === alpha) return;
       if (animate) this.tweens.add({ targets: view.shade, alpha, duration: 180, delay: 120 });
       else view.shade.setAlpha(alpha);
@@ -351,7 +355,7 @@ export class TileMatchScene extends Scene {
     let wrong = 0;
     let note = '';
     this.views.forEach((view, tile) => {
-      if (this.tweens.isTweening(view.box) || this.busy()) return;
+      if (this.tweens.isTweening(view.box) || this.flights.has(tile) || this.busy()) return;
       settled++;
       const place = want[tile]!;
       const box = view.box;

@@ -664,7 +664,17 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     that marks the second corner first shipped as a white disc with an ink bite and read as an eye; it is
     cut as a real crescent now. Two type errors reached CI (a `0 | -1` array, Phaser's `fillPoints`
     wanting its own vector type), because typecheck cannot run on this machine.
-  - [ ] **P1c Tile Match:** clear a stacked layout of tiles by matching free pairs, clearly its own game and not a Mahjong reskin
+  - [x] **P1c Tile Match (2026-09-23):** 54 games. Built as the triple-tray genre, not free pairs: take a
+    free tile into a tray of seven, three alike pop, seven without a three loses. Matching free pairs off a
+    stack is Mahjong solitaire, which has its own line in the catalogue, so building pairs would have been
+    the reskin this line said to avoid. Pictures are dealt along a real way of taking the pile apart, so
+    every board can be cleared, and a greedy player that never looks underneath wins 95% of Easy, 79% of
+    Medium and 56% of Hard, which is the difficulty curve. Three undos a game. Asking every upper tile to
+    rest on all four below was tried first and left boards a layer short; resting on two is what the real
+    games do. Played live: a Hard board lost with 62 tiles left, one undo used. That run found a real gap:
+    the scene said it was done while a tile was still in the air, because Phaser's tweens smooth over lag
+    and the scene clock does not, so on a hidden or slow page the result could come up over a flying tile.
+    `busy()` now counts tiles in flight.
   - [ ] **P1d Jigsaw:** a picture cut into pieces and put back, pictures drawn by us
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
