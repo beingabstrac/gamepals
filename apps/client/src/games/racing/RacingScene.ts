@@ -70,10 +70,18 @@ export class RacingScene extends Scene {
         .setAngle(facing(this.options.seats, seat as Seat))
         .setDepth(12),
     );
+    // The hint sits in the middle on a pill of its own, clear of the start line and the cars on it.
     for (const seat of [0, 1] as const) {
-      const hint = sharpText(this, W / 2, seat === 0 ? H - 60 : 60, 'Hold left or right to steer', 22, COLORS.ink).setDepth(12);
-      hint.setAngle(facing(this.options.seats, seat)).setVisible(isPerson(this.options.seats, seat));
-      this.tweens.add({ targets: hint, alpha: 0, delay: 4500, duration: 600 });
+      const y = seat === 0 ? H / 2 + 110 : H / 2 - 110;
+      const pill = this.add.graphics().setDepth(12);
+      pill.fillStyle(0xffffff, 0.92);
+      pill.fillRoundedRect(W / 2 - 170, y - 22, 340, 44, 22);
+      const hint = sharpText(this, W / 2, y, 'Hold left or right to steer', 22, COLORS.ink).setDepth(13);
+      hint.setAngle(facing(this.options.seats, seat));
+      const shown = isPerson(this.options.seats, seat);
+      pill.setVisible(shown);
+      hint.setVisible(shown);
+      this.tweens.add({ targets: [hint, pill], alpha: 0, delay: 4500, duration: 600 });
     }
     this.banner = sharpText(this, W / 2, H / 2, '', 90, COLORS.ink).setDepth(20).setFontStyle('bold');
 

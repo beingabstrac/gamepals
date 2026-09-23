@@ -271,7 +271,8 @@ export class SwordScene extends Scene {
     let tip = { x: hand.x, y: hand.y + forward * reach };
     if (f.stance === 'parry') tip = { x: hand.x + (seat === 0 ? 1 : -1) * reach * 0.8, y: hand.y + forward * reach * 0.55 };
     if (f.stance === 'stunned') tip = { x: hand.x + (seat === 0 ? -1 : 1) * reach * 0.85, y: hand.y + forward * reach * 0.3 };
-    g.lineStyle(5, 0xd9d2ec, 1);
+    // Grey steel with a bright edge: a pale blade vanished against the strip.
+    g.lineStyle(6, toHex(COLORS.soft), 1);
     g.lineBetween(hand.x, hand.y, tip.x, tip.y);
     g.lineStyle(2, 0xffffff, 1);
     g.lineBetween(hand.x, hand.y, tip.x, tip.y);
@@ -292,6 +293,7 @@ export class SwordScene extends Scene {
     g.lineStyle(4, 0xffffff, 1);
     g.lineBetween(STRIP.x - w / 2 + 14, (STRIP.top + STRIP.bottom) / 2, STRIP.x + w / 2 - 14, (STRIP.top + STRIP.bottom) / 2);
     g.lineStyle(3, toHex(COLORS.soft), 0.5);
-    for (const y of [STRIP.bottom - 220 + FENCER_RADIUS, STRIP.top + 220 - FENCER_RADIUS]) g.lineBetween(STRIP.x - 60, y, STRIP.x + 60, y);
+    // The en-garde lines, at the front of each fencer's starting place.
+    for (const y of [STRIP.bottom - 220 - FENCER_RADIUS, STRIP.top + 220 + FENCER_RADIUS]) g.lineBetween(STRIP.x - 60, y, STRIP.x + 60, y);
   }
 }
