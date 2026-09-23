@@ -32,7 +32,7 @@ async function open(page: Page, name: string): Promise<void> {
   await expect(page.locator('.board canvas')).toBeVisible();
 }
 
-const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths'];
+const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Flood'];
 
 for (const name of BANDED) {
   test(`${name}: nothing is drawn on top of anything else`, async ({ page }) => {
@@ -389,7 +389,7 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
  * move that was dropped never catches up, which is the Checkers bug this found; a move still in
  * the air catches up a few hundred milliseconds later.
  */
-for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War', 'Reversi', 'Sweeper']) {
+for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War', 'Reversi', 'Sweeper', 'Flood']) {
   test(`${game}: what is drawn catches up with what the rules say`, async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, game);

@@ -646,7 +646,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   - [x] **P1a Sweeper (2026-09-23):** 52 games. Mines under a grid, numbers counting the neighbours, and a
     board that never needs a guess. The mines are laid on the first tap, from the seed and that square, and
     a board is kept only when simple deduction from the open numbers alone clears it; that was measured
-    first (under 1ms a board on average, 30 relays at worst on Hard) so it could be built at all. The bot
+    first (under 1ms a board on average, 30 redraws at worst on Hard) so it could be built at all. The bot
     proves every move, and a test plays 75 boards with a random source that throws, so any guess fails it.
     Three sizes, dig or flag by tap, long press or the Dig/Flag switch, chording on an open number,
     keyboard arrows + Enter + F. It came with a fix for every one-player game: the vs Bot / Friends / Solo

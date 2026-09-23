@@ -37,6 +37,7 @@ const GAMES = [
   'Memory',
   'Sliding Puzzle',
   'Sweeper',
+  'Flood',
   'Color Sort',
   'Echo',
   'Classic Snake',

@@ -1025,6 +1025,35 @@ function SlidingArt() {
   );
 }
 
+function FloodArt() {
+  // The flooded corner is one flat patch with its star; the rest are raised tiles still to take.
+  const grid = ['ssspg', 'sstmg', 'smttp', 'gpmsm', 'tgpmt'];
+  const fill: Record<string, string> = { s: COLORS.sky, t: COLORS.tomato, m: COLORS.mint, p: COLORS.bubblegum, g: COLORS.sunny };
+  const lip: Record<string, string> = { s: DARK.sky, t: DARK.tomato, m: DARK.mint, p: DARK.bubblegum, g: DARK.sunny };
+  const owned = new Set([0, 1, 2, 5, 6, 10]);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="14" fill="#fff" />
+      {grid
+        .join('')
+        .split('')
+        .map((key, i) => {
+          const x = 14 + (i % 5) * 14.6;
+          const y = 14 + Math.floor(i / 5) * 14.6;
+          if (owned.has(i)) return <rect key={i} x={x - 0.4} y={y - 0.4} width="14.6" height="14.6" rx="3" fill={fill[key]} />;
+          return (
+            <g key={i}>
+              <rect x={x} y={y + 1.6} width="13.2" height="12.4" rx="3.5" fill={lip[key]} />
+              <rect x={x} y={y} width="13.2" height="12.2" rx="3.5" fill={fill[key]} />
+            </g>
+          );
+        })}
+      <path d="M 21 15.5 L 22.6 19.4 L 26.8 19.6 L 23.5 22.2 L 24.7 26.3 L 21 23.9 L 17.3 26.3 L 18.5 22.2 L 15.2 19.6 L 19.4 19.4 Z" fill="#fff" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1257,6 +1286,7 @@ const ART: Record<string, () => JSX.Element> = {
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
   sweeper: SweeperArt,
+  flood: FloodArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

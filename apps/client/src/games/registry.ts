@@ -77,6 +77,9 @@ import {
   slidingPuzzle,
   sweeper,
   SWEEPER_LEVELS,
+  flood,
+  FLOOD_LEVELS,
+  type FloodState,
   type SweeperState,
   sudoku,
   SUDOKU_HINTS,
@@ -148,6 +151,7 @@ import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
 import { SweeperControls } from './sweeper/SweeperControls';
 import { SWEEPER_SIZE, SweeperScene } from './sweeper/SweeperScene';
+import { FLOOD_SIZE, FloodScene } from './flood/FloodScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -272,6 +276,8 @@ const LEVEL_LABEL: Record<SudokuLevel, string> = { easy: 'Easy', medium: 'Medium
 
 const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_PLAYERS[4]!;
 const duelSides = { sideNames: () => ['Blue', 'Red'], sideColors: () => DUEL_COLORS } as const;
+
+const FLOOD_LEVEL_LABEL: Record<(typeof FLOOD_LEVELS)[number], string> = { small: 'Small', medium: 'Medium', large: 'Large' };
 
 const SWEEPER_LEVEL_LABEL: Record<(typeof SWEEPER_LEVELS)[number], string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 
@@ -1351,6 +1357,39 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (_before, after) => ((after as SweeperState).last.length > 0 ? 'place' : 'tap'),
     Controls: SweeperControls,
     createScene: (session) => new SweeperScene(session),
+  }),
+  entry({
+    definition: flood,
+    tagline: 'Fill the board with one color',
+    minutes: '3 min',
+    levels: FLOOD_LEVELS.map((id) => ({ id, label: FLOOD_LEVEL_LABEL[id] })),
+    howTo: {
+      goal: 'Alone: turn the whole board one color before your moves run out. With two: hold more of the board than the other player.',
+      controls:
+        'Tap a color under the board, or tap any square to pick its color. Your patch turns that color and takes in every square of it that touches. On a keyboard: press 1 to 6, or use the arrow keys and Enter.',
+      win: 'Alone, the board is all one color. With two, you hold more than half of it.',
+      draw: 'With two, if the board fills and you each hold the same, it is a draw.',
+      tip: 'Your patch starts at the star. With two, you cannot pick your own color or the other player’s, so taking the color they want next is a good move.',
+    },
+    sideNames: (players) => (players === 1 ? ['You'] : ['Star', 'Moon']),
+    sideColors: (players) => (players === 1 ? [COLORS.sky] : [COLORS.ink, COLORS.soft]),
+    size: FLOOD_SIZE,
+    color: DARK.sky,
+    status: (state, names) => {
+      const s = state as FloodState;
+      if (s.result) return undefined;
+      if (s.players === 1) return `${s.movesLeft} move${s.movesLeft === 1 ? '' : 's'} left`;
+      return `${names[s.currentSeat]} to pick. ${names[0]} ${s.held(0)}, ${names[1]} ${s.held(1)}`;
+    },
+    resultText: (state, names) => {
+      const s = state as FloodState;
+      if (s.players === 1) return s.result?.winners.length ? `Flooded with ${s.movesLeft} move${s.movesLeft === 1 ? '' : 's'} to spare!` : `Out of moves, ${s.cells - s.held(0)} squares to go.`;
+      if (s.result?.draw) return `A draw, ${s.held(0)} each! 🤝`;
+      const winner = s.result?.winners[0] ?? 0;
+      return `${names[winner]} wins, ${s.held(winner)} to ${s.held(1 - winner)}!`;
+    },
+    moveCue: (_before, after) => ((after as FloodState).last.length > 0 ? undefined : 'tap'),
+    createScene: (session) => new FloodScene(session),
   }),
   entry({
     definition: colorSort,
