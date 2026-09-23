@@ -18,13 +18,13 @@ Status: brief (2026-09-23). Rules: target archery as World Archery runs it, cut 
 The phone versions show the target down a long range with a wind arrow and speed, let you pull back and drag to aim, sway the sight while you hold (more when the wind is up or the range is long), and loose on release. The best keep a match short: a few ends of three arrows, players taking turns an arrow at a time.
 
 ## Our design
-- **A match is ends of three arrows**, players taking turns an arrow at a time: 3 ends at the table's Quick length, 5 at Match. Ranges of 30, 50 and 70 metres as levels: the further, the more the wind carries the arrow.
+- **A match is three ends of three arrows**, players taking turns an arrow at a time, 1 to 4 players. The table picks the range, 30, 50 or 70 metres: the further, the more the wind carries the arrow and the more the sight sways. (A Quick and a Match length were planned too; the table has one level picker, and range is the choice that changes the game.)
 - **Each arrow has its own wind**, from the seed: a direction and a speed shown before you shoot. It carries the arrow sideways (and a little up or down) by an amount that grows with the range. Reading it and aiming off is the skill.
 - **The sway is yours, the wind is the rules'.** While you hold, the sight drifts in a slow loop, as a real bow arm does, and you let go when it is where you want it. That drift lives in the scene, so the move is simply where the sight was when you let go: a point on the face in whole millimetres. The rules add the wind and score the hit. Nothing random happens in the rules, so a server can replay a match.
 - **Moves**: the aim point, `x,y` in millimetres from the middle of the face, inside a square a little bigger than the face so a very wide shot can miss. `allows` checks the numbers, the same contract as Pool and Mini Golf.
 - **Scoring** by ring, 10 to 1, a miss is 0; the X counts for ties. The result sheet shows each player's ends.
 - **Touch**: hold anywhere to draw, drag to move the sight, let go to shoot. **Keyboard**: arrows move the sight, Space holds and releases.
-- **Bots** aim off for the wind with a tier's accuracy: Easy half-reads it and shakes, Expert reads it all and barely shakes.
+- **Bots** aim off for the wind with a tier's accuracy: Easy reads a third of it and shakes a lot, Expert reads it all and shakes least. Measured over 40 matches at each range: about 7, 8.4, 9.1 and 9.7 an arrow, Easy to Expert.
 
 ## Tests
 A hit in the middle scores 10 and counts an X; each ring scores its number and a line takes the higher; off the face is 0; the wind carries an arrow the way it blows and further at longer range; the same aim in the same wind always lands in the same place; players take turns an arrow at a time and a match ends after its last end; highest total wins, then most Xs, and a full tie is a draw; `allows` refuses aims off the square; replay reproduces a match; Expert outscores Easy. Invariant, after every arrow of random matches: every score is 0 to 10, each player's total is the sum of their arrows, and nobody has shot more arrows than the other plus one.

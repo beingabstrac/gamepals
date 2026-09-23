@@ -91,6 +91,11 @@ import {
   type PoolState,
   miniGolf,
   GOLF_LENGTHS,
+  archery,
+  ARCHERY_RANGES,
+  ENDS,
+  RANGE_METRES,
+  type ArcheryState,
   GOLF_ROUNDS,
   HOLES,
   type GolfState,
@@ -172,6 +177,7 @@ import { JigsawControls } from './jigsaw/JigsawControls';
 import { JIGSAW_SIZE, JigsawScene } from './jigsaw/JigsawScene';
 import { POOL_SIZE, PoolScene } from './pool/PoolScene';
 import { GOLF_COLORS, GOLF_SIZE, GolfScene } from './mini-golf/GolfScene';
+import { ARCHERY_COLORS, ARCHERY_SIZE, ArcheryScene, arrowOfEnd } from './archery/ArcheryScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1545,6 +1551,40 @@ export const GAMES: readonly AnyEntry[] = [
     },
     moveCue: () => undefined,
     createScene: (session) => new GolfScene(session),
+  }),
+  entry({
+    definition: archery,
+    tagline: 'Read the wind and hit the gold',
+    minutes: '4 min',
+    levels: ARCHERY_RANGES.map((id) => ({ id, label: `${RANGE_METRES[id]} m` })),
+    howTo: {
+      goal: 'Score the most points with your arrows, three ends of three.',
+      controls:
+        'Drag to move the sight, then let go to shoot. The sight drifts, so let go when it is where you want it. On a keyboard: the arrow keys move the sight (hold Shift for small steps) and Space shoots.',
+      win: 'The highest total wins. The middle gold ring is 10, then 9, and on out to 1 at the edge.',
+      draw: 'A tie goes to the most 10s, then the most Xs (the tiny middle ring). Level on all three is a draw.',
+      tip: 'The flag shows the wind. It carries the arrow the way it blows, more at longer range, so aim off to the other side. The sight is steadiest a second after your turn starts and wobbles more the longer you hold.',
+    },
+    sideNames: (players) => ['Red', 'Blue', 'Green', 'Purple'].slice(0, players),
+    sideColors: (players) => ARCHERY_COLORS.slice(0, players),
+    size: ARCHERY_SIZE,
+    color: DARK.tomato,
+    botDelayMs: 500,
+    status: (state, names) => {
+      const s = state as ArcheryState;
+      if (s.result) return undefined;
+      return `${names[s.currentSeat]} to shoot. End ${s.end + 1} of ${ENDS}, arrow ${arrowOfEnd(s)}`;
+    },
+    resultText: (state, names) => {
+      const s = state as ArcheryState;
+      if (s.players === 1) return `${s.total(0)} of ${ENDS * 3 * 10}, with ${s.tens(0)} tens.`;
+      if (s.result?.draw) return `A tie at ${s.total(0)}! 🤝`;
+      const winners = s.result?.winners ?? [];
+      if (winners.length > 1) return `${winners.map((w) => names[w]).join(' and ')} tie on ${s.total(winners[0]!)}.`;
+      return `${names[winners[0]!]} wins with ${s.total(winners[0]!)}!`;
+    },
+    moveCue: () => undefined,
+    createScene: (session) => new ArcheryScene(session),
   }),
   entry({
     definition: colorSort,

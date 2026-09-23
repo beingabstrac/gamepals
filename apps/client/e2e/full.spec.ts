@@ -42,6 +42,7 @@ const GAMES = [
   'Jigsaw',
   'Pool',
   'Mini Golf',
+  'Archery',
   'Color Sort',
   'Echo',
   'Classic Snake',

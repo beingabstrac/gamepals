@@ -1162,6 +1162,23 @@ function MiniGolfArt() {
   );
 }
 
+function ArcheryArt() {
+  // The face, and an arrow just in the gold.
+  const rings = ['#fff', INK, COLORS.sky, COLORS.tomato, COLORS.sunny];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="54" r="40" fill={DARK.peach} />
+      <circle cx="50" cy="50" r="40" fill={COLORS.peach} />
+      {rings.map((color, i) => (
+        <circle key={i} cx="50" cy="50" r={34 - i * 6.6} fill={color} stroke={i === 0 ? '#E6E0F4' : 'none'} stroke-width="1.5" />
+      ))}
+      <path d="M53 47 L80 20" stroke={INK} stroke-width="3" stroke-linecap="round" />
+      <path d="M80 20 L78 11 L84 14 Z M80 20 L89 22 L86 16 Z" fill={COLORS.sky} />
+      <circle cx="53" cy="47" r="2.5" fill={INK} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1399,6 +1416,7 @@ const ART: Record<string, () => JSX.Element> = {
   jigsaw: JigsawArt,
   pool: PoolArt,
   'mini-golf': MiniGolfArt,
+  archery: ArcheryArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
