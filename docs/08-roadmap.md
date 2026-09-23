@@ -642,7 +642,12 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     Same unbounded lag, same fix, same `boardCheck()`, and one test now covers both. Ludo looked
     like the same risk and is not: it draws every token straight from the state, which is why it
     cannot drift and why its picture was clean.
-- [x] **P1 Puzzles (2026-09-23):** Sweeper, Flood, Tile Match, Jigsaw, 55 games. Split one game to a loop, the way the word games were:
+- [x] **P1 Puzzles (2026-09-23):** Sweeper, Flood, Tile Match, Jigsaw, 55 games. Green on all eight screen
+  types with every game played to the end (run 35900834113), and the four looked at in its iPhone gallery.
+  **Starting a manual run on `main` cancels the push run in progress** (they share a concurrency group),
+  and only a push deploys: the first try at this run cancelled the deploy of the last two fixes, and the
+  push run had to be re-run before the full one could start. Split one game to a loop, the way the word
+  games were:
   - [x] **P1a Sweeper (2026-09-23):** 52 games. Mines under a grid, numbers counting the neighbours, and a
     board that never needs a guess. The mines are laid on the first tap, from the seed and that square, and
     a board is kept only when simple deduction from the open numbers alone clears it; that was measured
