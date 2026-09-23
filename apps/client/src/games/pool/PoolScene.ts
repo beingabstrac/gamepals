@@ -385,7 +385,7 @@ export class PoolScene extends Scene {
       const spot = { x: Math.round(at.x), y: Math.round(at.y) };
       // The cue ball only goes where the rules would take it: on the cloth, clear of the others, and
       // behind the head string for the break.
-      if (this.state.accepts(this.moveFor(spot, 50))) {
+      if (this.state.allows(this.moveFor(spot, 50))) {
         this.place = spot;
         this.balls[0]!.setPosition(px(spot.x), py(spot.y));
       }
@@ -421,7 +421,7 @@ export class PoolScene extends Scene {
   private shoot(): void {
     if (!this.canShoot()) return;
     const move = this.moveFor(this.place, this.power);
-    if (!this.state.accepts(move)) return;
+    if (!this.state.allows(move)) return;
     this.session.play(move);
   }
 
@@ -430,7 +430,7 @@ export class PoolScene extends Scene {
     const step = arrow(key);
     if (this.placing && this.place && step) {
       const spot = { x: this.place.x + step[0] * 20, y: this.place.y + step[1] * 20 };
-      if (this.state.accepts(this.moveFor(spot, 50))) {
+      if (this.state.allows(this.moveFor(spot, 50))) {
         this.place = spot;
         this.balls[0]!.setPosition(px(spot.x), py(spot.y));
         this.drawControls();

@@ -45,7 +45,7 @@ export interface GameState<M> {
    * them. Every other game leaves it out and `legalMoves` stays the whole list. Look moves up with
    * `moveFor` and `isLegalMove` (core/moves.ts), which know the difference.
    */
-  accepts?(move: M): boolean;
+  allows?(move: M): boolean;
   /** Throws on an illegal move. */
   apply(move: M): GameState<M>;
 }
@@ -80,6 +80,6 @@ export interface GameDefinition<M> {
   createBot(tier: BotTier): Bot<M>;
   /** Stable string form of a move, used in move logs and network messages. */
   encodeMove(move: M): string;
-  /** The move a string stands for, for games whose states answer `accepts`; null if it is not one. */
+  /** The move a string stands for, for games whose states answer `allows`; null if it is not one. */
   decodeMove?(key: string): M | null;
 }

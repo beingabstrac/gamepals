@@ -86,19 +86,19 @@ describe('pool physics', () => {
 });
 
 describe('pool rules', () => {
-  it('accepts a shot exactly when it is well formed and fits the table', () => {
+  it('allows a shot exactly when it is well formed and fits the table', () => {
     const state = newPool(1);
     const place = state.defaultSpot()!;
-    expect(state.accepts(shot(0, -1000, 90, { place }))).toBe(true);
-    expect(state.accepts(shot(0, -1000, 90))).toBe(false);
-    expect(state.accepts(shot(0, 0, 90, { place }))).toBe(false);
-    expect(state.accepts(shot(0, -1000, 0, { place }))).toBe(false);
-    expect(state.accepts(shot(0, -1000, 101, { place }))).toBe(false);
-    expect(state.accepts(shot(0, -1000, 50, { place: { x: 635, y: HEAD_STRING - 100 } }))).toBe(false);
-    expect(state.accepts(shot(0, -1000, 50, { place, call: 2 }))).toBe(false);
-    expect(state.accepts('nonsense')).toBe(false);
-    expect(state.accepts(shot(50_000, 1, 50, { place }))).toBe(false);
-    for (const move of state.legalMoves(0)) expect(state.accepts(move), move).toBe(true);
+    expect(state.allows(shot(0, -1000, 90, { place }))).toBe(true);
+    expect(state.allows(shot(0, -1000, 90))).toBe(false);
+    expect(state.allows(shot(0, 0, 90, { place }))).toBe(false);
+    expect(state.allows(shot(0, -1000, 0, { place }))).toBe(false);
+    expect(state.allows(shot(0, -1000, 101, { place }))).toBe(false);
+    expect(state.allows(shot(0, -1000, 50, { place: { x: 635, y: HEAD_STRING - 100 } }))).toBe(false);
+    expect(state.allows(shot(0, -1000, 50, { place, call: 2 }))).toBe(false);
+    expect(state.allows('nonsense')).toBe(false);
+    expect(state.allows(shot(50_000, 1, 50, { place }))).toBe(false);
+    for (const move of state.legalMoves(0)) expect(state.allows(move), move).toBe(true);
     expect(state.legalMoves(1)).toEqual([]);
   });
 
@@ -142,7 +142,7 @@ describe('pool rules', () => {
     const { ball, cue, dx, dy } = cornerShot();
     const onEight = tableOf({ 0: cue, 8: ball, 9: { x: 1000, y: 2000 } }, { solids: 0 });
     expect(onEight.onEight(0)).toBe(true);
-    expect(onEight.accepts(shot(dx, dy, 30))).toBe(false);
+    expect(onEight.allows(shot(dx, dy, 30))).toBe(false);
     expect(onEight.apply(shot(dx, dy, 30, { call: 0 })).result).toEqual({ winners: [0], draw: false });
     expect(onEight.apply(shot(dx, dy, 30, { call: 5 })).result).toEqual({ winners: [1], draw: false });
     const early = tableOf({ 0: cue, 8: ball, 2: { x: 1000, y: 2000 } }, { solids: 0 });
@@ -184,7 +184,7 @@ describe('pool rules', () => {
       let state = newPool(seed);
       for (let n = 0; n < 150 && !state.result; n++) {
         const move = bots[state.currentSeat]!.chooseMove(state, state.currentSeat, rng);
-        expect(state.accepts(move), move).toBe(true);
+        expect(state.allows(move), move).toBe(true);
         state = state.apply(move);
       }
       return state.result;

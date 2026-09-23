@@ -110,7 +110,7 @@ export class PoolState implements GameState<PoolMove> {
     return on.filter((i) => i !== 8 && (!group || groupOfBall(i) === group));
   }
 
-  accepts(move: PoolMove): boolean {
+  allows(move: PoolMove): boolean {
     if (this.result) return false;
     const shot = parseShot(move);
     if (!shot) return false;
@@ -126,7 +126,7 @@ export class PoolState implements GameState<PoolMove> {
     return true;
   }
 
-  /** A spread of shots round the compass at three powers, for bots and tests; `accepts` is the whole truth. */
+  /** A spread of shots round the compass at three powers, for bots and tests; `allows` is the whole truth. */
   legalMoves(seat: Seat): readonly PoolMove[] {
     if (this.result || seat !== this.currentSeat) return [];
     const place = this.inHand === 'none' ? null : this.defaultSpot();
@@ -153,7 +153,7 @@ export class PoolState implements GameState<PoolMove> {
 
   apply(move: PoolMove): PoolState {
     if (this.result) throw new Error('Game is over');
-    if (!this.accepts(move)) throw new Error(`Illegal move: ${move}`);
+    if (!this.allows(move)) throw new Error(`Illegal move: ${move}`);
     return this.shoot(parseShot(move)!, true);
   }
 

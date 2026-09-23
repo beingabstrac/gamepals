@@ -9,7 +9,7 @@ class Big implements GameState<number> {
   legalMoves(): readonly number[] {
     return [2, 4];
   }
-  accepts(move: number): boolean {
+  allows(move: number): boolean {
     return Number.isInteger(move) && move >= 1 && move <= 1_000_000 && move % 2 === 0;
   }
   apply(): GameState<number> {
@@ -17,7 +17,7 @@ class Big implements GameState<number> {
   }
 }
 
-/** The same shape of game with no `accepts`: its list is the whole truth. */
+/** The same shape of game with no `allows`: its list is the whole truth. */
 class Small implements GameState<number> {
   readonly currentSeat = 0;
   readonly result = null;
@@ -44,7 +44,7 @@ const definition = (state: GameState<number>, decode: boolean): GameDefinition<n
 });
 
 describe('moves', () => {
-  it('asks accepts when a game answers it, and the list when it does not', () => {
+  it('asks allows when a game answers it, and the list when it does not', () => {
     const big = new Big();
     expect(moveFor(definition(big, true), big, '777778')).toBe(777778);
     expect(moveFor(definition(big, true), big, '777777')).toBeUndefined();
