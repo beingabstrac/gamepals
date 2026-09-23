@@ -52,6 +52,7 @@ const GAMES = [
   'Impostor',
   'Charades',
   'Draw & Guess',
+  'Guess the Person',
   'Color Sort',
   'Echo',
   'Classic Snake',

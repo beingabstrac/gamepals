@@ -115,6 +115,8 @@ import {
   CHARADES_GOES,
   drawGuess,
   DRAW_GOES,
+  guessPerson,
+  type PersonState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -228,6 +230,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { PERSON_COLORS, PERSON_SIZE, PersonScene, personStatus } from './guess-person/PersonScene';
 import { DRAW_COLORS, DRAW_SIZE, drawResult, DrawScene, drawStatus } from './draw-guess/DrawScene';
 import { CHARADES_COLORS, CHARADES_SIZE, charadesResult, CharadesScene, charadesStatus } from './charades/CharadesScene';
 import { IMPOSTOR_COLORS, IMPOSTOR_SIZE, impostorResult, ImpostorScene, impostorStatus } from './impostor/ImpostorScene';
@@ -867,6 +870,25 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state, names) => drawResult(state as DrawState, names),
     moveCue: () => 'tap',
     createScene: (session) => new DrawScene(session),
+  }),
+  entry({
+    definition: guessPerson,
+    tagline: 'Ask yes or no, find their face',
+    minutes: '5 min',
+    howTo: {
+      goal: 'Work out which of the 24 faces the other player has before they work out yours.',
+      controls: 'Tap a question to ask it. The phone answers truthfully and the faces that do not fit fall over. Tap a face, then tap its name to say it is theirs. On a keyboard: arrows move, Enter asks or names.',
+      win: 'Name their face right and you win. Name the wrong one and you lose.',
+      tip: 'The best question splits the faces still standing in half. Only name a face when you are sure.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => PERSON_COLORS,
+    size: PERSON_SIZE,
+    color: DARK.grape,
+    botDelayMs: 1100,
+    status: (state, names) => personStatus(state as PersonState, names),
+    moveCue: () => 'tap',
+    createScene: (session) => new PersonScene(session),
   }),
   entry({
     definition: fourInARow,

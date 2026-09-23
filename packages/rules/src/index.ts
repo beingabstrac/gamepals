@@ -60,6 +60,7 @@ export * from './games/grab-it';
 export * from './games/impostor';
 export * from './games/charades';
 export * from './games/draw-guess';
+export * from './games/guess-person';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

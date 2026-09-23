@@ -1363,6 +1363,36 @@ function DrawGuessArt() {
   );
 }
 
+function GuessPersonArt() {
+  // A little board of faces, two tipped over, and one with a question mark over it.
+  const faces = [COLORS.sunny, COLORS.peach, COLORS.sky, COLORS.mint, COLORS.bubblegum, COLORS.grape];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="30" width="84" height="64" rx="12" fill={DARK.grape} />
+      <rect x="8" y="26" width="84" height="64" rx="12" fill={COLORS.grape} />
+      {faces.map((color, i) => {
+        const x = 24 + (i % 3) * 26;
+        const y = 44 + Math.floor(i / 3) * 28;
+        const down = i === 1 || i === 3;
+        return down ? (
+          <rect key={i} x={x - 10} y={y + 6} width="20" height="6" rx="3" fill="#fff" opacity="0.6" />
+        ) : (
+          <g key={i}>
+            <rect x={x - 10} y={y - 12} width="20" height="24" rx="5" fill="#fff" />
+            <circle cx={x} cy={y - 2} r="6.5" fill={color} />
+            <circle cx={x - 2.2} cy={y - 3} r="1" fill={INK} />
+            <circle cx={x + 2.2} cy={y - 3} r="1" fill={INK} />
+          </g>
+        );
+      })}
+      <circle cx="76" cy="16" r="12" fill={COLORS.sunny} />
+      <text x="76" y="17" text-anchor="middle" dominant-baseline="central" font-size="17" font-weight="700" fill="#fff">
+        ?
+      </text>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1610,6 +1640,7 @@ const ART: Record<string, () => JSX.Element> = {
   impostor: ImpostorArt,
   charades: CharadesArt,
   'draw-guess': DrawGuessArt,
+  'guess-person': GuessPersonArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
