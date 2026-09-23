@@ -718,7 +718,12 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     the rules when a shot ends, so they hold nothing that could drift, and under autoplay they were never
     idle long enough to answer.
   - [ ] **U1c Archery:** wind and distance, ten ends, the arrow's flight from the same kind of simulation
-- [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
+- [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing. Split one game to a loop (2026-09-24). These three
+  are real time, like Sumo and Air Hockey: a pure fixed-step `step` in the rules, the scene feeding it
+  inputs, bots as input functions with a reaction delay.
+  - [ ] **U2a Spinner War:** tops in a bowl, spin that runs down, clashes that cost the slower one more; knocked out or spun down loses. Clearly not Sumo: the bowl pulls you in, and you win by outlasting as much as by pushing
+  - [ ] **U2b Racing:** two cars on a looping track seen from above, one-thumb steering each, three laps
+  - [ ] **U2c Sword Duel:** two fencers on a strip, lunge, parry and step, first to five touches
 - [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It
 That is twenty-two more games on top of the forty-three, and it covers every game either competitor lists.
 

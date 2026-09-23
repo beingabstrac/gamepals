@@ -1179,6 +1179,29 @@ function ArcheryArt() {
   );
 }
 
+function SpinnerArt() {
+  // Two tops in the bowl, just meeting, with a spark between them.
+  const top = (x: number, y: number, color: string, dark: string) => (
+    <g>
+      <ellipse cx={x + 2} cy={y + 4} rx="15" ry="13" fill={INK} opacity="0.15" />
+      <circle cx={x} cy={y} r="14" fill={dark} />
+      <path d={`M${x} ${y - 14} L${x + 6} ${y} L${x - 6} ${y} Z M${x + 14} ${y} L${x} ${y + 6} L${x} ${y - 6} Z M${x} ${y + 14} L${x - 6} ${y} L${x + 6} ${y} Z M${x - 14} ${y} L${x} ${y - 6} L${x} ${y + 6} Z`} fill={color} />
+      <circle cx={x} cy={y} r="5" fill="#fff" />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="54" r="42" fill={DARK.grape} />
+      <circle cx="50" cy="50" r="42" fill={COLORS.grape} />
+      <circle cx="50" cy="50" r="36" fill="#F4F1FB" />
+      <circle cx="50" cy="50" r="24" fill="#E3DBF4" />
+      {top(34, 58, COLORS.sky, DARK.sky)}
+      {top(64, 42, COLORS.tomato, DARK.tomato)}
+      <path d="M49 44 L52 50 L47 51 L50 57" stroke={COLORS.sunny} stroke-width="3" fill="none" stroke-linejoin="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1417,6 +1440,7 @@ const ART: Record<string, () => JSX.Element> = {
   pool: PoolArt,
   'mini-golf': MiniGolfArt,
   archery: ArcheryArt,
+  'spinner-war': SpinnerArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

@@ -104,6 +104,7 @@ import {
   SUDOKU_HINTS,
   SUDOKU_LEVELS,
   sumo,
+  spinnerWar,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -208,6 +209,7 @@ import { SOLITAIRE_SIZE, SolitaireScene } from './solitaire/SolitaireScene';
 import { SudokuControls } from './sudoku/SudokuControls';
 import { SUDOKU_SIZE, SudokuScene } from './sudoku/SudokuScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
+import { SPINNER_COLORS, SPINNER_SIZE, SpinnerScene } from './spinner-war/SpinnerScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -1787,6 +1789,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: SUMO_SIZE,
     color: DARK.peach,
     createScene: (options) => new SumoScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: spinnerWar,
+    tagline: 'Outspin them or knock them out',
+    minutes: '3 min',
+    howTo: {
+      goal: 'Knock the other top out of the bowl, or keep spinning longer than it does.',
+      controls: 'Hold and drag in your half to lean your top. Tap to dash. On a keyboard: the arrow keys lean and Space dashes (the top player uses W A S D and Shift).',
+      win: 'A knock out of the bowl is 2 points and outspinning them is 1. First to 3 wins.',
+      tip: 'Every hit costs both tops spin, and the slower one loses more, so hit hard or not at all. A dash costs spin too. The bowl always pulls you back to the middle.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => SPINNER_COLORS,
+    size: SPINNER_SIZE,
+    color: DARK.grape,
+    createScene: (options) => new SpinnerScene(options),
   },
   {
     kind: 'realtime',

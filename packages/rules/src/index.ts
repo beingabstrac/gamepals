@@ -51,6 +51,7 @@ export * from './games/jigsaw';
 export * from './games/pool';
 export * from './games/mini-golf';
 export * from './games/archery';
+export * from './games/spinner-war';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';
