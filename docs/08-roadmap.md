@@ -724,7 +724,11 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   - [ ] **U2a Spinner War:** tops in a bowl, spin that runs down, clashes that cost the slower one more; knocked out or spun down loses. Clearly not Sumo: the bowl pulls you in, and you win by outlasting as much as by pushing
   - [ ] **U2b Racing:** two cars on a looping track seen from above, one-thumb steering each, three laps
   - [ ] **U2c Sword Duel:** two fencers on a strip, lunge, parry and step, first to five touches
-- [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It
+- [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It. Split one game to a loop (2026-09-24), real
+  time, two players on one phone:
+  - [ ] **R1a Whack-a-Mole:** moles pop up in each player's half, whack them, never the bombs, most in 45 seconds
+  - [ ] **R1b Paint Fight:** two rollers on one floor, paint it your colour, most of the floor when the time is up
+  - [ ] **R1c Grab It:** a picture flashes in the middle; grab it first when it matches the call, and a wrong grab costs a point
 That is twenty-two more games on top of the forty-three, and it covers every game either competitor lists.
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
