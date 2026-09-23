@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { moveFor } from '../core/moves';
 import { toMoveLog, type MoveLog } from '../core/replay';
 import { BOT_TIERS } from '../core/types';
 import { chooseBotMove, HEAVY_BOTS, TURN_GAMES } from './catalog';
@@ -8,7 +9,7 @@ const logFor = (id: string, players: number, seed: number): MoveLog => ({ gameId
 describe('turn game catalog', () => {
   it('lists every turn-based game once, under its own id', () => {
     const ids = Object.keys(TURN_GAMES);
-    expect(ids.length).toBe(36);
+    expect(ids.length).toBe(37);
     for (const [id, game] of Object.entries(TURN_GAMES)) expect(game.id).toBe(id);
     expect(TURN_GAMES['mahjong']).toBeUndefined();
   });
@@ -23,8 +24,8 @@ describe('turn game catalog', () => {
       const log = logFor(id, players, 12);
       const state = game.newGame(log.config, log.seed);
       const key = chooseBotMove({ log, seat: state.currentSeat, tier: 'medium', rngSeed: 7 });
-      const keys = state.legalMoves(state.currentSeat).map((m) => game.encodeMove(m));
-      expect(keys, `${id} bot move`).toContain(key);
+      // A game that answers `allows` (Pool) is asked; every other is held to its list.
+      expect(moveFor(game, state, key), `${id} bot move ${key}`).toBeDefined();
     }
   });
 
