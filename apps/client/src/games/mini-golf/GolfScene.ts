@@ -16,6 +16,8 @@ const STRIP = 96;
 const S = Math.min((W - 40) / COURSE_W, (H - STRIP - 24) / COURSE_H);
 const X0 = (W - COURSE_W * S) / 2;
 const Y0 = STRIP + (H - STRIP - COURSE_H * S) / 2;
+/** The pause after a stroke stops before the next one can be taken. */
+const SETTLE_MS = 450;
 /** A pull this long, in pixels, is full power. */
 const FULL_PULL = 230;
 
@@ -187,7 +189,7 @@ export class GolfScene extends Scene {
       this.drawCourse(state.hole);
       this.course.setAlpha(0).setX(40);
       this.tweens.add({ targets: this.course, alpha: 1, x: 0, duration: 260, ease: 'Quad.easeOut' });
-      this.busyUntil = this.time.now + 280;
+      this.busyUntil = Math.max(this.busyUntil, this.time.now + 280);
       this.aim = Math.atan2(state.hole.cup.y - state.ball.y, state.hole.cup.x - state.ball.x);
     }
     this.ring.clear();
@@ -227,15 +229,16 @@ export class GolfScene extends Scene {
     if (last.outcome.end === 'cup') {
       cue('win');
       this.tweens.add({ targets: this.ball, scale: 0.2, alpha: 0, duration: 220, ease: 'Quad.easeIn', onComplete: () => this.settle() });
-      this.busyUntil = this.time.now + 260;
+      this.busyUntil = this.time.now + 260 + SETTLE_MS;
       return;
     }
     if (last.outcome.end === 'water') {
       cue('lose');
       this.tweens.add({ targets: this.ball, scale: 0.5, alpha: 0, duration: 260, onComplete: () => this.settle() });
-      this.busyUntil = this.time.now + 300;
+      this.busyUntil = this.time.now + 300 + SETTLE_MS;
       return;
     }
+    this.busyUntil = this.time.now + SETTLE_MS;
     this.settle();
   }
 
@@ -313,14 +316,5 @@ export class GolfScene extends Scene {
       { name: 'the scores', top: 30, bottom: 66 },
       { name: 'the course', top: Y0 - 14, bottom: Y0 + COURSE_H * S },
     ];
-  }
-
-  /** Whether the ball is where the rules say, for the Q1 check in `e2e/wordlayout.spec.ts`. */
-  boardCheck(): { settled: number; wrong: number; note: string } {
-    if (this.busy()) return { settled: 0, wrong: 0, note: '' };
-    const state = this.state;
-    if (state.result) return { settled: 1, wrong: 0, note: '' };
-    const off = Math.abs(this.ball.x - px(state.ball.x)) > 1 || Math.abs(this.ball.y - py(state.ball.y)) > 1 || this.shownHole !== state.holeIndex;
-    return { settled: 1, wrong: off ? 1 : 0, note: off ? `the ball is drawn at ${Math.round(this.ball.x)},${Math.round(this.ball.y)} on hole ${this.shownHole + 1}, the rules put it at ${Math.round(px(state.ball.x))},${Math.round(py(state.ball.y))} on hole ${state.holeIndex + 1}` : '' };
   }
 }

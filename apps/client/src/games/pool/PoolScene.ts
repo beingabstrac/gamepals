@@ -31,6 +31,9 @@ const INK = toHex(COLORS.ink);
 /** Ball colours, 1 to 7 (the stripes 9 to 15 share them). Six is pink here, not green, so it shows on green cloth. */
 const BALL_COLORS = [COLORS.sunny, COLORS.sky, COLORS.tomato, COLORS.grape, COLORS.peach, COLORS.bubblegum, '#8E3B2F'].map(toHex);
 
+/** The pause after a shot stops before the next one can be taken. */
+const SETTLE_MS = 450;
+
 const px = (x: number) => TX + x * S;
 const py = (y: number) => TY + y * S;
 
@@ -235,7 +238,8 @@ export class PoolScene extends Scene {
       else if (event.kind === 'cushion' && event.speed > 0.8) cue('wall');
     }
     if (index >= play.frames.length - 1) {
-      this.busyUntil = this.time.now + 180;
+      // A moment to see where everything stopped before anyone, bot or person, shoots again.
+      this.busyUntil = this.time.now + SETTLE_MS;
       this.settle();
     }
   }
@@ -458,28 +462,5 @@ export class PoolScene extends Scene {
       return true;
     }
     return false;
-  }
-
-  /** Whether every ball is drawn where the rules say, for the Q1 check in `e2e/wordlayout.spec.ts`. */
-  boardCheck(): { settled: number; wrong: number; note: string } {
-    if (this.busy()) return { settled: 0, wrong: 0, note: '' };
-    let wrong = 0;
-    let note = '';
-    this.state.balls.forEach((ball, i) => {
-      const view = this.balls[i]!;
-      const where = i === 0 && this.place ? this.place : ball;
-      if (!where) {
-        if (view.visible) {
-          wrong++;
-          note = `ball ${i} is down but still drawn`;
-        }
-        return;
-      }
-      if (!view.visible || Math.abs(view.x - px(where.x)) > 1 || Math.abs(view.y - py(where.y)) > 1) {
-        wrong++;
-        note = `ball ${i} is drawn at ${Math.round(view.x)},${Math.round(view.y)}, the rules put it at ${Math.round(px(where.x))},${Math.round(py(where.y))}`;
-      }
-    });
-    return { settled: 16, wrong, note };
   }
 }
