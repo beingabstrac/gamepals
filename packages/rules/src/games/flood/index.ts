@@ -109,7 +109,7 @@ function patchesOf(size: number, colours: readonly number[]): Patches {
 
 /** How far, in moves, the farthest patch is from ours, ignoring colour. */
 function reach(patches: Patches, mine: readonly boolean[]): number {
-  const distance = patches.colour.map((_, id) => (mine[id] ? 0 : -1));
+  const distance = patches.colour.map((_, id): number => (mine[id] ? 0 : -1));
   const queue = distance.flatMap((d, id) => (d === 0 ? [id] : []));
   let farthest = 0;
   for (let i = 0; i < queue.length; i++) {
