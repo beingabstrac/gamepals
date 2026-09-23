@@ -157,13 +157,15 @@ const partySeats = (count: number): SeatController[] => Array.from({ length: cou
 function PartySetup({ entry, onBack, onStart }: SetupProps) {
   const { id, minPlayers, maxPlayers } = entry.definition;
   const [count, setCount] = useState(() => loadCount(id, minPlayers, maxPlayers));
+  const [level, setLevel] = useState(() => loadLevel(id, entry.levels));
   useEffect(() => {
     try {
       storage.set(partyKey(id), String(count));
+      if (level) storage.set(levelKey(id), level);
     } catch {
-      // Remembering the count is a convenience; ignore storage failures.
+      // Remembering the table is a convenience; ignore storage failures.
     }
-  }, [id, count]);
+  }, [id, count, level]);
   const seats = partySeats(count);
   const colors = entry.sideColors(count);
   const rivalry = load(keyFor(id, seats));
@@ -171,6 +173,7 @@ function PartySetup({ entry, onBack, onStart }: SetupProps) {
   return (
     <div class="screen setup" style={{ '--game': entry.color }}>
       <Topbar entry={entry} onBack={onBack} />
+      {entry.levels && <Levels levels={entry.levels} level={level} onPick={setLevel} />}
       <div class="quick-starts party-count" role="group" aria-label="How many players">
         {Array.from({ length: maxPlayers - minPlayers + 1 }, (_, i) => minPlayers + i).map((n) => (
           <button key={n} class={n === count ? 'quick selected' : 'quick'} onClick={() => setCount(n)} aria-label={`${n} players`}>
@@ -202,7 +205,7 @@ function PartySetup({ entry, onBack, onStart }: SetupProps) {
       <p class="hint">Everyone plays on this phone. Pick how many, then pass it round.</p>
       {score && <p class="table-score">{score}</p>}
       <HowTo entry={entry} />
-      <button class="play-bubble" onClick={() => onStart(seats)}>
+      <button class="play-bubble" onClick={() => onStart(seats, level)}>
         Play
       </button>
     </div>
@@ -223,6 +226,18 @@ function loadLevel(id: string, levels: EntryBase['levels']): string | undefined 
 /** Game setup as a table: tap a chair to choose who sits there, or use a quick start. No forms. */
 export function Setup(props: SetupProps) {
   return props.entry.party ? <PartySetup key={props.entry.definition.id} {...props} /> : <ChairSetup key={props.entry.definition.id} {...props} />;
+}
+
+function Levels({ levels, level, onPick }: { levels: NonNullable<EntryBase['levels']>; level: string | undefined; onPick(id: string): void }) {
+  return (
+    <div class="quick-starts" role="group" aria-label="Level">
+      {levels.map((option) => (
+        <button key={option.id} class={option.id === level ? 'quick selected' : 'quick'} onClick={() => onPick(option.id)}>
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 function Topbar({ entry, onBack }: { entry: EntryBase; onBack(): void }) {
@@ -335,15 +350,7 @@ function ChairSetup({ entry, onBack, onStart }: SetupProps) {
     <div class="screen setup" style={{ '--game': entry.color }}>
       <Topbar entry={entry} onBack={onBack} />
 
-      {entry.levels && (
-        <div class="quick-starts" role="group" aria-label="Level">
-          {entry.levels.map((option) => (
-            <button key={option.id} class={option.id === level ? 'quick selected' : 'quick'} onClick={() => setLevel(option.id)}>
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {entry.levels && <Levels levels={entry.levels} level={level} onPick={setLevel} />}
 
       <div class="quick-starts" role="group" aria-label="Quick start" hidden={solo}>
         {quickStarts.map((quick) => (

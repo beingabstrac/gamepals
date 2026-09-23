@@ -50,6 +50,7 @@ const GAMES = [
   'Paint Fight',
   'Grab It',
   'Impostor',
+  'Charades',
   'Color Sort',
   'Echo',
   'Classic Snake',

@@ -58,6 +58,7 @@ export * from './games/whack-a-mole';
 export * from './games/paint-fight';
 export * from './games/grab-it';
 export * from './games/impostor';
+export * from './games/charades';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

@@ -111,6 +111,9 @@ import {
   paintFight,
   grabIt,
   impostor as impostorGame,
+  charades,
+  CHARADES_GOES,
+  type CharadesState,
   type ImpostorState,
   ticTacToe,
   tugOfWar,
@@ -222,6 +225,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { CHARADES_COLORS, CHARADES_SIZE, charadesResult, CharadesScene, charadesStatus } from './charades/CharadesScene';
 import { IMPOSTOR_COLORS, IMPOSTOR_SIZE, impostorResult, ImpostorScene, impostorStatus } from './impostor/ImpostorScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
@@ -811,6 +815,30 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state, names) => impostorResult(state as ImpostorState, names),
     moveCue: () => 'tap',
     createScene: (session) => new ImpostorScene(session),
+  }),
+  entry({
+    definition: charades,
+    party: true,
+    tagline: 'Phone on your head, guess the word',
+    minutes: '5 min',
+    tryIt: 'Hold the phone on your forehead, screen out',
+    levels: Object.keys(CHARADES_GOES).map((id) => ({ id, label: id === 'one' ? 'One go each' : 'Two goes each' })),
+    howTo: {
+      goal: 'Guess as many words as you can in a minute from what everyone else acts out.',
+      controls: 'Hold the phone on your forehead, screen out, and tap to start. Everyone else acts or describes the word and taps Got it on the right or Pass on the left. On a keyboard: Space starts, Right arrow is got it, Left arrow is pass.',
+      win: 'Whoever gets the most words wins.',
+      draw: 'All level is a draw.',
+      tip: 'Act it, describe it, sing it, but never say the word. Pass the hard ones quickly.',
+    },
+    sideNames: (players) => Array.from({ length: players }, (_, i) => `Player ${i + 1}`),
+    sideColors: (players) => CHARADES_COLORS.slice(0, players),
+    size: CHARADES_SIZE,
+    color: DARK.peach,
+    botDelayMs: 500,
+    status: (state, names) => charadesStatus(state as CharadesState, names),
+    resultText: (state, names) => charadesResult(state as CharadesState, names),
+    moveCue: () => 'tap',
+    createScene: (session) => new CharadesScene(session),
   }),
   entry({
     definition: fourInARow,

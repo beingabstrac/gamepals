@@ -1325,6 +1325,23 @@ function ImpostorArt() {
   );
 }
 
+function CharadesArt() {
+  // A face with the phone held on its forehead, the word facing out.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="64" r="28" fill={DARK.sky} />
+      <circle cx="50" cy="61" r="28" fill={COLORS.sky} />
+      <circle cx="40" cy="66" r="3.5" fill={INK} />
+      <circle cx="60" cy="66" r="3.5" fill={INK} />
+      <ellipse cx="50" cy="78" rx="7" ry="5" fill={INK} />
+      <rect x="22" y="14" width="56" height="32" rx="7" fill={INK} />
+      <rect x="26" y="18" width="48" height="24" rx="4" fill="#fff" />
+      <rect x="33" y="27" width="34" height="6" rx="3" fill={COLORS.peach} />
+      <path d="M14 30 L6 26 M14 38 L6 42 M86 30 L94 26 M86 38 L94 42" stroke={COLORS.sunny} stroke-width="3" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1570,6 +1587,7 @@ const ART: Record<string, () => JSX.Element> = {
   'paint-fight': PaintArt,
   'grab-it': GrabArt,
   impostor: ImpostorArt,
+  charades: CharadesArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
