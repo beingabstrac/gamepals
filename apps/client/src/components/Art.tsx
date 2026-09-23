@@ -1147,6 +1147,21 @@ function PoolArt() {
   );
 }
 
+function MiniGolfArt() {
+  // A dogleg green with its rail, a ball on the tee and the flag at the far end.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M18 90 V22 H84 V52 H48 V90 Z" fill={COLORS.mint} stroke={DARK.peach} stroke-width="9" stroke-linejoin="round" />
+      <path d="M18 90 V22 H84 V52 H48 V90 Z" fill={COLORS.mint} stroke={COLORS.peach} stroke-width="5" stroke-linejoin="round" />
+      <circle cx="72" cy="37" r="5" fill={INK} />
+      <path d="M72 37 V18" stroke={INK} stroke-width="2.5" />
+      <path d="M72 18 L84 22 L72 26 Z" fill={COLORS.tomato} />
+      <path d="M33 74 Q30 52 44 40" stroke="#fff" stroke-width="2.5" stroke-dasharray="1 5" stroke-linecap="round" fill="none" />
+      <circle cx="33" cy="80" r="5.5" fill="#fff" stroke={COLORS.tomato} stroke-width="2" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1383,6 +1398,7 @@ const ART: Record<string, () => JSX.Element> = {
   'tile-match': TileMatchArt,
   jigsaw: JigsawArt,
   pool: PoolArt,
+  'mini-golf': MiniGolfArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

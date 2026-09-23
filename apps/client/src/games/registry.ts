@@ -89,6 +89,11 @@ import {
   type JigsawState,
   pool,
   type PoolState,
+  miniGolf,
+  GOLF_LENGTHS,
+  GOLF_ROUNDS,
+  HOLES,
+  type GolfState,
   type SweeperState,
   sudoku,
   SUDOKU_HINTS,
@@ -166,6 +171,7 @@ import { TILE_MATCH_SIZE, TileMatchScene } from './tile-match/TileMatchScene';
 import { JigsawControls } from './jigsaw/JigsawControls';
 import { JIGSAW_SIZE, JigsawScene } from './jigsaw/JigsawScene';
 import { POOL_SIZE, PoolScene } from './pool/PoolScene';
+import { GOLF_COLORS, GOLF_SIZE, GolfScene } from './mini-golf/GolfScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1504,6 +1510,41 @@ export const GAMES: readonly AnyEntry[] = [
     },
     moveCue: () => undefined,
     createScene: (session) => new PoolScene(session),
+  }),
+  entry({
+    definition: miniGolf,
+    tagline: 'Bank it off the walls and into the cup',
+    minutes: '5 min',
+    levels: GOLF_LENGTHS.map((id) => ({ id, label: `${GOLF_ROUNDS[id].length} holes` })),
+    howTo: {
+      goal: 'Get the ball in the cup in as few hits as you can, hole after hole.',
+      controls:
+        'Pull back from anywhere on the course and let go. The dots show where the ball goes, and the further you pull, the harder you hit. On a keyboard: left and right aim (hold Shift for fine), up and down set power, Space hits.',
+      win: 'Fewest hits over the whole course wins.',
+      draw: 'If the lowest totals are the same, it is a draw.',
+      tip: 'Walls bounce the ball, sand slows it and slopes bend it. Water costs you a hit and puts the ball back. After six hits on a hole you pick up and score seven.',
+    },
+    sideNames: (players) => ['Red', 'Blue', 'Yellow', 'Purple'].slice(0, players),
+    sideColors: (players) => GOLF_COLORS.slice(0, players),
+    size: GOLF_SIZE,
+    color: DARK.mint,
+    botDelayMs: 500,
+    status: (state, names) => {
+      const s = state as GolfState;
+      if (s.result) return undefined;
+      return `${names[s.currentSeat]}: hole ${s.holeIndex + 1} of ${s.round.length}, par ${s.hole.par}, hit ${s.strokes + 1}`;
+    },
+    resultText: (state, names) => {
+      const s = state as GolfState;
+      const par = s.round.reduce((sum, hole) => sum + HOLES[hole]!.par, 0);
+      if (s.players === 1) return `Round done in ${s.total(0)}, par ${par}.`;
+      if (s.result?.draw) return `A tie at ${s.total(0)}! 🤝`;
+      const winners = s.result?.winners ?? [];
+      if (winners.length > 1) return `${winners.map((w) => names[w]).join(' and ')} tie for the lowest, ${s.total(winners[0]!)}.`;
+      return `${names[winners[0]!]} wins with ${s.total(winners[0]!)}, par ${par}!`;
+    },
+    moveCue: () => undefined,
+    createScene: (session) => new GolfScene(session),
   }),
   entry({
     definition: colorSort,

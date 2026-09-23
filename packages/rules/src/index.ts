@@ -49,6 +49,7 @@ export * from './games/flood';
 export * from './games/tile-match';
 export * from './games/jigsaw';
 export * from './games/pool';
+export * from './games/mini-golf';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

@@ -19,6 +19,7 @@ import { ludo } from './ludo';
 import { mancala } from './mancala';
 import { memory } from './memory';
 import { oldMaid } from './old-maid';
+import { miniGolf } from './mini-golf';
 import { pool } from './pool';
 import { pyramid } from './pyramid';
 import { reversi } from './reversi';
@@ -84,6 +85,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       shutTheBox,
       dominoes,
       pool,
+      miniGolf,
     ] as unknown as AnyTurnGame[]
   ).map((game) => [game.id, game]),
 );
@@ -93,7 +95,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
  * These are the ones worth handing to a worker; the rest decide in well under a millisecond,
  * where a message round trip would cost far more than the thinking it saves.
  */
-export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box', 'pool']);
+export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box', 'pool', 'mini-golf']);
 
 /**
  * Everything a bot needs to pick a move away from the screen (in a Web Worker, or on a server).
