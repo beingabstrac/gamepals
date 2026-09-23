@@ -800,7 +800,11 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - **The label check from M22a caught my own new table** before it shipped: the seat names sat on the face-down hands. Then the gallery picture showed the deck and the pile under two players' hands with the melds squeezed into a corner at half size, so the piles moved down the left and the melds took the width beside them.
   - **The Android job had one place with no relaunch:** the first connect. Every game already retried a lost WebView page, but if the page died before the shelf drew, the whole run was thrown away, which is exactly what happened on run 35457684066 with all eight screen types green. It retries three times now.
   - **Our one invention:** the rules say the pile is turned over when the stock runs out and say nothing about what happens when that runs out too, so we throw the hand in and nobody scores. Two players taking each other's discards would otherwise sit there for ever.
-- [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person
+- [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person. Split one game per loop, like the others. These need a table the others do not: three to eight people on one phone, so a game marked `party` in the registry gets player-count chips and a ring of faces instead of four chairs (`PartySetup` in `components/Setup.tsx`). There are no bots in a talking game; autoplay plays them as a quiet table so CI can finish them.
+  - [ ] **M23a Impostor:** everyone but one sees the secret word; pass the phone to look, go round with one word each, vote, and a caught impostor gets one guess from six words. Ten word sets of our own.
+  - [ ] **M23b Charades:** act out the word on the phone held to your head, the team calls it; tilt or tap for got it and pass.
+  - [ ] **M23c Draw & Guess:** draw the word on the phone, pass it, the next person guesses from a shortlist.
+  - [ ] **M23d Guess the Person:** yes/no questions to find the face on the other player's card (two players, each with a board of our own faces).
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)

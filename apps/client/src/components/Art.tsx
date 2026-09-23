@@ -1299,6 +1299,32 @@ function GrabArt() {
   );
 }
 
+function ImpostorArt() {
+  // Three cards with the word and one with a question mark: the one who does not know.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <g key={i} transform={`rotate(${-24 + i * 16} 50 88)`}>
+          <rect x="34" y="18" width="32" height="44" rx="7" fill="#E6E0F4" />
+          <rect x="34" y="16" width="32" height="44" rx="7" fill="#fff" />
+          <rect x="40" y="34" width="20" height="5" rx="2.5" fill={COLORS.grape} />
+        </g>
+      ))}
+      <g transform="rotate(26 50 88)">
+        <rect x="34" y="18" width="32" height="44" rx="7" fill={DARK.tomato} />
+        <rect x="34" y="16" width="32" height="44" rx="7" fill={COLORS.tomato} />
+        <text x="50" y="38" text-anchor="middle" dominant-baseline="central" font-size="24" font-weight="700" fill="#fff">
+          ?
+        </text>
+      </g>
+      <circle cx="50" cy="84" r="11" fill={COLORS.sunny} />
+      <circle cx="46" cy="82" r="1.8" fill={INK} />
+      <circle cx="54" cy="82" r="1.8" fill={INK} />
+      <path d="M45 87 Q50 91 55 87" stroke={INK} stroke-width="2" fill="none" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1543,6 +1569,7 @@ const ART: Record<string, () => JSX.Element> = {
   'whack-a-mole': WhackArt,
   'paint-fight': PaintArt,
   'grab-it': GrabArt,
+  impostor: ImpostorArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

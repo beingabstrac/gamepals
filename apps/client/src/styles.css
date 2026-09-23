@@ -1700,3 +1700,28 @@ h2,
     justify-content: flex-end;
   }
 }
+
+/* ---------- Setup: the party table (pass the phone, three to eight) ---------- */
+
+.party-count {
+  flex-wrap: wrap;
+}
+
+.party-count .quick {
+  min-width: 48px;
+  padding: 10px 14px;
+}
+
+/* Up to eight round the table, so each takes a smaller share than a chair does. */
+.seat.party-seat {
+  width: 19%;
+}
+
+.party-seat .who {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.party-table .table-top {
+  inset: 31%;
+}

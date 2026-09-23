@@ -110,6 +110,8 @@ import {
   whackAMole,
   paintFight,
   grabIt,
+  impostor as impostorGame,
+  type ImpostorState,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -220,6 +222,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { IMPOSTOR_COLORS, IMPOSTOR_SIZE, impostorResult, ImpostorScene, impostorStatus } from './impostor/ImpostorScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -269,6 +272,11 @@ export interface EntryBase {
    * putting made-up numbers in anybody's record. Ponder Club runs a shelf like this.
    */
   readonly cooking?: boolean;
+  /**
+   * A pass-the-phone party game (docs/08 M23): everyone is a person on this one phone, three to
+   * eight of them, so the table asks only how many rather than who sits in four chairs.
+   */
+  readonly party?: boolean;
 }
 
 /** Turn-based game driven by a `Session`. */
@@ -781,6 +789,28 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: DominoControls,
     createScene: (session) => new DominoScene(session),
+  }),
+  entry({
+    definition: impostorGame,
+    party: true,
+    tagline: 'One of you is faking it',
+    minutes: '5 min',
+    tryIt: 'Pass the phone round so everyone sees their card',
+    howTo: {
+      goal: 'Everyone but one gets the secret word. Find the impostor, who does not know it.',
+      controls: 'Pass the phone round: tap to look at your card, tap again to hide it. Go round once, each saying one word about the secret. Then agree on a name, tap it and tap Accuse. On a keyboard: Enter looks and hides, number keys pick.',
+      win: 'Catch the impostor and everyone else wins, unless the impostor then guesses the word. Accuse the wrong person and the impostor wins.',
+      tip: 'Give a clue close enough to show you know the word, but not so close the impostor can work it out.',
+    },
+    sideNames: (players) => Array.from({ length: players }, (_, i) => `Player ${i + 1}`),
+    sideColors: (players) => IMPOSTOR_COLORS.slice(0, players),
+    size: IMPOSTOR_SIZE,
+    color: DARK.tomato,
+    botDelayMs: 700,
+    status: (state, names) => impostorStatus(state as ImpostorState, names),
+    resultText: (state, names) => impostorResult(state as ImpostorState, names),
+    moveCue: () => 'tap',
+    createScene: (session) => new ImpostorScene(session),
   }),
   entry({
     definition: fourInARow,

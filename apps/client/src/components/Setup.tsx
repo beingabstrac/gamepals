@@ -136,6 +136,78 @@ interface SetupProps {
 }
 
 const levelKey = (id: string) => `gamepals.level.${id}`;
+const partyKey = (id: string) => `gamepals.party.${id}`;
+
+function loadCount(id: string, min: number, max: number): number {
+  try {
+    const saved = Number(storage.get(partyKey(id)));
+    if (Number.isInteger(saved) && saved >= min && saved <= max) return saved;
+  } catch {
+    // Ignore unreadable storage.
+  }
+  return Math.min(max, Math.max(min, 4));
+}
+
+const partySeats = (count: number): SeatController[] => Array.from({ length: count }, (_, i) => ({ kind: 'human', label: `Player ${i + 1}` }));
+
+/**
+ * The table for a pass-the-phone party game: everyone is a person on this one phone, so the only
+ * choice is how many, and the faces sit round the table to show it.
+ */
+function PartySetup({ entry, onBack, onStart }: SetupProps) {
+  const { id, minPlayers, maxPlayers } = entry.definition;
+  const [count, setCount] = useState(() => loadCount(id, minPlayers, maxPlayers));
+  useEffect(() => {
+    try {
+      storage.set(partyKey(id), String(count));
+    } catch {
+      // Remembering the count is a convenience; ignore storage failures.
+    }
+  }, [id, count]);
+  const seats = partySeats(count);
+  const colors = entry.sideColors(count);
+  const rivalry = load(keyFor(id, seats));
+  const score = scoreLine(rivalry, seats);
+  return (
+    <div class="screen setup" style={{ '--game': entry.color }}>
+      <Topbar entry={entry} onBack={onBack} />
+      <div class="quick-starts party-count" role="group" aria-label="How many players">
+        {Array.from({ length: maxPlayers - minPlayers + 1 }, (_, i) => minPlayers + i).map((n) => (
+          <button key={n} class={n === count ? 'quick selected' : 'quick'} onClick={() => setCount(n)} aria-label={`${n} players`}>
+            {n}
+          </button>
+        ))}
+      </div>
+      <div class="table party-table">
+        <div class="table-top">
+          <GameArt id={id} />
+        </div>
+        {seats.map((seat, i) => {
+          // Round the table from the bottom, the way the phone will go.
+          const angle = Math.PI / 2 + (i / count) * Math.PI * 2;
+          return (
+            <div
+              key={`${count}-${i}`}
+              class="seat party-seat"
+              style={{ '--side': colors[i] ?? entry.color, left: `${50 + Math.cos(angle) * 40}%`, top: `${50 + Math.sin(angle) * 40}%`, animationDelay: `${i * 30}ms` }}
+            >
+              <span class="avatar">
+                <PersonFace color={colors[i] ?? entry.color} />
+              </span>
+              <span class="who">{seat.label}</span>
+            </div>
+          );
+        })}
+      </div>
+      <p class="hint">Everyone plays on this phone. Pick how many, then pass it round.</p>
+      {score && <p class="table-score">{score}</p>}
+      <HowTo entry={entry} />
+      <button class="play-bubble" onClick={() => onStart(seats)}>
+        Play
+      </button>
+    </div>
+  );
+}
 
 function loadLevel(id: string, levels: EntryBase['levels']): string | undefined {
   if (!levels) return undefined;
@@ -149,13 +221,67 @@ function loadLevel(id: string, levels: EntryBase['levels']): string | undefined 
 }
 
 /** Game setup as a table: tap a chair to choose who sits there, or use a quick start. No forms. */
-export function Setup({ entry, onBack, onStart }: SetupProps) {
-  const { id, name, minPlayers, maxPlayers } = entry.definition;
+export function Setup(props: SetupProps) {
+  return props.entry.party ? <PartySetup key={props.entry.definition.id} {...props} /> : <ChairSetup key={props.entry.definition.id} {...props} />;
+}
+
+function Topbar({ entry, onBack }: { entry: EntryBase; onBack(): void }) {
+  return (
+    <header class="topbar">
+      <button class="round-btn" onClick={onBack} aria-label="Back to games">
+        <BackIcon />
+      </button>
+      <h1>{entry.definition.name}</h1>
+      <span class="mins topbar-mins">{entry.minutes}</span>
+    </header>
+  );
+}
+
+/** The goal, always on, and the rest of the rules behind a tap. */
+function HowTo({ entry }: { entry: EntryBase }) {
+  // The rules are reference, not the job: the goal shows, the rest opens when asked for.
+  const [rulesOpen, setRulesOpen] = useState(false);
+  return (
+    <section class="how-to" aria-label="How to play">
+      <p class="how-goal">
+        <span aria-hidden="true">🎯</span>
+        <span>{entry.howTo.goal}</span>
+      </p>
+      <button class="how-more" aria-expanded={rulesOpen} onClick={() => setRulesOpen(!rulesOpen)}>
+        {rulesOpen ? 'Hide the rules' : 'How to play'}
+        <span aria-hidden="true">{rulesOpen ? ' ▴' : ' ▾'}</span>
+      </button>
+      <ul hidden={!rulesOpen}>
+        <li>
+          <span aria-hidden="true">👆</span>
+          <span>{entry.howTo.controls}</span>
+        </li>
+        <li>
+          <span aria-hidden="true">🏆</span>
+          <span>{entry.howTo.win}</span>
+        </li>
+        {entry.howTo.draw && (
+          <li>
+            <span aria-hidden="true">🤝</span>
+            <span>{entry.howTo.draw}</span>
+          </li>
+        )}
+        {entry.howTo.tip && (
+          <li>
+            <span aria-hidden="true">💡</span>
+            <span>{entry.howTo.tip}</span>
+          </li>
+        )}
+      </ul>
+    </section>
+  );
+}
+
+function ChairSetup({ entry, onBack, onStart }: SetupProps) {
+  const { id, minPlayers, maxPlayers } = entry.definition;
   const [choices, setChoices] = useState(() => loadChoices(id, minPlayers, maxPlayers));
   const [picking, setPicking] = useState<number | null>(null);
   const [level, setLevel] = useState(() => loadLevel(id, entry.levels));
-  // The rules are reference, not the job: the goal shows, the rest opens when asked for.
-  const [rulesOpen, setRulesOpen] = useState(false);
 
   useEffect(() => {
     if (!level) return;
@@ -207,13 +333,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
 
   return (
     <div class="screen setup" style={{ '--game': entry.color }}>
-      <header class="topbar">
-        <button class="round-btn" onClick={onBack} aria-label="Back to games">
-          <BackIcon />
-        </button>
-        <h1>{name}</h1>
-        <span class="mins topbar-mins">{entry.minutes}</span>
-      </header>
+      <Topbar entry={entry} onBack={onBack} />
 
       {entry.levels && (
         <div class="quick-starts" role="group" aria-label="Level">
@@ -292,38 +412,7 @@ export function Setup({ entry, onBack, onStart }: SetupProps) {
         </p>
       )}
 
-      <section class="how-to" aria-label="How to play">
-        <p class="how-goal">
-          <span aria-hidden="true">🎯</span>
-          <span>{entry.howTo.goal}</span>
-        </p>
-        <button class="how-more" aria-expanded={rulesOpen} onClick={() => setRulesOpen(!rulesOpen)}>
-          {rulesOpen ? 'Hide the rules' : 'How to play'}
-          <span aria-hidden="true">{rulesOpen ? ' ▴' : ' ▾'}</span>
-        </button>
-        <ul hidden={!rulesOpen}>
-          <li>
-            <span aria-hidden="true">👆</span>
-            <span>{entry.howTo.controls}</span>
-          </li>
-          <li>
-            <span aria-hidden="true">🏆</span>
-            <span>{entry.howTo.win}</span>
-          </li>
-          {entry.howTo.draw && (
-            <li>
-              <span aria-hidden="true">🤝</span>
-              <span>{entry.howTo.draw}</span>
-            </li>
-          )}
-          {entry.howTo.tip && (
-            <li>
-              <span aria-hidden="true">💡</span>
-              <span>{entry.howTo.tip}</span>
-            </li>
-          )}
-        </ul>
-      </section>
+      <HowTo entry={entry} />
 
       <button class="play-bubble" onClick={() => onStart(seats, level)}>
         Play
