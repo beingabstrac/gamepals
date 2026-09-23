@@ -1342,6 +1342,27 @@ function CharadesArt() {
   );
 }
 
+function DrawGuessArt() {
+  // A sketch of a house on a card, a crayon still drawing it, and a question mark.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="16" width="70" height="72" rx="12" fill="#E6E0F4" />
+      <rect x="10" y="12" width="70" height="72" rx="12" fill="#fff" />
+      <path d="M24 52 L45 32 L66 52 M29 48 L29 70 L61 70 L61 48" stroke={INK} stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <rect x="40" y="56" width="10" height="14" rx="2" fill={COLORS.tomato} />
+      <g transform="rotate(35 80 64)">
+        <rect x="74" y="40" width="12" height="36" rx="3" fill={COLORS.sky} />
+        <path d="M74 76 L80 88 L86 76 Z" fill="#F4D9A8" />
+        <path d="M78.5 84 L80 88 L81.5 84 Z" fill={INK} />
+      </g>
+      <circle cx="82" cy="20" r="13" fill={COLORS.sunny} />
+      <text x="82" y="21" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="700" fill="#fff">
+        ?
+      </text>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1588,6 +1609,7 @@ const ART: Record<string, () => JSX.Element> = {
   'grab-it': GrabArt,
   impostor: ImpostorArt,
   charades: CharadesArt,
+  'draw-guess': DrawGuessArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

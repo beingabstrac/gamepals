@@ -9,7 +9,7 @@ import { expect, test, type Page } from '@playwright/test';
 const GAMES = [
   'Tic-Tac-Toe', 'Checkers', 'Chess', 'Backgammon', 'Sea Battle', 'Reversi', 'Dots & Boxes', 'Mancala',
   'Snakes & Ladders', 'Ultimate Tic-Tac-Toe', 'Yatzy', 'Shut the Box', 'Dominoes', 'Four in a Row', 'Ludo',
-  '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks', 'Crazy Eights', 'Go Fish', 'War', 'Old Maid', 'Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy', 'Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Memory', 'Sliding Puzzle', 'Sweeper', 'Flood', 'Tile Match', 'Jigsaw', 'Pool', 'Mini Golf', 'Archery', 'Spinner War', 'Racing', 'Sword Duel', 'Whack-a-Mole', 'Paint Fight', 'Grab It', 'Impostor', 'Charades', 'Color Sort', 'Echo', 'Classic Snake',
+  '2048', 'Sudoku', 'Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks', 'Crazy Eights', 'Go Fish', 'War', 'Old Maid', 'Hearts', 'Spades', 'Callbreak', 'Gin Rummy', 'Rummy', 'Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Memory', 'Sliding Puzzle', 'Sweeper', 'Flood', 'Tile Match', 'Jigsaw', 'Pool', 'Mini Golf', 'Archery', 'Spinner War', 'Racing', 'Sword Duel', 'Whack-a-Mole', 'Paint Fight', 'Grab It', 'Impostor', 'Charades', 'Draw & Guess', 'Color Sort', 'Echo', 'Classic Snake',
   'Air Hockey', 'Ping Pong', 'Tug of War', 'Reflex Race', 'Sumo', 'Penalty Kicks', 'Snake Battle',
 ];
 

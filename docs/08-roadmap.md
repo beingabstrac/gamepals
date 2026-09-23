@@ -803,7 +803,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person. Split one game per loop, like the others. These need a table the others do not: three to eight people on one phone, so a game marked `party` in the registry gets player-count chips and a ring of faces instead of four chairs (`PartySetup` in `components/Setup.tsx`). There are no bots in a talking game; autoplay plays them as a quiet table so CI can finish them.
   - [ ] **M23a Impostor:** everyone but one sees the secret word; pass the phone to look, go round with one word each, vote, and a caught impostor gets one guess from six words. Ten word sets of our own.
   - [ ] **M23b Charades:** the holder puts the phone on their forehead, the table acts or describes the word and taps Got it or Pass; a minute a go, one or two goes each, 160 words of our own. Tap now; tilt later, since it needs a motion permission on iPhones.
-  - [ ] **M23c Draw & Guess:** draw the word on the phone, pass it, the next person guesses from a shortlist.
+  - [ ] **M23c Draw & Guess:** one person draws the secret word while the table shouts; Got it asks who called it and both score. Eighty seconds, five inks, hold to peek, 140 words of our own.
   - [ ] **M23d Guess the Person:** yes/no questions to find the face on the other player's card (two players, each with a board of our own faces).
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara

@@ -6,14 +6,14 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { onKeys } from '../keys';
+import { PARTY_COLORS, PARTY_DARK } from '../party';
 
 const W = 600;
 const H = 820;
 export const IMPOSTOR_SIZE = { width: W, height: H };
 
-/** Eight people round a phone, so eight colors: the candy set and a teal. */
-export const IMPOSTOR_COLORS = [COLORS.sky, COLORS.tomato, COLORS.mint, COLORS.sunny, COLORS.grape, COLORS.peach, COLORS.bubblegum, '#12B5CB'];
-const IMPOSTOR_DARK = [DARK.sky, DARK.tomato, DARK.mint, DARK.sunny, DARK.grape, DARK.peach, DARK.bubblegum, '#0E93A6'];
+export const IMPOSTOR_COLORS = PARTY_COLORS;
+const IMPOSTOR_DARK = PARTY_DARK;
 
 /** The bands every phase draws in: a title, the middle, and the button along the bottom. */
 const TITLE_Y = 70;

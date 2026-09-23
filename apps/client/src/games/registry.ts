@@ -113,6 +113,9 @@ import {
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
+  drawGuess,
+  DRAW_GOES,
+  type DrawState,
   type CharadesState,
   type ImpostorState,
   ticTacToe,
@@ -225,6 +228,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { DRAW_COLORS, DRAW_SIZE, drawResult, DrawScene, drawStatus } from './draw-guess/DrawScene';
 import { CHARADES_COLORS, CHARADES_SIZE, charadesResult, CharadesScene, charadesStatus } from './charades/CharadesScene';
 import { IMPOSTOR_COLORS, IMPOSTOR_SIZE, impostorResult, ImpostorScene, impostorStatus } from './impostor/ImpostorScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
@@ -839,6 +843,30 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state, names) => charadesResult(state as CharadesState, names),
     moveCue: () => 'tap',
     createScene: (session) => new CharadesScene(session),
+  }),
+  entry({
+    definition: drawGuess,
+    party: true,
+    tagline: 'Draw it, they shout it',
+    minutes: '8 min',
+    tryIt: 'Pass the phone to whoever draws first',
+    levels: Object.keys(DRAW_GOES).map((id) => ({ id, label: id === 'one' ? 'One go each' : 'Two goes each' })),
+    howTo: {
+      goal: 'Draw the secret word so the others can guess it, and be first to guess theirs.',
+      controls: 'Tap to see your word, then draw it with your finger. Hold Peek to see the word again. When somebody shouts it, tap Got it and tap who. On a keyboard: arrows move the pen, Space puts it down or lifts it, 1 to 5 pick a color, C clears, Enter is Got it.',
+      win: 'Whoever guesses it and whoever drew it both score a point. Most points wins.',
+      draw: 'All level is a draw.',
+      tip: 'No letters or numbers in the drawing. Start with the big shape.',
+    },
+    sideNames: (players) => Array.from({ length: players }, (_, i) => `Player ${i + 1}`),
+    sideColors: (players) => DRAW_COLORS.slice(0, players),
+    size: DRAW_SIZE,
+    color: DARK.sky,
+    botDelayMs: 600,
+    status: (state, names) => drawStatus(state as DrawState, names),
+    resultText: (state, names) => drawResult(state as DrawState, names),
+    moveCue: () => 'tap',
+    createScene: (session) => new DrawScene(session),
   }),
   entry({
     definition: fourInARow,

@@ -51,6 +51,7 @@ const GAMES = [
   'Grab It',
   'Impostor',
   'Charades',
+  'Draw & Guess',
   'Color Sort',
   'Echo',
   'Classic Snake',

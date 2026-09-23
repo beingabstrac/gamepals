@@ -6,7 +6,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { onKeys } from '../keys';
-import { IMPOSTOR_COLORS as PARTY_COLORS } from '../impostor/ImpostorScene';
+import { PARTY_COLORS } from '../party';
 
 /** Wide, because the phone goes on a forehead sideways. */
 const W = 900;
