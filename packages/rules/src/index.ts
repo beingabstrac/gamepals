@@ -62,6 +62,7 @@ export * from './games/charades';
 export * from './games/draw-guess';
 export * from './games/guess-person';
 export * from './games/ur';
+export * from './games/senet';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

@@ -54,6 +54,7 @@ const GAMES = [
   'Draw & Guess',
   'Guess the Person',
   'Royal Game of Ur',
+  'Senet',
   'Color Sort',
   'Echo',
   'Classic Snake',

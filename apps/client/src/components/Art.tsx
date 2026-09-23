@@ -1414,6 +1414,28 @@ function UrArt() {
   );
 }
 
+function SenetArt() {
+  // The three rows of thirty squares, the water, the flower, a spool and a cone, and the sticks.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="28" width="88" height="44" rx="8" fill="#E6E0F4" />
+      {Array.from({ length: 30 }, (_, i) => {
+        const col = i % 10;
+        const row = Math.floor(i / 10);
+        const special = (row === 2 && col >= 5) || (row === 1 && col === 5);
+        return <rect key={i} x={9 + col * 8.3} y={31 + row * 13.5} width="7.3" height="12" rx="2" fill={special ? COLORS.sunny : '#fff'} />;
+      })}
+      <path d="M59 66 q1.5 -2 3 0 q1.5 2 3 0" stroke={COLORS.sky} stroke-width="1.6" fill="none" />
+      <circle cx="55" cy="65" r="2.6" fill={COLORS.bubblegum} />
+      <circle cx="30" cy="37" r="3.4" fill={COLORS.sky} />
+      <path d="M44 55 L48 48 L52 55 Z" fill={COLORS.tomato} />
+      {[0, 1, 2, 3].map((i) => (
+        <rect key={i} x={36 + i * 8} y="78" width="5" height="18" rx="2.5" fill={i % 2 ? '#fff' : COLORS.peach} stroke={DARK.peach} stroke-width="1" />
+      ))}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1663,6 +1685,7 @@ const ART: Record<string, () => JSX.Element> = {
   'draw-guess': DrawGuessArt,
   'guess-person': GuessPersonArt,
   ur: UrArt,
+  senet: SenetArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

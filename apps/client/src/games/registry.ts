@@ -119,6 +119,8 @@ import {
   type PersonState,
   ur,
   type UrState,
+  senet,
+  type SenetState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -232,6 +234,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { SENET_COLORS, SENET_NAMES, SENET_SIZE, SenetScene, senetStatus } from './senet/SenetScene';
 import { UR_COLORS, UR_NAMES, UR_SIZE, UrScene, urStatus } from './ur/UrScene';
 import { PERSON_COLORS, PERSON_SIZE, PersonScene, personStatus } from './guess-person/PersonScene';
 import { DRAW_COLORS, DRAW_SIZE, drawResult, DrawScene, drawStatus } from './draw-guess/DrawScene';
@@ -911,6 +914,25 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => urStatus(state as UrState, names),
     moveCue: () => undefined,
     createScene: (session) => new UrScene(session),
+  }),
+  entry({
+    definition: senet,
+    tagline: 'Race through the houses of old Egypt',
+    minutes: '15 min',
+    howTo: {
+      goal: 'Move all five of your pieces along the snake of thirty squares and off the end first.',
+      controls: 'Tap to throw the four sticks: the white sides showing are how far you move, and none white is five. Then tap a glowing piece. On a keyboard: Space throws, number keys or arrows and Enter move.',
+      win: 'The first to bear all five pieces off wins.',
+      tip: 'Landing on a lone piece swaps places with it. Two side by side are safe, and three in a row cannot be passed. A 1, 4 or 5 throws again. Every piece must stop on the flower square; the water sends you back to the ankh; the last three squares need a throw of 3, 2 or 1 to leave. If no piece can go forward, one has to go back.',
+    },
+    sideNames: () => SENET_NAMES,
+    sideColors: () => SENET_COLORS,
+    size: SENET_SIZE,
+    color: DARK.peach,
+    botDelayMs: 650,
+    status: (state, names) => senetStatus(state as SenetState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new SenetScene(session),
   }),
   entry({
     definition: fourInARow,

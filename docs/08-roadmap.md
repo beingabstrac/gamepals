@@ -807,7 +807,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M23d Guess the Person:** 24 faces of our own, twelve yes or no questions the phone answers, faces tip over, a wrong name loses. vs bot or two people passing the phone.
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi. Split one game per loop.
   - [ ] **M24a Royal Game of Ur:** Finkel's rules, the board stood on end to fit a phone, four pyramid dice, pieces hop square by square.
-  - [ ] **M24b Senet**
+  - [ ] **M24b Senet:** Kendall's reconstruction, the board on end, four sticks, swaps, walls, the water.
   - [ ] **M24c Nine Men's Morris**
   - [ ] **M24d Pachisi**
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
