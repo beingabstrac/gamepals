@@ -148,7 +148,7 @@ function loadCount(id: string, min: number, max: number): number {
   return Math.min(max, Math.max(min, 4));
 }
 
-const partySeats = (count: number): SeatController[] => Array.from({ length: count }, (_, i) => ({ kind: 'human', label: `Player ${i + 1}` }));
+const partySeats = (count: number): SeatController[] => Array.from({ length: count }, (_, i) => ({ kind: 'human' as const, label: `Player ${i + 1}` }));
 
 /**
  * The table for a pass-the-phone party game: everyone is a person on this one phone, so the only

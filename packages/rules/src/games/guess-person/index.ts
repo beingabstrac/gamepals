@@ -186,8 +186,8 @@ export const guessPerson: GameDefinition<PersonMove> = {
   hiddenInfo: true,
   realtime: false,
   newGame: (_config, seed) => newGuessPerson(seed),
-  createBot: (tier) => ({
+  createBot: (tier): Bot<PersonMove> => ({
     chooseMove: (state, seat, rng) => choosePersonMove(state as PersonState, seat, PERSON_TIERS[tier], rng),
-  }) as Bot<PersonMove>,
+  }),
   encodeMove: (move) => move,
 };
