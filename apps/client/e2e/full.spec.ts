@@ -39,6 +39,7 @@ const GAMES = [
   'Sweeper',
   'Flood',
   'Tile Match',
+  'Jigsaw',
   'Color Sort',
   'Echo',
   'Classic Snake',

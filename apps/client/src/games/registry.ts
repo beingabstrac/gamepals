@@ -83,6 +83,10 @@ import {
   tileMatch,
   TILE_LEVELS,
   type TileMatchState,
+  jigsaw,
+  JIGSAW_LEVELS,
+  JIGSAW_SIZES,
+  type JigsawState,
   type SweeperState,
   sudoku,
   SUDOKU_HINTS,
@@ -157,6 +161,8 @@ import { SWEEPER_SIZE, SweeperScene } from './sweeper/SweeperScene';
 import { FLOOD_SIZE, FloodScene } from './flood/FloodScene';
 import { TileMatchControls } from './tile-match/TileMatchControls';
 import { TILE_MATCH_SIZE, TileMatchScene } from './tile-match/TileMatchScene';
+import { JigsawControls } from './jigsaw/JigsawControls';
+import { JIGSAW_SIZE, JigsawScene } from './jigsaw/JigsawScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1425,6 +1431,32 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: (_before, after) => ((after as TileMatchState).last?.cleared.length ? 'place' : 'tap'),
     Controls: TileMatchControls,
     createScene: (session) => new TileMatchScene(session),
+  }),
+  entry({
+    definition: jigsaw,
+    tagline: 'Put the picture back together',
+    minutes: '5 min',
+    levels: JIGSAW_LEVELS.map((id) => ({ id, label: `${JIGSAW_SIZES[id].cols * JIGSAW_SIZES[id].rows} pieces` })),
+    howTo: {
+      goal: 'Put every piece back in its place to finish the picture.',
+      controls:
+        'Drag a piece from the tray onto the board. Drop it near its place and it clicks in. Or tap a piece, then tap where it goes. On a keyboard: the arrow keys pick a piece, Enter lifts it, the arrows move it and Enter drops it.',
+      win: 'Every piece is in and the picture is whole.',
+      tip: 'Start with the pieces that have a flat side: they go round the edge. Edges first makes the others step back. The faint picture on the board shows what goes where.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.peach],
+    size: JIGSAW_SIZE,
+    color: DARK.peach,
+    status: (state) => {
+      const s = state as JigsawState;
+      if (s.result) return undefined;
+      return `${s.left} piece${s.left === 1 ? '' : 's'} to go`;
+    },
+    resultText: () => 'Done! The whole picture.',
+    moveCue: () => 'place',
+    Controls: JigsawControls,
+    createScene: (session) => new JigsawScene(session),
   }),
   entry({
     definition: colorSort,

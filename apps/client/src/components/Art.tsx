@@ -1089,6 +1089,33 @@ function TileMatchArt() {
   );
 }
 
+function JigsawArt() {
+  // Four pieces of a sunny picture, three in and the last one on its way.
+  const piece = (dx: number, dy: number) => (
+    <path
+      transform={`translate(${dx} ${dy})`}
+      d="M0 0 H14 C14 -6 22 -6 22 0 H36 V14 C42 14 42 22 36 22 V36 H22 C22 30 14 30 14 36 H0 V22 C6 22 6 14 0 14 Z"
+      fill={COLORS.sky}
+      stroke="#fff"
+      stroke-width="2.5"
+    />
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="12" y="16" width="76" height="76" rx="14" fill="#E6E0F4" />
+      <rect x="12" y="12" width="76" height="76" rx="14" fill="#fff" />
+      <rect x="16" y="16" width="68" height="68" rx="8" fill="#F4F1FB" />
+      <circle cx="34" cy="34" r="12" fill={COLORS.sunny} />
+      <path d="M16 64 Q40 50 66 62 T84 58 V84 H16 Z" fill={COLORS.mint} />
+      <g opacity="0.9">{piece(52, 18)}</g>
+      <g transform="rotate(-12 70 70)">
+        {piece(56, 56)}
+        <circle cx="74" cy="74" r="6" fill={COLORS.tomato} />
+      </g>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1323,6 +1350,7 @@ const ART: Record<string, () => JSX.Element> = {
   sweeper: SweeperArt,
   flood: FloodArt,
   'tile-match': TileMatchArt,
+  jigsaw: JigsawArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
