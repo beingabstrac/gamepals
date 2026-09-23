@@ -38,6 +38,14 @@ export interface GameState<M> {
    * (`candidates`, `right`) rather than narrowing this one.
    */
   legalMoves(seat: Seat): readonly M[];
+  /**
+   * For games whose moves are points in a space too big to list: a pool shot is a direction, a power
+   * and sometimes a placement, millions of them. When a state answers this, it is the authority on
+   * what `apply` takes, and `legalMoves` is a spread of moves for bots and tests rather than all of
+   * them. Every other game leaves it out and `legalMoves` stays the whole list. Look moves up with
+   * `moveFor` and `isLegalMove` (core/moves.ts), which know the difference.
+   */
+  accepts?(move: M): boolean;
   /** Throws on an illegal move. */
   apply(move: M): GameState<M>;
 }
@@ -72,4 +80,6 @@ export interface GameDefinition<M> {
   createBot(tier: BotTier): Bot<M>;
   /** Stable string form of a move, used in move logs and network messages. */
   encodeMove(move: M): string;
+  /** The move a string stands for, for games whose states answer `accepts`; null if it is not one. */
+  decodeMove?(key: string): M | null;
 }

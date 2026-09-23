@@ -389,7 +389,7 @@ test('Yatzy: the shout does not land on the dice it is about', async ({ page }) 
  * move that was dropped never catches up, which is the Checkers bug this found; a move still in
  * the air catches up a few hundred milliseconds later.
  */
-for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War', 'Reversi', 'Sweeper', 'Flood', 'Tile Match', 'Jigsaw']) {
+for (const game of ['Pyramid', 'TriPeaks', 'Checkers', 'Ludo', 'Memory', 'War', 'Reversi', 'Sweeper', 'Flood', 'Tile Match', 'Jigsaw', 'Pool']) {
   test(`${game}: what is drawn catches up with what the rules say`, async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, game);

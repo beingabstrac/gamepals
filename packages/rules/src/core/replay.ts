@@ -1,3 +1,4 @@
+import { moveFor } from './moves';
 import type { GameConfig, GameDefinition, GameState } from './types';
 
 /** Canonical record of a game: everything needed to reproduce it exactly. */
@@ -19,7 +20,7 @@ export function replay<M>(definition: GameDefinition<M>, log: MoveLog): GameStat
   let state = definition.newGame(log.config, log.seed);
   log.moves.forEach((key, index) => {
     if (state.result) throw new Error(`Move ${index} (${key}) played after the game ended`);
-    const move = state.legalMoves(state.currentSeat).find((m) => definition.encodeMove(m) === key);
+    const move = moveFor(definition, state, key);
     if (move === undefined) throw new Error(`Move ${index} (${key}) is illegal`);
     state = state.apply(move);
   });

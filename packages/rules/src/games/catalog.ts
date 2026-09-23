@@ -1,3 +1,4 @@
+import { moveFor } from '../core/moves';
 import type { MoveLog } from '../core/replay';
 import { createRng } from '../core/rng';
 import type { BotTier, GameDefinition, GameState, Seat } from '../core/types';
@@ -18,6 +19,7 @@ import { ludo } from './ludo';
 import { mancala } from './mancala';
 import { memory } from './memory';
 import { oldMaid } from './old-maid';
+import { pool } from './pool';
 import { pyramid } from './pyramid';
 import { reversi } from './reversi';
 import { rummy } from './rummy';
@@ -81,6 +83,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       yatzy,
       shutTheBox,
       dominoes,
+      pool,
     ] as unknown as AnyTurnGame[]
   ).map((game) => [game.id, game]),
 );
@@ -90,7 +93,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
  * These are the ones worth handing to a worker; the rest decide in well under a millisecond,
  * where a message round trip would cost far more than the thinking it saves.
  */
-export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box']);
+export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box', 'pool']);
 
 /**
  * Everything a bot needs to pick a move away from the screen (in a Web Worker, or on a server).
@@ -127,7 +130,7 @@ function stateFor(game: AnyTurnGame, log: MoveLog): GameState<unknown> {
   for (let i = kept ? kept.moves.length : 0; i < log.moves.length; i++) {
     const encoded = log.moves[i]!;
     if (state.result) throw new Error(`Move ${i} (${encoded}) played after the game ended`);
-    const move = state.legalMoves(state.currentSeat).find((m) => game.encodeMove(m) === encoded);
+    const move = moveFor(game, state, encoded);
     if (move === undefined) throw new Error(`Move ${i} (${encoded}) is illegal`);
     state = state.apply(move);
   }

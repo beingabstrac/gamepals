@@ -1,4 +1,4 @@
-import { createRng, HEAVY_BOTS, type Bot, type BotTier, type GameDefinition, type GameState, type MoveLog } from '@gamepals/rules';
+import { createRng, HEAVY_BOTS, isLegalMove, moveFor, type Bot, type BotTier, type GameDefinition, type GameState, type MoveLog } from '@gamepals/rules';
 import { requestBotMove } from './bot/runner';
 
 /** Who controls a seat. Online seats (`remote`) arrive in milestone M16. */
@@ -52,7 +52,7 @@ export class Session<M> {
   /** Plays a move for the local human whose turn it is; ignored otherwise. */
   play(move: M): void {
     if (!this.isHumanTurn()) return;
-    if (!this.state.legalMoves(this.state.currentSeat).includes(move)) return;
+    if (!isLegalMove(this.state, move)) return;
     this.commit(move);
   }
 
@@ -89,7 +89,18 @@ export class Session<M> {
     this.botTimer = setTimeout(() => void this.playBot(seat, controller.tier, ply), this.botDelayMs);
   }
 
+  /**
+   * A scene whose moves take a varying time to show (a pool shot rolls for as long as it rolls) can
+   * hold the bots until it has finished, rather than guess a delay. Null lets them go on the delay.
+   */
+  holdBots: (() => boolean) | null = null;
+
   private async playBot(seat: number, tier: BotTier, ply: number): Promise<void> {
+    if (this.disposed || this.moves.length !== ply) return;
+    if (this.holdBots?.()) {
+      this.botTimer = setTimeout(() => void this.playBot(seat, tier, ply), 120);
+      return;
+    }
     const rngSeed = botSeed(this.seed, ply);
     // Quick bots decide here, from the live game: sending a message would cost more than the thinking.
     if (!HEAVY_BOTS.has(this.definition.id)) {
@@ -116,7 +127,7 @@ export class Session<M> {
     // A rematch, a new game or a human move while the bot was thinking: that answer is stale.
     if (this.disposed || this.moves.length !== ply) return;
     this.thinkingSeat = null;
-    const move = this.state.legalMoves(seat).find((m) => this.definition.encodeMove(m) === key);
+    const move = moveFor(this.definition, this.state, key);
     if (move === undefined) {
       console.error(`The bot picked a move that is not legal here: ${key}`);
       return;

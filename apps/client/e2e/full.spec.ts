@@ -40,6 +40,7 @@ const GAMES = [
   'Flood',
   'Tile Match',
   'Jigsaw',
+  'Pool',
   'Color Sort',
   'Echo',
   'Classic Snake',

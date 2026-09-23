@@ -87,6 +87,8 @@ import {
   JIGSAW_LEVELS,
   JIGSAW_SIZES,
   type JigsawState,
+  pool,
+  type PoolState,
   type SweeperState,
   sudoku,
   SUDOKU_HINTS,
@@ -163,6 +165,7 @@ import { TileMatchControls } from './tile-match/TileMatchControls';
 import { TILE_MATCH_SIZE, TileMatchScene } from './tile-match/TileMatchScene';
 import { JigsawControls } from './jigsaw/JigsawControls';
 import { JIGSAW_SIZE, JigsawScene } from './jigsaw/JigsawScene';
+import { POOL_SIZE, PoolScene } from './pool/PoolScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -289,6 +292,23 @@ const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_P
 const duelSides = { sideNames: () => ['Blue', 'Red'], sideColors: () => DUEL_COLORS } as const;
 
 const FLOOD_LEVEL_LABEL: Record<(typeof FLOOD_LEVELS)[number], string> = { small: 'Small', medium: 'Medium', large: 'Large' };
+
+const FOUL_WORDS: Record<string, string> = {
+  scratch: 'The cue ball went down.',
+  miss: 'Nothing was hit.',
+  'wrong-ball': 'The wrong ball was hit first.',
+  'no-rail': 'Nothing reached a cushion.',
+};
+
+/** Pool's line: whose shot, what they are on, and what the last foul was. */
+function poolStatus(state: PoolState, names: readonly string[]): string | undefined {
+  if (state.result) return undefined;
+  const who = names[state.currentSeat] ?? 'Player';
+  const group = state.groupOf(state.currentSeat);
+  const on = state.onEight(state.currentSeat) ? 'on the 8' : group ? `${group}, ${state.left(state.currentSeat).length} left` : !state.broken ? 'to break' : 'open table';
+  const foul = state.last?.foul ? `${FOUL_WORDS[state.last.foul]} Ball in hand. ` : '';
+  return `${foul}${who}: ${on}`;
+}
 
 /** Easy, Medium and Hard, for the puzzles that have those three and no more. */
 const THREE_LEVEL_LABEL: Record<(typeof SWEEPER_LEVELS)[number], string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
@@ -1457,6 +1477,33 @@ export const GAMES: readonly AnyEntry[] = [
     moveCue: () => 'place',
     Controls: JigsawControls,
     createScene: (session) => new JigsawScene(session),
+  }),
+  entry({
+    definition: pool,
+    tagline: 'Eight-ball on a table in your hand',
+    minutes: '8 min',
+    howTo: {
+      goal: 'Pot all of your group, solids or stripes, then the 8.',
+      controls:
+        'Drag on the table to aim. Pull the power bar down and let go to shoot. With the cue ball in hand, drag it where you want it first. For the 8, tap the pocket you are calling. On a keyboard: left and right aim (hold Shift for fine), up and down set power, Space shoots.',
+      win: 'Pot the 8 in the pocket you called, after the rest of your group.',
+      tip: 'The first ball you pot after the break decides your group. Hit your own group first and make something reach a cushion, or it is a foul and the other player puts the cue ball anywhere. Pot the 8 early and you lose.',
+    },
+    sideNames: () => ['Player 1', 'Player 2'],
+    sideColors: () => [COLORS.sunny, COLORS.sky],
+    size: POOL_SIZE,
+    color: DARK.mint,
+    botDelayMs: 600,
+    status: (state, names) => poolStatus(state as PoolState, names),
+    resultText: (state, names) => {
+      const s = state as PoolState;
+      const winner = s.result?.winners[0] ?? 0;
+      const shooter = s.last?.shooter ?? winner;
+      if (winner === shooter) return `${names[winner]} pots the 8 and wins!`;
+      return `${names[shooter]} lost the 8, so ${names[winner]} wins.`;
+    },
+    moveCue: () => undefined,
+    createScene: (session) => new PoolScene(session),
   }),
   entry({
     definition: colorSort,

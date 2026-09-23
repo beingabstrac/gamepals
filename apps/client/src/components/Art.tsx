@@ -1116,6 +1116,37 @@ function JigsawArt() {
   );
 }
 
+function PoolArt() {
+  // A corner of green cloth: the cue ball rolling at a short rack.
+  const balls: [number, number, string, boolean][] = [
+    [62, 30, COLORS.sunny, false],
+    [54, 44, COLORS.tomato, true],
+    [70, 44, INK, false],
+    [46, 58, COLORS.sky, false],
+    [62, 58, COLORS.grape, true],
+    [78, 58, COLORS.bubblegum, false],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="12" width="84" height="84" rx="16" fill={DARK.peach} />
+      <rect x="8" y="8" width="84" height="84" rx="16" fill={COLORS.peach} />
+      <rect x="16" y="16" width="68" height="68" rx="6" fill={DARK.mint} />
+      <circle cx="18" cy="18" r="6" fill={INK} />
+      <circle cx="82" cy="18" r="6" fill={INK} />
+      {balls.map(([x, y, color, stripe], i) => (
+        <g key={i}>
+          <circle cx={x} cy={y} r="7.5" fill={stripe ? '#fff' : color} />
+          {stripe && <rect x={x - 7.5} y={y - 3.5} width="15" height="7" fill={color} />}
+          <circle cx={x} cy={y} r="3" fill="#fff" />
+        </g>
+      ))}
+      <path d="M34 80 L54 64" stroke="#fff" stroke-width="2" stroke-dasharray="3 3" />
+      <circle cx="30" cy="84" r="7.5" fill="#fff" />
+      <path d="M8 104 L24 90" stroke="#C98A4B" stroke-width="5" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1351,6 +1382,7 @@ const ART: Record<string, () => JSX.Element> = {
   flood: FloodArt,
   'tile-match': TileMatchArt,
   jigsaw: JigsawArt,
+  pool: PoolArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
