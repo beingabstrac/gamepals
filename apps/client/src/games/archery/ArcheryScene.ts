@@ -189,7 +189,8 @@ export class ArcheryScene extends Scene {
         cue(hit.score >= 9 ? 'place' : hit.score > 0 ? 'tap' : 'wall');
         this.tweens.add({ targets: this.face, x: { from: 3, to: 0 }, duration: 120, ease: 'Quad.easeOut' });
         const label = hit.score === 0 ? 'Miss' : hit.x10 ? 'X!' : String(hit.score);
-        const pop = sharpText(this, to.x, to.y - 30, label, 40, hit.score >= 9 ? DARK.sunny : COLORS.ink).setFontStyle('bold').setDepth(30);
+        // Ink with a white edge, so it reads on every ring: dark gold on the gold was all but invisible.
+        const pop = sharpText(this, to.x, to.y - 30, label, 40, COLORS.ink).setFontStyle('bold').setStroke('#FFFFFF', 8).setDepth(30);
         this.tweens.add({ targets: pop, y: to.y - 90, alpha: 0, duration: 700, delay: 150, onComplete: () => pop.destroy() });
         this.flying = false;
         this.busyUntil = this.time.now + SETTLE_MS;
