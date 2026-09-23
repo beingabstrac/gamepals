@@ -643,7 +643,16 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     like the same risk and is not: it draws every token straight from the state, which is why it
     cannot drift and why its picture was clean.
 - [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw. Split one game to a loop, the way the word games were (2026-09-23):
-  - [ ] **P1a Sweeper:** mines under a grid, numbers counting the neighbours, and a board that never needs a guess, measured affordable before building
+  - [x] **P1a Sweeper (2026-09-23):** 52 games. Mines under a grid, numbers counting the neighbours, and a
+    board that never needs a guess. The mines are laid on the first tap, from the seed and that square, and
+    a board is kept only when simple deduction from the open numbers alone clears it; that was measured
+    first (under 1ms a board on average, 30 relays at worst on Hard) so it could be built at all. The bot
+    proves every move, and a test plays 75 boards with a random source that throws, so any guess fails it.
+    Three sizes, dig or flag by tap, long press or the Dig/Flag switch, chording on an open number,
+    keyboard arrows + Enter + F. It came with a fix for every one-player game: the vs Bot / Friends / Solo
+    row was set `hidden`, and `.quick-starts { display: flex }` beat the attribute, so solo games showed
+    three buttons that did nothing. A global `[hidden] { display: none !important }` settles it for good;
+    checked live on Sweeper (row hidden) and Chess (row shown).
   - [ ] **P1b Flood:** fill the board from a corner in one colour within a move limit
   - [ ] **P1c Tile Match:** clear a stacked layout of tiles by matching free pairs, clearly its own game and not a Mahjong reskin
   - [ ] **P1d Jigsaw:** a picture cut into pieces and put back, pictures drawn by us
