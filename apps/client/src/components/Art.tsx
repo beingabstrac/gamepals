@@ -1261,6 +1261,28 @@ function WhackArt() {
   );
 }
 
+function PaintArt() {
+  // A floor half blue, half red, and a roller cutting across it.
+  const tiles = Array.from({ length: 16 }, (_, i) => i);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="14" fill="#fff" />
+      {tiles.map((i) => {
+        const x = 15 + (i % 4) * 18;
+        const y = 15 + Math.floor(i / 4) * 18;
+        const fill = i % 4 < 2 && i < 13 ? COLORS.sky : i % 4 >= 2 && i > 2 ? COLORS.tomato : '#F4F1FB';
+        return <rect key={i} x={x} y={y} width="16" height="16" rx="4" fill={fill} />;
+      })}
+      <g transform="rotate(-20 52 46)">
+        <rect x="44" y="34" width="12" height="24" rx="5" fill={DARK.sky} />
+        <rect x="46" y="36" width="8" height="20" rx="3" fill={COLORS.sky} />
+        <rect x="28" y="44" width="16" height="4" fill={INK} />
+      </g>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1503,6 +1525,7 @@ const ART: Record<string, () => JSX.Element> = {
   racing: RacingArt,
   'sword-duel': SwordArt,
   'whack-a-mole': WhackArt,
+  'paint-fight': PaintArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

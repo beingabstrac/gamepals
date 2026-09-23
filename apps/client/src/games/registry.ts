@@ -108,6 +108,7 @@ import {
   racing,
   swordDuel,
   whackAMole,
+  paintFight,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -216,6 +217,7 @@ import { SPINNER_COLORS, SPINNER_SIZE, SpinnerScene } from './spinner-war/Spinne
 import { RACE_COLORS, RACE_SIZE, RacingScene } from './racing/RacingScene';
 import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
+import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -1866,6 +1868,24 @@ export const GAMES: readonly AnyEntry[] = [
     size: WHACK_SIZE,
     color: DARK.mint,
     createScene: (options) => new WhackScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: paintFight,
+    tagline: 'Cover the floor in your color',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Have more of the floor in your color than the other player when the time runs out.',
+      controls: 'Your roller keeps rolling. Hold and drag in your half to steer it. On a keyboard: the arrow keys steer (the top player uses W A S D).',
+      win: 'The most tiles in your color after 60 seconds wins.',
+      draw: 'The same number of tiles each is a draw.',
+      tip: 'Rolling over their color turns it yours. Grab the paint pots: each one splats a whole patch at once.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => PAINT_COLORS,
+    size: PAINT_SIZE,
+    color: DARK.sky,
+    createScene: (options) => new PaintScene(options),
   },
   {
     kind: 'realtime',
