@@ -54,6 +54,7 @@ export * from './games/archery';
 export * from './games/spinner-war';
 export * from './games/racing';
 export * from './games/sword-duel';
+export * from './games/whack-a-mole';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

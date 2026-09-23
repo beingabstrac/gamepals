@@ -107,6 +107,7 @@ import {
   spinnerWar,
   racing,
   swordDuel,
+  whackAMole,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -214,6 +215,7 @@ import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
 import { SPINNER_COLORS, SPINNER_SIZE, SpinnerScene } from './spinner-war/SpinnerScene';
 import { RACE_COLORS, RACE_SIZE, RacingScene } from './racing/RacingScene';
 import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
+import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -1846,6 +1848,24 @@ export const GAMES: readonly AnyEntry[] = [
     size: SWORD_SIZE,
     color: DARK.peach,
     createScene: (options) => new SwordScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: whackAMole,
+    tagline: 'Bonk the moles, dodge the bombs',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Whack more moles than the other player in 45 seconds.',
+      controls: 'Tap a mole in your half when it pops up. On a keyboard: 1 to 9 for the bottom board, laid out like a phone, and Q W E, A S D, Z X C for the top.',
+      win: 'The higher score when the time runs out wins. A mole is 1, a golden mole is 3.',
+      draw: 'Level scores at the end are a draw.',
+      tip: 'Never whack a bomb: it takes 2 away and leaves your mallet dizzy for a moment. You both get the same moles at the same time, so it is all about speed.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => WHACK_COLORS,
+    size: WHACK_SIZE,
+    color: DARK.mint,
+    createScene: (options) => new WhackScene(options),
   },
   {
     kind: 'realtime',

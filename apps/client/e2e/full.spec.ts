@@ -46,6 +46,7 @@ const GAMES = [
   'Spinner War',
   'Racing',
   'Sword Duel',
+  'Whack-a-Mole',
   'Color Sort',
   'Echo',
   'Classic Snake',

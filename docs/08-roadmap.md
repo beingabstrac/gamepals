@@ -690,7 +690,8 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     URL, and WebGL will not take a tainted canvas) and waited for with `onload`, not `decode()`, which
     Safari has refused for SVG. Played live: one piece dragged in, one tapped in, a wrong drop sent back,
     the rest finished to "Done! The whole picture." One unused pair of parameters reached CI.
-- [ ] **U1 Duels A:** Pool, Mini Golf, Archery. Split one game to a loop (2026-09-23), because each is a
+- [x] **U1 Duels A (2026-09-24):** Pool, Mini Golf, Archery. Green on all eight screen types with every game
+  played to the end (run 35919138247), and the three looked at in its gallery. Split one game to a loop (2026-09-23), because each is a
   physics game of its own. All three are turn-based shots rather than real-time: a move is an aim and a
   power, and the rules run a fixed-step simulation from it, so the server referee can replay a game the
   same way `replay` does for every other game. That only holds if the simulation uses nothing but
@@ -717,13 +718,34 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     a narrow hole came out as a strip. Pool and Mini Golf left the drift check: they set every ball from
     the rules when a shot ends, so they hold nothing that could drift, and under autoplay they were never
     idle long enough to answer.
-  - [ ] **U1c Archery:** wind and distance, ten ends, the arrow's flight from the same kind of simulation
+  - [x] **U1c Archery (2026-09-24):** 58 games. Three ends of three arrows, 1 to 4 players an arrow at a
+    time, 30, 50 or 70 metres. Each arrow's wind comes from the seed and carries it by an amount that grows
+    with the range; the sight sways in the scene, steadying for a second and then tiring, and the move is
+    only where the sight was on release, so the rules add nothing random and a match replays. Bots read a
+    share of the wind and shake by tier, measured at about 7, 8.4, 9.1 and 9.7 an arrow. The first tiers
+    were far too good (Expert shot a perfect 1800 over 20 matches). The gallery showed the score pop as dark
+    gold on the gold ring, all but invisible, so pops are ink with a white edge.
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing. Split one game to a loop (2026-09-24). These three
   are real time, like Sumo and Air Hockey: a pure fixed-step `step` in the rules, the scene feeding it
   inputs, bots as input functions with a reaction delay.
-  - [ ] **U2a Spinner War:** tops in a bowl, spin that runs down, clashes that cost the slower one more; knocked out or spun down loses. Clearly not Sumo: the bowl pulls you in, and you win by outlasting as much as by pushing
-  - [ ] **U2b Racing:** two cars on a looping track seen from above, one-thumb steering each, three laps
-  - [ ] **U2c Sword Duel:** two fencers on a strip, lunge, parry and step, first to five touches
+  - [x] **U2a Spinner War (2026-09-24):** 59 games. Tops in a bowl that pulls them together, a lip that turns
+    slow tops back, spin that runs down on its own and faster in hard clashes (the slower top losing more),
+    and a dash that costs spin. A ring out is 2, a spin finish 1, first to 3. Tuned by measuring bot rounds:
+    the first draft's rounds lasted 4 seconds and all ended by ring out; without a lip, and with bots
+    dashing every 0.7 seconds, nothing else could happen. Rounds now run about 18 seconds, most by spin
+    finish. A double spin-out in the same step went to the second seat every time, so mirror matches were
+    won by seat 1 ten times out of ten; it now compares spin before the step, or goes again with no points.
+  - [x] **U2b Racing (2026-09-24):** 60 games. Two cars that drive themselves, one thumb each to steer, three
+    laps round one of three tracks picked by the seed (real-time games have no level picker). Checkpoints in
+    order, so cutting across is no lap; grass at a third of the speed. The first third track ran its road
+    over itself: two parts of it passed 144px apart on a 116px road, and the bots lost the line there. A
+    test now keeps every track's separate parts apart, proved red on that track.
+  - [x] **U2c Sword Duel (2026-09-24):** 61 games. Two fencers on a strip held upright: step, lunge (reach
+    and then a stretched recovery), parry (knocks a lunge aside and leaves the attacker open for the
+    riposte); a double scores nobody; first to five. The first bot rolled its chances every step, 120 times
+    a second, so "parries 30% of the time" meant always; the scene now hands it a roll that changes every
+    0.4 seconds and a view of the other fencer a reaction late. With both bots hovering out of distance no
+    bout ever ended, so each now commits to attacks of its own.
 - [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It. Split one game to a loop (2026-09-24), real
   time, two players on one phone:
   - [ ] **R1a Whack-a-Mole:** moles pop up in each player's half, whack them, never the bombs, most in 45 seconds

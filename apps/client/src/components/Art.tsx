@@ -1241,6 +1241,26 @@ function SwordArt() {
   );
 }
 
+function WhackArt() {
+  // A mole up out of its hole, a mallet coming down.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="12" width="84" height="80" rx="18" fill={COLORS.mint} />
+      <ellipse cx="46" cy="72" rx="26" ry="11" fill="#3B2A1A" />
+      <rect x="30" y="40" width="32" height="36" rx="15" fill="#A8744A" />
+      <ellipse cx="46" cy="58" rx="10" ry="7" fill="#FFE0C2" />
+      <circle cx="40" cy="50" r="2.5" fill={INK} />
+      <circle cx="52" cy="50" r="2.5" fill={INK} />
+      <ellipse cx="46" cy="55" rx="3.5" ry="2.5" fill={COLORS.bubblegum} />
+      <rect x="18" y="74" width="56" height="14" fill={DARK.mint} />
+      <g transform="rotate(-30 74 30)">
+        <rect x="70" y="30" width="7" height="34" rx="3" fill={COLORS.peach} />
+        <rect x="58" y="20" width="32" height="16" rx="6" fill={COLORS.tomato} />
+      </g>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1482,6 +1502,7 @@ const ART: Record<string, () => JSX.Element> = {
   'spinner-war': SpinnerArt,
   racing: RacingArt,
   'sword-duel': SwordArt,
+  'whack-a-mole': WhackArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
