@@ -106,6 +106,7 @@ import {
   sumo,
   spinnerWar,
   racing,
+  swordDuel,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -212,6 +213,7 @@ import { SUDOKU_SIZE, SudokuScene } from './sudoku/SudokuScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
 import { SPINNER_COLORS, SPINNER_SIZE, SpinnerScene } from './spinner-war/SpinnerScene';
 import { RACE_COLORS, RACE_SIZE, RacingScene } from './racing/RacingScene';
+import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -1825,6 +1827,25 @@ export const GAMES: readonly AnyEntry[] = [
     size: RACE_SIZE,
     color: DARK.sky,
     createScene: (options) => new RacingScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: swordDuel,
+    tagline: 'Lunge, parry, first to five',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Touch the other fencer with your point five times before they touch you.',
+      controls:
+        'In your half: drag toward or away to step, tap to lunge, and swipe across to parry. On a keyboard: Up and Down step, Space lunges, Left or Right parries (the top player uses W and S, Shift, and A or D).',
+      win: 'First to five touches wins.',
+      draw: 'If you both land at the same moment, it is a double and nobody scores.',
+      tip: 'A lunge reaches far but leaves you stretched out for a moment, so a miss is dangerous. Parry their lunge and hit back straight away while they are knocked open.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => SWORD_COLORS,
+    size: SWORD_SIZE,
+    color: DARK.peach,
+    createScene: (options) => new SwordScene(options),
   },
   {
     kind: 'realtime',

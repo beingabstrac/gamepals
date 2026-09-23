@@ -45,6 +45,7 @@ const GAMES = [
   'Archery',
   'Spinner War',
   'Racing',
+  'Sword Duel',
   'Color Sort',
   'Echo',
   'Classic Snake',

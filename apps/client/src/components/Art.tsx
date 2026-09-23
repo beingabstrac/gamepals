@@ -1223,6 +1223,24 @@ function RacingArt() {
   );
 }
 
+function SwordArt() {
+  // Two fencers on the strip, one lunging, blades crossing.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="30" y="6" width="40" height="92" rx="10" fill={DARK.peach} />
+      <rect x="30" y="4" width="40" height="92" rx="10" fill={COLORS.peach} />
+      <rect x="36" y="9" width="28" height="82" rx="6" fill="#F4F1FB" />
+      <path d="M44 66 L60 30" stroke="#D9D2EC" stroke-width="3.5" stroke-linecap="round" />
+      <path d="M56 34 L44 46" stroke="#D9D2EC" stroke-width="3.5" stroke-linecap="round" />
+      <circle cx="46" cy="74" r="9" fill="#fff" stroke={COLORS.sky} stroke-width="3" />
+      <ellipse cx="46" cy="71" rx="4.5" ry="3.5" fill={INK} />
+      <circle cx="54" cy="24" r="9" fill="#fff" stroke={COLORS.tomato} stroke-width="3" />
+      <ellipse cx="54" cy="27" rx="4.5" ry="3.5" fill={INK} />
+      <path d="M50 40 L53 36 M48 38 L52 42" stroke={COLORS.sunny} stroke-width="2" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1463,6 +1481,7 @@ const ART: Record<string, () => JSX.Element> = {
   archery: ArcheryArt,
   'spinner-war': SpinnerArt,
   racing: RacingArt,
+  'sword-duel': SwordArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
