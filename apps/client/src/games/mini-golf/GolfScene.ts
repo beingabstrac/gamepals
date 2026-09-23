@@ -11,18 +11,14 @@ const W = 720;
 const H = 1040;
 export const GOLF_SIZE = { width: W, height: H };
 
-/** The score strip across the top, then the course below it. */
+/** The score strip across the top, then the hole below it, each hole fitted to the room there is. */
 const STRIP = 96;
-const S = Math.min((W - 40) / COURSE_W, (H - STRIP - 24) / COURSE_H);
-const X0 = (W - COURSE_W * S) / 2;
-const Y0 = STRIP + (H - STRIP - COURSE_H * S) / 2;
+/** Room round a hole's green, in millimetres, for the rail and the flag. */
+const MARGIN = 60;
 /** The pause after a stroke stops before the next one can be taken. */
 const SETTLE_MS = 450;
 /** A pull this long, in pixels, is full power. */
 const FULL_PULL = 230;
-
-const px = (x: number) => X0 + x * S;
-const py = (y: number) => Y0 + y * S;
 
 /** Each player's ball has a ring in their colour, so it is clear whose ball is on the course. */
 export const GOLF_COLORS = [COLORS.tomato, COLORS.sky, COLORS.sunny, COLORS.grape];
@@ -35,8 +31,13 @@ export const GOLF_COLORS = [COLORS.tomato, COLORS.sky, COLORS.sunny, COLORS.grap
 export class GolfScene extends Scene {
   private course!: GameObjects.Container;
   private shownHole = -1;
+  /** The hole on screen: millimetres to pixels, and where its middle sits. */
+  private s = 0.46;
+  private cx = COURSE_W / 2;
+  private cy = COURSE_H / 2;
   private ball!: GameObjects.Container;
   private ring!: GameObjects.Graphics;
+  private body!: GameObjects.Graphics;
   private guide!: GameObjects.Graphics;
   private strip: GameObjects.Text[] = [];
   private aim = -Math.PI / 2;
@@ -60,14 +61,8 @@ export class GolfScene extends Scene {
     this.course = this.add.container(0, 0);
     this.guide = this.add.graphics().setDepth(5);
     this.ring = this.add.graphics();
-    const r = GOLF_R * S * 1.25;
-    const shadow = this.add.graphics();
-    shadow.fillStyle(0x000000, 0.18);
-    shadow.fillCircle(2, 3, r);
-    const body = this.add.graphics();
-    body.fillStyle(0xffffff, 1);
-    body.fillCircle(0, 0, r);
-    this.ball = this.add.container(0, 0, [shadow, body, this.ring]).setDepth(10);
+    this.body = this.add.graphics();
+    this.ball = this.add.container(0, 0, [this.body, this.ring]).setDepth(10);
     this.drawStrip();
 
     this.input.on('pointerdown', (p: { worldX: number; worldY: number }) => this.down(p.worldX, p.worldY));
@@ -87,25 +82,45 @@ export class GolfScene extends Scene {
     });
   }
 
-  /** Still playing a stroke, or bringing on the next hole. See `apps/client/src/games/busy.ts`. */
+  private px(x: number): number {
+    return W / 2 + (x - this.cx) * this.s;
+  }
+
+  private py(y: number): number {
+    return STRIP + (H - STRIP) / 2 + (y - this.cy) * this.s;
+  }
+
+  /** Fits a hole's green, with room for its rail and flag, to the space under the score strip. */
+  private fit(hole: Hole): void {
+    const xs = hole.green.map((p) => p.x);
+    const ys = hole.green.map((p) => p.y);
+    const w = Math.max(...xs) - Math.min(...xs) + MARGIN * 2;
+    const h = Math.max(...ys) - Math.min(...ys) + MARGIN * 2;
+    this.s = Math.min((W - 40) / w, (H - STRIP - 24) / h, 0.8);
+    this.cx = (Math.max(...xs) + Math.min(...xs)) / 2;
+    this.cy = (Math.max(...ys) + Math.min(...ys)) / 2;
+  }
+
+  /** this.still playing a stroke, or bringing on the next hole. See `apps/client/src/games/busy.ts`. */
   busy(): boolean {
     return this.playing !== null || this.time.now < this.busyUntil;
   }
 
   private drawCourse(hole: Hole): void {
     this.course.removeAll(true);
+    this.fit(hole);
     const g = this.add.graphics();
     const fill = (outline: Outline, color: number, alpha = 1) => {
       g.fillStyle(color, alpha);
       g.beginPath();
-      outline.forEach((p, i) => (i === 0 ? g.moveTo(px(p.x), py(p.y)) : g.lineTo(px(p.x), py(p.y))));
+      outline.forEach((p, i) => (i === 0 ? g.moveTo(this.px(p.x), this.py(p.y)) : g.lineTo(this.px(p.x), this.py(p.y))));
       g.closePath();
       g.fillPath();
     };
     const edge = (outline: Outline, width: number, color: number) => {
       g.lineStyle(width, color, 1);
       g.beginPath();
-      outline.forEach((p, i) => (i === 0 ? g.moveTo(px(p.x), py(p.y)) : g.lineTo(px(p.x), py(p.y))));
+      outline.forEach((p, i) => (i === 0 ? g.moveTo(this.px(p.x), this.py(p.y)) : g.lineTo(this.px(p.x), this.py(p.y))));
       g.closePath();
       g.strokePath();
     };
@@ -124,7 +139,7 @@ export class GolfScene extends Scene {
       for (let y = top + 50; y < bottom; y += 70) {
         for (let x = left + 30; x < right - 40; x += 80) {
           g.beginPath();
-          g.arc(px(x + 15), py(y), 10, Math.PI * 1.1, Math.PI * 1.9);
+          g.arc(this.px(x + 15), this.py(y), 10, Math.PI * 1.1, Math.PI * 1.9);
           g.strokePath();
         }
       }
@@ -139,8 +154,8 @@ export class GolfScene extends Scene {
       g.lineStyle(4, 0xffffff, 0.35);
       for (let y = Math.min(...ys) + 60; y < Math.max(...ys); y += 140) {
         for (let x = Math.min(...xs) + 60; x < Math.max(...xs); x += 140) {
-          const cx = px(x);
-          const cy = py(y);
+          const cx = this.px(x);
+          const cy = this.py(y);
           g.lineBetween(cx - uy * 10 - ux * 8, cy + ux * 10 - uy * 8, cx + ux * 8, cy + uy * 8);
           g.lineBetween(cx + uy * 10 - ux * 8, cy - ux * 10 - uy * 8, cx + ux * 8, cy + uy * 8);
         }
@@ -152,14 +167,14 @@ export class GolfScene extends Scene {
     }
     // The tee mat and the cup with its flag.
     g.fillStyle(0xffffff, 0.45);
-    g.fillRoundedRect(px(hole.tee.x) - 22, py(hole.tee.y) - 14, 44, 28, 8);
+    g.fillRoundedRect(this.px(hole.tee.x) - 22, this.py(hole.tee.y) - 14, 44, 28, 8);
     g.fillStyle(toHex(COLORS.ink), 1);
-    g.fillCircle(px(hole.cup.x), py(hole.cup.y), CUP_R * S);
+    g.fillCircle(this.px(hole.cup.x), this.py(hole.cup.y), CUP_R * this.s);
     g.lineStyle(4, toHex(COLORS.ink), 1);
-    g.lineBetween(px(hole.cup.x), py(hole.cup.y), px(hole.cup.x), py(hole.cup.y) - 70);
+    g.lineBetween(this.px(hole.cup.x), this.py(hole.cup.y), this.px(hole.cup.x), this.py(hole.cup.y) - 70);
     g.fillStyle(toHex(COLORS.tomato), 1);
-    g.fillTriangle(px(hole.cup.x), py(hole.cup.y) - 70, px(hole.cup.x) + 36, py(hole.cup.y) - 58, px(hole.cup.x), py(hole.cup.y) - 46);
-    const name = sharpText(this, W / 2, Y0 + 24, `${this.state.holeIndex + 1}. ${hole.name}  ·  par ${hole.par}`, 22, COLORS.ink);
+    g.fillTriangle(this.px(hole.cup.x), this.py(hole.cup.y) - 70, this.px(hole.cup.x) + 36, this.py(hole.cup.y) - 58, this.px(hole.cup.x), this.py(hole.cup.y) - 46);
+    const name = sharpText(this, W / 2, STRIP + 10, `${this.state.holeIndex + 1}. ${hole.name}  ·  par ${hole.par}`, 22, COLORS.ink);
     name.setAlpha(0.7);
     this.course.add([g, name]);
   }
@@ -192,10 +207,17 @@ export class GolfScene extends Scene {
       this.busyUntil = Math.max(this.busyUntil, this.time.now + 280);
       this.aim = Math.atan2(state.hole.cup.y - state.ball.y, state.hole.cup.x - state.ball.x);
     }
+    // The ball at this hole's size, a little larger than life so it reads, ringed in the player's colour.
+    const r = GOLF_R * this.s * 1.25;
+    this.body.clear();
+    this.body.fillStyle(0x000000, 0.18);
+    this.body.fillCircle(2, 3, r);
+    this.body.fillStyle(0xffffff, 1);
+    this.body.fillCircle(0, 0, r);
     this.ring.clear();
     this.ring.lineStyle(4, toHex(GOLF_COLORS[state.currentSeat] ?? COLORS.ink), 1);
-    this.ring.strokeCircle(0, 0, GOLF_R * S * 1.25);
-    this.ball.setVisible(!state.result || state.last?.outcome.end !== 'cup').setAlpha(1).setScale(1).setPosition(px(state.ball.x), py(state.ball.y));
+    this.ring.strokeCircle(0, 0, r);
+    this.ball.setVisible(!state.result || state.last?.outcome.end !== 'cup').setAlpha(1).setScale(1).setPosition(this.px(state.ball.x), this.py(state.ball.y));
     this.drawStrip();
     this.drawGuide();
   }
@@ -207,7 +229,7 @@ export class GolfScene extends Scene {
       return;
     }
     this.guide.clear();
-    this.ball.setVisible(true).setAlpha(1).setScale(1).setPosition(px(last.from.x), py(last.from.y));
+    this.ball.setVisible(true).setAlpha(1).setScale(1).setPosition(this.px(last.from.x), this.py(last.from.y));
     this.playing = { frames: last.outcome.frames, frameMs: last.outcome.frameMs, start: this.time.now, events: last.outcome.events, heard: 0 };
     cue('tap');
   }
@@ -218,7 +240,7 @@ export class GolfScene extends Scene {
     const elapsed = this.time.now - play.start;
     const count = play.frames.length / 2;
     const index = Math.min(count - 1, Math.floor(elapsed / play.frameMs));
-    this.ball.setPosition(px(play.frames[index * 2]!), py(play.frames[index * 2 + 1]!));
+    this.ball.setPosition(this.px(play.frames[index * 2]!), this.py(play.frames[index * 2 + 1]!));
     while (play.heard < play.events.length && play.events[play.heard]!.t <= elapsed) {
       const event = play.events[play.heard++]!;
       if (event.kind === 'wall' && event.speed > 0.3) cue('wall');
@@ -255,8 +277,8 @@ export class GolfScene extends Scene {
     const dots = Math.max(3, Math.round(length / 22));
     g.fillStyle(0xffffff, 0.95);
     for (let i = 1; i <= dots; i++) {
-      const d = (i / dots) * length + GOLF_R * S;
-      g.fillCircle(px(ball.x) + Math.cos(this.aim) * d, py(ball.y) + Math.sin(this.aim) * d, i === dots ? 6 : 4);
+      const d = (i / dots) * length + GOLF_R * this.s;
+      g.fillCircle(this.px(ball.x) + Math.cos(this.aim) * d, this.py(ball.y) + Math.sin(this.aim) * d, i === dots ? 6 : 4);
     }
   }
 
@@ -314,7 +336,7 @@ export class GolfScene extends Scene {
   layoutCheck(): { name: string; top: number; bottom: number }[] {
     return [
       { name: 'the scores', top: 30, bottom: 66 },
-      { name: 'the course', top: Y0 - 14, bottom: Y0 + COURSE_H * S },
+      { name: 'the course', top: STRIP - 6, bottom: H - 12 },
     ];
   }
 }
