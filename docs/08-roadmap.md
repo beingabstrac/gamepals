@@ -642,7 +642,7 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     Same unbounded lag, same fix, same `boardCheck()`, and one test now covers both. Ludo looked
     like the same risk and is not: it draws every token straight from the state, which is why it
     cannot drift and why its picture was clean.
-- [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw. Split one game to a loop, the way the word games were (2026-09-23):
+- [x] **P1 Puzzles (2026-09-23):** Sweeper, Flood, Tile Match, Jigsaw, 55 games. Split one game to a loop, the way the word games were:
   - [x] **P1a Sweeper (2026-09-23):** 52 games. Mines under a grid, numbers counting the neighbours, and a
     board that never needs a guess. The mines are laid on the first tap, from the seed and that square, and
     a board is kept only when simple deduction from the open numbers alone clears it; that was measured
@@ -675,7 +675,16 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     the scene said it was done while a tile was still in the air, because Phaser's tweens smooth over lag
     and the scene clock does not, so on a hidden or slow page the result could come up over a flying tile.
     `busy()` now counts tiles in flight.
-  - [ ] **P1d Jigsaw:** a picture cut into pieces and put back, pictures drawn by us
+  - [x] **P1d Jigsaw (2026-09-23):** 55 games. Eight pictures drawn by us as SVG (a beach, a house, balloons,
+    a rocket, a fish bowl, a farm, a city at night, a snowman), each drawn once and every piece cut out of it
+    on a canvas along its own knobbed outline, so the pieces fit because they come from one drawing along
+    one set of lines. 12, 20 or 35 pieces; drag a piece and it snaps in near its place, or tap it and tap
+    where it goes; Edges first steps the middle pieces back. The snowman's lower third was plain white snow
+    on the first draw, which is a row of pieces nobody could place, so it got a sled and snow shadows before
+    shipping. The SVG is loaded from a blob rather than a data URL (some browsers taint a canvas for a data
+    URL, and WebGL will not take a tainted canvas) and waited for with `onload`, not `decode()`, which
+    Safari has refused for SVG. Played live: one piece dragged in, one tapped in, a wrong drop sent back,
+    the rest finished to "Done! The whole picture." One unused pair of parameters reached CI.
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery. Split one game to a loop (2026-09-23), because each is a
   physics game of its own. All three are turn-based shots rather than real-time: a move is an aim and a
   power, and the rules run a fixed-step simulation from it, so the server referee can replay a game the
