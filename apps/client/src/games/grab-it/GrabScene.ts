@@ -81,6 +81,7 @@ export class GrabScene extends Scene {
     onDuelKeys(this, this.options.seats, (seat, action) => {
       if (action === 'tap') this.queued[seat] = true;
     });
+    this.shout('Ready…');
     this.draw();
     this.options.onScore([0, 0]);
   }

@@ -725,7 +725,10 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     share of the wind and shake by tier, measured at about 7, 8.4, 9.1 and 9.7 an arrow. The first tiers
     were far too good (Expert shot a perfect 1800 over 20 matches). The gallery showed the score pop as dark
     gold on the gold ring, all but invisible, so pops are ink with a white edge.
-- [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing. Split one game to a loop (2026-09-24). These three
+- [x] **U2 Duels B (2026-09-24):** Sword Duel, Spinner War, Racing. Every duel played to the end on all eight
+  screen types (run 35926301034); the one red there was the fits-the-screen test, which walks every game in
+  one test and ran out of its flat 300 seconds at 65 games on the slow Android engine, so it now gets eight
+  seconds a game. Split one game to a loop (2026-09-24). These three
   are real time, like Sumo and Air Hockey: a pure fixed-step `step` in the rules, the scene feeding it
   inputs, bots as input functions with a reaction delay.
   - [x] **U2a Spinner War (2026-09-24):** 59 games. Tops in a bowl that pulls them together, a lip that turns
@@ -748,9 +751,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     bout ever ended, so each now commits to attacks of its own.
 - [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It. Split one game to a loop (2026-09-24), real
   time, two players on one phone:
-  - [ ] **R1a Whack-a-Mole:** moles pop up in each player's half, whack them, never the bombs, most in 45 seconds
-  - [ ] **R1b Paint Fight:** two rollers on one floor, paint it your colour, most of the floor when the time is up
-  - [ ] **R1c Grab It:** a picture flashes in the middle; grab it first when it matches the call, and a wrong grab costs a point
+  - [x] **R1a Whack-a-Mole (2026-09-24):** 62 games. Nine holes each, the same moles at the same moments on
+    both boards from the seed, 45 seconds, moles 1, golden 3, bombs minus 2 and a dizzy mallet. Bots see a
+    pop a reaction late and decide each pop once, from a roll kept per pop.
+  - [x] **R1b Paint Fight (2026-09-24):** 63 games. Two rollers on a floor of 12 by 18 tiles, painting as they
+    go and over each other, pots that splat a patch, 60 seconds, the split across the middle all round.
+  - [x] **R1c Grab It (2026-09-24):** 64 games. A picture is called, two to six decoys flash (four in ten of
+    them its same-colour look-alike), then the one called; first grab takes it, a wrong grab costs a point
+    and freezes the hand, first to five. A same-step tie first went to nobody, which let two equally quick
+    bots tie every call for ever and never finish; it alternates by call now.
 That is twenty-two more games on top of the forty-three, and it covers every game either competitor lists.
 
 ## Stage 4: grow the catalog (brief first, 3–4 games per milestone, never a reskin)
