@@ -696,8 +696,27 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
   same way `replay` does for every other game. That only holds if the simulation uses nothing but
   arithmetic and `Math.sqrt`, which are exact in every engine; `Math.sin` and `Math.cos` are not
   guaranteed to agree between engines, so aims are points to shoot at, not angles.
-  - [ ] **U1a Pool:** eight-ball on a table held upright, solids and stripes, fouls give ball in hand, bots that plan with the same simulation
-  - [ ] **U1b Mini Golf:** holes with walls and slopes, fewest strokes over nine, 1 to 4 players
+  - [x] **U1a Pool (2026-09-24):** 56 games. Eight-ball, WPA rules with the phone simplifications (8 on
+    the break spotted, ball in hand anywhere after a foul), on a table held upright. Each shot is played
+    out by a fixed-step simulation in the rules and the scene plays its frames back, so what you see is
+    what a referee would replay. A shot is a direction and a power, millions of them, so Pool is the first
+    game where the state answers `allows(move)` and `legalMoves` is a spread; `moveFor` / `isLegalMove`
+    look a move up wherever one arrives. The name was `accepts` until CI showed FreeCell already has a
+    private `accepts` meaning something else; with a matching signature the helpers would have trusted it
+    silently. Found live and fixed before ticking: a 9-foot table left the balls 11 points across on a
+    phone, so it is a 7-foot bar table; and a straight break barely opened the rack, because contacts
+    were resolved once in ball-number order, so the same break spread 307 to 776mm depending on which
+    numbered ball sat where. Contacts now settle in passes. A scene can hold the bots until its last move
+    has finished showing (`session.holdBots`), and a shot rests 450ms before the next.
+  - [x] **U1b Mini Golf (2026-09-24):** 57 games. Nine holes of our own as data (walls, blocks, a slope,
+    sand, water, a bowl), three or nine at the table, 1 to 4 players taking each hole in turn; water costs
+    a stroke and puts the ball back, six strokes and you pick up with seven. Strokes roll out in the rules
+    the same arithmetic-only way as Pool, and a test has the expert bot hole every hole within par plus
+    two. Pull back and let go to hit. Played live: a nine-hole round to "Round done in 31, par 23". Each
+    hole is now fitted to the screen, because the first draw used the scale of the whole course box and
+    a narrow hole came out as a strip. Pool and Mini Golf left the drift check: they set every ball from
+    the rules when a shot ends, so they hold nothing that could drift, and under autoplay they were never
+    idle long enough to answer.
   - [ ] **U1c Archery:** wind and distance, ten ends, the arrow's flight from the same kind of simulation
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
 - [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It
