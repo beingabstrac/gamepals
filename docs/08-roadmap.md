@@ -676,7 +676,15 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     and the scene clock does not, so on a hidden or slow page the result could come up over a flying tile.
     `busy()` now counts tiles in flight.
   - [ ] **P1d Jigsaw:** a picture cut into pieces and put back, pictures drawn by us
-- [ ] **U1 Duels A:** Pool, Mini Golf, Archery
+- [ ] **U1 Duels A:** Pool, Mini Golf, Archery. Split one game to a loop (2026-09-23), because each is a
+  physics game of its own. All three are turn-based shots rather than real-time: a move is an aim and a
+  power, and the rules run a fixed-step simulation from it, so the server referee can replay a game the
+  same way `replay` does for every other game. That only holds if the simulation uses nothing but
+  arithmetic and `Math.sqrt`, which are exact in every engine; `Math.sin` and `Math.cos` are not
+  guaranteed to agree between engines, so aims are points to shoot at, not angles.
+  - [ ] **U1a Pool:** eight-ball on a table held upright, solids and stripes, fouls give ball in hand, bots that plan with the same simulation
+  - [ ] **U1b Mini Golf:** holes with walls and slopes, fewest strokes over nine, 1 to 4 players
+  - [ ] **U1c Archery:** wind and distance, ten ends, the arrow's flight from the same kind of simulation
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
 - [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It
 That is twenty-two more games on top of the forty-three, and it covers every game either competitor lists.
