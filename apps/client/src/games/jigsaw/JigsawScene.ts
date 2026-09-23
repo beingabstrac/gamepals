@@ -87,7 +87,7 @@ export class JigsawScene extends Scene {
     this.ring = focusRing(this, this.cw + 10, this.ch + 10, 14);
     this.input.on('pointerdown', (p: { worldX: number; worldY: number }) => this.down(p.worldX, p.worldY));
     this.input.on('pointermove', (p: { worldX: number; worldY: number; isDown: boolean }) => p.isDown && this.drag(p.worldX, p.worldY));
-    this.input.on('pointerup', (p: { worldX: number; worldY: number }) => this.up(p.worldX, p.worldY));
+    this.input.on('pointerup', () => this.up());
     onKeys(this, (key) => this.key(key));
 
     const unsubscribe = this.session.subscribe(() => this.sync(true));
@@ -277,7 +277,7 @@ export class JigsawScene extends Scene {
     this.views[held.piece]!.image.setPosition(x + held.dx * 0.3, y + held.dy * 0.3 - 20);
   }
 
-  private up(x: number, y: number): void {
+  private up(): void {
     const held = this.held;
     this.held = null;
     if (!held) return;
