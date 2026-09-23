@@ -105,6 +105,7 @@ import {
   SUDOKU_LEVELS,
   sumo,
   spinnerWar,
+  racing,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -210,6 +211,7 @@ import { SudokuControls } from './sudoku/SudokuControls';
 import { SUDOKU_SIZE, SudokuScene } from './sudoku/SudokuScene';
 import { SUMO_SIZE, SumoScene } from './sumo/SumoScene';
 import { SPINNER_COLORS, SPINNER_SIZE, SpinnerScene } from './spinner-war/SpinnerScene';
+import { RACE_COLORS, RACE_SIZE, RacingScene } from './racing/RacingScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -1806,6 +1808,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: SPINNER_SIZE,
     color: DARK.grape,
     createScene: (options) => new SpinnerScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: racing,
+    tagline: 'Three laps, one thumb each',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Finish three laps before the other car.',
+      controls: 'Your car drives itself. Hold the left or right side of your half to steer that way. On a keyboard: Left and Right steer (the top player uses A and D).',
+      win: 'First over the line after three laps wins.',
+      tip: 'The grass slows you right down, so keep to the grey. Cutting across does not count: you have to go all the way round. Each race is on one of three tracks.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => RACE_COLORS,
+    size: RACE_SIZE,
+    color: DARK.sky,
+    createScene: (options) => new RacingScene(options),
   },
   {
     kind: 'realtime',

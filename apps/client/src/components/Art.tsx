@@ -1202,6 +1202,27 @@ function SpinnerArt() {
   );
 }
 
+function RacingArt() {
+  // A bend of road on the grass, two cars neck and neck.
+  const car = (x: number, y: number, color: string, dark: string, turn: number) => (
+    <g transform={`rotate(${turn} ${x} ${y})`}>
+      <rect x={x - 11} y={y - 6} width="22" height="12" rx="5" fill={dark} />
+      <rect x={x - 10} y={y - 6} width="20" height="10" rx="4" fill={color} />
+      <rect x={x + 1} y={y - 4} width="5" height="6" rx="1.5" fill="#fff" />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="6" width="88" height="88" rx="18" fill={COLORS.mint} />
+      <path d="M-4 78 Q50 80 64 50 Q74 26 104 22" stroke="#fff" stroke-width="30" fill="none" />
+      <path d="M-4 78 Q50 80 64 50 Q74 26 104 22" stroke={COLORS.soft} stroke-width="24" fill="none" />
+      <path d="M-4 78 Q50 80 64 50 Q74 26 104 22" stroke="#fff" stroke-width="2" stroke-dasharray="5 6" fill="none" />
+      {car(34, 72, COLORS.sky, DARK.sky, -10)}
+      {car(52, 62, COLORS.tomato, DARK.tomato, -38)}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1441,6 +1462,7 @@ const ART: Record<string, () => JSX.Element> = {
   'mini-golf': MiniGolfArt,
   archery: ArcheryArt,
   'spinner-war': SpinnerArt,
+  racing: RacingArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
