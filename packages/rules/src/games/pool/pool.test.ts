@@ -79,9 +79,9 @@ describe('pool physics', () => {
   });
 
   it('a harder hit sends a lone ball further', () => {
-    const soft = simulate([{ x: 635, y: 2000 }], 0, -1, false).balls[0]!;
-    const hard = simulate([{ x: 635, y: 2000 }], 0, -1.6, false).balls[0]!;
-    expect(2000 - hard.y).toBeGreaterThan(2000 - soft.y);
+    const soft = simulate([{ x: TABLE_W / 2, y: TABLE_H - 300 }], 0, -0.9, false).balls[0]!;
+    const hard = simulate([{ x: TABLE_W / 2, y: TABLE_H - 300 }], 0, -1.3, false).balls[0]!;
+    expect(soft.y).toBeGreaterThan(hard.y);
   });
 });
 
@@ -94,7 +94,7 @@ describe('pool rules', () => {
     expect(state.allows(shot(0, 0, 90, { place }))).toBe(false);
     expect(state.allows(shot(0, -1000, 0, { place }))).toBe(false);
     expect(state.allows(shot(0, -1000, 101, { place }))).toBe(false);
-    expect(state.allows(shot(0, -1000, 50, { place: { x: 635, y: HEAD_STRING - 100 } }))).toBe(false);
+    expect(state.allows(shot(0, -1000, 50, { place: { x: Math.round(TABLE_W / 2), y: Math.round(HEAD_STRING - 100) } }))).toBe(false);
     expect(state.allows(shot(0, -1000, 50, { place, call: 2 }))).toBe(false);
     expect(state.allows('nonsense')).toBe(false);
     expect(state.allows(shot(50_000, 1, 50, { place }))).toBe(false);
@@ -104,7 +104,7 @@ describe('pool rules', () => {
 
   it('a scratch gives the other player ball in hand', () => {
     // The cue ball runs straight into the bottom-left corner.
-    const state = tableOf({ 0: { x: 200, y: 2340 }, 1: { x: 900, y: 500 } }, { solids: 0 });
+    const state = tableOf({ 0: { x: 200, y: TABLE_H - 200 }, 1: { x: TABLE_W - 150, y: 500 } }, { solids: 0 });
     const after = state.apply(shot(-100, 100, 40));
     expect(after.last?.foul).toBe('scratch');
     expect(after.balls[0]).toBeNull();
@@ -113,7 +113,7 @@ describe('pool rules', () => {
   });
 
   it('hitting the wrong group first is a foul', () => {
-    const state = tableOf({ 0: { x: 635, y: 1800 }, 9: { x: 635, y: 1200 }, 1: { x: 200, y: 400 } }, { solids: 0 });
+    const state = tableOf({ 0: { x: TABLE_W / 2, y: TABLE_H * 0.72 }, 9: { x: TABLE_W / 2, y: TABLE_H * 0.47 }, 1: { x: 200, y: 400 } }, { solids: 0 });
     const after = state.apply(shot(0, -1000, 40));
     expect(after.last?.firstHit).toBe(9);
     expect(after.last?.foul).toBe('wrong-ball');
@@ -121,7 +121,7 @@ describe('pool rules', () => {
   });
 
   it('nothing reaching a cushion after contact is a foul', () => {
-    const state = tableOf({ 0: { x: 635, y: 1300 }, 1: { x: 635, y: 1200 } }, { solids: 0 });
+    const state = tableOf({ 0: { x: TABLE_W / 2, y: TABLE_H / 2 + 50 }, 1: { x: TABLE_W / 2, y: TABLE_H / 2 - 50 } }, { solids: 0 });
     const after = state.apply(shot(0, -1000, 3));
     expect(after.last?.firstHit).toBe(1);
     expect(after.last?.foul).toBe('no-rail');
@@ -129,7 +129,7 @@ describe('pool rules', () => {
 
   it('the first ball legally pocketed after the break picks the groups, and keeps the turn', () => {
     const { ball, cue, dx, dy } = cornerShot();
-    const state = tableOf({ 0: cue, 12: ball, 3: { x: 1000, y: 2000 } });
+    const state = tableOf({ 0: cue, 12: ball, 3: { x: TABLE_W - 200, y: TABLE_H - 400 } });
     const after = state.apply(shot(dx, dy, 30));
     expect(after.last?.pocketed).toEqual([12]);
     expect(after.groupOf(0)).toBe('stripes');
@@ -140,18 +140,18 @@ describe('pool rules', () => {
 
   it('the 8 in the called pocket after your group wins; early or in the wrong pocket loses', () => {
     const { ball, cue, dx, dy } = cornerShot();
-    const onEight = tableOf({ 0: cue, 8: ball, 9: { x: 1000, y: 2000 } }, { solids: 0 });
+    const onEight = tableOf({ 0: cue, 8: ball, 9: { x: TABLE_W - 200, y: TABLE_H - 400 } }, { solids: 0 });
     expect(onEight.onEight(0)).toBe(true);
     expect(onEight.allows(shot(dx, dy, 30))).toBe(false);
     expect(onEight.apply(shot(dx, dy, 30, { call: 0 })).result).toEqual({ winners: [0], draw: false });
     expect(onEight.apply(shot(dx, dy, 30, { call: 5 })).result).toEqual({ winners: [1], draw: false });
-    const early = tableOf({ 0: cue, 8: ball, 2: { x: 1000, y: 2000 } }, { solids: 0 });
+    const early = tableOf({ 0: cue, 8: ball, 2: { x: TABLE_W - 200, y: TABLE_H - 400 } }, { solids: 0 });
     expect(early.apply(shot(dx, dy, 30)).result).toEqual({ winners: [1], draw: false });
   });
 
   it('the 8 going down on the break is put back on the foot spot, and the game goes on', () => {
     const { ball, cue, dx, dy } = cornerShot();
-    const breaking = tableOf({ 0: cue, 8: ball, 5: { x: 1000, y: 2000 } }, { broken: false });
+    const breaking = tableOf({ 0: cue, 8: ball, 5: { x: TABLE_W - 200, y: TABLE_H - 400 } }, { broken: false });
     const after = breaking.apply(shot(dx, dy, 30));
     expect(after.last?.pocketed).toEqual([8]);
     expect(after.last?.respotted).toBe(true);

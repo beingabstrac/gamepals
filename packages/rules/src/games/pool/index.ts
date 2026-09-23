@@ -141,7 +141,7 @@ export class PoolState implements GameState<PoolMove> {
 
   /** Where the cue ball goes by default when it is in hand: the middle of the head, or the first free spot near it. */
   defaultSpot(): TablePoint | null {
-    const home = { x: TABLE_W / 2, y: Math.round((HEAD_STRING + TABLE_H) / 2) };
+    const home = { x: Math.round(TABLE_W / 2), y: Math.round((HEAD_STRING + TABLE_H) / 2) };
     for (let r = 0; r < 800; r += 20) {
       for (const [sx, sy] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]] as const) {
         const at = { x: home.x + sx * r, y: home.y + sy * r };

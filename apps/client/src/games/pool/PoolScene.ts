@@ -11,9 +11,9 @@ const W = 720;
 const H = 1040;
 export const POOL_SIZE = { width: W, height: H };
 
-/** Pixels per millimetre of cloth, and the rail round it. */
-const S = 0.355;
+/** The rail round the cloth, and pixels per millimetre of cloth: the table as tall as the canvas allows. */
 const RAIL = 26;
+const S = (H - 2 * (RAIL + 34)) / TABLE_H;
 /** The table and the power bar beside it, centred together. */
 const SPAN = RAIL * 2 + TABLE_W * S + 58 + 22;
 const TX = (W - SPAN) / 2 + RAIL;

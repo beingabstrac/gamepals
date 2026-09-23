@@ -5,9 +5,14 @@
  * difference into a different game (docs/games/pool.md).
  */
 
-/** A 9-foot table's playing surface, held upright: the head (where you break from) at the bottom. */
-export const TABLE_W = 1270;
-export const TABLE_H = 2540;
+/**
+ * A 7-foot bar table's playing surface, held upright: the head (where you break from) at the bottom.
+ * A 9-foot table was tried first and its balls came out 11 points across on a phone, too small to
+ * aim at; the same balls on the smaller table are a third bigger, and it is the table most people
+ * have played on.
+ */
+export const TABLE_W = 991;
+export const TABLE_H = 1981;
 export const BALL_R = 28.575;
 /** Where the cue ball may go for the break: behind the head string, a quarter of the way up. */
 export const HEAD_STRING = TABLE_H * 0.75;
