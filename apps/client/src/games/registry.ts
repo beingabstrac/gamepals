@@ -109,6 +109,7 @@ import {
   swordDuel,
   whackAMole,
   paintFight,
+  grabIt,
   ticTacToe,
   tugOfWar,
   twenty48,
@@ -218,6 +219,7 @@ import { RACE_COLORS, RACE_SIZE, RacingScene } from './racing/RacingScene';
 import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
+import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
 import { TIC_TAC_TOE_SIZE, TicTacToeScene } from './tic-tac-toe/TicTacToeScene';
 import { TUG_OF_WAR_SIZE, TugOfWarScene } from './tug-of-war/TugOfWarScene';
 import { TWENTY48_SIZE, Twenty48Scene } from './twenty48/Twenty48Scene';
@@ -1886,6 +1888,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: PAINT_SIZE,
     color: DARK.sky,
     createScene: (options) => new PaintScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: grabIt,
+    tagline: 'Grab the right one first',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Be first to grab the picture on your card when it flashes up.',
+      controls: 'Tap anywhere in your half to grab. On a keyboard: Space for the bottom player, Shift for the top one.',
+      win: 'First to five points wins.',
+      tip: 'Grab the wrong picture and you lose a point and freeze for a moment. Watch out for look-alikes in the same color.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => GRAB_COLORS,
+    size: GRAB_SIZE,
+    color: DARK.bubblegum,
+    createScene: (options) => new GrabScene(options),
   },
   {
     kind: 'realtime',

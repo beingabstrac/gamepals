@@ -48,6 +48,7 @@ const GAMES = [
   'Sword Duel',
   'Whack-a-Mole',
   'Paint Fight',
+  'Grab It',
   'Color Sort',
   'Echo',
   'Classic Snake',

@@ -1283,6 +1283,22 @@ function PaintArt() {
   );
 }
 
+function GrabArt() {
+  // A cherry on the stage and two hands reaching for it from either side.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="52" r="30" fill="#E6E0F4" />
+      <circle cx="50" cy="50" r="30" fill="#fff" />
+      <path d="M44 50 L50 36 L56 50" stroke={DARK.mint} stroke-width="2.5" fill="none" />
+      <circle cx="43" cy="54" r="7.5" fill={COLORS.tomato} />
+      <circle cx="57" cy="55" r="7.5" fill={COLORS.tomato} />
+      <rect x="4" y="74" width="30" height="18" rx="8" fill={COLORS.sky} />
+      <rect x="66" y="8" width="30" height="18" rx="8" fill={COLORS.tomato} />
+      <path d="M26 74 L36 62 M74 26 L64 38" stroke={INK} stroke-width="3" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1526,6 +1542,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sword-duel': SwordArt,
   'whack-a-mole': WhackArt,
   'paint-fight': PaintArt,
+  'grab-it': GrabArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
