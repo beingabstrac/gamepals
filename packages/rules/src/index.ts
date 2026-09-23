@@ -43,6 +43,7 @@ export * from './games/target-number';
 export * from './games/quick-maths';
 export * from './games/memory';
 export * from './games/sliding-puzzle';
+export * from './games/sweeper';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

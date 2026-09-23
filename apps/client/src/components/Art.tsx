@@ -1025,6 +1025,46 @@ function SlidingArt() {
   );
 }
 
+function SweeperArt() {
+  // A cleared corner with the numbers along its edge and a flag on the mine they point at.
+  const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
+  const numberColor: Record<string, string> = { '1': COLORS.sky, '2': COLORS.mint };
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="14" width="80" height="80" rx="14" fill="#E6E0F4" />
+      <rect x="10" y="10" width="80" height="80" rx="14" fill="#fff" />
+      {cells.map((cell, i) => {
+        const x = 14 + (i % 4) * 18.5;
+        const y = 14 + Math.floor(i / 4) * 18.5;
+        if (cell === 'c' || cell === 'f') {
+          return (
+            <g key={i}>
+              <rect x={x} y={y + 2} width="16.5" height="16" rx="4" fill={DARK.mint} />
+              <rect x={x} y={y} width="16.5" height="15.5" rx="4" fill={COLORS.mint} />
+              {cell === 'f' && (
+                <g>
+                  <rect x={x + 6} y={y + 3} width="2" height="10" rx="1" fill={INK} />
+                  <path d={`M ${x + 8} ${y + 3} L ${x + 14} ${y + 6} L ${x + 8} ${y + 9} Z`} fill={COLORS.tomato} />
+                </g>
+              )}
+            </g>
+          );
+        }
+        return (
+          <g key={i}>
+            <rect x={x} y={y} width="16.5" height="16.5" rx="4" fill="#F4F1FB" />
+            {cell && (
+              <text x={x + 8.25} y={y + 8.5} text-anchor="middle" dominant-baseline="central" font-family="Fredoka, sans-serif" font-weight="600" font-size="11" fill={numberColor[cell]}>
+                {cell}
+              </text>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 function MemoryArt() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -1216,6 +1256,7 @@ const ART: Record<string, () => JSX.Element> = {
   tripeaks: TriPeaksArt,
   sudoku: SudokuArt,
   'sliding-puzzle': SlidingArt,
+  sweeper: SweeperArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

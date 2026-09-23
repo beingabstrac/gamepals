@@ -36,6 +36,7 @@ const GAMES = [
   'Quick Maths',
   'Memory',
   'Sliding Puzzle',
+  'Sweeper',
   'Color Sort',
   'Echo',
   'Classic Snake',

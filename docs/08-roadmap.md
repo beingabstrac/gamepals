@@ -642,7 +642,11 @@ Both competitors' catalogues, and what neither of them has. [JindoBlu](https://a
     Same unbounded lag, same fix, same `boardCheck()`, and one test now covers both. Ludo looked
     like the same risk and is not: it draws every token straight from the state, which is why it
     cannot drift and why its picture was clean.
-- [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw
+- [ ] **P1 Puzzles:** Sweeper, Flood, Tile Match, Jigsaw. Split one game to a loop, the way the word games were (2026-09-23):
+  - [ ] **P1a Sweeper:** mines under a grid, numbers counting the neighbours, and a board that never needs a guess, measured affordable before building
+  - [ ] **P1b Flood:** fill the board from a corner in one colour within a move limit
+  - [ ] **P1c Tile Match:** clear a stacked layout of tiles by matching free pairs, clearly its own game and not a Mahjong reskin
+  - [ ] **P1d Jigsaw:** a picture cut into pieces and put back, pictures drawn by us
 - [ ] **U1 Duels A:** Pool, Mini Golf, Archery
 - [ ] **U2 Duels B:** Sword Duel, Spinner War, Racing
 - [ ] **R1 Party reflex:** Whack-a-Mole, Paint Fight, Grab It

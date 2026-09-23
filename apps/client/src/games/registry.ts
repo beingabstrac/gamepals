@@ -75,6 +75,9 @@ import {
   tripeaks,
   type TriPeaksState,
   slidingPuzzle,
+  sweeper,
+  SWEEPER_LEVELS,
+  type SweeperState,
   sudoku,
   SUDOKU_HINTS,
   SUDOKU_LEVELS,
@@ -143,6 +146,8 @@ import { DominoControls } from './dominoes/DominoControls';
 import { DOMINO_COLORS, DOMINO_NAMES, DOMINO_SIZE, DominoScene } from './dominoes/DominoScene';
 import { MEMORY_COLORS, MEMORY_NAMES, MEMORY_SIZE, MemoryScene } from './memory/MemoryScene';
 import { SLIDING_SIZE, SlidingScene } from './sliding-puzzle/SlidingScene';
+import { SweeperControls } from './sweeper/SweeperControls';
+import { SWEEPER_SIZE, SweeperScene } from './sweeper/SweeperScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -267,6 +272,8 @@ const LEVEL_LABEL: Record<SudokuLevel, string> = { easy: 'Easy', medium: 'Medium
 
 const ludoSides = (players: number) => COLORS_BY_PLAYERS[players] ?? COLORS_BY_PLAYERS[4]!;
 const duelSides = { sideNames: () => ['Blue', 'Red'], sideColors: () => DUEL_COLORS } as const;
+
+const SWEEPER_LEVEL_LABEL: Record<(typeof SWEEPER_LEVELS)[number], string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 
 export const GAMES: readonly AnyEntry[] = [
   entry({
@@ -1313,6 +1320,37 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state) => `Moves ${(state as SlidingState).moves}`,
     resultText: (state) => `Solved in ${(state as SlidingState).moves} moves!`,
     createScene: (session) => new SlidingScene(session),
+  }),
+  entry({
+    definition: sweeper,
+    tagline: 'Find the mines by the numbers',
+    minutes: '3 min',
+    hint: 'Tap any square to start',
+    levels: SWEEPER_LEVELS.map((id) => ({ id, label: SWEEPER_LEVEL_LABEL[id] })),
+    howTo: {
+      goal: 'Uncover every square that is not a mine.',
+      controls:
+        'Tap a square to dig. A number says how many mines touch it. Hold a square, or switch to Flag, to mark a mine. Tap a number whose flags are all in place to dig round it. On a keyboard: the arrow keys move, Enter digs and F flags.',
+      win: 'Every square that is not a mine is uncovered. You do not have to flag them.',
+      tip: 'Every board can be solved without guessing. When you are stuck, one of the numbers is telling you where to go next.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => [COLORS.mint],
+    size: SWEEPER_SIZE,
+    color: DARK.mint,
+    status: (state) => {
+      const left = (state as SweeperState).minesLeft;
+      return left >= 0 ? `${left} mine${left === 1 ? '' : 's'} left` : `${-left} flag${left === -1 ? '' : 's'} too many`;
+    },
+    resultText: (state) => {
+      const s = state as SweeperState;
+      if (s.result?.winners.length) return 'Swept clean! Every mine found.';
+      const safe = s.cells - s.mineCount;
+      return `Boom. You cleared ${safe - s.safeLeft} of ${safe} squares.`;
+    },
+    moveCue: (_before, after) => ((after as SweeperState).last.length > 0 ? 'place' : 'tap'),
+    Controls: SweeperControls,
+    createScene: (session) => new SweeperScene(session),
   }),
   entry({
     definition: colorSort,

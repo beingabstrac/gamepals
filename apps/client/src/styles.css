@@ -796,7 +796,8 @@ h2,
   margin: 0 auto;
 }
 
-.sudoku-tools {
+.sudoku-tools,
+.sweeper-tools {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
