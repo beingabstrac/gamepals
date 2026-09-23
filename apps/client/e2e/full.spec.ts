@@ -55,6 +55,7 @@ const GAMES = [
   'Guess the Person',
   'Royal Game of Ur',
   'Senet',
+  "Nine Men's Morris",
   'Color Sort',
   'Echo',
   'Classic Snake',

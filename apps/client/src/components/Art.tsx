@@ -1436,6 +1436,28 @@ function SenetArt() {
   );
 }
 
+function MorrisArt() {
+  // Three nested squares joined at the middles, a mill of three lit up and a piece on its way.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="10" width="88" height="88" rx="14" fill={DARK.sunny} />
+      <rect x="6" y="6" width="88" height="88" rx="14" fill={COLORS.sunny} />
+      <g stroke="#fff" stroke-width="3.5" fill="none">
+        <rect x="16" y="16" width="68" height="68" />
+        <rect x="28" y="28" width="44" height="44" />
+        <rect x="40" y="40" width="20" height="20" />
+        <path d="M50 16 V40 M50 60 V84 M16 50 H40 M60 50 H84" />
+      </g>
+      <path d="M16 16 H84" stroke={COLORS.bubblegum} stroke-width="7" stroke-linecap="round" opacity="0.8" />
+      {[16, 50, 84].map((x) => (
+        <circle key={x} cx={x} cy="16" r="6.5" fill={COLORS.sky} />
+      ))}
+      <circle cx="28" cy="72" r="6.5" fill={COLORS.tomato} />
+      <circle cx="72" cy="50" r="6.5" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1686,6 +1708,7 @@ const ART: Record<string, () => JSX.Element> = {
   'guess-person': GuessPersonArt,
   ur: UrArt,
   senet: SenetArt,
+  morris: MorrisArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

@@ -175,14 +175,15 @@ for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
   const file = path.join(dir, entry.name, "index.ts");
   if (!fs.existsSync(file)) continue;
-  const m = fs.readFileSync(file, "utf8").match(/^  name: .([^\x27]+).,$/m);
-  if (m) names.push(m[1]);
+  // Either quote: a name with an apostrophe in it (Nine Men\x27s Morris) is written in double quotes.
+  const m = fs.readFileSync(file, "utf8").match(/^  name: ([\x27"])(.+)\1,$/m);
+  if (m) names.push(m[2]);
 }
 const files = ["e2e/smoke.spec.ts", "e2e/layout.spec.ts", "e2e/full.spec.ts", "e2e/gallery.spec.ts", "e2e-native/android.mjs", "src/selftest.ts"];
 let bad = 0;
 for (const f of files) {
   const text = fs.readFileSync(process.env.REPO + "/apps/client/" + f, "utf8");
-  const missing = names.filter((n) => !text.includes("\x27" + n + "\x27"));
+  const missing = names.filter((n) => !text.includes("\x27" + n + "\x27") && !text.includes("\"" + n + "\""));
   if (missing.length) { console.log("  MISSING in " + f + ":", missing.join(", ")); bad = 1; }
 }
 if (!bad) console.log("  ok: " + names.length + " games in every list");

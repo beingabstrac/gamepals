@@ -121,6 +121,8 @@ import {
   type UrState,
   senet,
   type SenetState,
+  morris,
+  type MorrisState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -234,6 +236,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { MORRIS_COLORS, MORRIS_NAMES, MORRIS_SIZE, MorrisScene, morrisStatus } from './morris/MorrisScene';
 import { SENET_COLORS, SENET_NAMES, SENET_SIZE, SenetScene, senetStatus } from './senet/SenetScene';
 import { UR_COLORS, UR_NAMES, UR_SIZE, UrScene, urStatus } from './ur/UrScene';
 import { PERSON_COLORS, PERSON_SIZE, PersonScene, personStatus } from './guess-person/PersonScene';
@@ -933,6 +936,26 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => senetStatus(state as SenetState, names),
     moveCue: () => undefined,
     createScene: (session) => new SenetScene(session),
+  }),
+  entry({
+    definition: morris,
+    tagline: 'Make a mill, take a piece',
+    minutes: '10 min',
+    howTo: {
+      goal: 'Take the other player down to two pieces, or leave them with no move.',
+      controls: 'First take turns placing your nine pieces on the points. Then tap one of your pieces and tap a point next to it along a line. When you make a mill, tap one of their glowing pieces to take it. On a keyboard: arrows move the ring, Enter places, picks or takes.',
+      win: 'Win when the other player has only two pieces left or cannot move.',
+      draw: 'If a hundred moves go by with no piece taken, it is a draw.',
+      tip: 'Three of yours in a row along a line is a mill. A piece in a mill cannot be taken while they have others. Down to three pieces, you can fly to any empty point.',
+    },
+    sideNames: () => MORRIS_NAMES,
+    sideColors: () => MORRIS_COLORS,
+    size: MORRIS_SIZE,
+    color: DARK.sunny,
+    botDelayMs: 600,
+    status: (state, names) => morrisStatus(state as MorrisState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new MorrisScene(session),
   }),
   entry({
     definition: fourInARow,

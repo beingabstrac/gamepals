@@ -808,7 +808,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi. Split one game per loop.
   - [ ] **M24a Royal Game of Ur:** Finkel's rules, the board stood on end to fit a phone, four pyramid dice, pieces hop square by square.
   - [ ] **M24b Senet:** Kendall's reconstruction, the board on end, four sticks, swaps, walls, the water.
-  - [ ] **M24c Nine Men's Morris**
+  - [ ] **M24c Nine Men's Morris:** place, move, fly with three; mills glow and take; search bots, Expert in the worker.
   - [ ] **M24d Pachisi**
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
