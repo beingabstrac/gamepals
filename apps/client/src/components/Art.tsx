@@ -1586,6 +1586,35 @@ function ChowkaArt() {
   );
 }
 
+function CodeBreakerArt() {
+  // The covered code on top, two guess rows with their dots, the last one right.
+  const rows: [string[], number, number][] = [
+    [[COLORS.tomato, COLORS.sky, COLORS.mint, COLORS.sunny], 1, 2],
+    [[COLORS.sky, COLORS.tomato, COLORS.mint, COLORS.grape], 4, 0],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="10" width="84" height="22" rx="10" fill={COLORS.grape} />
+      {[22, 38, 54, 70].map((x) => (
+        <text key={x} x={x} y="21" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#fff">
+          ?
+        </text>
+      ))}
+      {rows.map(([pegs, exact, near], r) => (
+        <g key={r}>
+          <rect x="8" y={40 + r * 26} width="84" height="22" rx="8" fill="#fff" stroke="#E6E0F4" stroke-width="2" />
+          {pegs.map((c, i) => (
+            <circle key={i} cx={20 + i * 14} cy={51 + r * 26} r="5.5" fill={c} />
+          ))}
+          {[0, 1, 2, 3].map((k) => (
+            <circle key={k} cx={78 + (k % 2) * 7} cy={47 + r * 26 + Math.floor(k / 2) * 8} r="2.6" fill={k < exact ? INK : 'none'} stroke={k < exact + near ? INK : '#D8D3E6'} stroke-width="1.3" />
+          ))}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1842,6 +1871,7 @@ const ART: Record<string, () => JSX.Element> = {
   tafl: TaflArt,
   fanorona: FanoronaArt,
   chowka: ChowkaArt,
+  'code-breaker': CodeBreakerArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

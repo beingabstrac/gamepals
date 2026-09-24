@@ -69,6 +69,7 @@ export * from './games/go';
 export * from './games/tafl';
 export * from './games/fanorona';
 export * from './games/chowka';
+export * from './games/code-breaker';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

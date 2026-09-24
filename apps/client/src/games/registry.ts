@@ -133,6 +133,8 @@ import {
   type FanoState,
   chowka,
   type ChowkaState,
+  codeBreaker,
+  type CodeState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -246,6 +248,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { CODE_COLORS, CODE_SIZE, codeResult, CodeScene, codeStatus } from './code-breaker/CodeScene';
 import { chowkaColors, chowkaNames, CHOWKA_SIZE, ChowkaScene, chowkaStatus } from './chowka/ChowkaScene';
 import { FANO_CANVAS, FANO_COLORS, FANO_NAMES, FanoronaScene, fanoStatus } from './fanorona/FanoronaScene';
 import { TAFL_CANVAS, TAFL_COLORS, TAFL_NAMES, TaflScene, taflStatus } from './tafl/TaflScene';
@@ -1069,6 +1072,31 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => chowkaStatus(state as ChowkaState, names),
     moveCue: () => undefined,
     createScene: (session) => new ChowkaScene(session),
+  }),
+  entry({
+    definition: codeBreaker,
+    tagline: 'Crack the hidden color code',
+    minutes: '5 min',
+    levels: [
+      { id: 'easy', label: 'Easy' },
+      { id: 'classic', label: 'Classic' },
+      { id: 'hard', label: 'Hard' },
+    ],
+    hint: 'Tap colors to fill the row, then Check',
+    howTo: {
+      goal: 'Work out the hidden row of colored pegs before you run out of rows.',
+      controls: 'Tap colors to fill a row, tap a peg in it to take it out, then tap Check. On a keyboard: number keys pick colors, Backspace takes one out, Enter checks.',
+      win: 'Get every peg the right color in the right place to crack it.',
+      tip: 'A full dot means a peg is the right color in the right place. An open dot means the right color in the wrong place. The dots do not say which peg they mean. Easy is 4 pegs from 6 colors, none twice; Classic lets colors repeat; Hard is 5 pegs from 8 colors in 12 rows.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => CODE_COLORS,
+    size: CODE_SIZE,
+    color: DARK.grape,
+    status: (state) => codeStatus(state as CodeState),
+    resultText: (state) => codeResult(state as CodeState),
+    moveCue: () => 'place',
+    createScene: (session) => new CodeScene(session),
   }),
   entry({
     definition: fourInARow,
