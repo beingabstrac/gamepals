@@ -1975,6 +1975,25 @@ function TankArt() {
   );
 }
 
+function RoadDodgeArt() {
+  // A three-lane road with a car weaving between two lumps of traffic.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="6" width="80" height="88" rx="10" fill="#E9E6F2" />
+      <rect x="35" y="10" width="3" height="14" rx="1.5" fill="#fff" />
+      <rect x="35" y="36" width="3" height="14" rx="1.5" fill="#fff" />
+      <rect x="35" y="62" width="3" height="14" rx="1.5" fill="#fff" />
+      <rect x="62" y="10" width="3" height="14" rx="1.5" fill="#fff" />
+      <rect x="62" y="36" width="3" height="14" rx="1.5" fill="#fff" />
+      <rect x="62" y="62" width="3" height="14" rx="1.5" fill="#fff" />
+      <rect x="15" y="16" width="16" height="22" rx="6" fill={COLORS.sunny} />
+      <rect x="69" y="30" width="16" height="22" rx="6" fill={COLORS.grape} />
+      <rect x="42" y="64" width="16" height="22" rx="6" fill={COLORS.sky} />
+      <rect x="45" y="67" width="10" height="5" rx="2" fill="#fff" opacity="0.8" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2250,6 +2269,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sling-puck': SlingPuckArt,
   hoops: HoopsArt,
   'tank-duel': TankArt,
+  'road-dodge': RoadDodgeArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

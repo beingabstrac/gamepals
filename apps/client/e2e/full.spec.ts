@@ -54,6 +54,7 @@ const GAMES = [
   'Sling Puck',
   'Basketball Hoops',
   'Tank Duel',
+  'Road Dodge',
   'Impostor',
   'Charades',
   'Draw & Guess',

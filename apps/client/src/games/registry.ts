@@ -115,6 +115,7 @@ import {
   slingPuck,
   hoops,
   tankDuel,
+  roadDodge,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -284,6 +285,7 @@ import { BRICK_COLORS, BRICK_SIZE, BrickScene } from './brick-blast/BrickScene';
 import { SLING_COLORS, SLING_SIZE, SlingScene } from './sling-puck/SlingScene';
 import { HOOPS_COLORS, HOOPS_SIZE, HoopsScene } from './hoops/HoopsScene';
 import { TANK_COLORS, TANK_SIZE, TankScene } from './tank-duel/TankScene';
+import { ROAD_COLORS, ROAD_SIZE, RoadScene } from './road-dodge/RoadScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2653,6 +2655,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: TANK_SIZE,
     color: DARK.mint,
     createScene: (options) => new TankScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: roadDodge,
+    tagline: 'Dodge the traffic, last one driving',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Keep your car out of the traffic coming down your road.',
+      controls: 'Tap the left side of your half to move a lane left, the right side to move a lane right. On a keyboard: Left and Right for the bottom car, A and D for the top one.',
+      win: 'Three bumps and you are out. The last one still driving wins. After two minutes, more hearts left wins.',
+      tip: 'The traffic gets faster the longer you last. You both get the same traffic, so watch the road, not the other player.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => ROAD_COLORS,
+    size: ROAD_SIZE,
+    color: DARK.sky,
+    createScene: (options) => new RoadScene(options),
   },
   {
     kind: 'realtime',
