@@ -19,7 +19,7 @@ export const SHELVES: readonly { readonly title: string; readonly ids: readonly 
     title: 'Cards',
     ids: ['solitaire', 'freecell', 'spider', 'pyramid', 'tripeaks', 'crazy-eights', 'go-fish', 'war', 'old-maid', 'hearts', 'spades', 'callbreak', 'gin-rummy', 'rummy'],
   },
-  { title: 'Words and numbers', ids: ['word-guess', 'word-search', 'mini-crossword', 'word-ladder', 'word-groups', 'anagram-hunt', 'target-number', 'quick-maths', 'number-match', 'code-breaker'] },
+  { title: 'Words and numbers', ids: ['word-guess', 'word-search', 'mini-crossword', 'word-ladder', 'word-groups', 'anagram-hunt', 'target-number', 'quick-maths', 'number-match', 'code-breaker', 'hangman'] },
   {
     title: 'Puzzles',
     ids: ['2048', 'sudoku', 'nonogram', 'sweeper', 'flood', 'color-sort', 'tile-match', 'mahjong', 'block-puzzle', 'sliding-puzzle', 'jigsaw', 'memory', 'echo', 'classic-snake'],

@@ -32,7 +32,7 @@ async function open(page: Page, name: string): Promise<void> {
   await expect(page.locator('.board canvas')).toBeVisible();
 }
 
-const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Flood', 'Mini Golf', 'Archery', 'Impostor', 'Charades', 'Draw & Guess', 'Guess the Person', 'Go 9×9', 'Hnefatafl', 'Fanorona', 'Code Breaker', 'Hex', 'Nonogram', 'Block Puzzle', 'Number Match', 'Would You Rather', 'Truth or Dare'];
+const BANDED = ['Word Guess', 'Word Search', 'Mini Crossword', 'Word Ladder', 'Word Groups', 'Anagram Hunt', 'Target Number', 'Quick Maths', 'Flood', 'Mini Golf', 'Archery', 'Impostor', 'Charades', 'Draw & Guess', 'Guess the Person', 'Go 9×9', 'Hnefatafl', 'Fanorona', 'Code Breaker', 'Hex', 'Nonogram', 'Block Puzzle', 'Number Match', 'Would You Rather', 'Truth or Dare', 'Hangman'];
 
 for (const name of BANDED) {
   test(`${name}: nothing is drawn on top of anything else`, async ({ page }) => {

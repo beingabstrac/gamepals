@@ -73,6 +73,7 @@ const GAMES = [
   "Newton's Cradle",
   'Would You Rather',
   'Truth or Dare',
+  'Hangman',
   'Color Sort',
   'Echo',
   'Classic Snake',

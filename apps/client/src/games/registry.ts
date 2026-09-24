@@ -157,6 +157,8 @@ import {
   type RatherState,
   truthOrDare,
   type TodState,
+  hangman,
+  type HangState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -270,6 +272,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
 import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus } from './would-you-rather/RatherScene';
 import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
@@ -1376,6 +1379,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state, names) => todResult(state as TodState, names),
     moveCue: () => 'tap',
     createScene: (session) => new TodScene(session),
+  }),
+  entry({
+    definition: hangman,
+    tagline: 'Guess the word before the balloons go',
+    minutes: '3 min',
+    levels: [
+      { id: 'easy', label: 'Easy' },
+      { id: 'classic', label: 'Classic' },
+      { id: 'hard', label: 'Hard' },
+    ],
+    hint: 'Tap a letter to guess',
+    howTo: {
+      goal: 'Work out the hidden word one letter at a time.',
+      controls: 'Tap a letter to guess it, or type it on a keyboard. The clue says what kind of word it is.',
+      win: 'Fill in the whole word to win. Every wrong letter pops a balloon; lose them all and the word is shown.',
+      tip: 'Start with the vowels and the common letters: E, A, O, R, T, N, S. Easy has 8 balloons and short words; Hard has 5 and long ones.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => HANG_COLORS,
+    size: HANG_CANVAS,
+    color: DARK.sky,
+    botDelayMs: 300,
+    status: (state) => hangStatus(state as HangState),
+    resultText: (state) => hangResult(state as HangState),
+    moveCue: () => undefined,
+    createScene: (session) => new HangScene(session),
   }),
   entry({
     definition: fourInARow,

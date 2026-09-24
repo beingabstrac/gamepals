@@ -1839,6 +1839,28 @@ function TruthOrDareArt() {
   );
 }
 
+function HangmanArt() {
+  // A basket held up by balloons, and the word's slots with two letters in.
+  const balloons: [number, number, string][] = [[26, 26, COLORS.tomato], [42, 16, COLORS.sunny], [58, 16, COLORS.mint], [74, 26, COLORS.grape]];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {balloons.map(([x, y, c]) => (
+        <g key={x}>
+          <path d={`M${x} ${y + 9} L50 52`} stroke={COLORS.soft} stroke-width="1" />
+          <ellipse cx={x} cy={y} rx="8" ry="10" fill={c} />
+        </g>
+      ))}
+      <rect x="40" y="52" width="20" height="11" rx="3" fill={COLORS.peach} />
+      <circle cx="50" cy="49" r="5" fill={COLORS.sunny} />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <rect key={i} x={20 + i * 13} y="84" width="10" height="2.5" rx="1" fill={INK} />
+      ))}
+      <text x="25" y="77" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill={INK}>A</text>
+      <text x="64" y="77" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill={INK}>E</text>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2107,6 +2129,7 @@ const ART: Record<string, () => JSX.Element> = {
   'newtons-cradle': CradleArt,
   'would-you-rather': RatherArt,
   'truth-or-dare': TruthOrDareArt,
+  hangman: HangmanArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
