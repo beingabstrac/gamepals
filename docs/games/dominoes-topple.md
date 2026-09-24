@@ -1,4 +1,4 @@
-# Dominoes Topple
+# Domino Topple
 
 Status: brief (2026-09-25). From the catalog's chill toys (docs/12 F, "Dominoes topple").
 

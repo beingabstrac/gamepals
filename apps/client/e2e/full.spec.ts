@@ -87,7 +87,7 @@ const GAMES = [
   'Clean It',
   'Straighten Up',
   'Sand Fall',
-  'Dominoes Topple',
+  'Domino Topple',
   'Gomoku',
   'Oware',
   'Mexican Train',

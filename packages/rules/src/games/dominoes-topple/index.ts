@@ -2,7 +2,7 @@ import type { Rng } from '../../core/rng';
 import type { Bot, GameDefinition, GameResult, GameState, Seat } from '../../core/types';
 
 /**
- * Dominoes Topple (docs/games/dominoes-topple.md), a chill toy: lay a line of dominoes with your
+ * Domino Topple (docs/games/dominoes-topple.md), a chill toy: lay a line of dominoes with your
  * finger, tip the first, and watch them fall one after another. The chain is worked out here, not
  * in the scene: a falling domino lands on the nearest standing one in front of it, within its
  * length and its width, and that one falls on in the way it faces. Knock every domino down with
@@ -180,7 +180,7 @@ function createToppleBot(): Bot<ToppleMove> {
 
 export const dominoesTopple: GameDefinition<ToppleMove> = {
   id: 'dominoes-topple',
-  name: 'Dominoes Topple',
+  name: 'Domino Topple',
   minPlayers: 1,
   maxPlayers: 1,
   modes: ['solo'],

@@ -34,7 +34,7 @@ interface Piece {
 }
 
 /**
- * Dominoes Topple. The rules keep where every domino stands and work out the chain when one is
+ * Domino Topple. The rules keep where every domino stands and work out the chain when one is
  * pushed; this scene draws them from above, thin while standing, laid flat with their pips once
  * down, lays a domino every step of a finger drawn across the table, and plays the chain out.
  */
