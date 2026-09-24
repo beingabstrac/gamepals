@@ -171,6 +171,8 @@ import {
   type ZenState,
   newtonsCradle,
   type CradleState,
+  switchBoard,
+  type SwitchState,
   wouldYouRather,
   type RatherState,
   truthOrDare,
@@ -307,6 +309,7 @@ import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './h
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
 import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus } from './would-you-rather/RatherScene';
 import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
+import { SWITCH_CANVAS, SWITCH_COLORS, switchResult, SwitchScene, switchStatus } from './switch-board/SwitchScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
@@ -1457,6 +1460,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => cradleResult(state as CradleState),
     moveCue: () => undefined,
     createScene: (session) => new CradleScene(session),
+  }),
+  entry({
+    definition: switchBoard,
+    tagline: 'Flick, slide, click, clunk',
+    minutes: 'Any time',
+    hint: 'Flick a switch',
+    howTo: {
+      goal: 'Play with a board of chunky switches, sliders, dials, buttons and a lever.',
+      controls: 'Tap a switch to flick it, drag a slider or turn a dial, press the buttons, pull the lever. Tap Done when you have had enough. On a keyboard: 1 to 4 flick the switches, 5 to 8 press the buttons, Z, X and C move the sliders, V and B turn the dials, L pulls the lever, Enter is done.',
+      win: 'There is nothing to win. Every control lights a lamp at the top.',
+      tip: 'Turn everything all the way on and see what the lamps do.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => SWITCH_COLORS,
+    size: SWITCH_CANVAS,
+    color: DARK.sunny,
+    botDelayMs: 200,
+    status: (state) => switchStatus(state as SwitchState),
+    resultText: (state) => switchResult(state as SwitchState),
+    moveCue: () => undefined,
+    createScene: (session) => new SwitchScene(session),
   }),
   entry({
     definition: wouldYouRather,

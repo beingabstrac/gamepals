@@ -112,3 +112,4 @@ export * from './games/fruit-merge';
 export * from './games/speed';
 export * from './games/gravity-run';
 export * from './games/tower';
+export * from './games/switch-board';

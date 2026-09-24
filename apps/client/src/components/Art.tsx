@@ -2130,6 +2130,28 @@ function TowerArt() {
   );
 }
 
+function SwitchBoardArt() {
+  // A little fidget board: lamps along the top, two toggles, a slider and a round button.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="14" fill="#F4F1FB" />
+      <circle cx="22" cy="20" r="4" fill={COLORS.tomato} />
+      <circle cx="36" cy="20" r="4" fill={COLORS.sunny} />
+      <circle cx="50" cy="20" r="4" fill="#D8D3E6" />
+      <circle cx="64" cy="20" r="4" fill={COLORS.mint} />
+      <circle cx="78" cy="20" r="4" fill={COLORS.sky} />
+      <rect x="18" y="32" width="18" height="30" rx="6" fill="#fff" stroke="#D8D3E6" stroke-width="2" />
+      <circle cx="27" cy="40" r="6" fill={COLORS.tomato} />
+      <rect x="42" y="32" width="18" height="30" rx="6" fill="#fff" stroke="#D8D3E6" stroke-width="2" />
+      <circle cx="51" cy="54" r="6" fill="#B8B2CC" />
+      <circle cx="76" cy="47" r="10" fill={COLORS.grape} />
+      <rect x="18" y="72" width="64" height="7" rx="3.5" fill="#E0DAF0" />
+      <rect x="18" y="72" width="38" height="7" rx="3.5" fill={COLORS.sky} />
+      <rect x="50" y="68" width="12" height="15" rx="4" fill="#fff" stroke="#C9C2E0" stroke-width="2" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2397,6 +2419,7 @@ const ART: Record<string, () => JSX.Element> = {
   'maze-paint': MazePaintArt,
   'fruit-merge': FruitMergeArt,
   tower: TowerArt,
+  'switch-board': SwitchBoardArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,
