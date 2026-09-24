@@ -14,6 +14,15 @@ export const IMPOSTOR_SIZE = { width: W, height: H };
 
 export const IMPOSTOR_COLORS = PARTY_COLORS;
 const IMPOSTOR_DARK = PARTY_DARK;
+/** The six guess buttons: white words need a strong color behind them, so no yellow. */
+const GUESS_COLORS: readonly (readonly [string, string])[] = [
+  [COLORS.grape, DARK.grape],
+  [COLORS.sky, DARK.sky],
+  [COLORS.tomato, DARK.tomato],
+  [COLORS.mint, DARK.mint],
+  [COLORS.bubblegum, DARK.bubblegum],
+  [COLORS.peach, DARK.peach],
+];
 
 /** The bands every phase draws in: a title, the middle, and the button along the bottom. */
 const TITLE_Y = 70;
@@ -283,6 +292,11 @@ export class ImpostorScene extends Scene {
       g.fillRoundedRect(x - 128, y - cellH / 2 + 8 + 5, 256, cellH - 16, 26);
       g.fillStyle(on ? toHex(IMPOSTOR_COLORS[seat % 8]!) : 0xffffff, 1);
       g.fillRoundedRect(x - 128, y - cellH / 2 + 8, 256, cellH - 16, 26);
+      if (on) {
+        // Picked, the button turns the face's own color, so the face sits on a white disc.
+        g.fillStyle(0xffffff, 1);
+        g.fillCircle(x - 80, y, Math.min(30, cellH / 3.4) + 5);
+      }
       this.view.add(g);
       this.face(x - 80, y, Math.min(30, cellH / 3.4), seat);
       const t = sharpText(this, x + 26, y, this.name(seat), 26, on ? '#FFFFFF' : COLORS.ink).setFontStyle('bold');
@@ -306,7 +320,7 @@ export class ImpostorScene extends Scene {
     state.choices.forEach((word, i) => {
       const x = i % 2 === 0 ? W / 2 - 138 : W / 2 + 138;
       const y = MIDDLE_TOP + Math.floor(i / 2) * cellH + cellH / 2;
-      this.button(x, y, 256, cellH - 30, words[word]!, IMPOSTOR_COLORS[(i + 3) % 8]!, IMPOSTOR_DARK[(i + 3) % 8]!, () => this.play(`g${i}`), 28);
+      this.button(x, y, 256, cellH - 30, words[word]!, GUESS_COLORS[i]![0], GUESS_COLORS[i]![1], () => this.play(`g${i}`), 28);
     });
     const t = sharpText(this, W / 2, BUTTON_Y, `${this.name(state.impostor)}, which was the word?`, 24, COLORS.soft);
     this.fit(t, W - 40, 24);
