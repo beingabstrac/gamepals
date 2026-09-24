@@ -24,7 +24,7 @@ export const SHELVES: readonly { readonly title: string; readonly ids: readonly 
     title: 'Puzzles',
     ids: ['2048', 'sudoku', 'nonogram', 'sweeper', 'flood', 'color-sort', 'tile-match', 'mahjong', 'block-puzzle', 'sliding-puzzle', 'jigsaw', 'memory', 'echo', 'classic-snake'],
   },
-  { title: 'Party: pass the phone', ids: ['impostor', 'charades', 'draw-guess'] },
+  { title: 'Party: pass the phone', ids: ['impostor', 'charades', 'draw-guess', 'would-you-rather'] },
   { title: 'Chill', ids: ['pop-it', 'zen-garden', 'newtons-cradle'] },
 ];
 

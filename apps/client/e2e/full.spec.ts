@@ -71,6 +71,7 @@ const GAMES = [
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",
+  'Would You Rather',
   'Color Sort',
   'Echo',
   'Classic Snake',

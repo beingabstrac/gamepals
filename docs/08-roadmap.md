@@ -830,7 +830,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M28c Newton's Cradle:** pull one to four, as many fly out the far side, a click at every crossing.
   - [ ] **M28b Zen Garden:** rake with four tines, up to seven stones, Smooth, Done.
   - [ ] **M28a Pop It:** four shapes, rainbow rows, drag to pop, flip for the second side.
-- [ ] **M30+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M30 Party B:** Would You Rather, Truth or Dare (family-safe), and two more from the catalog's party and puzzle lists.
+  - [ ] **M30a Would You Rather:** pick in secret on a passed phone, then the split; a point for siding with the table.
+- [ ] **M31+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

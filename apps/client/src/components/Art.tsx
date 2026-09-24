@@ -1804,6 +1804,23 @@ function CradleArt() {
   );
 }
 
+function RatherArt() {
+  // Two choice cards, one above the other, and a little face under each.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="12" y="14" width="76" height="28" rx="10" fill={DARK.sky} />
+      <rect x="12" y="10" width="76" height="28" rx="10" fill={COLORS.sky} />
+      <text x="50" y="24" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#fff">A</text>
+      <text x="50" y="50" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill={COLORS.soft}>or</text>
+      <rect x="12" y="62" width="76" height="28" rx="10" fill={DARK.tomato} />
+      <rect x="12" y="58" width="76" height="28" rx="10" fill={COLORS.tomato} />
+      <text x="50" y="72" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#fff">B</text>
+      <circle cx="86" cy="40" r="7" fill={COLORS.sunny} />
+      <circle cx="14" cy="88" r="7" fill={COLORS.mint} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2070,6 +2087,7 @@ const ART: Record<string, () => JSX.Element> = {
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,
+  'would-you-rather': RatherArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

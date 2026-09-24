@@ -153,6 +153,8 @@ import {
   type ZenState,
   newtonsCradle,
   type CradleState,
+  wouldYouRather,
+  type RatherState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -266,6 +268,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus } from './would-you-rather/RatherScene';
 import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
@@ -1324,6 +1327,29 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => cradleResult(state as CradleState),
     moveCue: () => undefined,
     createScene: (session) => new CradleScene(session),
+  }),
+  entry({
+    definition: wouldYouRather,
+    party: true,
+    tagline: 'Pick in secret, see who agrees',
+    minutes: '5 min',
+    tryIt: 'Pass the phone round so everyone picks',
+    howTo: {
+      goal: 'Guess which way the table will go, and go with them.',
+      controls: 'Pass the phone round. Tap to see the question, then tap the one you would rather. When everyone has picked, the split is shown. On a keyboard: Enter looks, 1 or 2 picks.',
+      win: 'Pick the side most of the table picked and score a point. After ten questions, the most points wins.',
+      draw: 'All level is a draw.',
+      tip: 'There are no wrong answers, only popular ones.',
+    },
+    sideNames: (players) => Array.from({ length: players }, (_, i) => `Player ${i + 1}`),
+    sideColors: (players) => RATHER_COLORS.slice(0, players),
+    size: RATHER_CANVAS,
+    color: DARK.grape,
+    botDelayMs: 400,
+    status: (state, names) => ratherStatus(state as RatherState, names),
+    resultText: (state, names) => ratherResult(state as RatherState, names),
+    moveCue: () => 'tap',
+    createScene: (session) => new RatherScene(session),
   }),
   entry({
     definition: fourInARow,
