@@ -13,7 +13,9 @@ const H = 1000;
 export const PERSON_SIZE = { width: W, height: H };
 export const PERSON_COLORS = [COLORS.sky, COLORS.tomato];
 
-const TOP_Y = 48;
+const TOP_Y = 40;
+/** The other player's last question, under yours. */
+const SUB_Y = 76;
 const COLS = 6;
 const CARD_W = 98;
 const CARD_H = 124;
@@ -27,8 +29,12 @@ const CHIP_W = 196;
 const CHIP_H = 52;
 const CHIP_GAP = 10;
 
+/** Question chips carry white words, so no yellow among them. */
+const CHIP_COLORS = PARTY_COLORS.filter((c) => c !== COLORS.sunny);
 const SKIN = ['#F6D3B3', '#E0AC7E', '#B97A4E', '#7A4B2E'];
 const HAIR: Record<GuessFace['hair'], string> = { black: '#2B2A3A', brown: '#8A5A2B', ginger: '#E0701A', blonde: '#F2C94C', grey: '#B9B6C8', bald: '' };
+/** Beards a shade darker than the hair, so a blonde or grey one still shows on a pale face. */
+const BEARD: Record<GuessFace['hair'], string> = { black: '#2B2A3A', brown: '#6E4520', ginger: '#B8560F', blonde: '#C99A1E', grey: '#8F8BA3', bald: '#6E4520' };
 
 /**
  * Guess the Person. The rules answer every question truthfully and work out which faces still fit;
@@ -252,7 +258,8 @@ export class PersonScene extends Scene {
       this.view.add(g);
     });
     const other: Seat = this.viewer === 0 ? 1 : 0;
-    this.text(W / 2, TOP_Y, this.headline(state), 30, COLORS.ink);
+    this.text(W / 2, TOP_Y, this.headline(state), 28, COLORS.ink);
+    this.text(W / 2, SUB_Y, this.subline(state), 18, COLORS.soft, W - 40, false);
 
     // Your own secret face, bottom left, so you can answer nothing wrong by mistake.
     const mine = FACES[state.secrets[this.viewer]!]!;
@@ -280,7 +287,7 @@ export class PersonScene extends Scene {
       const c = this.chipAt(i);
       const used = asked.has(i);
       const chip = this.add.graphics();
-      const color = used ? COLORS.line : PARTY_COLORS[i % PARTY_COLORS.length]!;
+      const color = used ? COLORS.line : CHIP_COLORS[i % CHIP_COLORS.length]!;
       chip.fillStyle(toHex(used ? '#D8D3E6' : darker(color)), 1);
       chip.fillRoundedRect(c.x - CHIP_W / 2, c.y - CHIP_H / 2 + 5, CHIP_W, CHIP_H, CHIP_H / 2);
       chip.fillStyle(toHex(color), live || used ? 1 : 0.5);
@@ -290,6 +297,7 @@ export class PersonScene extends Scene {
     });
   }
 
+  /** The top line: what you last learned, or how it ended. */
   private headline(state: PersonState): string {
     const last = state.last;
     if (state.result) {
@@ -297,11 +305,20 @@ export class PersonScene extends Scene {
       const who = this.who(last.seat);
       return last.right ? `${who} got it: ${FACES[last.face]!.name}!` : `${who} said ${FACES[last.face]!.name}. Wrong!`;
     }
-    if (last?.kind === 'ask') {
-      const who = last.seat === this.viewer ? 'You' : this.who(last.seat);
-      return `${who} asked "${FACE_QUESTIONS[last.question]!.text}" ${last.answer ? 'Yes!' : 'No.'}`;
-    }
+    // Your own last answer, which the other player's turn must not push off the screen.
+    const asked = state.asked[this.viewer]!;
+    const mine = asked[asked.length - 1];
+    if (mine) return `You asked "${FACE_QUESTIONS[mine.question]!.text}" ${mine.answer ? 'Yes!' : 'No.'}`;
     return this.viewerCanAct() ? 'Ask a question or name a face' : `${this.who(state.currentSeat)} is thinking…`;
+  }
+
+  /** The second line: what the other player last asked about your face. */
+  private subline(state: PersonState): string {
+    const other: Seat = this.viewer === 0 ? 1 : 0;
+    const list = state.asked[other]!;
+    const theirs = list[list.length - 1];
+    if (!theirs || state.result) return '';
+    return `${this.who(other)} asked "${FACE_QUESTIONS[theirs.question]!.text}" ${theirs.answer ? 'Yes' : 'No'}`;
   }
 
   private button(x: number, y: number, w: number, h: number, label: string, color: string, lip: string): void {
@@ -331,7 +348,8 @@ export class PersonScene extends Scene {
   /** The bands this board keeps to, for the layout check. */
   layoutCheck(): { name: string; top: number; bottom: number }[] {
     return [
-      { name: 'headline', top: TOP_Y - 22, bottom: TOP_Y + 22 },
+      { name: 'headline', top: TOP_Y - 20, bottom: TOP_Y + 20 },
+      { name: 'their question', top: SUB_Y - 12, bottom: SUB_Y + 12 },
       { name: 'board', top: BOARD_Y - CARD_H * 0.02, bottom: BOARD_BOTTOM + 5 },
       { name: 'yours', top: MINE_Y - 34, bottom: MINE_Y + 34 },
       { name: 'questions', top: CHIPS_Y, bottom: CHIPS_Y + 4 * (CHIP_H + CHIP_GAP) },
@@ -372,7 +390,7 @@ function drawFace(g: GameObjects.Graphics, face: GuessFace, index: number, x: nu
     g.fillCircle(x + r * 1.0, y + r * 0.42, r * 0.14);
   }
   if (face.beard) {
-    g.fillStyle(toHex(hair || '#8A5A2B'), 1);
+    g.fillStyle(toHex(BEARD[face.hair]), 1);
     g.beginPath();
     g.arc(x, y + r * 0.1, r * 0.98, Math.PI * 0.05, Math.PI * 0.95, false);
     g.closePath();
@@ -392,6 +410,10 @@ function drawFace(g: GameObjects.Graphics, face: GuessFace, index: number, x: nu
     g.lineBetween(x - r * 0.22, y + r * 0.38, x + r * 0.22, y + r * 0.38);
   }
   if (face.glasses) {
+    // A white rim under the frames, so they show on every skin tone.
+    g.lineStyle(Math.max(2.5, r * 0.17), 0xffffff, 0.9);
+    g.strokeCircle(x - r * 0.36, y - r * 0.08, r * 0.26);
+    g.strokeCircle(x + r * 0.36, y - r * 0.08, r * 0.26);
     g.lineStyle(Math.max(1.5, r * 0.09), toHex(COLORS.ink), 1);
     g.strokeCircle(x - r * 0.36, y - r * 0.08, r * 0.26);
     g.strokeCircle(x + r * 0.36, y - r * 0.08, r * 0.26);
