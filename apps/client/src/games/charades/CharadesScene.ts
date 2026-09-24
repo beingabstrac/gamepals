@@ -6,7 +6,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { onKeys } from '../keys';
-import { PARTY_COLORS } from '../party';
+import { inkOn, PARTY_COLORS } from '../party';
 
 /** Wide, because the phone goes on a forehead sideways. */
 const W = 900;
@@ -184,9 +184,9 @@ export class CharadesScene extends Scene {
     g.fillStyle(toHex(color), 1);
     g.fillRoundedRect(60, 110, W - 120, 300, 44);
     this.view.add(g);
-    this.text(W / 2, 190, 'Hold the phone on your forehead,', 32, '#FFFFFF', W - 180, true);
-    this.text(W / 2, 236, 'screen out. Everyone else gives clues.', 32, '#FFFFFF', W - 180, true);
-    this.text(W / 2, 320, "Don't say the word!", 26, '#FFFFFF');
+    this.text(W / 2, 190, 'Hold the phone on your forehead,', 32, inkOn(color), W - 180, true);
+    this.text(W / 2, 236, 'screen out. Everyone else gives clues.', 32, inkOn(color), W - 180, true);
+    this.text(W / 2, 320, "Don't say the word!", 26, inkOn(color));
     const last = this.lastGo(state);
     if (last) this.text(W / 2, 460, last, 26, COLORS.soft);
     const b = this.add.graphics();

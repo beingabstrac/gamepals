@@ -6,7 +6,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { onKeys } from '../keys';
-import { PARTY_COLORS, PARTY_DARK } from '../party';
+import { inkOn, PARTY_COLORS, PARTY_DARK } from '../party';
 
 const W = 600;
 const H = 880;
@@ -278,8 +278,7 @@ export class DrawScene extends Scene {
     g.fillStyle(toHex(color), 1);
     g.fillRoundedRect(x - w / 2, y - h / 2, w, h, Math.min(34, h / 2.2));
     this.view.add(g);
-    // White words disappear on yellow, so a yellow button (a player's own color) gets dark ones.
-    this.text(x, y, label, size, color === COLORS.sunny ? COLORS.ink : '#FFFFFF', w - 20);
+    this.text(x, y, label, size, inkOn(color), w - 20);
     this.hits.push({ x, y, w, h: h + 6, act });
   }
 
@@ -306,12 +305,12 @@ export class DrawScene extends Scene {
       g.fillStyle(toHex(color), 1);
       g.fillRoundedRect(PAD.x + 30, PAD.y, PAD.w - 60, PAD.h, 40);
       this.view.add(g);
-      this.text(W / 2, mid - 60, `${this.name(seat)} draws`, 44, '#FFFFFF');
-      this.text(W / 2, mid + 10, 'Only you look at the word!', 26, '#FFFFFF', W - 120, false);
+      this.text(W / 2, mid - 60, `${this.name(seat)} draws`, 44, inkOn(color));
+      this.text(W / 2, mid + 10, 'Only you look at the word!', 26, inkOn(color), W - 120, false);
       const last = state.lastWord;
       if (last) {
         const who = state.lastGuesser === null ? `Nobody got ${last}` : `${this.name(state.lastGuesser)} got ${last}`;
-        this.text(W / 2, mid + 120, who, 26, '#FFFFFF', W - 120, false);
+        this.text(W / 2, mid + 120, who, 26, inkOn(color), W - 120, false);
       }
       this.hits.push({ x: W / 2, y: mid, w: PAD.w - 60, h: PAD.h, act: () => this.flip() });
       this.button(W / 2, ACTION_Y, 360, ACTION_H, 'Tap to see the word', COLORS.grape, DARK.grape, () => this.flip());

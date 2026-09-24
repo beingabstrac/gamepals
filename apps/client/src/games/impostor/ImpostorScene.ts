@@ -6,7 +6,7 @@ import type { Session } from '../../session';
 import { COLORS, DARK, toHex } from '../../theme';
 import { fitCamera, sharpText } from '../crisp';
 import { onKeys } from '../keys';
-import { PARTY_COLORS, PARTY_DARK } from '../party';
+import { inkOn, PARTY_COLORS, PARTY_DARK } from '../party';
 
 const W = 600;
 const H = 820;
@@ -231,8 +231,8 @@ export class ImpostorScene extends Scene {
       g.fillStyle(0xffffff, 1);
       g.fillCircle(W / 2, mid - 40, 86);
       this.face(W / 2, mid - 40, 70, seat);
-      const who = sharpText(this, W / 2, mid + 80, this.name(seat), 40, '#FFFFFF').setFontStyle('bold');
-      const only = sharpText(this, W / 2, mid + 130, 'Only you look!', 24, '#FFFFFF');
+      const who = sharpText(this, W / 2, mid + 80, this.name(seat), 40, inkOn(IMPOSTOR_COLORS[seat % 8]!)).setFontStyle('bold');
+      const only = sharpText(this, W / 2, mid + 130, 'Only you look!', 24, inkOn(IMPOSTOR_COLORS[seat % 8]!));
       this.view.add([who, only]);
       this.hits.push({ x: W / 2, y: mid, w: W - 140, h: MIDDLE_BOTTOM - MIDDLE_TOP, act: () => this.flip() });
       this.button(W / 2, BUTTON_Y, 360, BUTTON_H, 'Tap to look', COLORS.grape, DARK.grape, () => this.flip());
@@ -299,7 +299,7 @@ export class ImpostorScene extends Scene {
       }
       this.view.add(g);
       this.face(x - 80, y, Math.min(30, cellH / 3.4), seat);
-      const t = sharpText(this, x + 26, y, this.name(seat), 26, on && IMPOSTOR_COLORS[seat % 8] !== COLORS.sunny ? '#FFFFFF' : COLORS.ink).setFontStyle('bold');
+      const t = sharpText(this, x + 26, y, this.name(seat), 26, on ? inkOn(IMPOSTOR_COLORS[seat % 8]!) : COLORS.ink).setFontStyle('bold');
       this.fit(t, 150, 26);
       this.view.add(t);
       this.hits.push({ x, y, w: 256, h: cellH - 16, act: () => this.pick(seat) });
