@@ -168,9 +168,9 @@ export class MazeScene extends Scene {
         g.fillRect(x - c / 2, y - c / 2, c, c);
       } else {
         // Walls stand up a little, with a lip.
-        g.fillStyle(toHex('#B3AAD6'), 1);
+        g.fillStyle(toHex('#9A8DCB'), 1);
         g.fillRoundedRect(x - c / 2 + 2, y - c / 2 + 5, c - 4, c - 4, c * 0.2);
-        g.fillStyle(toHex('#CFC8EA'), 1);
+        g.fillStyle(toHex('#B9AEE3'), 1);
         g.fillRoundedRect(x - c / 2 + 2, y - c / 2 + 1, c - 4, c - 6, c * 0.2);
       }
     });
