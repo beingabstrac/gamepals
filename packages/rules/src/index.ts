@@ -111,3 +111,4 @@ export * from './games/maze-paint';
 export * from './games/fruit-merge';
 export * from './games/speed';
 export * from './games/gravity-run';
+export * from './games/tower';

@@ -159,10 +159,12 @@ import {
   chainMerge,
   mazePaint,
   fruitMerge,
+  tower,
   type NumberState,
   type ChainState,
   type MazeState,
   type FruitState,
+  type TowerState,
   popIt,
   type PopState,
   zenGarden,
@@ -311,6 +313,7 @@ import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus }
 import { CHAIN_CANVAS, CHAIN_COLORS, ChainScene, chainResultText, chainStatus } from './chain-merge/ChainScene';
 import { MAZE_CANVAS, MAZE_COLORS, mazeResult, MazeScene, mazeStatus } from './maze-paint/MazeScene';
 import { FRUIT_CANVAS, FRUIT_COLORS, fruitResult, FruitScene, fruitStatus } from './fruit-merge/FruitScene';
+import { TOWER_CANVAS, TOWER_COLORS, towerResult, TowerScene, towerStatus } from './tower/TowerScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
@@ -1364,6 +1367,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => fruitResult(state as FruitState),
     moveCue: () => undefined,
     createScene: (session) => new FruitScene(session),
+  }),
+  entry({
+    definition: tower,
+    tagline: 'Pull a block, do not topple it',
+    minutes: '5 min',
+    hint: 'Draw a block out, slowly',
+    howTo: {
+      goal: 'Do not be the one who knocks the tower over.',
+      controls: 'On your turn, drag a block sideways out of the tower (not from the top two rows), then tap a free place on top for it. Slow and steady pulls are safer. On a keyboard: arrows pick a block, Enter pulls it, then Left, Right and Enter place it.',
+      win: 'If the tower falls on your turn, you lose and everyone else wins.',
+      tip: 'A row can lose both side blocks and still stand on its middle one, but take the middle first and the sides have to stay. The taller it gets, the wobblier it is.',
+    },
+    sideNames: (players) => Array.from({ length: players }, (_, i) => ['Peach', 'Blue', 'Green', 'Purple'][i]!),
+    sideColors: () => TOWER_COLORS,
+    size: TOWER_CANVAS,
+    color: DARK.peach,
+    botDelayMs: 500,
+    status: (state, names) => towerStatus(state as TowerState, names),
+    resultText: (state, names) => towerResult(state as TowerState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new TowerScene(session),
   }),
   entry({
     definition: popIt,

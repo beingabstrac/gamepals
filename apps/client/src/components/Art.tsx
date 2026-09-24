@@ -2113,6 +2113,23 @@ function GravityRunArt() {
   );
 }
 
+function TowerArt() {
+  // A wooden tower, side on, with a block halfway out and one gap lower down.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="18" y="88" width="64" height="6" rx="3" fill="#E9E3F5" />
+      <rect x="26" y="76" width="48" height="11" rx="3" fill="#F2C58C" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="26" y="64" width="15" height="11" rx="3" fill="#EDB877" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="59" y="64" width="15" height="11" rx="3" fill="#EDB877" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="26" y="52" width="48" height="11" rx="3" fill="#F5CF9E" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="26" y="40" width="15" height="11" rx="3" fill="#F2C58C" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="54" y="40" width="30" height="11" rx="3" fill="#F2C58C" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="26" y="28" width="48" height="11" rx="3" fill="#EDB877" stroke="#C98F5A" stroke-width="1.5" />
+      <rect x="26" y="16" width="15" height="11" rx="3" fill="#F5CF9E" stroke="#C98F5A" stroke-width="1.5" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2379,6 +2396,7 @@ const ART: Record<string, () => JSX.Element> = {
   'chain-merge': ChainMergeArt,
   'maze-paint': MazePaintArt,
   'fruit-merge': FruitMergeArt,
+  tower: TowerArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,
