@@ -86,6 +86,7 @@ const GAMES = [
   'Switch Board',
   'Clean It',
   'Straighten Up',
+  'Sand Fall',
   'Gomoku',
   'Oware',
   'Mexican Train',

@@ -2260,6 +2260,20 @@ function BallRunArt() {
   );
 }
 
+function SandFallArt() {
+  // A jar of sand in soft colored stripes, a stream pouring in from the top.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="18" y="14" width="64" height="78" rx="14" fill="#F4F1FB" />
+      <path d="M20 92 V70 Q35 62 50 68 T80 64 V92 Z" fill={COLORS.sky} />
+      <path d="M20 72 V58 Q34 50 50 56 T80 52 V66 Q64 60 50 68 T20 72 Z" fill={COLORS.sunny} />
+      <path d="M20 60 V50 Q36 42 52 48 T80 44 V54 Q64 50 50 56 T20 60 Z" fill={COLORS.tomato} />
+      <rect x="47" y="8" width="6" height="40" rx="3" fill={COLORS.mint} />
+      <path d="M40 48 Q50 38 60 48 Z" fill={COLORS.mint} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2531,6 +2545,7 @@ const ART: Record<string, () => JSX.Element> = {
   'switch-board': SwitchBoardArt,
   'clean-it': CleanItArt,
   'straighten-up': StraightenUpArt,
+  'sand-fall': SandFallArt,
   gomoku: GomokuArt,
   oware: OwareArt,
   'mexican-train': MexicanTrainArt,

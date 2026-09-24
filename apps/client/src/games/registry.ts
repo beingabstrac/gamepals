@@ -185,6 +185,8 @@ import {
   type CleanState,
   straightenUp,
   type StraightenState,
+  sandFall,
+  type SandState,
   wouldYouRather,
   type RatherState,
   truthOrDare,
@@ -325,6 +327,7 @@ import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus }
 import { SWITCH_CANVAS, SWITCH_COLORS, switchResult, SwitchScene, switchStatus } from './switch-board/SwitchScene';
 import { CLEAN_CANVAS, CLEAN_COLORS, cleanResult, CleanScene, cleanStatus } from './clean-it/CleanScene';
 import { STRAIGHTEN_CANVAS, STRAIGHTEN_COLORS, straightenResult, StraightenScene, straightenStatus } from './straighten-up/StraightenScene';
+import { SAND_CANVAS, SAND_TINTS, sandResult, SandScene, sandStatus } from './sand-fall/SandScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
@@ -1643,6 +1646,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => straightenResult(state as StraightenState),
     moveCue: () => undefined,
     createScene: (session) => new StraightenScene(session),
+  }),
+  entry({
+    definition: sandFall,
+    tagline: 'Pour sand, make stripes',
+    minutes: 'Any time',
+    hint: 'Drag in the jar to pour',
+    howTo: {
+      goal: 'Pour colored sand into the jar and watch it pile up in stripes.',
+      controls: 'Tap a color, then drag in the jar to pour. Shake empties the jar. Tap Done when you like it. On a keyboard: 1 to 7 pick a color, Space pours, S shakes, D is done.',
+      win: 'There is nothing to win: it is done when you say so.',
+      tip: 'Pour in one spot for a hill, sweep across for a flat stripe, then change color.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => SAND_TINTS,
+    size: SAND_CANVAS,
+    color: DARK.peach,
+    botDelayMs: 120,
+    status: (state) => sandStatus(state as SandState),
+    resultText: (state) => sandResult(state as SandState),
+    moveCue: () => undefined,
+    createScene: (session) => new SandScene(session),
   }),
   entry({
     definition: wouldYouRather,
