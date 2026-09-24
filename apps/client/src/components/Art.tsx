@@ -2274,6 +2274,21 @@ function SandFallArt() {
   );
 }
 
+function DominoesToppleArt() {
+  // A curve of dominoes, the front ones already down on the table.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="62" width="26" height="14" rx="3" fill={COLORS.tomato} transform="rotate(-8 23 69)" />
+      <circle cx="17" cy="68" r="2" fill="#FFFFFF" />
+      <circle cx="29" cy="67" r="2" fill="#FFFFFF" />
+      <rect x="34" y="40" width="12" height="30" rx="3" fill={COLORS.sunny} transform="rotate(38 40 70)" />
+      <rect x="50" y="36" width="9" height="32" rx="3" fill={COLORS.mint} />
+      <rect x="64" y="30" width="9" height="32" rx="3" fill={COLORS.sky} />
+      <rect x="78" y="24" width="9" height="32" rx="3" fill={COLORS.grape} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2546,6 +2561,7 @@ const ART: Record<string, () => JSX.Element> = {
   'clean-it': CleanItArt,
   'straighten-up': StraightenUpArt,
   'sand-fall': SandFallArt,
+  'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   oware: OwareArt,
   'mexican-train': MexicanTrainArt,

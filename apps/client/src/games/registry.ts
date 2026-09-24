@@ -187,6 +187,8 @@ import {
   type StraightenState,
   sandFall,
   type SandState,
+  dominoesTopple,
+  type ToppleState,
   wouldYouRather,
   type RatherState,
   truthOrDare,
@@ -328,6 +330,7 @@ import { SWITCH_CANVAS, SWITCH_COLORS, switchResult, SwitchScene, switchStatus }
 import { CLEAN_CANVAS, CLEAN_COLORS, cleanResult, CleanScene, cleanStatus } from './clean-it/CleanScene';
 import { STRAIGHTEN_CANVAS, STRAIGHTEN_COLORS, straightenResult, StraightenScene, straightenStatus } from './straighten-up/StraightenScene';
 import { SAND_CANVAS, SAND_TINTS, sandResult, SandScene, sandStatus } from './sand-fall/SandScene';
+import { TOPPLE_CANVAS, TOPPLE_TINTS, toppleResult, ToppleScene, toppleStatus } from './dominoes-topple/ToppleScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
@@ -1667,6 +1670,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => sandResult(state as SandState),
     moveCue: () => undefined,
     createScene: (session) => new SandScene(session),
+  }),
+  entry({
+    definition: dominoesTopple,
+    tagline: 'Line them up, knock them down',
+    minutes: '2 min',
+    hint: 'Draw a line of dominoes, tap the first',
+    howTo: {
+      goal: 'Lay a long line of dominoes and knock them all down with one push.',
+      controls: 'Draw a line with your finger to lay dominoes along it. Tap a domino to push it over. On a keyboard: Up lays the next one straight on, Left and Right lay it turning, Enter pushes the first, U stands them up, C clears.',
+      win: 'Lay at least 20, push one, and if every domino falls, you did it.',
+      tip: 'Keep the bends gentle and the gaps small. If the chain stops, tap Stand up and fill the gap.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => TOPPLE_TINTS,
+    size: TOPPLE_CANVAS,
+    color: DARK.tomato,
+    botDelayMs: 60,
+    status: (state) => toppleStatus(state as ToppleState),
+    resultText: (state) => toppleResult(state as ToppleState),
+    moveCue: () => undefined,
+    createScene: (session) => new ToppleScene(session),
   }),
   entry({
     definition: wouldYouRather,
