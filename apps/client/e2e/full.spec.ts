@@ -76,6 +76,7 @@ const GAMES = [
   'Mahjong Solitaire',
   'Block Puzzle',
   'Number Match',
+  '2248',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",

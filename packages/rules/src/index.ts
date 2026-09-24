@@ -106,3 +106,4 @@ export * from './games/tank-duel';
 export * from './games/road-dodge';
 export * from './games/slot-cars';
 export * from './games/wheelie';
+export * from './games/chain-merge';

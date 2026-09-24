@@ -2027,6 +2027,27 @@ function WheelieArt() {
   );
 }
 
+function ChainMergeArt() {
+  // Candy number tiles with a thick line joining a 2, a 2 and a 4 into a chain.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="12" width="24" height="24" rx="7" fill={COLORS.tomato} />
+      <rect x="38" y="12" width="24" height="24" rx="7" fill={COLORS.tomato} />
+      <rect x="66" y="12" width="24" height="24" rx="7" fill={COLORS.sunny} />
+      <rect x="10" y="40" width="24" height="24" rx="7" fill={COLORS.mint} />
+      <rect x="38" y="40" width="24" height="24" rx="7" fill={COLORS.peach} />
+      <rect x="66" y="40" width="24" height="24" rx="7" fill={COLORS.sky} />
+      <rect x="10" y="68" width="24" height="24" rx="7" fill={COLORS.grape} />
+      <rect x="38" y="68" width="24" height="24" rx="7" fill={COLORS.sunny} />
+      <rect x="66" y="68" width="24" height="24" rx="7" fill={COLORS.tomato} />
+      <path d="M22 24 L50 24 L50 52" stroke={INK} stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+      <text x="22" y="25" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#fff">2</text>
+      <text x="50" y="25" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#fff">2</text>
+      <text x="50" y="53" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#fff">4</text>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2290,6 +2311,7 @@ const ART: Record<string, () => JSX.Element> = {
   mahjong: MahjongArt,
   'block-puzzle': BlockPuzzleArt,
   'number-match': NumberMatchArt,
+  'chain-merge': ChainMergeArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

@@ -845,7 +845,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M32b Road Dodge:** your own road in your half, the same traffic for both, three bumps out.
   - [ ] **M32c Slot Cars:** one button, hold to go, fly off a bend taken too fast, lanes that cross so the laps are equal; seven laps.
   - [ ] **M32d Wheelie:** hold to lift, land to bank the metres, go over and the ride is 0; three rides each.
-- [ ] **M33+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M33 Puzzles B:** 2248, Maze Paint, Fruit Merge (Petdoku left out: it is Sudoku with pictures).
+  - [ ] **M33a 2248:** drag a chain of numbers, same or double, thirty chains to make 4K.
+- [ ] **M34+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

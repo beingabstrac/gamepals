@@ -154,7 +154,9 @@ import {
   blockPuzzle,
   type BlockState,
   numberMatch,
+  chainMerge,
   type NumberState,
+  type ChainState,
   popIt,
   type PopState,
   zenGarden,
@@ -298,6 +300,7 @@ import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus }
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
+import { CHAIN_CANVAS, CHAIN_COLORS, ChainScene, chainResultText, chainStatus } from './chain-merge/ChainScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
@@ -1283,6 +1286,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => numberResult(state as NumberState),
     moveCue: () => undefined,
     createScene: (session) => new NumberScene(session),
+  }),
+  entry({
+    definition: chainMerge,
+    tagline: 'Chain the numbers, double up',
+    minutes: '5 min',
+    hint: 'Drag through two numbers that match',
+    howTo: {
+      goal: 'Make a 4K tile (4096) in thirty chains.',
+      controls: 'Drag through numbers that touch, across, up, down or corner to corner. Start with two the same, then each next one can be the same or double. Let go and they all become one tile. On a keyboard: arrows move, Enter adds a number, Enter again on the last one lets go.',
+      win: 'The chain becomes its total, rounded up to the next double (2, 4, 8, 16...), at the end where you stopped. Make 4K and you win.',
+      tip: 'Long chains grow fast. Drag back over the last number to take it off the chain.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => CHAIN_COLORS,
+    size: CHAIN_CANVAS,
+    color: DARK.grape,
+    botDelayMs: 300,
+    status: (state) => chainStatus(state as ChainState),
+    resultText: (state) => chainResultText(state as ChainState),
+    moveCue: () => undefined,
+    createScene: (session) => new ChainScene(session),
   }),
   entry({
     definition: popIt,
