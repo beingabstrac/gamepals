@@ -139,6 +139,8 @@ import {
   type HexState,
   chineseCheckers,
   type StarState,
+  nonogram,
+  type NonoState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -252,6 +254,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
 import { STAR_SIZE, StarScene, starSeatColors, starSeatNames, starStatus } from './chinese-checkers/StarScene';
 import { HEX_CANVAS, HEX_COLORS, HEX_NAMES, HexScene, hexStatus } from './hex/HexScene';
 import { CODE_COLORS, CODE_SIZE, codeResult, CodeScene, codeStatus } from './code-breaker/CodeScene';
@@ -1141,6 +1144,31 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => starStatus(state as StarState, names),
     moveCue: () => undefined,
     createScene: (session) => new StarScene(session),
+  }),
+  entry({
+    definition: nonogram,
+    tagline: 'Paint the picture the numbers hide',
+    minutes: '6 min',
+    levels: [
+      { id: 'small', label: '5 × 5' },
+      { id: 'medium', label: '10 × 10' },
+      { id: 'large', label: '15 × 15' },
+    ],
+    hint: 'Tap or drag to fill squares',
+    howTo: {
+      goal: 'Fill the squares so every row and column matches its numbers, and a picture appears.',
+      controls: 'Tap or drag to fill squares. Switch to Mark to put an × on squares you know are empty. Tap a square again to clear it. On a keyboard: arrows move, Space fills, X marks.',
+      win: 'When every filled square is right, the picture is done.',
+      tip: 'The numbers are the runs of filled squares in that line, in order, with at least one gap between runs. Start with the big numbers: a 4 in a line of 5 always fills the middle three. Every puzzle can be solved without guessing.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => NONO_COLORS,
+    size: NONO_CANVAS,
+    color: DARK.mint,
+    status: (state) => nonoStatus(state as NonoState),
+    resultText: (state) => nonoResult(state as NonoState),
+    moveCue: () => undefined,
+    createScene: (session) => new NonoScene(session),
   }),
   entry({
     definition: fourInARow,

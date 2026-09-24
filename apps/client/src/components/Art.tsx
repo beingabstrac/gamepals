@@ -1664,6 +1664,32 @@ function ChineseCheckersArt() {
   );
 }
 
+function NonogramArt() {
+  // A 5 by 5 grid with its clues, a little mirrored picture half painted in.
+  const pic = ['01110', '11011', '11111', '01010', '10001'];
+  const done = 3;
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="30" y="30" width="62" height="62" rx="8" fill="#fff" stroke="#E6E0F4" stroke-width="2" />
+      {pic.map((row, y) =>
+        [...row].map((c, x) => (
+          <rect key={`${x}-${y}`} x={33 + x * 11.6} y={33 + y * 11.6} width="10" height="10" rx="2.5" fill={c === '1' && y < done ? COLORS.mint : '#F4F1FB'} />
+        )),
+      )}
+      {['3', '2 2', '5', '1 1', '1 1'].map((t, y) => (
+        <text key={t + y} x="27" y={38 + y * 11.6} text-anchor="end" dominant-baseline="central" font-size="7" font-weight="700" fill={INK}>
+          {t}
+        </text>
+      ))}
+      {['1 1', '4', '3', '4', '1 1'].map((t, x) => (
+        <text key={t + x} x={38 + x * 11.6} y="25" text-anchor="middle" dominant-baseline="central" font-size="7" font-weight="700" fill={INK}>
+          {t}
+        </text>
+      ))}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1923,6 +1949,7 @@ const ART: Record<string, () => JSX.Element> = {
   'code-breaker': CodeBreakerArt,
   hex: HexArt,
   'chinese-checkers': ChineseCheckersArt,
+  nonogram: NonogramArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

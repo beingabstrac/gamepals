@@ -64,6 +64,7 @@ const GAMES = [
   'Code Breaker',
   'Hex',
   'Chinese Checkers',
+  'Nonogram',
   'Color Sort',
   'Echo',
   'Classic Snake',
