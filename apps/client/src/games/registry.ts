@@ -173,6 +173,8 @@ import {
   type CradleState,
   switchBoard,
   type SwitchState,
+  cleanIt,
+  type CleanState,
   wouldYouRather,
   type RatherState,
   truthOrDare,
@@ -310,6 +312,7 @@ import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-
 import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus } from './would-you-rather/RatherScene';
 import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
 import { SWITCH_CANVAS, SWITCH_COLORS, switchResult, SwitchScene, switchStatus } from './switch-board/SwitchScene';
+import { CLEAN_CANVAS, CLEAN_COLORS, cleanResult, CleanScene, cleanStatus } from './clean-it/CleanScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
@@ -1481,6 +1484,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => switchResult(state as SwitchState),
     moveCue: () => undefined,
     createScene: (session) => new SwitchScene(session),
+  }),
+  entry({
+    definition: cleanIt,
+    tagline: 'Rub it till it sparkles',
+    minutes: '2 min',
+    hint: 'Rub the dirt away with your finger',
+    levels: [
+      { id: 'window', label: 'Window' },
+      { id: 'coin', label: 'Coin' },
+      { id: 'rug', label: 'Rug' },
+    ],
+    howTo: {
+      goal: 'Clean off every speck of dirt.',
+      controls: 'Rub your finger over the dirt. Each rub takes off one layer, and thick dirt needs a few. On a keyboard: arrows move, Enter rubs.',
+      win: 'When the last speck is gone it sparkles.',
+      tip: 'There is no hurry and nothing to lose.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => CLEAN_COLORS,
+    size: CLEAN_CANVAS,
+    color: DARK.sky,
+    botDelayMs: 60,
+    status: (state) => cleanStatus(state as CleanState),
+    resultText: (state) => cleanResult(state as CleanState),
+    moveCue: () => undefined,
+    createScene: (session) => new CleanScene(session),
   }),
   entry({
     definition: wouldYouRather,

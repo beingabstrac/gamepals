@@ -2152,6 +2152,22 @@ function SwitchBoardArt() {
   );
 }
 
+function CleanItArt() {
+  // A window onto a sunny day, half wiped clean, a blue cloth mid-rub.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="10" width="80" height="80" rx="6" fill="#BFE3FF" stroke="#C98F5A" stroke-width="6" />
+      <circle cx="66" cy="30" r="10" fill={COLORS.sunny} />
+      <ellipse cx="34" cy="92" rx="40" ry="22" fill="#7FD89B" />
+      <circle cx="30" cy="36" r="14" fill="#8F8BA3" opacity="0.7" />
+      <circle cx="40" cy="60" r="12" fill="#8F8BA3" opacity="0.55" />
+      <circle cx="22" cy="58" r="9" fill="#8F8BA3" opacity="0.6" />
+      <rect x="54" y="52" width="26" height="20" rx="6" fill={COLORS.sky} transform="rotate(-15 67 62)" />
+      <path d="M70 18 L72 24 L78 26 L72 28 L70 34 L68 28 L62 26 L68 24 Z" fill="#fff" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2420,6 +2436,7 @@ const ART: Record<string, () => JSX.Element> = {
   'fruit-merge': FruitMergeArt,
   tower: TowerArt,
   'switch-board': SwitchBoardArt,
+  'clean-it': CleanItArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

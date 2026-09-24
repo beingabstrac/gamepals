@@ -83,6 +83,7 @@ const GAMES = [
   'Fruit Merge',
   'Tower',
   'Switch Board',
+  'Clean It',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",

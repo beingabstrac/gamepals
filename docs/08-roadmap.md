@@ -855,6 +855,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M34c Tower:** pull a block and lay it on top, side on; care from a steady pull; 2 to 4 players.
 - [ ] **M35 Chill shelf B:** Switch Board, Clean It, Straighten Up.
   - [ ] **M35a Switch Board:** a fidget board of toggles, sliders, dials, buttons and a lever; a lamp each; all on goes rainbow.
+  - [ ] **M35b Clean It:** rub the grime off a window, a coin or a rug; it sparkles when clean.
 - [ ] **M36+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
