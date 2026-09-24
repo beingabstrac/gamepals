@@ -137,6 +137,8 @@ import {
   type CodeState,
   hex,
   type HexState,
+  chineseCheckers,
+  type StarState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -250,6 +252,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { STAR_SIZE, StarScene, starSeatColors, starSeatNames, starStatus } from './chinese-checkers/StarScene';
 import { HEX_CANVAS, HEX_COLORS, HEX_NAMES, HexScene, hexStatus } from './hex/HexScene';
 import { CODE_COLORS, CODE_SIZE, codeResult, CodeScene, codeStatus } from './code-breaker/CodeScene';
 import { chowkaColors, chowkaNames, CHOWKA_SIZE, ChowkaScene, chowkaStatus } from './chowka/ChowkaScene';
@@ -1119,6 +1122,25 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => hexStatus(state as HexState, names),
     moveCue: () => undefined,
     createScene: (session) => new HexScene(session),
+  }),
+  entry({
+    definition: chineseCheckers,
+    tagline: 'Hop your marbles across the star',
+    minutes: '12 min',
+    howTo: {
+      goal: 'Move all ten of your marbles from your point of the star into the point opposite.',
+      controls: 'Tap one of your marbles, then a lit hole. A marble steps to a hole next to it, or hops over one marble to the hole straight beyond, and can keep hopping in the same turn. On a keyboard: arrows move the ring, Enter picks and moves, Escape lets go.',
+      win: 'The first to fill the point opposite wins. If other marbles are stuck in it, it is enough that it is full and one of yours is there.',
+      tip: 'Build ladders: a line of marbles with gaps lets one marble hop the whole way across in a single turn.',
+    },
+    sideNames: (players) => starSeatNames(players),
+    sideColors: (players) => starSeatColors(players),
+    size: STAR_SIZE,
+    color: DARK.sky,
+    botDelayMs: 450,
+    status: (state, names) => starStatus(state as StarState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new StarScene(session),
   }),
   entry({
     definition: fourInARow,

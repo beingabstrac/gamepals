@@ -1642,6 +1642,28 @@ function HexArt() {
   );
 }
 
+function ChineseCheckersArt() {
+  // The six-pointed star in dots, two points filled with marbles, one hopping over another.
+  const dots: [number, number][] = [];
+  for (let q = -4; q <= 4; q++) {
+    for (let r = -4; r <= 4; r++) {
+      const s = -q - r;
+      if (Math.max(Math.abs(q), Math.abs(r), Math.abs(s)) <= 2 || (q >= -2 && r >= -2 && s >= -2) || (q <= 2 && r <= 2 && s <= 2)) dots.push([q, r]);
+    }
+  }
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {dots.map(([q, r]) => {
+        const x = 50 + (q + r / 2) * 9.5;
+        const y = 50 + r * 8.2;
+        const fill = r <= -3 ? COLORS.tomato : r >= 3 ? COLORS.sky : '#E6E0F4';
+        return <circle key={`${q},${r}`} cx={x} cy={y} r={r <= -3 || r >= 3 ? 4 : 3} fill={fill} />;
+      })}
+      <path d="M50 58 Q55 44 60 50" stroke={COLORS.grape} stroke-width="2.5" fill="none" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1900,6 +1922,7 @@ const ART: Record<string, () => JSX.Element> = {
   chowka: ChowkaArt,
   'code-breaker': CodeBreakerArt,
   hex: HexArt,
+  'chinese-checkers': ChineseCheckersArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

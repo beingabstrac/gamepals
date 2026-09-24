@@ -816,6 +816,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M25c Fanorona:** approach and withdrawal, capture runs, choose the line by tapping it; search bots, Expert in the worker.
   - [ ] **M25d Chowka Bhara:** the 5 by 5 floor, four cowries, hit before going inside (round again until then), doubles safe.
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
+  - [ ] **M26b Chinese Checkers:** the 121-hole star, chained hops, anti-spoiling home; 2 to 4 players until the party table can seat six.
   - [ ] **M26c Hex:** 11 by 11 with the swap rule; all-moves-as-first Monte Carlo bots, Expert in the worker.
   - [ ] **M26d Code Breaker:** Easy, Classic and Hard; pegs carry their numbers; `allows` for the 32,768 codes of Hard.
   - [ ] **M26a Gomoku (parked 2026-09-24):** the rules were easy; the bot was not. A one-move evaluator (unbroken runs, then five-wide windows, attack plus defense) played so badly that in self-play the second player won 72% of games, where real Gomoku favors the first, and a little randomness beat no randomness, so tier ordering was noise. Subtracting the reply's best score punished its own threats. It needs a real threat-space search (fours and open threes first, then a short forced-win search) before it ships. The draft rules and tests were kept out of the repo.

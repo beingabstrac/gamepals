@@ -63,6 +63,7 @@ const GAMES = [
   'Chowka Bhara',
   'Code Breaker',
   'Hex',
+  'Chinese Checkers',
   'Color Sort',
   'Echo',
   'Classic Snake',

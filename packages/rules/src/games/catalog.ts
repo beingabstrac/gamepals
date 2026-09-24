@@ -36,6 +36,7 @@ import { tripeaks } from './tripeaks';
 import { sudoku } from './sudoku';
 import { ticTacToe } from './tic-tac-toe';
 import { guessPerson } from './guess-person';
+import { chineseCheckers } from './chinese-checkers';
 import { chowka } from './chowka';
 import { fanorona } from './fanorona';
 import { go } from './go';
@@ -106,6 +107,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       fanorona,
       chowka,
       hex,
+      chineseCheckers,
     ] as unknown as AnyTurnGame[]
   ).map((game) => [game.id, game]),
 );
