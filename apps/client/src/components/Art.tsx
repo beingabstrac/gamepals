@@ -2190,6 +2190,27 @@ function StraightenUpArt() {
   );
 }
 
+function ConnectSixArt() {
+  // A mint board, a black six in a row and white pairs trying to stop it.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="12" fill="#8FE3C0" />
+      <path d="M18 18 H82 M18 34 H82 M18 50 H82 M18 66 H82 M18 82 H82 M18 18 V82 M34 18 V82 M50 18 V82 M66 18 V82 M82 18 V82" stroke="#3E9C76" stroke-width="1.5" />
+      <circle cx="18" cy="50" r="6" fill={INK} />
+      <circle cx="34" cy="50" r="6" fill={INK} />
+      <circle cx="50" cy="50" r="6" fill={INK} />
+      <circle cx="66" cy="50" r="6" fill={INK} />
+      <circle cx="82" cy="50" r="6" fill={INK} />
+      <circle cx="34" cy="34" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+      <circle cx="50" cy="34" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+      <circle cx="66" cy="66" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+      <circle cx="50" cy="66" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+      <circle cx="50" cy="50" r="2.5" fill={COLORS.tomato} />
+      <circle cx="66" cy="50" r="2.5" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function GomokuArt() {
   // A sunny board with crossing lines and five black stones in a row, corner to corner.
   return (
@@ -2581,6 +2602,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sand-fall': SandFallArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
+  'connect-six': ConnectSixArt,
   oware: OwareArt,
   'mexican-train': MexicanTrainArt,
   'pop-it': PopItArt,

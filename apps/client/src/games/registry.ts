@@ -100,6 +100,9 @@ import {
   darts,
   DARTS_LEVELS,
   type DartsState,
+  connectSix,
+  SIX_LEVELS,
+  type SixState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -279,6 +282,7 @@ import { POOL_SIZE, PoolScene } from './pool/PoolScene';
 import { GOLF_COLORS, GOLF_SIZE, GolfScene } from './mini-golf/GolfScene';
 import { ARCHERY_COLORS, ARCHERY_SIZE, ArcheryScene, arrowOfEnd } from './archery/ArcheryScene';
 import { DART_COLORS, dartsResult, DartsScene, DARTS_SIZE, dartsStatus } from './darts/DartsScene';
+import { SIX_CANVAS, SIX_COLORS, sixResult, SixScene, sixStatus } from './connect-six/SixScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1181,6 +1185,28 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state, names) => gomokuResult(state as GomokuState, names),
     moveCue: () => undefined,
     createScene: (session) => new GomokuScene(session),
+  }),
+  entry({
+    definition: connectSix,
+    tagline: 'Two stones a turn, six in a row',
+    minutes: '8 min',
+    hint: 'Tap a point to put a stone there',
+    levels: SIX_LEVELS.map((id) => ({ id, label: `${id} × ${id}` })),
+    howTo: {
+      goal: 'Get six of your stones in a row before the other player does.',
+      controls: 'Tap a point where the lines cross to put a stone there. Black starts with one stone, then each player puts down two a turn. On a keyboard: arrows move, Enter places a stone.',
+      win: 'Six or more in a row, across, down or corner to corner, wins. A full board is a draw.',
+      tip: 'Four in a row is already a threat, because two stones finish it. Make three threats in one turn and they cannot block them all.',
+    },
+    sideNames: () => ['Black', 'White'],
+    sideColors: () => SIX_COLORS,
+    size: SIX_CANVAS,
+    color: DARK.mint,
+    botDelayMs: 400,
+    status: (state, names) => sixStatus(state as SixState, names),
+    resultText: (state, names) => sixResult(state as SixState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new SixScene(session),
   }),
   entry({
     definition: tafl,

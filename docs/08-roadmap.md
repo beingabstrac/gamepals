@@ -865,8 +865,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M37a Ball Run:** turn track pieces to join the ball to the flag; three sizes, par to beat.
   - [ ] **M37b Sand Fall:** pour colored sand into a jar, falling-sand grains, shake to empty.
   - [ ] **M37c Domino Topple:** draw a line of dominoes, push the first, the rules work out the chain.
-- [ ] **M38 Duels F:** Darts, and the party duels from docs/12 A still to build.
+- [ ] **M38 Classics D:** Darts, Connect Six and Game of the Goose. Crash It, Stampede and Golf Football (docs/12 A) are held back: as described they are Sumo, Road Dodge and Mini Golf again, and each needs a core of its own before it is built.
   - [ ] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
+  - [ ] **M38b Connect Six:** one stone then two a turn, six in a row; bots block every four, Hard and Expert look for three threats at once and Expert spoils the other player's (Medium beat Easy 11-0, Hard beat Medium 8-0, Expert beat Hard 10-4, draws aside, 16 games each).
 - [ ] **M39+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.

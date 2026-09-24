@@ -89,6 +89,7 @@ const GAMES = [
   'Sand Fall',
   'Domino Topple',
   'Darts',
+  'Connect Six',
   'Gomoku',
   'Oware',
   'Mexican Train',
