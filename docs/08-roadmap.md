@@ -835,7 +835,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M30c Hangman:** three levels, themed words with the theme as the clue, balloons instead of a gallows.
   - [ ] **M30b Truth or Dare:** family-safe cards of our own, done or pass, three goes each.
   - [ ] **M30a Would You Rather:** pick in secret on a passed phone, then the split; a point for siding with the table.
-- [ ] **M31+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M31 Duels C:** Bomb Pass and more from the catalog's two-on-one-phone list (docs/12 A).
+  - [ ] **M31a Bomb Pass:** hot potato, a button to hit in your half, a hidden fuse, three bangs lose.
+- [ ] **M32+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

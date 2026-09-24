@@ -110,6 +110,7 @@ import {
   whackAMole,
   paintFight,
   grabIt,
+  bombPass,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -274,6 +275,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { BOMB_COLORS, BOMB_SIZE, BombScene } from './bomb-pass/BombScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2558,6 +2560,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: GRAB_SIZE,
     color: DARK.bubblegum,
     createScene: (options) => new GrabScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: bombPass,
+    tagline: 'Hot potato: get rid of it',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Never be the one holding the bomb when it goes off.',
+      controls: 'When the bomb is on your side, tap the green button that lights up in your half to throw it back. On a keyboard: Space throws for the bottom player, Shift for the top one.',
+      win: 'It goes off three times on the other player and you win.',
+      tip: 'Nobody knows how long the fuse is. Miss the button and you lose precious time.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => BOMB_COLORS,
+    size: BOMB_SIZE,
+    color: DARK.tomato,
+    createScene: (options) => new BombScene(options),
   },
   {
     kind: 'realtime',

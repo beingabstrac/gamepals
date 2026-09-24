@@ -1881,6 +1881,23 @@ function PointersArt() {
   );
 }
 
+function BombPassArt() {
+  // A round bomb with a sparking fuse, arcing between a blue half and a red one.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="52" width="88" height="42" rx="10" fill={COLORS.sky} opacity="0.25" />
+      <rect x="6" y="6" width="88" height="42" rx="10" fill={COLORS.tomato} opacity="0.25" />
+      <path d="M28 76 Q18 50 34 30" stroke={COLORS.soft} stroke-width="2" stroke-dasharray="3 4" fill="none" />
+      <circle cx="54" cy="54" r="20" fill={INK} />
+      <circle cx="47" cy="47" r="5" fill="#fff" opacity="0.3" />
+      <rect x="58" y="30" width="7" height="7" rx="2" fill={COLORS.soft} />
+      <circle cx="66" cy="26" r="6" fill={COLORS.sunny} />
+      <circle cx="66" cy="26" r="3" fill={COLORS.peach} />
+      <circle cx="76" cy="80" r="9" fill={COLORS.mint} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2151,6 +2168,7 @@ const ART: Record<string, () => JSX.Element> = {
   'truth-or-dare': TruthOrDareArt,
   hangman: HangmanArt,
   pointers: PointersArt,
+  'bomb-pass': BombPassArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

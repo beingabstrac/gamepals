@@ -49,6 +49,7 @@ const GAMES = [
   'Whack-a-Mole',
   'Paint Fight',
   'Grab It',
+  'Bomb Pass',
   'Impostor',
   'Charades',
   'Draw & Guess',
