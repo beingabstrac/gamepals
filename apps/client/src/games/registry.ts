@@ -147,6 +147,8 @@ import {
   type BlockState,
   numberMatch,
   type NumberState,
+  popIt,
+  type PopState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -260,6 +262,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
@@ -1246,6 +1249,33 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => numberResult(state as NumberState),
     moveCue: () => undefined,
     createScene: (session) => new NumberScene(session),
+  }),
+  entry({
+    definition: popIt,
+    tagline: 'Pop, flip, pop again',
+    minutes: '2 min',
+    levels: [
+      { id: 'heart', label: 'Heart' },
+      { id: 'star', label: 'Star' },
+      { id: 'circle', label: 'Circle' },
+      { id: 'square', label: 'Square' },
+    ],
+    hint: 'Press the bubbles, or drag across them',
+    howTo: {
+      goal: 'Press every bubble down, flip the sheet over, and press them all again.',
+      controls: 'Tap a bubble to pop it, or drag your finger across a row. When they are all down, tap Flip it over. On a keyboard: arrows move, Space pops, F flips.',
+      win: 'Both sides popped and the sheet is done. There is nothing to win or lose.',
+      tip: 'It is a toy for fiddling with: take your time.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => POP_COLORS,
+    size: POP_CANVAS,
+    color: DARK.bubblegum,
+    botDelayMs: 80,
+    status: (state) => popStatus(state as PopState),
+    resultText: (state) => popResult(state as PopState),
+    moveCue: () => undefined,
+    createScene: (session) => new PopScene(session),
   }),
   entry({
     definition: fourInARow,

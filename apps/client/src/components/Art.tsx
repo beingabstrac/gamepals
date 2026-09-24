@@ -1745,6 +1745,26 @@ function NumberMatchArt() {
   );
 }
 
+function PopItArt() {
+  // A rainbow heart of bubbles, two rows pressed down.
+  const rows = ['.oo.oo.', 'ooooooo', 'ooooooo', '.ooooo.', '..ooo..', '...o...'];
+  const colors = [COLORS.tomato, COLORS.peach, COLORS.sunny, COLORS.mint, COLORS.sky, COLORS.grape];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {rows.map((line, r) =>
+        [...line].map((c, k) =>
+          c === 'o' ? (
+            <g key={`${r}-${k}`}>
+              <circle cx={17 + k * 11} cy={22 + r * 11} r="5.2" fill={colors[r]} opacity={r >= 4 ? 0.65 : 1} />
+              {r < 4 && <ellipse cx={15.5 + k * 11} cy={20.5 + r * 11} rx="2" ry="1.2" fill="#fff" opacity="0.6" />}
+            </g>
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2008,6 +2028,7 @@ const ART: Record<string, () => JSX.Element> = {
   mahjong: MahjongArt,
   'block-puzzle': BlockPuzzleArt,
   'number-match': NumberMatchArt,
+  'pop-it': PopItArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

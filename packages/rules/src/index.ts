@@ -76,6 +76,7 @@ export * from './games/nonogram';
 export * from './games/mahjong';
 export * from './games/block-puzzle';
 export * from './games/number-match';
+export * from './games/pop-it';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';
