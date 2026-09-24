@@ -60,6 +60,7 @@ const GAMES = [
   'Go 9×9',
   'Hnefatafl',
   'Fanorona',
+  'Chowka Bhara',
   'Color Sort',
   'Echo',
   'Classic Snake',

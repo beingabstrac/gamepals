@@ -131,6 +131,8 @@ import {
   type TaflState,
   fanorona,
   type FanoState,
+  chowka,
+  type ChowkaState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -244,6 +246,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { chowkaColors, chowkaNames, CHOWKA_SIZE, ChowkaScene, chowkaStatus } from './chowka/ChowkaScene';
 import { FANO_CANVAS, FANO_COLORS, FANO_NAMES, FanoronaScene, fanoStatus } from './fanorona/FanoronaScene';
 import { TAFL_CANVAS, TAFL_COLORS, TAFL_NAMES, TaflScene, taflStatus } from './tafl/TaflScene';
 import { GO_CANVAS, GO_COLORS, GO_NAMES, GoScene, goStatus } from './go/GoScene';
@@ -1047,6 +1050,25 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => fanoStatus(state as FanoState, names),
     moveCue: () => undefined,
     createScene: (session) => new FanoronaScene(session),
+  }),
+  entry({
+    definition: chowka,
+    tagline: 'Round the outside, knock one off, go in',
+    minutes: '12 min',
+    howTo: {
+      goal: 'Bring all four of your pieces to the middle square first.',
+      controls: 'Tap to throw the four cowries, then tap a glowing piece or where it would land. On a keyboard: Space throws, number keys or arrows and Enter move.',
+      win: 'The first to get all four pieces to the middle wins.',
+      tip: 'The cowries mouth up are your throw; none up is 8. A 4 or an 8 brings a piece on and throws again. Pieces go round the outside, then the inner ring to the middle, but you cannot go inside until you have knocked somebody off: until then you go round again. Crossed squares are safe, and two of yours together cannot be hit.',
+    },
+    sideNames: (players) => chowkaNames(players),
+    sideColors: (players) => chowkaColors(players),
+    size: CHOWKA_SIZE,
+    color: DARK.grape,
+    botDelayMs: 600,
+    status: (state, names) => chowkaStatus(state as ChowkaState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new ChowkaScene(session),
   }),
   entry({
     definition: fourInARow,

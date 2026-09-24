@@ -1560,6 +1560,32 @@ function FanoronaArt() {
   );
 }
 
+function ChowkaArt() {
+  // The 5 by 5 floor with its crossed safe squares, a piece or two, and four cowries.
+  const safe = new Set([2, 10, 12, 14, 22]);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="12" y="10" width="76" height="76" rx="10" fill={DARK.grape} />
+      <rect x="12" y="6" width="76" height="76" rx="10" fill={COLORS.grape} />
+      {Array.from({ length: 25 }, (_, i) => {
+        const x = 16 + (i % 5) * 14;
+        const y = 10 + Math.floor(i / 5) * 14;
+        return (
+          <g key={i}>
+            <rect x={x} y={y} width="12" height="12" rx="3" fill={safe.has(i) ? COLORS.sunny : '#fff'} />
+            {safe.has(i) && <path d={`M${x + 3} ${y + 3} L${x + 9} ${y + 9} M${x + 9} ${y + 3} L${x + 3} ${y + 9}`} stroke={DARK.sunny} stroke-width="1.5" />}
+          </g>
+        );
+      })}
+      <circle cx="36" cy="58" r="4.5" fill={COLORS.sky} />
+      <circle cx="64" cy="30" r="4.5" fill={COLORS.tomato} />
+      {[34, 44, 56, 66].map((x, i) => (
+        <ellipse key={x} cx={x} cy="92" rx="4" ry="5.5" fill={i % 2 ? COLORS.sunny : '#fff'} stroke={DARK.sunny} stroke-width="1" />
+      ))}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1815,6 +1841,7 @@ const ART: Record<string, () => JSX.Element> = {
   go: GoArt,
   tafl: TaflArt,
   fanorona: FanoronaArt,
+  chowka: ChowkaArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
