@@ -133,17 +133,28 @@ export function stepWorld(world: World, dt = FRUIT_STEP): World {
   return { fruit: fruit.map((f) => ({ ...f, vx: f.vx * 0.998, vy: f.vy * 0.998 })), nextId, made };
 }
 
-/** Has everything come to rest? */
-export const still = (world: World) => world.fruit.every((f) => Math.abs(f.vx) < 6 && Math.abs(f.vy) < 6);
+/**
+ * Has everything come to rest between two steps? Judged by where the fruit is, not how fast it is
+ * going: a fruit resting in a pile carries 20 to 35 px/s of speed that the push-apart cancels
+ * every step, so going by speed nothing ever counted as still and every drop ran all 900 steps.
+ */
+export function still(before: World, after: World): boolean {
+  if (before.fruit.length !== after.fruit.length) return false;
+  return after.fruit.every((f, i) => {
+    const b = before.fruit[i]!;
+    return b.id === f.id && Math.abs(b.x - f.x) < 0.2 && Math.abs(b.y - f.y) < 0.2;
+  });
+}
 
 /** Runs a world until it has been still a while (or long enough), calling `each` on every step. */
 export function settle(world: World, each?: (w: World) => void): World {
   let w = world;
   let quiet = 0;
   for (let n = 0; n < MAX_STEPS && quiet < QUIET; n++) {
-    w = stepWorld(w);
-    each?.(w);
-    quiet = still(w) ? quiet + 1 : 0;
+    const next = stepWorld(w);
+    each?.(next);
+    quiet = still(w, next) ? quiet + 1 : 0;
+    w = next;
   }
   return w;
 }
