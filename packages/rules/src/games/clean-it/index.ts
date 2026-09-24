@@ -78,7 +78,7 @@ export function newCleanIt(seed: number, thing: CleanThing = 'window'): CleanSta
     }
   }
   // Never a clean start: a smudge in the middle at least.
-  if (dirt.every((d) => d === 0)) dirt[Math.floor(dirt.length / 2)] = 1;
+  if (!dirt.some((d) => d > 0)) dirt[Math.floor(dirt.length / 2)] = 1;
   const total = dirt.reduce((a, c) => a + c, 0);
   return new CleanState(thing, dirt, 0, total, null);
 }
