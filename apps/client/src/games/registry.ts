@@ -175,6 +175,8 @@ import {
   type SwitchState,
   cleanIt,
   type CleanState,
+  straightenUp,
+  type StraightenState,
   wouldYouRather,
   type RatherState,
   truthOrDare,
@@ -313,6 +315,7 @@ import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus }
 import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
 import { SWITCH_CANVAS, SWITCH_COLORS, switchResult, SwitchScene, switchStatus } from './switch-board/SwitchScene';
 import { CLEAN_CANVAS, CLEAN_COLORS, cleanResult, CleanScene, cleanStatus } from './clean-it/CleanScene';
+import { STRAIGHTEN_CANVAS, STRAIGHTEN_COLORS, straightenResult, StraightenScene, straightenStatus } from './straighten-up/StraightenScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
@@ -1510,6 +1513,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => cleanResult(state as CleanState),
     moveCue: () => undefined,
     createScene: (session) => new CleanScene(session),
+  }),
+  entry({
+    definition: straightenUp,
+    tagline: 'Put the crooked pictures right',
+    minutes: '1 min',
+    hint: 'Push a frame until it hangs level',
+    levels: [
+      { id: 'small', label: '3 frames' },
+      { id: 'medium', label: '5 frames' },
+      { id: 'large', label: '7 frames' },
+    ],
+    howTo: {
+      goal: 'Hang every picture on the wall straight.',
+      controls: 'Push a frame sideways to turn it on its nail. Let go when it looks level. On a keyboard: Left and Right pick a frame, Up and Down turn it.',
+      win: 'Close enough to level and it clicks straight. When the whole wall is straight, you are done.',
+      tip: 'Watch the little bubble under each frame: in the middle and green means level.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => STRAIGHTEN_COLORS,
+    size: STRAIGHTEN_CANVAS,
+    color: DARK.peach,
+    botDelayMs: 300,
+    status: (state) => straightenStatus(state as StraightenState),
+    resultText: (state) => straightenResult(state as StraightenState),
+    moveCue: () => undefined,
+    createScene: (session) => new StraightenScene(session),
   }),
   entry({
     definition: wouldYouRather,

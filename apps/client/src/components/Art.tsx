@@ -2168,6 +2168,28 @@ function CleanItArt() {
   );
 }
 
+function StraightenUpArt() {
+  // Two frames on nails: one hanging crooked, one straight with a green level under it.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="6" width="88" height="88" rx="12" fill="#FFF6EC" />
+      <g transform="rotate(-14 32 20)">
+        <path d="M32 20 L22 30 M32 20 L42 30" stroke={COLORS.soft} stroke-width="1.5" />
+        <rect x="16" y="30" width="32" height="26" rx="4" fill={COLORS.peach} />
+        <rect x="20" y="34" width="24" height="18" rx="2" fill="#fff" />
+        <circle cx="32" cy="43" r="5" fill={COLORS.sunny} />
+      </g>
+      <circle cx="32" cy="20" r="2.5" fill={INK} />
+      <path d="M68 44 L58 54 M68 44 L78 54" stroke={COLORS.soft} stroke-width="1.5" />
+      <rect x="52" y="54" width="32" height="30" rx="4" fill={COLORS.sky} />
+      <rect x="56" y="58" width="24" height="22" rx="2" fill="#fff" />
+      <path d="M62 74 L68 62 L74 74 Z" fill={COLORS.mint} />
+      <circle cx="68" cy="44" r="2.5" fill={INK} />
+      <rect x="58" y="88" width="20" height="4" rx="2" fill={COLORS.mint} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2437,6 +2459,7 @@ const ART: Record<string, () => JSX.Element> = {
   tower: TowerArt,
   'switch-board': SwitchBoardArt,
   'clean-it': CleanItArt,
+  'straighten-up': StraightenUpArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

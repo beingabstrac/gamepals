@@ -856,6 +856,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M35 Chill shelf B:** Switch Board, Clean It, Straighten Up.
   - [ ] **M35a Switch Board:** a fidget board of toggles, sliders, dials, buttons and a lever; a lamp each; all on goes rainbow.
   - [ ] **M35b Clean It:** rub the grime off a window, a coin or a rug; it sparkles when clean.
+  - [ ] **M35c Straighten Up:** push crooked frames level on their nails; 3, 5 or 7 frames.
 - [ ] **M36+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
