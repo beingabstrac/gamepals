@@ -57,6 +57,7 @@ const GAMES = [
   'Senet',
   "Nine Men's Morris",
   'Pachisi',
+  'Go 9×9',
   'Color Sort',
   'Echo',
   'Classic Snake',

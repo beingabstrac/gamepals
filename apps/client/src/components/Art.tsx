@@ -1487,6 +1487,36 @@ function PachisiArt() {
   );
 }
 
+function GoArt() {
+  // A corner of the board: the lines, a star point, and black and white stones hemming each other in.
+  const stones: [number, number, string][] = [
+    [34, 34, INK],
+    [50, 34, '#fff'],
+    [34, 50, '#fff'],
+    [50, 50, INK],
+    [66, 50, INK],
+    [50, 66, '#fff'],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="12" width="84" height="84" rx="12" fill={DARK.sunny} />
+      <rect x="8" y="8" width="84" height="84" rx="12" fill={COLORS.sunny} />
+      <g stroke={DARK.sunny} stroke-width="2.5">
+        {[18, 34, 50, 66, 82].map((v) => (
+          <g key={v}>
+            <path d={`M18 ${v} H82`} />
+            <path d={`M${v} 18 V82`} />
+          </g>
+        ))}
+      </g>
+      <circle cx="66" cy="66" r="3" fill={DARK.sunny} />
+      {stones.map(([x, y, fill]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="7" fill={fill} stroke={fill === '#fff' ? '#D8D3E6' : 'none'} stroke-width="1.5" />
+      ))}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1739,6 +1769,7 @@ const ART: Record<string, () => JSX.Element> = {
   senet: SenetArt,
   morris: MorrisArt,
   pachisi: PachisiArt,
+  go: GoArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

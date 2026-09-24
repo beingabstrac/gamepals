@@ -125,6 +125,8 @@ import {
   type MorrisState,
   pachisi,
   type PachisiState,
+  go,
+  type GoState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -238,6 +240,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { GO_CANVAS, GO_COLORS, GO_NAMES, GoScene, goStatus } from './go/GoScene';
 import { pachisiColors, pachisiNames, PACHISI_SIZE, PachisiScene, pachisiStatus } from './pachisi/PachisiScene';
 import { MORRIS_COLORS, MORRIS_NAMES, MORRIS_SIZE, MorrisScene, morrisStatus } from './morris/MorrisScene';
 import { SENET_COLORS, SENET_NAMES, SENET_SIZE, SenetScene, senetStatus } from './senet/SenetScene';
@@ -978,6 +981,26 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => pachisiStatus(state as PachisiState, names),
     moveCue: () => undefined,
     createScene: (session) => new PachisiScene(session),
+  }),
+  entry({
+    definition: go,
+    tagline: 'Surround more of the board',
+    minutes: '15 min',
+    howTo: {
+      goal: 'Hold more of the board than the other player: your stones plus the empty points only you surround.',
+      controls: 'Tap a point where the lines cross to place a stone. Tap Pass when there is nothing useful left to play. On a keyboard: arrows move, Enter places, P passes.',
+      win: 'When both players pass in a row, the game is counted. White gets 7 extra for going second. Most points wins.',
+      draw: 'If the count is level, it is a draw.',
+      tip: 'A stone or group with no empty point next to it is taken off. You cannot play where your stones would have no space, unless it takes theirs, or make the board look as it did before. Take dead stones off by playing, not by passing: the count counts what is on the board.',
+    },
+    sideNames: () => GO_NAMES,
+    sideColors: () => GO_COLORS,
+    size: GO_CANVAS,
+    color: DARK.sunny,
+    botDelayMs: 450,
+    status: (state, names) => goStatus(state as GoState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new GoScene(session),
   }),
   entry({
     definition: fourInARow,

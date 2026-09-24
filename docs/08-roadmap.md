@@ -810,7 +810,11 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M24b Senet:** Kendall's reconstruction, the board on end, four sticks, swaps, walls, the water.
   - [ ] **M24c Nine Men's Morris:** place, move, fly with three; mills glow and take; search bots, Expert in the worker.
   - [ ] **M24d Pachisi:** the cross, six cowries, graces, castles, partners with four; not a Ludo reskin (see the brief).
-- [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
+- [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara. Split one game per loop.
+  - [ ] **M25a Go 9×9:** area scoring with komi 7, superko, dead stones played off; Monte Carlo bots on a fast board, Expert in the worker.
+  - [ ] **M25b Hnefatafl**
+  - [ ] **M25c Fanorona**
+  - [ ] **M25d Chowka Bhara**
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
 - [ ] **M27 Puzzles A:** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them)
 - [ ] **M28 Chill shelf A:** Pop bubbles, Bubble wrap, Newton's cradle, Zen garden
