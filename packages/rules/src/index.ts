@@ -123,3 +123,4 @@ export * from './games/sand-fall';
 export * from './games/dominoes-topple';
 export * from './games/darts';
 export * from './games/connect-six';
+export * from './games/goose';

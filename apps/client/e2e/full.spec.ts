@@ -90,6 +90,7 @@ const GAMES = [
   'Domino Topple',
   'Darts',
   'Connect Six',
+  'Game of the Goose',
   'Gomoku',
   'Oware',
   'Mexican Train',

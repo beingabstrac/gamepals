@@ -2327,6 +2327,22 @@ function DartsArt() {
   );
 }
 
+function GooseArt() {
+  // A spiral of squares running in to a pink home, with a white goose on the way.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="14" fill="#FFE9A8" />
+      <path d="M20 80 H80 V20 H20 V66 H66 V34 H34 V52 H50" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="50" cy="52" r="8" fill={COLORS.bubblegum} />
+      <ellipse cx="72" cy="78" rx="10" ry="6" fill="#FFFFFF" stroke="#E6D9B0" stroke-width="1.5" />
+      <path d="M76 74 V64" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" />
+      <circle cx="77" cy="63" r="4" fill="#FFFFFF" stroke="#E6D9B0" stroke-width="1.5" />
+      <path d="M80 62 L86 64 L80 66 Z" fill={COLORS.peach} />
+      <circle cx="26" cy="80" r="5" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2629,6 +2645,7 @@ const ART: Record<string, () => JSX.Element> = {
   'dots-and-boxes': DotsArt,
   mancala: MancalaArt,
   'snakes-and-ladders': SnakesArt,
+  goose: GooseArt,
   'ultimate-ttt': UltimateArt,
   yatzy: YatzyArt,
   'shut-the-box': ShutArt,

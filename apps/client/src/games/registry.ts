@@ -103,6 +103,8 @@ import {
   connectSix,
   SIX_LEVELS,
   type SixState,
+  goose,
+  type GooseState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -283,6 +285,7 @@ import { GOLF_COLORS, GOLF_SIZE, GolfScene } from './mini-golf/GolfScene';
 import { ARCHERY_COLORS, ARCHERY_SIZE, ArcheryScene, arrowOfEnd } from './archery/ArcheryScene';
 import { DART_COLORS, dartsResult, DartsScene, DARTS_SIZE, dartsStatus } from './darts/DartsScene';
 import { SIX_CANVAS, SIX_COLORS, sixResult, SixScene, sixStatus } from './connect-six/SixScene';
+import { GOOSE_COLORS, gooseResult, GooseScene, GOOSE_SIZE, gooseStatus } from './goose/GooseScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -757,6 +760,26 @@ export const GAMES: readonly AnyEntry[] = [
     },
     moveCue: (_before, after) => ((after as OwareState).last?.capture ? 'capture' : 'place'),
     createScene: (session) => new MancalaScene(session),
+  }),
+  entry({
+    definition: goose,
+    tagline: 'Race round the spiral, ride the geese',
+    minutes: '8 min',
+    howTo: {
+      goal: 'Be the first to reach square 63 in the middle of the spiral.',
+      controls: 'Tap Roll, or anywhere below the board. Your token moves by itself. On a keyboard: press Space or Enter.',
+      win: 'The first to land exactly on 63 wins. A throw that is too big counts back from 63.',
+      tip: 'Land on a goose and you fly on again by the same throw. The Bridge takes you ahead to 12, the Maze sends you back to 30, and square 58 sends you back to the start. At the Inn you miss a turn; in the Well or the Jail you wait until someone else lands there. Land on another player and they go back to where you started. It is all luck, so every bot plays the same.',
+    },
+    sideNames: (players) => ['Red', 'Blue', 'Green', 'Purple'].slice(0, players),
+    sideColors: (players) => GOOSE_COLORS.slice(0, players),
+    size: GOOSE_SIZE,
+    color: DARK.sunny,
+    botDelayMs: 700,
+    status: (state, names) => gooseStatus(state as GooseState, names),
+    resultText: (state, names) => gooseResult(state as GooseState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new GooseScene(session),
   }),
   entry({
     definition: snakesAndLadders,

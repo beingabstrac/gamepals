@@ -868,6 +868,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M38 Classics D:** Darts, Connect Six and Game of the Goose. Crash It, Stampede and Golf Football (docs/12 A) are held back: as described they are Sumo, Road Dodge and Mini Golf again, and each needs a core of its own before it is built.
   - [ ] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
   - [ ] **M38b Connect Six:** one stone then two a turn, six in a row; bots block every four, Hard and Expert look for three threats at once and Expert spoils the other player's (Medium beat Easy 11-0, Hard beat Medium 8-0, Expert beat Hard 10-4, draws aside, 16 games each).
+  - [ ] **M38c Game of the Goose:** the 63-square spiral, geese, Bridge, Inn, Well, Maze, Jail and Death, knocking back; 2 to 4, all luck.
 - [ ] **M39+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
