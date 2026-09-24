@@ -77,6 +77,7 @@ const GAMES = [
   'Block Puzzle',
   'Number Match',
   '2248',
+  'Maze Paint',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",

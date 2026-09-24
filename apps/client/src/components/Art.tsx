@@ -2048,6 +2048,22 @@ function ChainMergeArt() {
   );
 }
 
+function MazePaintArt() {
+  // A small maze, half painted mint behind a grape ball that has just rolled to a wall.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="12" fill="#DAD4EE" />
+      <rect x="16" y="16" width="68" height="68" rx="4" fill="#fff" />
+      <rect x="16" y="16" width="68" height="14" rx="4" fill={COLORS.mint} />
+      <rect x="70" y="16" width="14" height="50" rx="4" fill={COLORS.mint} />
+      <rect x="30" y="34" width="14" height="14" rx="3" fill="#CFC8EA" />
+      <rect x="44" y="52" width="14" height="14" rx="3" fill="#CFC8EA" />
+      <rect x="16" y="66" width="14" height="18" rx="3" fill="#CFC8EA" />
+      <circle cx="77" cy="59" r="6" fill={COLORS.grape} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2312,6 +2328,7 @@ const ART: Record<string, () => JSX.Element> = {
   'block-puzzle': BlockPuzzleArt,
   'number-match': NumberMatchArt,
   'chain-merge': ChainMergeArt,
+  'maze-paint': MazePaintArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

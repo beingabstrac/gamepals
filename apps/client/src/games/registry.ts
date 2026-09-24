@@ -155,8 +155,10 @@ import {
   type BlockState,
   numberMatch,
   chainMerge,
+  mazePaint,
   type NumberState,
   type ChainState,
+  type MazeState,
   popIt,
   type PopState,
   zenGarden,
@@ -301,6 +303,7 @@ import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-ga
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
 import { CHAIN_CANVAS, CHAIN_COLORS, ChainScene, chainResultText, chainStatus } from './chain-merge/ChainScene';
+import { MAZE_CANVAS, MAZE_COLORS, mazeResult, MazeScene, mazeStatus } from './maze-paint/MazeScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
@@ -1307,6 +1310,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => chainResultText(state as ChainState),
     moveCue: () => undefined,
     createScene: (session) => new ChainScene(session),
+  }),
+  entry({
+    definition: mazePaint,
+    tagline: 'Roll the ball, paint the maze',
+    minutes: '2 min',
+    hint: 'Swipe to roll the ball',
+    levels: [
+      { id: 'small', label: 'Small' },
+      { id: 'medium', label: 'Medium' },
+      { id: 'large', label: 'Large' },
+    ],
+    howTo: {
+      goal: 'Paint every square of the maze.',
+      controls: 'Swipe up, down, left or right. The ball rolls that way until it hits a wall, painting as it goes. On a keyboard: the arrow keys.',
+      win: 'Paint the last square and the maze is done. Fewer rolls is better.',
+      tip: 'The ball cannot stop in the middle of a corridor, only against a wall. You can never get stuck: every maze can still be finished from wherever you are.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => MAZE_COLORS,
+    size: MAZE_CANVAS,
+    color: DARK.mint,
+    botDelayMs: 250,
+    status: (state) => mazeStatus(state as MazeState),
+    resultText: (state) => mazeResult(state as MazeState),
+    moveCue: () => undefined,
+    createScene: (session) => new MazeScene(session),
   }),
   entry({
     definition: popIt,

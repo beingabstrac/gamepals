@@ -22,7 +22,7 @@ export const SHELVES: readonly { readonly title: string; readonly ids: readonly 
   { title: 'Words and numbers', ids: ['word-guess', 'word-search', 'mini-crossword', 'word-ladder', 'word-groups', 'anagram-hunt', 'target-number', 'quick-maths', 'number-match', 'chain-merge', 'code-breaker', 'hangman'] },
   {
     title: 'Puzzles',
-    ids: ['2048', 'sudoku', 'nonogram', 'sweeper', 'flood', 'color-sort', 'tile-match', 'mahjong', 'block-puzzle', 'pointers', 'sliding-puzzle', 'jigsaw', 'memory', 'echo', 'classic-snake'],
+    ids: ['2048', 'sudoku', 'nonogram', 'sweeper', 'flood', 'color-sort', 'tile-match', 'mahjong', 'block-puzzle', 'pointers', 'maze-paint', 'sliding-puzzle', 'jigsaw', 'memory', 'echo', 'classic-snake'],
   },
   { title: 'Party: pass the phone', ids: ['impostor', 'charades', 'draw-guess', 'would-you-rather', 'truth-or-dare'] },
   { title: 'Chill', ids: ['pop-it', 'zen-garden', 'newtons-cradle'] },
