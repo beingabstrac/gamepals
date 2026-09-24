@@ -74,6 +74,7 @@ const GAMES = [
   'Would You Rather',
   'Truth or Dare',
   'Hangman',
+  'Pointers',
   'Color Sort',
   'Echo',
   'Classic Snake',

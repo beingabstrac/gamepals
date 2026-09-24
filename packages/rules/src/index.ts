@@ -82,6 +82,7 @@ export * from './games/newtons-cradle';
 export * from './games/would-you-rather';
 export * from './games/truth-or-dare';
 export * from './games/hangman';
+export * from './games/pointers';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

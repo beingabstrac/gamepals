@@ -159,6 +159,8 @@ import {
   type TodState,
   hangman,
   type HangState,
+  pointers,
+  type PointerState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -272,6 +274,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
 import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus } from './would-you-rather/RatherScene';
@@ -1405,6 +1408,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => hangResult(state as HangState),
     moveCue: () => undefined,
     createScene: (session) => new HangScene(session),
+  }),
+  entry({
+    definition: pointers,
+    tagline: 'Send every arrow off the board',
+    minutes: '3 min',
+    levels: [
+      { id: 'small', label: '5 × 5' },
+      { id: 'medium', label: '7 × 7' },
+      { id: 'large', label: '9 × 9' },
+    ],
+    hint: 'Tap an arrow with nothing in its way',
+    howTo: {
+      goal: 'Clear every arrow off the board.',
+      controls: 'Tap an arrow and it flies off the way it points, if nothing is in its way. On a keyboard: arrows move, Enter taps.',
+      win: 'Clear them all to win. Tap one that is blocked and it bumps: three bumps and the game is over.',
+      tip: 'Look for arrows pointing straight out at the edge first. Every board can be cleared without a single bump.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => POINTER_COLORS,
+    size: POINTER_CANVAS,
+    color: DARK.mint,
+    botDelayMs: 250,
+    status: (state) => pointerStatus(state as PointerState),
+    resultText: (state) => pointerResult(state as PointerState),
+    moveCue: () => undefined,
+    createScene: (session) => new PointerScene(session),
   }),
   entry({
     definition: fourInARow,

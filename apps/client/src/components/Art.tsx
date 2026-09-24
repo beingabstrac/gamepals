@@ -1861,6 +1861,26 @@ function HangmanArt() {
   );
 }
 
+function PointersArt() {
+  // A small grid of arrow tiles, one flying off the edge.
+  const tiles: [number, number, number][] = [[0, 0, 1], [1, 0, 0], [2, 0, 3], [0, 1, 2], [1, 1, 1], [0, 2, 3], [2, 2, 0], [1, 2, 2]];
+  const colors = [COLORS.sky, COLORS.mint, COLORS.tomato, COLORS.grape];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {tiles.map(([x, y, d]) => (
+        <g key={`${x}-${y}`} transform={`translate(${20 + x * 22} ${24 + y * 22}) rotate(${d * 90})`}>
+          <rect x="-9" y="-9" width="18" height="18" rx="4" fill={colors[d]} />
+          <path d="M0 -6 L5 0 L2 0 L2 6 L-2 6 L-2 0 L-5 0 Z" fill="#fff" />
+        </g>
+      ))}
+      <g transform="translate(86 46) rotate(90)">
+        <rect x="-9" y="-9" width="18" height="18" rx="4" fill={COLORS.mint} opacity="0.7" />
+        <path d="M0 -6 L5 0 L2 0 L2 6 L-2 6 L-2 0 L-5 0 Z" fill="#fff" />
+      </g>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2130,6 +2150,7 @@ const ART: Record<string, () => JSX.Element> = {
   'would-you-rather': RatherArt,
   'truth-or-dare': TruthOrDareArt,
   hangman: HangmanArt,
+  pointers: PointersArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

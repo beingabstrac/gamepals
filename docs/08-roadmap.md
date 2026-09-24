@@ -830,7 +830,8 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M28c Newton's Cradle:** pull one to four, as many fly out the far side, a click at every crossing.
   - [ ] **M28b Zen Garden:** rake with four tines, up to seven stones, Smooth, Done.
   - [ ] **M28a Pop It:** four shapes, rainbow rows, drag to pop, flip for the second side.
-- [ ] **M30 Party B:** Would You Rather, Truth or Dare (family-safe), and two more from the catalog's party and puzzle lists.
+- [ ] **M30 Party B:** Would You Rather, Truth or Dare (family-safe), Hangman, Pointers.
+  - [ ] **M30d Pointers:** tap arrows off the board; three sizes, every board clearable with no bump.
   - [ ] **M30c Hangman:** three levels, themed words with the theme as the clue, balloons instead of a gallows.
   - [ ] **M30b Truth or Dare:** family-safe cards of our own, done or pass, three goes each.
   - [ ] **M30a Would You Rather:** pick in secret on a passed phone, then the split; a point for siding with the table.
