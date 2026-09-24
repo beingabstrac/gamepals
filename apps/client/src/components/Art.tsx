@@ -1953,6 +1953,28 @@ function HoopsArt() {
   );
 }
 
+function TankArt() {
+  // Two toy tanks either side of a block, a shell bouncing off it.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="6" width="88" height="88" rx="12" fill="#EEF6E4" />
+      <rect x="40" y="44" width="22" height="14" rx="4" fill={COLORS.mint} />
+      <rect x="14" y="66" width="24" height="6" rx="2" fill={INK} />
+      <rect x="14" y="80" width="24" height="6" rx="2" fill={INK} />
+      <rect x="16" y="70" width="20" height="12" rx="3" fill={COLORS.sky} />
+      <rect x="30" y="73" width="16" height="5" rx="2" fill={COLORS.sky} />
+      <circle cx="26" cy="76" r="5" fill="#2F7DD1" />
+      <rect x="62" y="14" width="24" height="6" rx="2" fill={INK} />
+      <rect x="62" y="28" width="24" height="6" rx="2" fill={INK} />
+      <rect x="64" y="18" width="20" height="12" rx="3" fill={COLORS.tomato} />
+      <rect x="54" y="21" width="16" height="5" rx="2" fill={COLORS.tomato} />
+      <circle cx="74" cy="24" r="5" fill="#C73A2E" />
+      <path d="M48 76 L66 60 L80 46" stroke={COLORS.soft} stroke-width="2" stroke-dasharray="3 4" fill="none" />
+      <circle cx="48" cy="76" r="3.5" fill="#fff" stroke={INK} stroke-width="1.5" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2227,6 +2249,7 @@ const ART: Record<string, () => JSX.Element> = {
   'brick-blast': BrickBlastArt,
   'sling-puck': SlingPuckArt,
   hoops: HoopsArt,
+  'tank-duel': TankArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

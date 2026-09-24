@@ -91,6 +91,24 @@ export function heldDuelKeys(scene: Scene, seats: readonly SeatController[]): (s
   };
 }
 
+/**
+ * Held tap keys per seat (Space or Enter for the bottom player, Shift for the top), for one-button
+ * games you hold down (Tank Duel). Dropped when the window loses focus, so none gets stuck down.
+ */
+export function heldTaps(scene: Scene, seats: readonly SeatController[]): (seat: Seat) => boolean {
+  const down = new Set<string>();
+  scene.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+    const key = normalize(event.key);
+    if (DUEL_KEYS[key]?.[1] === 'tap') {
+      down.add(key);
+      event.preventDefault();
+    }
+  });
+  scene.input.keyboard?.on('keyup', (event: KeyboardEvent) => down.delete(normalize(event.key)));
+  scene.game.events.on('blur', () => down.clear());
+  return (seat) => [...down].some((key) => seatAction(seats, key)?.[0] === seat);
+}
+
 /** One-screen duels: seat 0 holds the bottom half of the phone, seat 1 the top half (facing the other way). */
 export const DUEL_COLORS = [COLORS.sky, COLORS.tomato];
 

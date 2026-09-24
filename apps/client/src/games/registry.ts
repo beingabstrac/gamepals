@@ -114,6 +114,7 @@ import {
   brickBlast,
   slingPuck,
   hoops,
+  tankDuel,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -282,6 +283,7 @@ import { BOMB_COLORS, BOMB_SIZE, BombScene } from './bomb-pass/BombScene';
 import { BRICK_COLORS, BRICK_SIZE, BrickScene } from './brick-blast/BrickScene';
 import { SLING_COLORS, SLING_SIZE, SlingScene } from './sling-puck/SlingScene';
 import { HOOPS_COLORS, HOOPS_SIZE, HoopsScene } from './hoops/HoopsScene';
+import { TANK_COLORS, TANK_SIZE, TankScene } from './tank-duel/TankScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2634,6 +2636,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: HOOPS_SIZE,
     color: DARK.peach,
     createScene: (options) => new HoopsScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: tankDuel,
+    tagline: 'One button, spin, drive, fire',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Hit the other tank with a shell.',
+      controls: 'Your whole half of the screen is your button. Let go and your tank spins on the spot. Hold it down and your tank drives the way it faces. Every press fires a shell. On a keyboard: Space for the bottom tank, Shift for the top one.',
+      win: 'A hit wins the round. First to five rounds wins.',
+      tip: 'Shells bounce off the walls, so you can hit round a corner. Your own shells never hurt you.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => TANK_COLORS,
+    size: TANK_SIZE,
+    color: DARK.mint,
+    createScene: (options) => new TankScene(options),
   },
   {
     kind: 'realtime',

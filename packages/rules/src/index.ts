@@ -102,3 +102,4 @@ export * from './games/dominoes';
 export * from './games/brick-blast';
 export * from './games/sling-puck';
 export * from './games/hoops';
+export * from './games/tank-duel';
