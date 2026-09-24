@@ -135,6 +135,8 @@ import {
   type ChowkaState,
   codeBreaker,
   type CodeState,
+  hex,
+  type HexState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -248,6 +250,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { HEX_CANVAS, HEX_COLORS, HEX_NAMES, HexScene, hexStatus } from './hex/HexScene';
 import { CODE_COLORS, CODE_SIZE, codeResult, CodeScene, codeStatus } from './code-breaker/CodeScene';
 import { chowkaColors, chowkaNames, CHOWKA_SIZE, ChowkaScene, chowkaStatus } from './chowka/ChowkaScene';
 import { FANO_CANVAS, FANO_COLORS, FANO_NAMES, FanoronaScene, fanoStatus } from './fanorona/FanoronaScene';
@@ -1097,6 +1100,25 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => codeResult(state as CodeState),
     moveCue: () => 'place',
     createScene: (session) => new CodeScene(session),
+  }),
+  entry({
+    definition: hex,
+    tagline: 'Join your two sides first',
+    minutes: '10 min',
+    howTo: {
+      goal: 'Red joins the top edge to the bottom with an unbroken chain of stones. Blue joins left to right.',
+      controls: 'Tap an empty cell to place a stone. After Red\'s first stone, Blue may tap Swap to take it over instead. On a keyboard: arrows move, Enter places, S swaps.',
+      win: 'The first to join their two edges wins. Somebody always does: there are no draws in Hex.',
+      tip: 'Two stones with two empty cells between them are as good as joined: if one is taken, take the other. Going first is a big help, which is why the swap is there.',
+    },
+    sideNames: () => HEX_NAMES,
+    sideColors: () => HEX_COLORS,
+    size: HEX_CANVAS,
+    color: DARK.tomato,
+    botDelayMs: 400,
+    status: (state, names) => hexStatus(state as HexState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new HexScene(session),
   }),
   entry({
     definition: fourInARow,

@@ -1615,6 +1615,33 @@ function CodeBreakerArt() {
   );
 }
 
+function HexArt() {
+  // A small rhombus of hexes, red edges top and bottom, blue at the sides, a red chain getting through.
+  const cells: [number, number, string][] = [];
+  const red = new Set(['1,0', '1,1', '0,2', '0,3']);
+  const blue = new Set(['2,1', '3,2', '2,2']);
+  for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) cells.push([x, y, red.has(`${x},${y}`) ? COLORS.tomato : blue.has(`${x},${y}`) ? COLORS.sky : '#fff']);
+  const hexPath = (cx: number, cy: number) => {
+    const r = 9;
+    const pts = Array.from({ length: 6 }, (_, k) => {
+      const a = (Math.PI / 180) * (60 * k - 90);
+      return `${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`;
+    });
+    return `M${pts.join(' L')} Z`;
+  };
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M18 18 H70" stroke={COLORS.tomato} stroke-width="5" stroke-linecap="round" />
+      <path d="M40 86 H92" stroke={COLORS.tomato} stroke-width="5" stroke-linecap="round" />
+      <path d="M12 26 L34 78" stroke={COLORS.sky} stroke-width="5" stroke-linecap="round" />
+      <path d="M76 22 L98 74" stroke={COLORS.sky} stroke-width="5" stroke-linecap="round" />
+      {cells.map(([x, y, fill]) => (
+        <path key={`${x}-${y}`} d={hexPath(26 + x * 15.6 + y * 7.8, 30 + y * 13.5)} fill={fill} stroke="#D8D3E6" stroke-width="1.5" />
+      ))}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1872,6 +1899,7 @@ const ART: Record<string, () => JSX.Element> = {
   fanorona: FanoronaArt,
   chowka: ChowkaArt,
   'code-breaker': CodeBreakerArt,
+  hex: HexArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

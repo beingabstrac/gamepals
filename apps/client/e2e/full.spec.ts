@@ -62,6 +62,7 @@ const GAMES = [
   'Fanorona',
   'Chowka Bhara',
   'Code Breaker',
+  'Hex',
   'Color Sort',
   'Echo',
   'Classic Snake',
