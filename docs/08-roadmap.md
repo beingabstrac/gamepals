@@ -825,6 +825,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M27c Block Puzzle:** 8 by 8, three pieces a deal, drag with the piece above your finger; goal 500.
   - [ ] **M27b Mahjong Solitaire:** 36, 72 and the 144-tile turtle, our own faces, deals built backwards so each can be cleared.
   - [ ] **M27a Nonogram:** 3 sizes, mirrored pictures that line logic alone solves; drag to paint, Fill and Mark buttons.
+- [x] **H1 Shelves (2026-09-24):** at 83 games one grid was a wall, so the home screen now has a shelf per kind: two on one phone, board games, games from long ago, cards, words and numbers, puzzles, party. One file (`games/shelves.ts`), the same tiles, and a last "More games" shelf so a game left off every list still shows. A design call made without the owner, and easy to undo: say so and it goes back to one grid.
 - [ ] **M28 Chill shelf A:** Pop bubbles, Bubble wrap, Newton's cradle, Zen garden
 - [ ] **M30+** The rest of the catalog, 3–4 per milestone, split here when we get there
 

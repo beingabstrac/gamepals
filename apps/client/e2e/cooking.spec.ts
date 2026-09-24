@@ -17,9 +17,10 @@ test('a game still cooking is playable, sits in its own row, and keeps nothing',
   const shelf = page.locator('.cooking');
   await expect(shelf).toBeVisible();
   await expect(shelf).toContainText('nothing here counts');
-  // It moved out of the main grid rather than being in both.
+  // It moved out of the main shelves rather than being in both. (Every shelf, not the first grid:
+  // since the home has shelves by kind, the first grid is the duels, which never held it.)
   await expect(shelf.getByRole('button', { name: /^Tic-Tac-Toe/ })).toBeVisible();
-  await expect(page.locator('.grid').first().getByRole('button', { name: /^Tic-Tac-Toe/ })).toHaveCount(0);
+  await expect(page.locator('.shelf').getByRole('button', { name: /^Tic-Tac-Toe/ })).toHaveCount(0);
 
   await shelf.getByRole('button', { name: /^Tic-Tac-Toe/ }).click();
   await page.getByRole('button', { name: 'Play', exact: true }).click();

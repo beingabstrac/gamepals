@@ -4,6 +4,7 @@ import { GameScreen } from './components/GameScreen';
 import { RealtimeGameScreen } from './components/RealtimeGameScreen';
 import { Setup } from './components/Setup';
 import { COOKING, GAMES, isCooking, READY, type AnyEntry } from './games/registry';
+import { shelve } from './games/shelves';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
 import { AUTOPLAY, autoplaySeats } from './autoplay';
@@ -250,11 +251,16 @@ function Home({ onPick, onDaily }: { onPick(entry: AnyEntry): void; onDaily(entr
 
       <Daily onPlay={onDaily} onArchive={() => setPast(true)} />
 
-      <div class="grid">
-        {READY.map((entry, i) => (
-          <Tile key={entry.definition.id} entry={entry} delay={i * 50} onPick={onPick} />
-        ))}
-      </div>
+      {shelve(READY).map((shelf, s) => (
+        <section class="shelf" key={shelf.title} aria-label={shelf.title}>
+          <h2 class="shelf-head">{shelf.title}</h2>
+          <div class="grid">
+            {shelf.entries.map((entry, i) => (
+              <Tile key={entry.definition.id} entry={entry} delay={Math.min(s * 3 + i, 12) * 40} onPick={onPick} />
+            ))}
+          </div>
+        </section>
+      ))}
 
       {COOKING.length > 0 && (
         <section class="cooking" aria-label="Still cooking">
