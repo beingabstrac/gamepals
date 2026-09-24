@@ -109,3 +109,4 @@ export * from './games/wheelie';
 export * from './games/chain-merge';
 export * from './games/maze-paint';
 export * from './games/fruit-merge';
+export * from './games/speed';

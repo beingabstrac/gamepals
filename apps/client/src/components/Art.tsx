@@ -2082,6 +2082,22 @@ function FruitMergeArt() {
   );
 }
 
+function SpeedArt() {
+  // Two piles in the middle and a card flying onto one from each side.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="52" width="88" height="42" rx="10" fill={COLORS.sky} opacity="0.14" />
+      <rect x="6" y="6" width="88" height="42" rx="10" fill={COLORS.tomato} opacity="0.14" />
+      <rect x="22" y="36" width="22" height="30" rx="4" fill="#fff" stroke={INK} stroke-width="1.5" />
+      <rect x="56" y="36" width="22" height="30" rx="4" fill="#fff" stroke={INK} stroke-width="1.5" />
+      <text x="33" y="51" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill={COLORS.tomato}>7</text>
+      <text x="67" y="51" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill={INK}>Q</text>
+      <rect x="30" y="72" width="18" height="24" rx="3" fill="#fff" stroke={COLORS.sky} stroke-width="2" transform="rotate(-12 39 84)" />
+      <rect x="54" y="6" width="18" height="24" rx="3" fill="#fff" stroke={COLORS.tomato} stroke-width="2" transform="rotate(10 63 18)" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2363,6 +2379,7 @@ const ART: Record<string, () => JSX.Element> = {
   'road-dodge': RoadDodgeArt,
   'slot-cars': SlotCarsArt,
   wheelie: WheelieArt,
+  speed: SpeedArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

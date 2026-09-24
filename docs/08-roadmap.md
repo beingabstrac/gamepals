@@ -849,7 +849,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M33a 2248:** drag a chain of numbers, same or double, thirty chains to make 4K.
   - [x] **M33b Maze Paint:** roll the ball until a wall, paint every square; three sizes, carved by rolling and checked so nobody gets stuck.
   - [x] **M33c Fruit Merge:** drop fruit, two alike grow, over the line ends it; the physics is a pure step in the rules.
-- [ ] **M34+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M34 Duels E:** Speed and more from the two-on-one-phone and card lists.
+  - [ ] **M34a Speed:** the card race for two on one phone, no turns, first out wins.
+- [ ] **M35+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

@@ -118,6 +118,7 @@ import {
   roadDodge,
   slotCars,
   wheelie,
+  speed,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -296,6 +297,7 @@ import { TANK_COLORS, TANK_SIZE, TankScene } from './tank-duel/TankScene';
 import { ROAD_COLORS, ROAD_SIZE, RoadScene } from './road-dodge/RoadScene';
 import { SLOT_COLORS, SLOT_SIZE, SlotScene } from './slot-cars/SlotScene';
 import { WHEELIE_COLORS, WHEELIE_SIZE, WheelieScene } from './wheelie/WheelieScene';
+import { SPEED_COLORS, SPEED_SIZE, SpeedScene } from './speed/SpeedScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2787,6 +2789,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: WHEELIE_SIZE,
     color: DARK.tomato,
     createScene: (options) => new WheelieScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: speed,
+    tagline: 'Race to get rid of your cards',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Get rid of all your cards before the other player does.',
+      controls: 'Drag a card from your hand onto one of the two piles in the middle, or just tap it. A card goes on a pile if it is one higher or one lower (a king and an ace are next to each other). On a keyboard: Left and Right pick a card, Space plays it (A, D and Shift for the top player).',
+      win: 'There are no turns: play as fast as you can. First with no cards left wins.',
+      tip: 'When neither of you can play, a card from each side stack turns over onto the piles.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => SPEED_COLORS,
+    size: SPEED_SIZE,
+    color: DARK.sky,
+    createScene: (options) => new SpeedScene(options),
   },
   {
     kind: 'realtime',

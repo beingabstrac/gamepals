@@ -57,6 +57,7 @@ const GAMES = [
   'Road Dodge',
   'Slot Cars',
   'Wheelie',
+  'Speed',
   'Impostor',
   'Charades',
   'Draw & Guess',
