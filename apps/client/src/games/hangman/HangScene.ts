@@ -137,7 +137,8 @@ export class HangScene extends Scene {
     const g = this.g.clear();
     const left = state.level.balloons - this.popped;
     const lifted = left > 0 && !(state.result && !state.result.winners.length);
-    const basketY = lifted ? BASKET.y : 330;
+    // Down, it settles a little lower but still above the clue: at 330 it sat on the clue line.
+    const basketY = lifted ? BASKET.y : 318;
     // Balloons still up, each on its string to the basket.
     for (let i = 0; i < left; i++) {
       const b = this.balloonXY(i);
