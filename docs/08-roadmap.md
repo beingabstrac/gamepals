@@ -840,11 +840,11 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M31b Brick Blast:** versus breakout, a wall between two paddles, two balls, first to five; the wall builds back once cleared.
   - [x] **M31c Sling Puck:** both at once, pull a puck back on your band and fire it through the slot, empty your side to win; a two-minute clock.
   - [x] **M31d Basketball Hoops:** each player's own side-on court, flick to throw, a minute, a golden basket if level.
-- [ ] **M32 Duels D:** more of the two-on-one-phone list.
-  - [ ] **M32a Tank Duel:** one button, spin, hold to drive, press to fire bouncing shells; your own shells never hurt you; first to five.
-  - [ ] **M32b Road Dodge:** your own road in your half, the same traffic for both, three bumps out.
-  - [ ] **M32c Slot Cars:** one button, hold to go, fly off a bend taken too fast, lanes that cross so the laps are equal; seven laps.
-  - [ ] **M32d Wheelie:** hold to lift, land to bank the metres, go over and the ride is 0; three rides each.
+- [x] **M32 Duels D (green on all eight screens 2026-09-24, run 36004477352):** more of the two-on-one-phone list.
+  - [x] **M32a Tank Duel:** one button, spin, hold to drive, press to fire bouncing shells; your own shells never hurt you; first to five.
+  - [x] **M32b Road Dodge:** your own road in your half, the same traffic for both, three bumps out.
+  - [x] **M32c Slot Cars:** one button, hold to go, fly off a bend taken too fast, lanes that cross so the laps are equal; seven laps.
+  - [x] **M32d Wheelie:** hold to lift, land to bank the metres, go over and the ride is 0; three rides each.
 - [ ] **M33 Puzzles B:** 2248, Maze Paint, Fruit Merge (Petdoku left out: it is Sudoku with pictures).
   - [ ] **M33a 2248:** drag a chain of numbers, same or double, thirty chains to make 4K.
   - [ ] **M33b Maze Paint:** roll the ball until a wall, paint every square; three sizes, carved by rolling and checked so nobody gets stuck.
