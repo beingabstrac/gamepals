@@ -127,6 +127,8 @@ import {
   type PachisiState,
   go,
   type GoState,
+  tafl,
+  type TaflState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -240,6 +242,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { TAFL_CANVAS, TAFL_COLORS, TAFL_NAMES, TaflScene, taflStatus } from './tafl/TaflScene';
 import { GO_CANVAS, GO_COLORS, GO_NAMES, GoScene, goStatus } from './go/GoScene';
 import { pachisiColors, pachisiNames, PACHISI_SIZE, PachisiScene, pachisiStatus } from './pachisi/PachisiScene';
 import { MORRIS_COLORS, MORRIS_NAMES, MORRIS_SIZE, MorrisScene, morrisStatus } from './morris/MorrisScene';
@@ -1001,6 +1004,26 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => goStatus(state as GoState, names),
     moveCue: () => undefined,
     createScene: (session) => new GoScene(session),
+  }),
+  entry({
+    definition: tafl,
+    tagline: 'Viking chess: get the king out',
+    minutes: '15 min',
+    howTo: {
+      goal: 'The defenders get their king to a corner. The attackers trap the king before he gets there.',
+      controls: 'Tap one of your pieces, then a lit square along its row or column. Pieces move like rooks and cannot jump. On a keyboard: arrows move the ring, Enter picks and moves, Escape lets go.',
+      win: 'The king on a corner wins for the defenders. The king surrounded by attackers on all four sides (or three and the throne) wins for the attackers. A player who cannot move loses.',
+      draw: 'Three hundred moves with no end is a draw. Going round in circles to the same position three times loses for the defenders.',
+      tip: 'Trap a piece between two of yours along a line to take it. The corners and the empty throne trap too. Only the king may stop on them. The king cannot be caught on the edge of the board.',
+    },
+    sideNames: () => TAFL_NAMES,
+    sideColors: () => TAFL_COLORS,
+    size: TAFL_CANVAS,
+    color: DARK.peach,
+    botDelayMs: 450,
+    status: (state, names) => taflStatus(state as TaflState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new TaflScene(session),
   }),
   entry({
     definition: fourInARow,

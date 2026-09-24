@@ -1517,6 +1517,30 @@ function GoArt() {
   );
 }
 
+function TaflArt() {
+  // The king in his crown at the middle, his defenders round him, attackers closing in from the edge.
+  const defenders = [[50, 36], [36, 50], [64, 50], [50, 64]];
+  const attackers = [[50, 12], [12, 50], [88, 50], [50, 88], [24, 24]];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="4" y="8" width="92" height="90" rx="14" fill={DARK.peach} />
+      <rect x="4" y="4" width="92" height="90" rx="14" fill={COLORS.peach} />
+      <rect x="10" y="10" width="80" height="80" rx="8" fill="#fff" />
+      {[[10, 10], [80, 10], [10, 80], [80, 80]].map(([x, y]) => (
+        <rect key={`${x}-${y}`} x={x} y={y} width="10" height="10" rx="3" fill={COLORS.sunny} />
+      ))}
+      {attackers.map(([x, y]) => (
+        <circle key={`a${x}-${y}`} cx={x} cy={y} r="6" fill={COLORS.tomato} />
+      ))}
+      {defenders.map(([x, y]) => (
+        <circle key={`d${x}-${y}`} cx={x} cy={y} r="6" fill={COLORS.sky} />
+      ))}
+      <circle cx="50" cy="50" r="9" fill={COLORS.sky} />
+      <path d="M43 53 V45 L46.5 49 L50 43 L53.5 49 L57 45 V53 Z" fill={COLORS.sunny} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1770,6 +1794,7 @@ const ART: Record<string, () => JSX.Element> = {
   morris: MorrisArt,
   pachisi: PachisiArt,
   go: GoArt,
+  tafl: TaflArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

@@ -58,6 +58,7 @@ const GAMES = [
   "Nine Men's Morris",
   'Pachisi',
   'Go 9×9',
+  'Hnefatafl',
   'Color Sort',
   'Echo',
   'Classic Snake',

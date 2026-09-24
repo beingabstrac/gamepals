@@ -66,6 +66,7 @@ export * from './games/senet';
 export * from './games/morris';
 export * from './games/pachisi';
 export * from './games/go';
+export * from './games/tafl';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';
