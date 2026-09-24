@@ -1690,6 +1690,25 @@ function NonogramArt() {
   );
 }
 
+function MahjongArt() {
+  // A small stack of cream tiles, one on top of two, faces of dots, a numeral and a flower.
+  const tile = (x: number, y: number, key: string, face: JSX.Element) => (
+    <g key={key}>
+      <rect x={x} y={y + 3} width="26" height="34" rx="5" fill={DARK.sunny} />
+      <rect x={x} y={y} width="26" height="34" rx="5" fill="#FFF6DD" />
+      {face}
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {tile(14, 46, 'a', <g><circle cx="21" cy="55" r="3.5" fill={COLORS.sky} /><circle cx="27" cy="63" r="3.5" fill={COLORS.tomato} /><circle cx="33" cy="71" r="3.5" fill={COLORS.mint} /></g>)}
+      {tile(42, 46, 'b', <text x="55" y="63" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="700" fill={COLORS.tomato}>7</text>)}
+      {tile(70, 46, 'c', <g>{[0, 1, 2, 3, 4, 5].map((k) => <circle key={k} cx={83 + Math.cos(k) * 6} cy={63 + Math.sin(k) * 6} r="4" fill={COLORS.bubblegum} />)}<circle cx="83" cy="63" r="3" fill={COLORS.sunny} /></g>)}
+      {tile(34, 14, 'd', <path d="M47 22 L54 30 L50 30 L50 40 L44 40 L44 30 L40 30 Z" fill={COLORS.grape} />)}
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1950,6 +1969,7 @@ const ART: Record<string, () => JSX.Element> = {
   hex: HexArt,
   'chinese-checkers': ChineseCheckersArt,
   nonogram: NonogramArt,
+  mahjong: MahjongArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

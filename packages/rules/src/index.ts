@@ -73,6 +73,7 @@ export * from './games/code-breaker';
 export * from './games/hex';
 export * from './games/chinese-checkers';
 export * from './games/nonogram';
+export * from './games/mahjong';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

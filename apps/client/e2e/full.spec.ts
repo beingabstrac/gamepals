@@ -65,6 +65,7 @@ const GAMES = [
   'Hex',
   'Chinese Checkers',
   'Nonogram',
+  'Mahjong Solitaire',
   'Color Sort',
   'Echo',
   'Classic Snake',

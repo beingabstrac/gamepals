@@ -141,6 +141,8 @@ import {
   type StarState,
   nonogram,
   type NonoState,
+  mahjong,
+  type MahjongState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -254,6 +256,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
 import { STAR_SIZE, StarScene, starSeatColors, starSeatNames, starStatus } from './chinese-checkers/StarScene';
 import { HEX_CANVAS, HEX_COLORS, HEX_NAMES, HexScene, hexStatus } from './hex/HexScene';
@@ -1169,6 +1172,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => nonoResult(state as NonoState),
     moveCue: () => undefined,
     createScene: (session) => new NonoScene(session),
+  }),
+  entry({
+    definition: mahjong,
+    tagline: 'Pair the free tiles, clear the stack',
+    minutes: '8 min',
+    levels: [
+      { id: 'small', label: '36 tiles' },
+      { id: 'medium', label: '72 tiles' },
+      { id: 'large', label: 'Turtle' },
+    ],
+    hint: 'Tap two matching free tiles',
+    howTo: {
+      goal: 'Clear every tile off the board, two matching tiles at a time.',
+      controls: 'Tap a free tile, then its match. Hint shows a pair; Shuffle deals the tiles left again, twice a game. On a keyboard: arrows move between free tiles, Enter picks, H hints, S shuffles.',
+      win: 'Take every tile off to win. If no pair is left and no shuffle either, the game is over.',
+      tip: 'A tile is free when nothing lies on it and it has no neighbor on its left or on its right. Any flower matches any flower, and any season any season. Take tiles from the high stacks and long rows first.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => MAHJONG_COLORS,
+    size: MAHJONG_CANVAS,
+    color: DARK.sunny,
+    botDelayMs: 350,
+    status: (state) => mahjongStatus(state as MahjongState),
+    resultText: (state) => mahjongResult(state as MahjongState),
+    moveCue: () => undefined,
+    createScene: (session) => new MahjongScene(session),
   }),
   entry({
     definition: fourInARow,
