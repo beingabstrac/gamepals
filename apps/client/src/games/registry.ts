@@ -155,6 +155,8 @@ import {
   type CradleState,
   wouldYouRather,
   type RatherState,
+  truthOrDare,
+  type TodState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -268,6 +270,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
 import { RATHER_CANVAS, RATHER_COLORS, ratherResult, RatherScene, ratherStatus } from './would-you-rather/RatherScene';
 import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
@@ -1350,6 +1353,29 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state, names) => ratherResult(state as RatherState, names),
     moveCue: () => 'tap',
     createScene: (session) => new RatherScene(session),
+  }),
+  entry({
+    definition: truthOrDare,
+    party: true,
+    tagline: 'The family-safe kind',
+    minutes: '10 min',
+    tryIt: 'Pass the phone to whoever goes first',
+    howTo: {
+      goal: 'Take your turn: answer a truth or do a dare, as many as you dare.',
+      controls: 'On your go, tap Truth or Dare, read the card out, then tap Done when you have done it, or Pass. On a keyboard: T or D picks, Enter is done, P passes.',
+      win: 'Every one done is a point. After three goes each, the most points wins.',
+      draw: 'All level is a draw.',
+      tip: 'Every card is kind and safe indoors. Pass any you do not want to do: it just scores nothing.',
+    },
+    sideNames: (players) => Array.from({ length: players }, (_, i) => `Player ${i + 1}`),
+    sideColors: (players) => TOD_COLORS.slice(0, players),
+    size: TOD_CANVAS,
+    color: DARK.tomato,
+    botDelayMs: 400,
+    status: (state, names) => todStatus(state as TodState, names),
+    resultText: (state, names) => todResult(state as TodState, names),
+    moveCue: () => 'tap',
+    createScene: (session) => new TodScene(session),
   }),
   entry({
     definition: fourInARow,

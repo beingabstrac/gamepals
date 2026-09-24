@@ -72,6 +72,7 @@ const GAMES = [
   'Zen Garden',
   "Newton's Cradle",
   'Would You Rather',
+  'Truth or Dare',
   'Color Sort',
   'Echo',
   'Classic Snake',

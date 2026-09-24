@@ -80,6 +80,7 @@ export * from './games/pop-it';
 export * from './games/zen-garden';
 export * from './games/newtons-cradle';
 export * from './games/would-you-rather';
+export * from './games/truth-or-dare';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';

@@ -1821,6 +1821,24 @@ function RatherArt() {
   );
 }
 
+function TruthOrDareArt() {
+  // Two cards fanned: a blue question mark and a red lightning bolt.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <g transform="rotate(-12 40 55)">
+        <rect x="16" y="22" width="40" height="56" rx="9" fill={DARK.sky} />
+        <rect x="16" y="18" width="40" height="56" rx="9" fill={COLORS.sky} />
+        <text x="36" y="46" text-anchor="middle" dominant-baseline="central" font-size="28" font-weight="700" fill="#fff">?</text>
+      </g>
+      <g transform="rotate(12 60 55)">
+        <rect x="44" y="22" width="40" height="56" rx="9" fill={DARK.tomato} />
+        <rect x="44" y="18" width="40" height="56" rx="9" fill={COLORS.tomato} />
+        <path d="M68 30 L56 50 L64 50 L60 66 L74 44 L66 44 Z" fill="#fff" />
+      </g>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2088,6 +2106,7 @@ const ART: Record<string, () => JSX.Element> = {
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,
   'would-you-rather': RatherArt,
+  'truth-or-dare': TruthOrDareArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
