@@ -59,6 +59,7 @@ const GAMES = [
   'Pachisi',
   'Go 9×9',
   'Hnefatafl',
+  'Fanorona',
   'Color Sort',
   'Echo',
   'Classic Snake',

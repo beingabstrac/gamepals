@@ -1541,6 +1541,25 @@ function TaflArt() {
   );
 }
 
+function FanoronaArt() {
+  // A corner of the board with its diagonals, a blue piece stepping up and a red line about to go.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="16" width="88" height="70" rx="12" fill={DARK.mint} />
+      <rect x="6" y="12" width="88" height="70" rx="12" fill={COLORS.mint} />
+      <g stroke="#fff" stroke-width="2.5" opacity="0.9">
+        <path d="M18 24 H82 M18 47 H82 M18 70 H82 M18 24 V70 M50 24 V70 M82 24 V70 M18 24 L64 70 M18 70 L64 24 M50 24 L82 56" />
+      </g>
+      <circle cx="18" cy="47" r="7" fill={COLORS.sky} />
+      <circle cx="50" cy="47" r="7" fill={COLORS.tomato} />
+      <circle cx="66" cy="47" r="7" fill={COLORS.tomato} />
+      <circle cx="82" cy="47" r="7" fill={COLORS.tomato} />
+      <path d="M26 47 H36" stroke={COLORS.sky} stroke-width="4" stroke-linecap="round" />
+      <path d="M33 42 L38 47 L33 52" stroke={COLORS.sky} stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1795,6 +1814,7 @@ const ART: Record<string, () => JSX.Element> = {
   pachisi: PachisiArt,
   go: GoArt,
   tafl: TaflArt,
+  fanorona: FanoronaArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

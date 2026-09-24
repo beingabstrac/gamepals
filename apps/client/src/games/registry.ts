@@ -129,6 +129,8 @@ import {
   type GoState,
   tafl,
   type TaflState,
+  fanorona,
+  type FanoState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -242,6 +244,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { FANO_CANVAS, FANO_COLORS, FANO_NAMES, FanoronaScene, fanoStatus } from './fanorona/FanoronaScene';
 import { TAFL_CANVAS, TAFL_COLORS, TAFL_NAMES, TaflScene, taflStatus } from './tafl/TaflScene';
 import { GO_CANVAS, GO_COLORS, GO_NAMES, GoScene, goStatus } from './go/GoScene';
 import { pachisiColors, pachisiNames, PACHISI_SIZE, PachisiScene, pachisiStatus } from './pachisi/PachisiScene';
@@ -1024,6 +1027,26 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => taflStatus(state as TaflState, names),
     moveCue: () => undefined,
     createScene: (session) => new TaflScene(session),
+  }),
+  entry({
+    definition: fanorona,
+    tagline: 'Take whole lines at once',
+    minutes: '10 min',
+    howTo: {
+      goal: 'Take every one of the other player\'s pieces.',
+      controls: 'Tap one of your pieces, then a lit point next to it along a line. If it could take the line in front or the line behind, tap a piece in the line you want. After a take the same piece may go again; tap Stop here to end. On a keyboard: arrows move the ring, Enter picks and moves, A or W choose front or behind, S stops.',
+      win: 'Take all of their pieces to win.',
+      draw: 'A hundred moves with nothing taken is a draw.',
+      tip: 'Move up to a piece along a line, or move straight away from one, and you take it and every piece of theirs in an unbroken line behind it. If you can take, you must. A piece taking again cannot go the same way twice running or back to a point it has been.',
+    },
+    sideNames: () => FANO_NAMES,
+    sideColors: () => FANO_COLORS,
+    size: FANO_CANVAS,
+    color: DARK.mint,
+    botDelayMs: 500,
+    status: (state, names) => fanoStatus(state as FanoState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new FanoronaScene(session),
   }),
   entry({
     definition: fourInARow,

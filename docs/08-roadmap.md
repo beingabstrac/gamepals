@@ -813,7 +813,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara. Split one game per loop.
   - [ ] **M25a Go 9×9:** area scoring with komi 7, superko, dead stones played off; Monte Carlo bots on a fast board, Expert in the worker.
   - [ ] **M25b Hnefatafl:** Copenhagen rules on 11 by 11, minus shieldwalls, exit forts and encirclement; search bots, Expert in the worker.
-  - [ ] **M25c Fanorona**
+  - [ ] **M25c Fanorona:** approach and withdrawal, capture runs, choose the line by tapping it; search bots, Expert in the worker.
   - [ ] **M25d Chowka Bhara**
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
 - [ ] **M27 Puzzles A:** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them)
