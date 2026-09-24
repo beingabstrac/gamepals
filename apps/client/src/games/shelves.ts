@@ -8,7 +8,7 @@ import type { AnyEntry } from './registry';
 export const SHELVES: readonly { readonly title: string; readonly ids: readonly string[] }[] = [
   {
     title: 'Two on one phone',
-    ids: ['air-hockey', 'ping-pong', 'tug-of-war', 'reflex-race', 'sumo', 'penalty-kicks', 'snake-battle', 'spinner-war', 'racing', 'sword-duel', 'whack-a-mole', 'paint-fight', 'grab-it', 'bomb-pass', 'brick-blast', 'sling-puck', 'hoops', 'tank-duel', 'road-dodge', 'slot-cars', 'wheelie', 'gravity-run', 'pool', 'mini-golf', 'archery'],
+    ids: ['air-hockey', 'ping-pong', 'tug-of-war', 'reflex-race', 'sumo', 'penalty-kicks', 'snake-battle', 'spinner-war', 'racing', 'sword-duel', 'whack-a-mole', 'paint-fight', 'grab-it', 'bomb-pass', 'brick-blast', 'sling-puck', 'hoops', 'tank-duel', 'road-dodge', 'slot-cars', 'wheelie', 'gravity-run', 'pool', 'mini-golf', 'archery', 'darts'],
   },
   {
     title: 'Board games',

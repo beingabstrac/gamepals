@@ -2289,6 +2289,23 @@ function DominoesToppleArt() {
   );
 }
 
+function DartsArt() {
+  // A candy dartboard with a dart in the treble twenty.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="54" r="40" fill={COLORS.grape} />
+      <circle cx="50" cy="54" r="31" fill={COLORS.tomato} />
+      <circle cx="50" cy="54" r="27" fill="#FFF3DC" />
+      <path d="M50 54 L50 27 A27 27 0 0 1 58.3 28.3 Z M50 54 L75.7 45.7 A27 27 0 0 1 77 54 Z M50 54 L66 75.8 A27 27 0 0 1 58.3 79.7 Z M50 54 L34 75.8 A27 27 0 0 1 26.3 67 Z M50 54 L24.3 45.7 A27 27 0 0 1 27.6 38.1 Z" fill={COLORS.ink} />
+      <circle cx="50" cy="54" r="17" fill="none" stroke={COLORS.mint} stroke-width="4" />
+      <circle cx="50" cy="54" r="5" fill={COLORS.mint} />
+      <circle cx="50" cy="54" r="2.5" fill={COLORS.tomato} />
+      <path d="M52 37 L68 16" stroke={COLORS.ink} stroke-width="3" stroke-linecap="round" />
+      <path d="M66 18 L78 12 L72 24 Z" fill={COLORS.sunny} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2527,6 +2544,7 @@ const ART: Record<string, () => JSX.Element> = {
   pool: PoolArt,
   'mini-golf': MiniGolfArt,
   archery: ArcheryArt,
+  darts: DartsArt,
   'spinner-war': SpinnerArt,
   racing: RacingArt,
   'sword-duel': SwordArt,

@@ -865,7 +865,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M37a Ball Run:** turn track pieces to join the ball to the flag; three sizes, par to beat.
   - [ ] **M37b Sand Fall:** pour colored sand into a jar, falling-sand grains, shake to empty.
   - [ ] **M37c Domino Topple:** draw a line of dominoes, push the first, the rules work out the chain.
-- [ ] **M38+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M38 Duels F:** Darts, and the party duels from docs/12 A still to build.
+  - [ ] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
+- [ ] **M39+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

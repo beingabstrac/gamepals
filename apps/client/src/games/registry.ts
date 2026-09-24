@@ -97,6 +97,9 @@ import {
   GOLF_LENGTHS,
   archery,
   ARCHERY_RANGES,
+  darts,
+  DARTS_LEVELS,
+  type DartsState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -275,6 +278,7 @@ import { JIGSAW_SIZE, JigsawScene } from './jigsaw/JigsawScene';
 import { POOL_SIZE, PoolScene } from './pool/PoolScene';
 import { GOLF_COLORS, GOLF_SIZE, GolfScene } from './mini-golf/GolfScene';
 import { ARCHERY_COLORS, ARCHERY_SIZE, ArcheryScene, arrowOfEnd } from './archery/ArcheryScene';
+import { DART_COLORS, dartsResult, DartsScene, DARTS_SIZE, dartsStatus } from './darts/DartsScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -2605,6 +2609,29 @@ export const GAMES: readonly AnyEntry[] = [
     },
     moveCue: () => undefined,
     createScene: (session) => new ArcheryScene(session),
+  }),
+  entry({
+    definition: darts,
+    tagline: 'Count down, finish on a double',
+    minutes: '5 min',
+    levels: DARTS_LEVELS.map((id) => ({ id, label: id })),
+    howTo: {
+      goal: 'Get your score from 301 (or 501) down to exactly zero before anyone else.',
+      controls:
+        'Drag to move the sight, then let go to throw. The sight sways, so let go when it is on the spot you want. Three darts a turn. On a keyboard: the arrow keys move the sight (hold Shift for small steps) and Space throws.',
+      win: 'Your last dart has to land in a double (the thin outer ring) or the red middle, and bring you to exactly zero.',
+      draw: 'Too much, 1 left, or zero without a double is a bust: that turn scores nothing.',
+      tip: 'The thin inner ring counts three times. The line under the board shows a way to finish once you are close enough.',
+    },
+    sideNames: (players) => ['Red', 'Blue', 'Green', 'Purple'].slice(0, players),
+    sideColors: (players) => DART_COLORS.slice(0, players),
+    size: DARTS_SIZE,
+    color: DARK.grape,
+    botDelayMs: 450,
+    status: (state, names) => dartsStatus(state as DartsState, names),
+    resultText: (state, names) => dartsResult(state as DartsState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new DartsScene(session),
   }),
   entry({
     definition: colorSort,
