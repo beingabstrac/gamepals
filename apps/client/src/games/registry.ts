@@ -137,6 +137,8 @@ import {
   type PachisiState,
   go,
   type GoState,
+  gomoku,
+  type GomokuState,
   tafl,
   type TaflState,
   fanorona,
@@ -333,6 +335,7 @@ import { chowkaColors, chowkaNames, CHOWKA_SIZE, ChowkaScene, chowkaStatus } fro
 import { FANO_CANVAS, FANO_COLORS, FANO_NAMES, FanoronaScene, fanoStatus } from './fanorona/FanoronaScene';
 import { TAFL_CANVAS, TAFL_COLORS, TAFL_NAMES, TaflScene, taflStatus } from './tafl/TaflScene';
 import { GO_CANVAS, GO_COLORS, GO_NAMES, GoScene, goStatus } from './go/GoScene';
+import { GOMOKU_CANVAS, GOMOKU_COLORS, gomokuResult, GomokuScene, gomokuStatus } from './gomoku/GomokuScene';
 import { pachisiColors, pachisiNames, PACHISI_SIZE, PachisiScene, pachisiStatus } from './pachisi/PachisiScene';
 import { MORRIS_COLORS, MORRIS_NAMES, MORRIS_SIZE, MorrisScene, morrisStatus } from './morris/MorrisScene';
 import { SENET_COLORS, SENET_NAMES, SENET_SIZE, SenetScene, senetStatus } from './senet/SenetScene';
@@ -1093,6 +1096,27 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => goStatus(state as GoState, names),
     moveCue: () => undefined,
     createScene: (session) => new GoScene(session),
+  }),
+  entry({
+    definition: gomoku,
+    tagline: 'Five in a row wins',
+    minutes: '6 min',
+    hint: 'Tap a point to put a stone there',
+    howTo: {
+      goal: 'Get five of your stones in a row before the other player does.',
+      controls: 'Tap a point where the lines cross to put a stone there. Black goes first. On a keyboard: arrows move, Enter places a stone.',
+      win: 'Five or more in a row, across, down or corner to corner, wins. A full board is a draw.',
+      tip: 'An open row of three with space at both ends is a threat: block it, or it becomes a four with two ways to finish.',
+    },
+    sideNames: () => ['Black', 'White'],
+    sideColors: () => GOMOKU_COLORS,
+    size: GOMOKU_CANVAS,
+    color: DARK.sunny,
+    botDelayMs: 400,
+    status: (state, names) => gomokuStatus(state as GomokuState, names),
+    resultText: (state, names) => gomokuResult(state as GomokuState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new GomokuScene(session),
   }),
   entry({
     definition: tafl,

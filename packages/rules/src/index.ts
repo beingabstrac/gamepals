@@ -115,3 +115,4 @@ export * from './games/tower';
 export * from './games/switch-board';
 export * from './games/clean-it';
 export * from './games/straighten-up';
+export * from './games/gomoku';

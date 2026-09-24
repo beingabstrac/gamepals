@@ -2190,6 +2190,24 @@ function StraightenUpArt() {
   );
 }
 
+function GomokuArt() {
+  // A sunny board with crossing lines and five black stones in a row, corner to corner.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="12" fill="#FFD66B" />
+      <path d="M20 20 H80 M20 35 H80 M20 50 H80 M20 65 H80 M20 80 H80 M20 20 V80 M35 20 V80 M50 20 V80 M65 20 V80 M80 20 V80" stroke="#C9912A" stroke-width="1.5" />
+      <circle cx="20" cy="80" r="6" fill={INK} />
+      <circle cx="35" cy="65" r="6" fill={INK} />
+      <circle cx="50" cy="50" r="6" fill={INK} />
+      <circle cx="65" cy="35" r="6" fill={INK} />
+      <circle cx="80" cy="20" r="6" fill={INK} />
+      <circle cx="35" cy="50" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+      <circle cx="65" cy="50" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+      <circle cx="50" cy="35" r="6" fill="#fff" stroke="#C9C2E0" stroke-width="1.5" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2460,6 +2478,7 @@ const ART: Record<string, () => JSX.Element> = {
   'switch-board': SwitchBoardArt,
   'clean-it': CleanItArt,
   'straighten-up': StraightenUpArt,
+  gomoku: GomokuArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

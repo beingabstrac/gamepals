@@ -85,6 +85,7 @@ const GAMES = [
   'Switch Board',
   'Clean It',
   'Straighten Up',
+  'Gomoku',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",

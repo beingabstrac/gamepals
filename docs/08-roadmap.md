@@ -819,7 +819,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M26b Chinese Checkers:** the 121-hole star, chained hops, anti-spoiling home; 2 to 4 players until the party table can seat six.
   - [x] **M26c Hex:** 11 by 11 with the swap rule; all-moves-as-first Monte Carlo bots, Expert in the worker.
   - [x] **M26d Code Breaker:** Easy, Classic and Hard; pegs carry their numbers; `allows` for the 32,768 codes of Hard.
-  - [ ] **M26a Gomoku (parked 2026-09-24):** the rules were easy; the bot was not. A one-move evaluator (unbroken runs, then five-wide windows, attack plus defense) played so badly that in self-play the second player won 72% of games, where real Gomoku favors the first, and a little randomness beat no randomness, so tier ordering was noise. Subtracting the reply's best score punished its own threats. It needs a real threat-space search (fours and open threes first, then a short forced-win search) before it ships. The draft rules and tests were kept out of the repo.
+  - [x] **M26a Gomoku (built 2026-09-25, in M36; was parked 2026-09-24):** the rules were easy; the bot was not. A one-move evaluator (unbroken runs, then five-wide windows, attack plus defense) played so badly that in self-play the second player won 72% of games, where real Gomoku favors the first, and a little randomness beat no randomness, so tier ordering was noise. Subtracting the reply's best score punished its own threats. It needs a real threat-space search (fours and open threes first, then a short forced-win search) before it ships. The draft rules and tests were kept out of the repo.
 - [x] **M27 Puzzles A (green on all eight screens 2026-09-24, run 35956832887):** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them). Split: Nonogram, Mahjong Solitaire, Block Puzzle, Number Match. Nuts & Bolts was dropped: it is Color Sort with different pictures.
   - [x] **M27d Number Match:** Take Ten: pairs that match or make ten, five adds, the grid shrinks to fit.
   - [x] **M27c Block Puzzle:** 8 by 8, three pieces a deal, drag with the piece above your finger; goal 500.
@@ -857,7 +857,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M35a Switch Board:** a fidget board of toggles, sliders, dials, buttons and a lever; a lamp each; all on goes rainbow.
   - [ ] **M35b Clean It:** rub the grime off a window, a coin or a rug; it sparkles when clean.
   - [ ] **M35c Straighten Up:** push crooked frames level on their nails; 3, 5 or 7 frames.
-- [ ] **M36+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M36 Board classics C:** Gomoku (with the threat search it lacked), and the variants the catalog lists beside built games.
+  - [ ] **M36a Gomoku:** freestyle five in a row; bots score every window of five and search for wins by fours; Expert also breaks the other side's.
+- [ ] **M37+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

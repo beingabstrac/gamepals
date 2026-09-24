@@ -12,7 +12,7 @@ export const SHELVES: readonly { readonly title: string; readonly ids: readonly 
   },
   {
     title: 'Board games',
-    ids: ['tic-tac-toe', 'four-in-a-row', 'ultimate-ttt', 'checkers', 'chess', 'reversi', 'go', 'hex', 'backgammon', 'ludo', 'snakes-and-ladders', 'sea-battle', 'dots-and-boxes', 'mancala', 'morris', 'chinese-checkers', 'guess-person', 'dominoes', 'yatzy', 'shut-the-box', 'tower'],
+    ids: ['tic-tac-toe', 'four-in-a-row', 'ultimate-ttt', 'checkers', 'chess', 'reversi', 'go', 'hex', 'backgammon', 'ludo', 'snakes-and-ladders', 'sea-battle', 'dots-and-boxes', 'mancala', 'morris', 'chinese-checkers', 'guess-person', 'dominoes', 'yatzy', 'shut-the-box', 'tower', 'gomoku'],
   },
   { title: 'Games from long ago', ids: ['ur', 'senet', 'pachisi', 'chowka', 'tafl', 'fanorona'] },
   {
