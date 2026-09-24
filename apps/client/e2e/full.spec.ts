@@ -78,6 +78,7 @@ const GAMES = [
   'Number Match',
   '2248',
   'Maze Paint',
+  'Fruit Merge',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",
@@ -119,7 +120,7 @@ const TWO_SEATS = new Set(['Pachisi', 'Chowka Bhara']);
  * Long race games, 300 to 460 plies of throw and hop, get more time: the Android phone engine spent
  * about 0.75s a ply on Senet and ran out at 240s.
  */
-const LONG = new Set(['Pachisi', 'Chowka Bhara', 'Senet']);
+const LONG = new Set(['Pachisi', 'Chowka Bhara', 'Senet', 'Fruit Merge']);
 
 /** Patience deals can be unwinnable, so for those a long stretch of play with no errors is the pass mark. */
 const MAY_NOT_FINISH = new Set(['Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks']);

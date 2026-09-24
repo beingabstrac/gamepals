@@ -46,6 +46,7 @@ import { pachisi } from './pachisi';
 import { senet } from './senet';
 import { tafl } from './tafl';
 import { twenty48 } from './twenty48';
+import { fruitMerge } from './fruit-merge';
 import { ur } from './ur';
 import { ultimateTtt } from './ultimate-ttt';
 import { war } from './war';
@@ -108,6 +109,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       chowka,
       hex,
       chineseCheckers,
+      fruitMerge,
     ] as unknown as AnyTurnGame[]
   ).map((game) => [game.id, game]),
 );
@@ -117,7 +119,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
  * These are the ones worth handing to a worker; the rest decide in well under a millisecond,
  * where a message round trip would cost far more than the thinking it saves.
  */
-export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box', 'pool', 'mini-golf', 'morris', 'go', 'tafl', 'fanorona', 'hex']);
+export const HEAVY_BOTS: ReadonlySet<string> = new Set(['chess', 'checkers', 'reversi', 'ultimate-ttt', 'mancala', 'dominoes', 'yatzy', 'shut-the-box', 'pool', 'mini-golf', 'morris', 'go', 'tafl', 'fanorona', 'hex', 'fruit-merge']);
 
 /**
  * Everything a bot needs to pick a move away from the screen (in a Web Worker, or on a server).

@@ -156,9 +156,11 @@ import {
   numberMatch,
   chainMerge,
   mazePaint,
+  fruitMerge,
   type NumberState,
   type ChainState,
   type MazeState,
+  type FruitState,
   popIt,
   type PopState,
   zenGarden,
@@ -304,6 +306,7 @@ import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
 import { CHAIN_CANVAS, CHAIN_COLORS, ChainScene, chainResultText, chainStatus } from './chain-merge/ChainScene';
 import { MAZE_CANVAS, MAZE_COLORS, mazeResult, MazeScene, mazeStatus } from './maze-paint/MazeScene';
+import { FRUIT_CANVAS, FRUIT_COLORS, fruitResult, FruitScene, fruitStatus } from './fruit-merge/FruitScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
@@ -1336,6 +1339,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => mazeResult(state as MazeState),
     moveCue: () => undefined,
     createScene: (session) => new MazeScene(session),
+  }),
+  entry({
+    definition: fruitMerge,
+    tagline: 'Drop fruit, two alike grow',
+    minutes: '5 min',
+    hint: 'Slide to aim, let go to drop',
+    howTo: {
+      goal: 'Score as much as you can before the box fills up.',
+      controls: 'Slide your finger to aim the fruit over the box and let go to drop it. On a keyboard: Left and Right aim, Space drops.',
+      win: 'Two of the same that touch become one of the next size, and bigger fruit scores more. The game ends when the pile reaches the dotted line.',
+      tip: 'Keep the big fruit to one side and the small ones together, and watch the next fruit in the corner.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => FRUIT_COLORS,
+    size: FRUIT_CANVAS,
+    color: DARK.tomato,
+    botDelayMs: 250,
+    status: (state) => fruitStatus(state as FruitState),
+    resultText: (state) => fruitResult(state as FruitState),
+    moveCue: () => undefined,
+    createScene: (session) => new FruitScene(session),
   }),
   entry({
     definition: popIt,

@@ -2064,6 +2064,24 @@ function MazePaintArt() {
   );
 }
 
+function FruitMergeArt() {
+  // A box of round candy fruit with faces, one about to drop in.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="12" y="30" width="76" height="62" rx="10" fill="#FFF4E6" stroke="#E0701A" stroke-width="3" />
+      <circle cx="30" cy="76" r="13" fill={COLORS.sunny} />
+      <circle cx="56" cy="78" r="11" fill={COLORS.grape} />
+      <circle cx="74" cy="74" r="14" fill={COLORS.mint} />
+      <circle cx="42" cy="56" r="9" fill={COLORS.bubblegum} />
+      <circle cx="62" cy="14" r="8" fill={COLORS.tomato} />
+      <ellipse cx="64" cy="6" rx="4" ry="2" fill="#0E9A63" />
+      <circle cx="59" cy="14" r="1.2" fill={INK} />
+      <circle cx="65" cy="14" r="1.2" fill={INK} />
+      <path d="M20 40 L80 40" stroke={COLORS.tomato} stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2329,6 +2347,7 @@ const ART: Record<string, () => JSX.Element> = {
   'number-match': NumberMatchArt,
   'chain-merge': ChainMergeArt,
   'maze-paint': MazePaintArt,
+  'fruit-merge': FruitMergeArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

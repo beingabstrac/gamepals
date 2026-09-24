@@ -848,6 +848,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M33 Puzzles B:** 2248, Maze Paint, Fruit Merge (Petdoku left out: it is Sudoku with pictures).
   - [ ] **M33a 2248:** drag a chain of numbers, same or double, thirty chains to make 4K.
   - [ ] **M33b Maze Paint:** roll the ball until a wall, paint every square; three sizes, carved by rolling and checked so nobody gets stuck.
+  - [ ] **M33c Fruit Merge:** drop fruit, two alike grow, over the line ends it; the physics is a pure step in the rules.
 - [ ] **M34+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
