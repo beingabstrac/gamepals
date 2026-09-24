@@ -52,7 +52,9 @@ export class UrScene extends Scene {
   private ring!: GameObjects.Graphics;
   private focus = 0;
   private moving = 0;
-  private rollingUntil = 0;
+  /** The dice are tumbling. A flag rather than a deadline: the hints are drawn when the tumble ends, and a
+   *  deadline could still be in the future then on a slow frame, which left the pieces unlit. */
+  private rolling = false;
   private shownThrows = 0;
 
   constructor(private readonly session: Session<UrMove>) {
@@ -96,7 +98,7 @@ export class UrScene extends Scene {
 
   /** A hop or a throw is still showing. See `apps/client/src/games/busy.ts`. */
   busy(): boolean {
-    return this.moving > 0 || this.time.now < this.rollingUntil;
+    return this.moving > 0 || this.rolling;
   }
 
   private diceXY(seat: Seat): { x: number; y: number } {
@@ -213,7 +215,7 @@ export class UrScene extends Scene {
   /** The throw: the dice tumble for a moment, then settle on what the rules threw. */
   private roll(state: UrState): void {
     const seat: Seat = state.passed ? (state.currentSeat === 0 ? 1 : 0) : state.currentSeat;
-    this.rollingUntil = this.time.now + 420;
+    this.rolling = true;
     cue('roll');
     const dice = this.dice[seat]!;
     this.tweens.add({ targets: dice, angle: { from: -12, to: 0 }, duration: 380, ease: 'Back.easeOut' });
@@ -226,6 +228,7 @@ export class UrScene extends Scene {
         this.drawDiceFor(seat, [frames % 2, (frames + 1) % 2, frames % 3 === 0 ? 1 : 0, 1 - (frames % 2)]);
         if (frames >= 6) {
           tumble.remove();
+          this.rolling = false;
           this.drawDice(state.dice);
           if (state.passed) this.shout(this.diceXY(seat), state.value === 0 ? 'Nought!' : 'No move', COLORS.soft);
           this.refresh();

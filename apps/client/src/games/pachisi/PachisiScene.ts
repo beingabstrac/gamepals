@@ -59,7 +59,9 @@ export class PachisiScene extends Scene {
   private ring!: GameObjects.Graphics;
   private focus = 0;
   private moving = 0;
-  private rollingUntil = 0;
+  /** The dice are tumbling. A flag rather than a deadline: the hints are drawn when the tumble ends, and a
+   *  deadline could still be in the future then on a slow frame, which left the pieces unlit. */
+  private rolling = false;
   private shownThrows = 0;
   private hidden = new Set<string>();
 
@@ -107,7 +109,7 @@ export class PachisiScene extends Scene {
 
   /** A hop, a hit or a throw is still showing. See `apps/client/src/games/busy.ts`. */
   busy(): boolean {
-    return this.moving > 0 || this.time.now < this.rollingUntil;
+    return this.moving > 0 || this.rolling;
   }
 
   private drawBoard(): void {
@@ -230,7 +232,7 @@ export class PachisiScene extends Scene {
 
   private roll(state: PachisiState): void {
     const seat = this.thrower(state);
-    this.rollingUntil = this.time.now + 420;
+    this.rolling = true;
     cue('roll');
     let frames = 0;
     const tumble = this.time.addEvent({
@@ -241,6 +243,7 @@ export class PachisiScene extends Scene {
         this.drawShellsFor(seat, Array.from({ length: 6 }, (_, i) => (frames + i) % 2));
         if (frames >= 6) {
           tumble.remove();
+          this.rolling = false;
           this.drawShells();
           const c = cornerXY(state.arm(seat));
           if (state.passed) this.shout(c, 'No move', COLORS.soft);
