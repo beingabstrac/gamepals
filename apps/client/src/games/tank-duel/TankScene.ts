@@ -193,7 +193,11 @@ export class TankScene extends Scene {
       const box = (f0: number, f1: number, s0: number, s1: number, color: number) => {
         const p = [at(f0, s0), at(f1, s0), at(f1, s1), at(f0, s1)];
         g.fillStyle(color, 1);
-        g.fillPoints(p, true);
+        g.beginPath();
+        g.moveTo(p[0]!.x, p[0]!.y);
+        for (const q of p.slice(1)) g.lineTo(q.x, q.y);
+        g.closePath();
+        g.fillPath();
       };
       g.fillStyle(0x000000, 0.12);
       g.fillCircle(t.x + 3, t.y + 6, TANK_R);
