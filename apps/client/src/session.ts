@@ -108,8 +108,9 @@ export class Session<M> {
       this.commit(bot.chooseMove(this.state, seat, createRng(rngSeed)));
       return;
     }
+    // Not announced: the table already reads a bot's turn as thinking, and an announce with no move
+    // in it looked like one to the scenes, so Mancala sowed the last move twice for every bot move.
     this.thinkingSeat = seat;
-    this.announce();
     const log: MoveLog = {
       gameId: this.definition.id,
       seed: this.seed,

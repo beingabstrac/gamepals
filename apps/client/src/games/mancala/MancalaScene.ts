@@ -36,7 +36,7 @@ export class MancalaScene extends Scene {
   private glow!: GameObjects.Graphics;
   private counts: GameObjects.Text[] = [];
   private banner!: GameObjects.Text;
-  private busy = false;
+  private sowing = false;
   private overlaps = 0;
   private cursor = 0;
   private ring!: GameObjects.Graphics;
@@ -97,7 +97,17 @@ export class MancalaScene extends Scene {
     });
 
     const unsubscribe = this.session.subscribe(() => this.onChange());
-    this.events.once('shutdown', unsubscribe);
+    // A bot waits for the last sowing to land, so two never run over each other.
+    this.session.holdBots = () => this.sowing;
+    this.events.once('shutdown', () => {
+      unsubscribe();
+      this.session.holdBots = null;
+    });
+  }
+
+  /** Still sowing: the result sheet and the gallery wait for the seeds to land. */
+  busy(): boolean {
+    return this.sowing;
   }
 
   /** The current player's houses in screen order, left to right. */
@@ -106,7 +116,7 @@ export class MancalaScene extends Scene {
   }
 
   private play(pit: number): void {
-    if (this.busy || !this.session.isHumanTurn()) return;
+    if (this.sowing || !this.session.isHumanTurn()) return;
     const move = sowMove(pit);
     if (this.state.legalMoves(this.state.currentSeat).includes(move)) this.session.play(move);
   }
@@ -162,7 +172,7 @@ export class MancalaScene extends Scene {
   private drawGlow(): void {
     const g = this.glow.clear();
     const state = this.state;
-    if (this.busy || state.result || !this.session.isHumanTurn()) return;
+    if (this.sowing || state.result || !this.session.isHumanTurn()) return;
     for (const move of state.legalMoves(state.currentSeat)) {
       const { x, y } = spot(Number(move.slice(1)));
       g.fillStyle(toHex(COLORS.sunny), 0.35);
@@ -186,7 +196,7 @@ export class MancalaScene extends Scene {
   boardCheck(): { behind: number; walking: boolean; sowings: number; moves: number; overlaps: number } {
     const truth = this.state.pits;
     const behind = this.shown.reduce((worst, seeds, pit) => Math.max(worst, Math.abs(seeds - (truth[pit] ?? 0))), 0);
-    return { behind, walking: this.busy, sowings: this.generation, moves: this.session.moves.length, overlaps: this.overlaps };
+    return { behind, walking: this.sowing, sowings: this.generation, moves: this.session.moves.length, overlaps: this.overlaps };
   }
 
   private onChange(): void {
@@ -203,15 +213,15 @@ export class MancalaScene extends Scene {
    * One pebble hops along the path, the counts rising as it lands; then any capture or end sweep.
    *
    * Every callback below checks its era first. Nothing stopped two sowings overlapping, and the
-   * first one to finish would snap the board to the state and clear `busy` while the second was
+   * first one to finish would snap the board to the state and clear `sowing` while the second was
    * still in the air, so its remaining hops then counted seeds onto an already-correct board. The
    * check measured it settling three seeds out.
    */
   private animate(event: MancalaEvent): void {
     const era = ++this.generation;
     // A sowing started while the last is still in the air: the board check counts these.
-    if (this.busy) this.overlaps++;
-    this.busy = true;
+    if (this.sowing) this.overlaps++;
+    this.sowing = true;
     this.glow.clear();
     this.shown[event.pit] = 0;
     this.redraw();
@@ -260,7 +270,7 @@ export class MancalaScene extends Scene {
         this.shout('One side is empty. Game over!');
       }
       this.shown = this.state.pits.slice();
-      this.busy = false;
+      this.sowing = false;
       this.redraw();
     });
   }
