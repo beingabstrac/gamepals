@@ -119,6 +119,7 @@ import {
   slotCars,
   wheelie,
   speed,
+  gravityRun,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -298,6 +299,7 @@ import { ROAD_COLORS, ROAD_SIZE, RoadScene } from './road-dodge/RoadScene';
 import { SLOT_COLORS, SLOT_SIZE, SlotScene } from './slot-cars/SlotScene';
 import { WHEELIE_COLORS, WHEELIE_SIZE, WheelieScene } from './wheelie/WheelieScene';
 import { SPEED_COLORS, SPEED_SIZE, SpeedScene } from './speed/SpeedScene';
+import { GRAVITY_COLORS, GRAVITY_SIZE, GravityScene } from './gravity-run/GravityScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2806,6 +2808,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: SPEED_SIZE,
     color: DARK.sky,
     createScene: (options) => new SpeedScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: gravityRun,
+    tagline: 'Tap to flip, floor to ceiling',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Keep your runner clear of the blocks in your corridor.',
+      controls: 'Tap anywhere in your half to flip gravity: your runner falls up to the ceiling, or back down to the floor. On a keyboard: Space for the bottom runner, Shift for the top one.',
+      win: 'Three bumps and you are out. The last one running wins. After two minutes, more hearts left wins.',
+      tip: 'Flip before a block reaches you, not after. Watch for two blocks close together on opposite sides.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => GRAVITY_COLORS,
+    size: GRAVITY_SIZE,
+    color: DARK.grape,
+    createScene: (options) => new GravityScene(options),
   },
   {
     kind: 'realtime',

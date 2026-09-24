@@ -58,6 +58,7 @@ const GAMES = [
   'Slot Cars',
   'Wheelie',
   'Speed',
+  'Gravity Run',
   'Impostor',
   'Charades',
   'Draw & Guess',

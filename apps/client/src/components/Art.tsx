@@ -2098,6 +2098,21 @@ function SpeedArt() {
   );
 }
 
+function GravityRunArt() {
+  // A corridor with a blob running upside down on the ceiling past a block on the floor.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="14" width="88" height="8" rx="3" fill={COLORS.grape} />
+      <rect x="6" y="78" width="88" height="8" rx="3" fill={COLORS.grape} />
+      <rect x="58" y="54" width="16" height="24" rx="4" fill={COLORS.sunny} />
+      <ellipse cx="32" cy="32" rx="10" ry="11" fill={COLORS.sky} />
+      <circle cx="35" cy="36" r="3" fill="#fff" />
+      <circle cx="36" cy="36" r="1.5" fill={INK} />
+      <path d="M32 46 Q34 62 40 70" stroke={COLORS.soft} stroke-width="2" stroke-dasharray="3 3" fill="none" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2380,6 +2395,7 @@ const ART: Record<string, () => JSX.Element> = {
   'slot-cars': SlotCarsArt,
   wheelie: WheelieArt,
   speed: SpeedArt,
+  'gravity-run': GravityRunArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

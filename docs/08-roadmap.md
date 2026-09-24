@@ -851,6 +851,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M33c Fruit Merge:** drop fruit, two alike grow, over the line ends it; the physics is a pure step in the rules.
 - [ ] **M34 Duels E:** Speed and more from the two-on-one-phone and card lists.
   - [ ] **M34a Speed:** the card race for two on one phone, no turns, first out wins.
+  - [ ] **M34b Gravity Run:** one tap flips gravity, blocks on floor or ceiling, three bumps out.
 - [ ] **M35+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
