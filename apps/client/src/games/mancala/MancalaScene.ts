@@ -37,6 +37,7 @@ export class MancalaScene extends Scene {
   private counts: GameObjects.Text[] = [];
   private banner!: GameObjects.Text;
   private busy = false;
+  private overlaps = 0;
   private cursor = 0;
   private ring!: GameObjects.Graphics;
 
@@ -182,10 +183,10 @@ export class MancalaScene extends Scene {
    * broke Snakes & Ladders and Shut the Box. It is safe here because every animation ends by
    * snapping back to the state rather than trusting its own arithmetic, and this is what says so.
    */
-  boardCheck(): { behind: number; walking: boolean } {
+  boardCheck(): { behind: number; walking: boolean; sowings: number; moves: number; overlaps: number } {
     const truth = this.state.pits;
     const behind = this.shown.reduce((worst, seeds, pit) => Math.max(worst, Math.abs(seeds - (truth[pit] ?? 0))), 0);
-    return { behind, walking: this.busy };
+    return { behind, walking: this.busy, sowings: this.generation, moves: this.session.moves.length, overlaps: this.overlaps };
   }
 
   private onChange(): void {
@@ -208,6 +209,8 @@ export class MancalaScene extends Scene {
    */
   private animate(event: MancalaEvent): void {
     const era = ++this.generation;
+    // A sowing started while the last is still in the air: the board check counts these.
+    if (this.busy) this.overlaps++;
     this.busy = true;
     this.glow.clear();
     this.shown[event.pit] = 0;

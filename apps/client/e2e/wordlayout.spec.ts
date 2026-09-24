@@ -113,6 +113,7 @@ for (const { name, limit } of [
   // Mancala keeps a copy of the pits and walks it as the hopper lands. It snaps back to the state
   // at the end of every sowing, so it should never settle behind at all.
   { name: 'Mancala', limit: 0 },
+  { name: 'Oware', limit: 0 },
 ]) {
   test(`${name}: the board keeps up with the score line`, async ({ page }) => {
     await open(page, name);
@@ -129,6 +130,32 @@ for (const { name, limit } of [
       if (!report.walking) worst = Math.max(worst, report.behind);
     }
     expect(worst, `${name}: the board settled this far behind the state`).toBeLessThanOrEqual(limit);
+  });
+}
+
+/**
+ * One move, one sowing, and never one on top of another. Mancala sowed every move twice against a
+ * bot, because the session also announced the bot starting to think and the scene took that for a
+ * move; and Oware's bots, never held for the seeds to land, sowed over each other, so the gallery
+ * caught a finished game with its stores reading 0 and hoppers left in the houses.
+ */
+for (const name of ['Mancala', 'Oware']) {
+  test(`${name}: one sowing per move, never two at once`, async ({ page }) => {
+    await open(page, name);
+    let last = null as { sowings: number; moves: number; overlaps: number } | null;
+    for (let look = 0; look < 6; look++) {
+      await page.waitForTimeout(900);
+      const report = await page.evaluate(() => {
+        const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
+        const scene = game?.scene.scenes[0] as { boardCheck?: () => { sowings: number; moves: number; overlaps: number } } | undefined;
+        return scene?.boardCheck ? scene.boardCheck() : null;
+      });
+      if (report) last = report;
+    }
+    expect(last, `${name} answers boardCheck`).not.toBeNull();
+    expect(last!.moves, `${name}: no moves were played to judge`).toBeGreaterThan(3);
+    expect(last!.sowings, `${name}: sowings played for ${last!.moves} moves`).toBeLessThanOrEqual(last!.moves);
+    expect(last!.overlaps, `${name}: sowings started while another was in the air`).toBe(0);
   });
 }
 
