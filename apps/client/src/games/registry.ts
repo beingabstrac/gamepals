@@ -112,6 +112,7 @@ import {
   grabIt,
   bombPass,
   brickBlast,
+  slingPuck,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -278,6 +279,7 @@ import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
 import { BOMB_COLORS, BOMB_SIZE, BombScene } from './bomb-pass/BombScene';
 import { BRICK_COLORS, BRICK_SIZE, BrickScene } from './brick-blast/BrickScene';
+import { SLING_COLORS, SLING_SIZE, SlingScene } from './sling-puck/SlingScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2596,6 +2598,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: BRICK_SIZE,
     color: DARK.grape,
     createScene: (options) => new BrickScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: slingPuck,
+    tagline: 'Fire them all through the slot',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Get every puck off your side of the board, through the slot in the wall.',
+      controls: 'Touch a puck on your side, pull it back on your band and let go. On a keyboard: Left and Right pick a puck and Space fires it for the bottom player; A, D and Shift for the top one.',
+      win: 'The first with no pucks on their side wins. If the two minutes run out, fewer pucks on your side wins.',
+      tip: 'Both of you shoot at once, so pucks come back through the slot. A puck in the way of the slot will block your own shots.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => SLING_COLORS,
+    size: SLING_SIZE,
+    color: DARK.peach,
+    createScene: (options) => new SlingScene(options),
   },
   {
     kind: 'realtime',

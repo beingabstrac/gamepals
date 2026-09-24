@@ -1918,6 +1918,25 @@ function BrickBlastArt() {
   );
 }
 
+function SlingPuckArt() {
+  // A wooden board, a wall with a slot, a puck pulled back on its band and one flying through.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="6" width="84" height="88" rx="12" fill="#C98F5A" />
+      <rect x="13" y="11" width="74" height="78" rx="8" fill="#F7E3C4" />
+      <rect x="8" y="47" width="32" height="6" rx="2" fill="#A8703F" />
+      <rect x="60" y="47" width="32" height="6" rx="2" fill="#A8703F" />
+      <path d="M18 80 L50 88 L82 80" stroke={COLORS.sky} stroke-width="3" fill="none" stroke-linejoin="round" />
+      <circle cx="50" cy="80" r="8" fill={INK} />
+      <circle cx="50" cy="80" r="5" fill={COLORS.grape} />
+      <circle cx="54" cy="36" r="8" fill={INK} />
+      <circle cx="54" cy="36" r="5" fill={COLORS.grape} />
+      <path d="M52 62 L53 48" stroke={COLORS.soft} stroke-width="2" stroke-dasharray="2 3" />
+      <path d="M18 20 L82 20" stroke={COLORS.tomato} stroke-width="3" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2190,6 +2209,7 @@ const ART: Record<string, () => JSX.Element> = {
   pointers: PointersArt,
   'bomb-pass': BombPassArt,
   'brick-blast': BrickBlastArt,
+  'sling-puck': SlingPuckArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

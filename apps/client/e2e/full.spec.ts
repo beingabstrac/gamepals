@@ -51,6 +51,7 @@ const GAMES = [
   'Grab It',
   'Bomb Pass',
   'Brick Blast',
+  'Sling Puck',
   'Impostor',
   'Charades',
   'Draw & Guess',
