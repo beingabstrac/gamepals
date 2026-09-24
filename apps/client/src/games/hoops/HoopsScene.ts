@@ -271,7 +271,8 @@ export class HoopsScene extends Scene {
         const a = this.spin[seat];
         g.lineStyle(2.5, toHex(COLORS.ink), 0.55);
         g.lineBetween(b.x + Math.cos(a) * HOOPS_BALL_R, b.y + Math.sin(a) * HOOPS_BALL_R, b.x - Math.cos(a) * HOOPS_BALL_R, b.y - Math.sin(a) * HOOPS_BALL_R);
-        g.strokeCircle(b.x + Math.cos(a + Math.PI / 2) * HOOPS_BALL_R * 1.1, b.y + Math.sin(a + Math.PI / 2) * HOOPS_BALL_R * 1.1, HOOPS_BALL_R * 0.8);
+        // The second seam, square to the first; a curved one would spill outside the ball.
+        g.lineBetween(b.x - Math.sin(a) * HOOPS_BALL_R, b.y + Math.cos(a) * HOOPS_BALL_R, b.x + Math.sin(a) * HOOPS_BALL_R, b.y - Math.cos(a) * HOOPS_BALL_R);
         g.fillStyle(0xffffff, 0.35);
         g.fillCircle(b.x - 7, b.y - 7, 5);
       }
