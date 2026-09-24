@@ -8,13 +8,17 @@ import { fitCamera, sharpText } from '../crisp';
 import { focusRing, moveRing, onKeys } from '../keys';
 
 const W = 600;
-const H = 900;
+/**
+ * Short on purpose: nine across is the most a phone's width allows, so the canvas must not be so tall
+ * that its height sets the scale instead. At 900 the gallery showed cells of about 26pt on an iPhone.
+ */
+const H = 620;
 export const NUMBER_CANVAS = { width: W, height: H };
 export const NUMBER_COLORS = [COLORS.sky];
 
 const TOP = 70;
-const BOTTOM = 790;
-const BUTTONS_Y = 845;
+const BOTTOM = 530;
+const BUTTONS_Y = 575;
 const DIGIT_COLORS = [COLORS.sky, COLORS.tomato, COLORS.mint, COLORS.grape, COLORS.peach, COLORS.bubblegum, COLORS.sky, COLORS.mint, COLORS.tomato];
 
 /**

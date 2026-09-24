@@ -23,6 +23,8 @@ const DECAY = 0.965;
 /** The furthest a ball can be pulled: any more and the end ball leaves the frame. */
 const MAX = 0.5;
 
+const BALL_COLORS = [COLORS.tomato, COLORS.sunny, COLORS.mint, COLORS.sky, COLORS.bubblegum];
+const BALL_DARK = [DARK.tomato, DARK.sunny, DARK.mint, DARK.sky, DARK.bubblegum];
 const restX = (i: number) => CX + (i - (CRADLE_BALLS - 1) / 2) * R * 2;
 
 /**
@@ -175,9 +177,10 @@ export class CradleScene extends Scene {
       g.lineStyle(2, toHex(COLORS.soft), 0.8);
       g.lineBetween(restX(i) - 14, TOP - 8, b.x, b.y);
       g.lineBetween(restX(i) + 14, TOP - 8, b.x, b.y);
-      g.fillStyle(0x8f8ba3, 1);
+      // Candy balls, not steel: the app is bright colors throughout.
+      g.fillStyle(toHex(BALL_DARK[i % BALL_DARK.length]!), 1);
       g.fillCircle(b.x, b.y + 3, R);
-      g.fillStyle(0xd8d3e6, 1);
+      g.fillStyle(toHex(BALL_COLORS[i % BALL_COLORS.length]!), 1);
       g.fillCircle(b.x, b.y, R);
       g.fillStyle(0xffffff, 0.85);
       g.fillEllipse(b.x - R * 0.35, b.y - R * 0.38, R * 0.7, R * 0.45);
