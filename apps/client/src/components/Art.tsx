@@ -1937,6 +1937,22 @@ function SlingPuckArt() {
   );
 }
 
+function HoopsArt() {
+  // A backboard and rim with a ball dropping in on its arc.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="80" width="88" height="14" rx="4" fill="#E8B878" />
+      <rect x="80" y="18" width="6" height="64" rx="3" fill={COLORS.soft} />
+      <rect x="70" y="12" width="8" height="40" rx="2" fill="#fff" stroke={COLORS.tomato} stroke-width="2" />
+      <path d="M50 38 L54 54 M58 38 L59 54 M66 38 L64 54" stroke={COLORS.soft} stroke-width="1.5" />
+      <path d="M14 70 Q34 6 56 30" stroke={COLORS.soft} stroke-width="2" stroke-dasharray="3 4" fill="none" />
+      <circle cx="57" cy="28" r="9" fill={COLORS.peach} />
+      <path d="M48 28 L66 28 M57 19 L57 37" stroke={INK} stroke-width="1.5" opacity="0.5" />
+      <rect x="46" y="36" width="26" height="4" rx="2" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2210,6 +2226,7 @@ const ART: Record<string, () => JSX.Element> = {
   'bomb-pass': BombPassArt,
   'brick-blast': BrickBlastArt,
   'sling-puck': SlingPuckArt,
+  hoops: HoopsArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

@@ -113,6 +113,7 @@ import {
   bombPass,
   brickBlast,
   slingPuck,
+  hoops,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -280,6 +281,7 @@ import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
 import { BOMB_COLORS, BOMB_SIZE, BombScene } from './bomb-pass/BombScene';
 import { BRICK_COLORS, BRICK_SIZE, BrickScene } from './brick-blast/BrickScene';
 import { SLING_COLORS, SLING_SIZE, SlingScene } from './sling-puck/SlingScene';
+import { HOOPS_COLORS, HOOPS_SIZE, HoopsScene } from './hoops/HoopsScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2615,6 +2617,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: SLING_SIZE,
     color: DARK.peach,
     createScene: (options) => new SlingScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: hoops,
+    tagline: 'Flick it in, beat the buzzer',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Sink more baskets than the other player before the minute is up.',
+      controls: 'Flick up toward the hoop in your half to throw. A faster flick throws harder. On a keyboard: press Space to start the power meter and again to throw (Shift for the top player).',
+      win: 'Most baskets when the buzzer goes wins. If you are level, the next basket wins.',
+      tip: 'Every basket moves you to a new spot. Aim to drop it in from above: a flat throw clangs off the front of the rim.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => HOOPS_COLORS,
+    size: HOOPS_SIZE,
+    color: DARK.peach,
+    createScene: (options) => new HoopsScene(options),
   },
   {
     kind: 'realtime',
