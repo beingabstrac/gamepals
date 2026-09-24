@@ -1458,6 +1458,35 @@ function MorrisArt() {
   );
 }
 
+function PachisiArt() {
+  // The cross with its middle, a castle on each arm, pieces of both sides and two cowries.
+  const arms = [
+    [42, 6, 16, 32],
+    [42, 62, 16, 32],
+    [6, 42, 32, 16],
+    [62, 42, 32, 16],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      {arms.map(([x, y, w, h], i) => (
+        <g key={i}>
+          <rect x={x} y={y! + 2} width={w} height={h} rx="4" fill="#E6E0F4" />
+          <rect x={x} y={y} width={w} height={h} rx="4" fill="#fff" />
+        </g>
+      ))}
+      <rect x="40" y="40" width="20" height="20" rx="5" fill={COLORS.grape} />
+      {[[50, 10], [50, 90], [10, 50], [90, 50]].map(([x, y]) => (
+        <rect key={`${x}-${y}`} x={x! - 5} y={y! - 5} width="10" height="10" rx="2" fill={COLORS.sunny} />
+      ))}
+      <circle cx="46" cy="28" r="5" fill={COLORS.sky} />
+      <circle cx="54" cy="74" r="5" fill={COLORS.tomato} />
+      <circle cx="76" cy="46" r="5" fill={COLORS.grape} />
+      <ellipse cx="18" cy="18" rx="6" ry="9" fill="#fff" stroke={DARK.sunny} stroke-width="2" />
+      <ellipse cx="30" cy="22" rx="6" ry="9" fill={COLORS.sunny} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1709,6 +1738,7 @@ const ART: Record<string, () => JSX.Element> = {
   ur: UrArt,
   senet: SenetArt,
   morris: MorrisArt,
+  pachisi: PachisiArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

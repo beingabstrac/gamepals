@@ -37,6 +37,7 @@ import { sudoku } from './sudoku';
 import { ticTacToe } from './tic-tac-toe';
 import { guessPerson } from './guess-person';
 import { morris } from './morris';
+import { pachisi } from './pachisi';
 import { senet } from './senet';
 import { twenty48 } from './twenty48';
 import { ur } from './ur';
@@ -94,6 +95,7 @@ export const TURN_GAMES: Readonly<Record<string, AnyTurnGame>> = Object.fromEntr
       ur,
       senet,
       morris,
+      pachisi,
     ] as unknown as AnyTurnGame[]
   ).map((game) => [game.id, game]),
 );

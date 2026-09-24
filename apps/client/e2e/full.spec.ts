@@ -56,6 +56,7 @@ const GAMES = [
   'Royal Game of Ur',
   'Senet',
   "Nine Men's Morris",
+  'Pachisi',
   'Color Sort',
   'Echo',
   'Classic Snake',

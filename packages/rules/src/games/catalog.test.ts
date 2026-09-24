@@ -9,7 +9,7 @@ const logFor = (id: string, players: number, seed: number): MoveLog => ({ gameId
 describe('turn game catalog', () => {
   it('lists every turn-based game once, under its own id', () => {
     const ids = Object.keys(TURN_GAMES);
-    expect(ids.length).toBe(42);
+    expect(ids.length).toBe(43);
     for (const [id, game] of Object.entries(TURN_GAMES)) expect(game.id).toBe(id);
     expect(TURN_GAMES['mahjong']).toBeUndefined();
   });

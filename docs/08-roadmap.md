@@ -809,7 +809,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M24a Royal Game of Ur:** Finkel's rules, the board stood on end to fit a phone, four pyramid dice, pieces hop square by square.
   - [ ] **M24b Senet:** Kendall's reconstruction, the board on end, four sticks, swaps, walls, the water.
   - [ ] **M24c Nine Men's Morris:** place, move, fly with three; mills glow and take; search bots, Expert in the worker.
-  - [ ] **M24d Pachisi**
+  - [ ] **M24d Pachisi:** the cross, six cowries, graces, castles, partners with four; not a Ludo reskin (see the brief).
 - [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara
 - [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
 - [ ] **M27 Puzzles A:** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them)

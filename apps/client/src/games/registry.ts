@@ -123,6 +123,8 @@ import {
   type SenetState,
   morris,
   type MorrisState,
+  pachisi,
+  type PachisiState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -236,6 +238,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { pachisiColors, pachisiNames, PACHISI_SIZE, PachisiScene, pachisiStatus } from './pachisi/PachisiScene';
 import { MORRIS_COLORS, MORRIS_NAMES, MORRIS_SIZE, MorrisScene, morrisStatus } from './morris/MorrisScene';
 import { SENET_COLORS, SENET_NAMES, SENET_SIZE, SenetScene, senetStatus } from './senet/SenetScene';
 import { UR_COLORS, UR_NAMES, UR_SIZE, UrScene, urStatus } from './ur/UrScene';
@@ -956,6 +959,25 @@ export const GAMES: readonly AnyEntry[] = [
     status: (state, names) => morrisStatus(state as MorrisState, names),
     moveCue: () => undefined,
     createScene: (session) => new MorrisScene(session),
+  }),
+  entry({
+    definition: pachisi,
+    tagline: 'The royal race of India, in partners',
+    minutes: '20 min',
+    howTo: {
+      goal: 'Bring all four of your pieces round the cross and back to the middle before the other side.',
+      controls: 'Tap to throw the six cowries, then tap a glowing piece or where it would land. Pieces go down your own arm, right round the board and back up your arm. On a keyboard: Space throws, number keys or arrows and Enter move.',
+      win: 'The first side home wins. With four players, the two sitting opposite are partners and win together.',
+      tip: 'No shells up counts 25 and one up counts 10. A 6, 10 or 25 is a grace: it brings a piece on and throws again. Landing on the other side sends their pieces back to the middle, except on the crossed castle squares, which are safe.',
+    },
+    sideNames: (players) => pachisiNames(players),
+    sideColors: (players) => pachisiColors(players),
+    size: PACHISI_SIZE,
+    color: DARK.bubblegum,
+    botDelayMs: 600,
+    status: (state, names) => pachisiStatus(state as PachisiState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new PachisiScene(session),
   }),
   entry({
     definition: fourInARow,

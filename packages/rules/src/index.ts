@@ -64,6 +64,7 @@ export * from './games/guess-person';
 export * from './games/ur';
 export * from './games/senet';
 export * from './games/morris';
+export * from './games/pachisi';
 export * from './games/color-sort';
 export * from './games/echo';
 export * from './games/classic-snake';
