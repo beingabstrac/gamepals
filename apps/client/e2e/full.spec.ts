@@ -70,6 +70,7 @@ const GAMES = [
   'Number Match',
   'Pop It',
   'Zen Garden',
+  "Newton's Cradle",
   'Color Sort',
   'Echo',
   'Classic Snake',

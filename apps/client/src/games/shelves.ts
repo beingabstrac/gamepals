@@ -25,7 +25,7 @@ export const SHELVES: readonly { readonly title: string; readonly ids: readonly 
     ids: ['2048', 'sudoku', 'nonogram', 'sweeper', 'flood', 'color-sort', 'tile-match', 'mahjong', 'block-puzzle', 'sliding-puzzle', 'jigsaw', 'memory', 'echo', 'classic-snake'],
   },
   { title: 'Party: pass the phone', ids: ['impostor', 'charades', 'draw-guess'] },
-  { title: 'Chill', ids: ['pop-it', 'zen-garden'] },
+  { title: 'Chill', ids: ['pop-it', 'zen-garden', 'newtons-cradle'] },
 ];
 
 /** The games on each shelf, in shelf order, and anything not listed on a last shelf of its own. */

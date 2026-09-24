@@ -1783,6 +1783,27 @@ function ZenGardenArt() {
   );
 }
 
+function CradleArt() {
+  // The frame, five balls on strings, the end one swung out.
+  const balls = [20, 36, 52, 68];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="84" width="84" height="9" rx="4.5" fill={COLORS.sky} />
+      <rect x="10" y="14" width="80" height="6" rx="3" fill={COLORS.grape} />
+      <rect x="10" y="14" width="5" height="72" rx="2.5" fill={COLORS.grape} />
+      <rect x="85" y="14" width="5" height="72" rx="2.5" fill={COLORS.grape} />
+      {balls.map((x) => (
+        <g key={x}>
+          <path d={`M${x + 8} 20 L${x + 8} 62`} stroke={COLORS.soft} stroke-width="1.5" />
+          <circle cx={x + 8} cy="66" r="7.5" fill="#D8D3E6" />
+        </g>
+      ))}
+      <path d="M76 20 L90 58" stroke={COLORS.soft} stroke-width="1.5" />
+      <circle cx="92" cy="61" r="7.5" fill="#D8D3E6" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2048,6 +2069,7 @@ const ART: Record<string, () => JSX.Element> = {
   'number-match': NumberMatchArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
+  'newtons-cradle': CradleArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

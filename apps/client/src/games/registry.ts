@@ -151,6 +151,8 @@ import {
   type PopState,
   zenGarden,
   type ZenState,
+  newtonsCradle,
+  type CradleState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -264,6 +266,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { CRADLE_CANVAS, CRADLE_COLORS, cradleResult, CradleScene, cradleStatus } from './newtons-cradle/CradleScene';
 import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
@@ -1300,6 +1303,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => zenResult(state as ZenState),
     moveCue: () => undefined,
     createScene: (session) => new ZenScene(session),
+  }),
+  entry({
+    definition: newtonsCradle,
+    tagline: 'Click, click, click',
+    minutes: 'Any time',
+    hint: 'Pull a ball out to the side and let go',
+    howTo: {
+      goal: 'Swing the balls and watch them click back and forth.',
+      controls: 'Drag a ball out to the side and let go. Grab the second ball and two come out together, and so on. Tap Done to put it down. On a keyboard: 1 to 4 let go from the left, 6 to 9 from the right, D is done.',
+      win: 'There is nothing to win: it is a desk toy.',
+      tip: 'Let go of two and two fly out the other side. The balls pass the push along the row.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => CRADLE_COLORS,
+    size: CRADLE_CANVAS,
+    color: DARK.sky,
+    botDelayMs: 600,
+    status: (state) => cradleStatus(state as CradleState),
+    resultText: (state) => cradleResult(state as CradleState),
+    moveCue: () => undefined,
+    createScene: (session) => new CradleScene(session),
   }),
   entry({
     definition: fourInARow,

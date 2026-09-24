@@ -827,6 +827,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M27a Nonogram:** 3 sizes, mirrored pictures that line logic alone solves; drag to paint, Fill and Mark buttons.
 - [x] **H1 Shelves (2026-09-24):** at 83 games one grid was a wall, so the home screen now has a shelf per kind: two on one phone, board games, games from long ago, cards, words and numbers, puzzles, party. One file (`games/shelves.ts`), the same tiles, and a last "More games" shelf so a game left off every list still shows. A design call made without the owner, and easy to undo: say so and it goes back to one grid.
 - [ ] **M28 Chill shelf A:** Pop bubbles, Bubble wrap, Newton's cradle, Zen garden. A toy ends when you finish it (both sides popped, or Done), so it fits the game contract. Pop bubbles and Bubble wrap are one toy: two would be a reskin.
+  - [ ] **M28c Newton's Cradle:** pull one to four, as many fly out the far side, a click at every crossing.
   - [ ] **M28b Zen Garden:** rake with four tines, up to seven stones, Smooth, Done.
   - [ ] **M28a Pop It:** four shapes, rainbow rows, drag to pop, flip for the second side.
 - [ ] **M30+** The rest of the catalog, 3–4 per milestone, split here when we get there
