@@ -278,7 +278,8 @@ export class DrawScene extends Scene {
     g.fillStyle(toHex(color), 1);
     g.fillRoundedRect(x - w / 2, y - h / 2, w, h, Math.min(34, h / 2.2));
     this.view.add(g);
-    this.text(x, y, label, size, '#FFFFFF', w - 20);
+    // White words disappear on yellow, so a yellow button (a player's own color) gets dark ones.
+    this.text(x, y, label, size, color === COLORS.sunny ? COLORS.ink : '#FFFFFF', w - 20);
     this.hits.push({ x, y, w, h: h + 6, act });
   }
 

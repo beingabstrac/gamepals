@@ -299,7 +299,7 @@ export class ImpostorScene extends Scene {
       }
       this.view.add(g);
       this.face(x - 80, y, Math.min(30, cellH / 3.4), seat);
-      const t = sharpText(this, x + 26, y, this.name(seat), 26, on ? '#FFFFFF' : COLORS.ink).setFontStyle('bold');
+      const t = sharpText(this, x + 26, y, this.name(seat), 26, on && IMPOSTOR_COLORS[seat % 8] !== COLORS.sunny ? '#FFFFFF' : COLORS.ink).setFontStyle('bold');
       this.fit(t, 150, 26);
       this.view.add(t);
       this.hits.push({ x, y, w: 256, h: cellH - 16, act: () => this.pick(seat) });
