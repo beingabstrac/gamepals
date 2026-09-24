@@ -55,6 +55,7 @@ const GAMES = [
   'Basketball Hoops',
   'Tank Duel',
   'Road Dodge',
+  'Slot Cars',
   'Impostor',
   'Charades',
   'Draw & Guess',

@@ -116,6 +116,7 @@ import {
   hoops,
   tankDuel,
   roadDodge,
+  slotCars,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -286,6 +287,7 @@ import { SLING_COLORS, SLING_SIZE, SlingScene } from './sling-puck/SlingScene';
 import { HOOPS_COLORS, HOOPS_SIZE, HoopsScene } from './hoops/HoopsScene';
 import { TANK_COLORS, TANK_SIZE, TankScene } from './tank-duel/TankScene';
 import { ROAD_COLORS, ROAD_SIZE, RoadScene } from './road-dodge/RoadScene';
+import { SLOT_COLORS, SLOT_SIZE, SlotScene } from './slot-cars/SlotScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2672,6 +2674,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: ROAD_SIZE,
     color: DARK.sky,
     createScene: (options) => new RoadScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: slotCars,
+    tagline: 'Hold to go, let go for the bends',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Race your car round the track faster than the other one.',
+      controls: 'Hold your half of the screen to speed up. Let go to slow down. On a keyboard: hold Space for the blue car, Shift for the red one.',
+      win: 'First to finish seven laps wins.',
+      tip: 'Take a bend too fast and your car flies off, and it waits a moment before it goes back on. The lanes cross over, so it is fair.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => SLOT_COLORS,
+    size: SLOT_SIZE,
+    color: DARK.grape,
+    createScene: (options) => new SlotScene(options),
   },
   {
     kind: 'realtime',

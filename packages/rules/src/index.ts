@@ -104,3 +104,4 @@ export * from './games/sling-puck';
 export * from './games/hoops';
 export * from './games/tank-duel';
 export * from './games/road-dodge';
+export * from './games/slot-cars';

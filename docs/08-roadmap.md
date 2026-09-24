@@ -843,6 +843,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M32 Duels D:** more of the two-on-one-phone list.
   - [ ] **M32a Tank Duel:** one button, spin, hold to drive, press to fire bouncing shells; your own shells never hurt you; first to five.
   - [ ] **M32b Road Dodge:** your own road in your half, the same traffic for both, three bumps out.
+  - [ ] **M32c Slot Cars:** one button, hold to go, fly off a bend taken too fast, lanes that cross so the laps are equal; seven laps.
 - [ ] **M33+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.

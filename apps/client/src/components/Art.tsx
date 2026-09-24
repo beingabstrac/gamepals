@@ -1994,6 +1994,21 @@ function RoadDodgeArt() {
   );
 }
 
+function SlotCarsArt() {
+  // A grape stadium track with two grooves, a blue car on the straight and a red one on the bend.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#E6F5DC" />
+      <rect x="18" y="12" width="64" height="76" rx="32" fill="none" stroke={COLORS.grape} stroke-width="14" />
+      <rect x="14" y="8" width="72" height="84" rx="36" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.8" />
+      <rect x="22" y="16" width="56" height="68" rx="28" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.8" />
+      <rect x="76" y="44" width="8" height="14" rx="3" fill={COLORS.sky} />
+      <rect x="44" y="6" width="14" height="8" rx="3" fill={COLORS.tomato} />
+      <rect x="72" y="66" width="16" height="3" fill={INK} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2270,6 +2285,7 @@ const ART: Record<string, () => JSX.Element> = {
   hoops: HoopsArt,
   'tank-duel': TankArt,
   'road-dodge': RoadDodgeArt,
+  'slot-cars': SlotCarsArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
