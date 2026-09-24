@@ -853,14 +853,14 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M34a Speed:** the card race for two on one phone, no turns, first out wins.
   - [x] **M34b Gravity Run:** one tap flips gravity, blocks on floor or ceiling, three bumps out.
   - [x] **M34c Tower:** pull a block and lay it on top, side on; care from a steady pull; 2 to 4 players.
-- [ ] **M35 Chill shelf B:** Switch Board, Clean It, Straighten Up.
-  - [ ] **M35a Switch Board:** a fidget board of toggles, sliders, dials, buttons and a lever; a lamp each; all on goes rainbow.
-  - [ ] **M35b Clean It:** rub the grime off a window, a coin or a rug; it sparkles when clean.
-  - [ ] **M35c Straighten Up:** push crooked frames level on their nails; 3, 5 or 7 frames.
-- [ ] **M36 Board classics C:** Gomoku (with the threat search it lacked), and the variants the catalog lists beside built games.
-  - [ ] **M36a Gomoku:** freestyle five in a row; bots score every window of five and search for wins by fours; Expert also breaks the other side's.
-  - [ ] **M36b Oware:** Abapa rules on the Mancala board, captures of twos and threes, no grand slam, feed an empty side.
-  - [ ] **M36c Mexican Train:** double nine, one round, trains, markers and doubles to cover; 2 to 4.
+- [x] **M35 Chill shelf B (green on all eight screens 2026-09-25, run 36055668032):** Switch Board, Clean It, Straighten Up.
+  - [x] **M35a Switch Board:** a fidget board of toggles, sliders, dials, buttons and a lever; a lamp each; all on goes rainbow.
+  - [x] **M35b Clean It:** rub the grime off a window, a coin or a rug; it sparkles when clean.
+  - [x] **M35c Straighten Up:** push crooked frames level on their nails; 3, 5 or 7 frames.
+- [x] **M36 Board classics C (green on all eight screens 2026-09-25, run 36055668032; the gallery then caught Mancala and Oware finishing on a stale board, see the sowing check):** Gomoku (with the threat search it lacked), and the variants the catalog lists beside built games.
+  - [x] **M36a Gomoku:** freestyle five in a row; bots score every window of five and search for wins by fours; Expert also breaks the other side's.
+  - [x] **M36b Oware:** Abapa rules on the Mancala board, captures of twos and threes, no grand slam, feed an empty side.
+  - [x] **M36c Mexican Train:** double nine, one round, trains, markers and doubles to cover; 2 to 4.
 - [ ] **M37 Puzzles and toys C:** Ball Run and more chill toys from docs/12 F.
   - [ ] **M37a Ball Run:** turn track pieces to join the ball to the flag; three sizes, par to beat.
   - [ ] **M37b Sand Fall:** pour colored sand into a jar, falling-sand grains, shake to empty.
