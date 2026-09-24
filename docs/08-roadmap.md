@@ -800,46 +800,46 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - **The label check from M22a caught my own new table** before it shipped: the seat names sat on the face-down hands. Then the gallery picture showed the deck and the pile under two players' hands with the melds squeezed into a corner at half size, so the piles moved down the left and the melds took the width beside them.
   - **The Android job had one place with no relaunch:** the first connect. Every game already retried a lost WebView page, but if the page died before the shelf drew, the whole run was thrown away, which is exactly what happened on run 35457684066 with all eight screen types green. It retries three times now.
   - **Our one invention:** the rules say the pile is turned over when the stock runs out and say nothing about what happens when that runs out too, so we throw the hand in and nobody scores. Two players taking each other's discards would otherwise sit there for ever.
-- [ ] **M23 Party (pass the phone):** Impostor, Charades, Draw & Guess, Guess the Person. Split one game per loop, like the others. These need a table the others do not: three to eight people on one phone, so a game marked `party` in the registry gets player-count chips and a ring of faces instead of four chairs (`PartySetup` in `components/Setup.tsx`). There are no bots in a talking game; autoplay plays them as a quiet table so CI can finish them.
-  - [ ] **M23a Impostor:** everyone but one sees the secret word; pass the phone to look, go round with one word each, vote, and a caught impostor gets one guess from six words. Ten word sets of our own.
-  - [ ] **M23b Charades:** the holder puts the phone on their forehead, the table acts or describes the word and taps Got it or Pass; a minute a go, one or two goes each, 160 words of our own. Tap now; tilt later, since it needs a motion permission on iPhones.
-  - [ ] **M23c Draw & Guess:** one person draws the secret word while the table shouts; Got it asks who called it and both score. Eighty seconds, five inks, hold to peek, 140 words of our own.
-  - [ ] **M23d Guess the Person:** 24 faces of our own, twelve yes or no questions the phone answers, faces tip over, a wrong name loses. vs bot or two people passing the phone.
-- [ ] **M24 Heritage A:** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi. Split one game per loop.
-  - [ ] **M24a Royal Game of Ur:** Finkel's rules, the board stood on end to fit a phone, four pyramid dice, pieces hop square by square.
-  - [ ] **M24b Senet:** Kendall's reconstruction, the board on end, four sticks, swaps, walls, the water.
-  - [ ] **M24c Nine Men's Morris:** place, move, fly with three; mills glow and take; search bots, Expert in the worker.
-  - [ ] **M24d Pachisi:** the cross, six cowries, graces, castles, partners with four; not a Ludo reskin (see the brief).
-- [ ] **M25 Heritage B:** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara. Split one game per loop.
-  - [ ] **M25a Go 9×9:** area scoring with komi 7, superko, dead stones played off; Monte Carlo bots on a fast board, Expert in the worker.
-  - [ ] **M25b Hnefatafl:** Copenhagen rules on 11 by 11, minus shieldwalls, exit forts and encirclement; search bots, Expert in the worker.
-  - [ ] **M25c Fanorona:** approach and withdrawal, capture runs, choose the line by tapping it; search bots, Expert in the worker.
-  - [ ] **M25d Chowka Bhara:** the 5 by 5 floor, four cowries, hit before going inside (round again until then), doubles safe.
-- [ ] **M26 Board extras:** Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
-  - [ ] **M26b Chinese Checkers:** the 121-hole star, chained hops, anti-spoiling home; 2 to 4 players until the party table can seat six.
-  - [ ] **M26c Hex:** 11 by 11 with the swap rule; all-moves-as-first Monte Carlo bots, Expert in the worker.
-  - [ ] **M26d Code Breaker:** Easy, Classic and Hard; pegs carry their numbers; `allows` for the 32,768 codes of Hard.
+- [x] **M23 Party (pass the phone) (green on all eight screens 2026-09-24, run 35956832887):** Impostor, Charades, Draw & Guess, Guess the Person. Split one game per loop, like the others. These need a table the others do not: three to eight people on one phone, so a game marked `party` in the registry gets player-count chips and a ring of faces instead of four chairs (`PartySetup` in `components/Setup.tsx`). There are no bots in a talking game; autoplay plays them as a quiet table so CI can finish them.
+  - [x] **M23a Impostor:** everyone but one sees the secret word; pass the phone to look, go round with one word each, vote, and a caught impostor gets one guess from six words. Ten word sets of our own.
+  - [x] **M23b Charades:** the holder puts the phone on their forehead, the table acts or describes the word and taps Got it or Pass; a minute a go, one or two goes each, 160 words of our own. Tap now; tilt later, since it needs a motion permission on iPhones.
+  - [x] **M23c Draw & Guess:** one person draws the secret word while the table shouts; Got it asks who called it and both score. Eighty seconds, five inks, hold to peek, 140 words of our own.
+  - [x] **M23d Guess the Person:** 24 faces of our own, twelve yes or no questions the phone answers, faces tip over, a wrong name loses. vs bot or two people passing the phone.
+- [x] **M24 Heritage A (green on all eight screens 2026-09-24, run 35956832887):** Royal Game of Ur, Senet, Nine Men's Morris, Pachisi. Split one game per loop.
+  - [x] **M24a Royal Game of Ur:** Finkel's rules, the board stood on end to fit a phone, four pyramid dice, pieces hop square by square.
+  - [x] **M24b Senet:** Kendall's reconstruction, the board on end, four sticks, swaps, walls, the water.
+  - [x] **M24c Nine Men's Morris:** place, move, fly with three; mills glow and take; search bots, Expert in the worker.
+  - [x] **M24d Pachisi:** the cross, six cowries, graces, castles, partners with four; not a Ludo reskin (see the brief).
+- [x] **M25 Heritage B (green on all eight screens 2026-09-24, run 35956832887):** Go 9×9, Hnefatafl, Fanorona, Chowka Bhara. Split one game per loop.
+  - [x] **M25a Go 9×9:** area scoring with komi 7, superko, dead stones played off; Monte Carlo bots on a fast board, Expert in the worker.
+  - [x] **M25b Hnefatafl:** Copenhagen rules on 11 by 11, minus shieldwalls, exit forts and encirclement; search bots, Expert in the worker.
+  - [x] **M25c Fanorona:** approach and withdrawal, capture runs, choose the line by tapping it; search bots, Expert in the worker.
+  - [x] **M25d Chowka Bhara:** the 5 by 5 floor, four cowries, hit before going inside (round again until then), doubles safe.
+- [x] **M26 Board extras, three of four (green on all eight screens 2026-09-24, run 35956832887):** Gomoku is parked below until its bot is good enough; Gomoku, Chinese Checkers, Hex, Code Breaker (Code Breaker also answers Ponder Club's)
+  - [x] **M26b Chinese Checkers:** the 121-hole star, chained hops, anti-spoiling home; 2 to 4 players until the party table can seat six.
+  - [x] **M26c Hex:** 11 by 11 with the swap rule; all-moves-as-first Monte Carlo bots, Expert in the worker.
+  - [x] **M26d Code Breaker:** Easy, Classic and Hard; pegs carry their numbers; `allows` for the 32,768 codes of Hard.
   - [ ] **M26a Gomoku (parked 2026-09-24):** the rules were easy; the bot was not. A one-move evaluator (unbroken runs, then five-wide windows, attack plus defense) played so badly that in self-play the second player won 72% of games, where real Gomoku favors the first, and a little randomness beat no randomness, so tier ordering was noise. Subtracting the reply's best score punished its own threats. It needs a real threat-space search (fours and open threes first, then a short forced-win search) before it ships. The draft rules and tests were kept out of the repo.
-- [ ] **M27 Puzzles A:** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them). Split: Nonogram, Mahjong Solitaire, Block Puzzle, Number Match. Nuts & Bolts was dropped: it is Color Sort with different pictures.
-  - [ ] **M27d Number Match:** Take Ten: pairs that match or make ten, five adds, the grid shrinks to fit.
-  - [ ] **M27c Block Puzzle:** 8 by 8, three pieces a deal, drag with the piece above your finger; goal 500.
-  - [ ] **M27b Mahjong Solitaire:** 36, 72 and the 144-tile turtle, our own faces, deals built backwards so each can be cleared.
-  - [ ] **M27a Nonogram:** 3 sizes, mirrored pictures that line logic alone solves; drag to paint, Fill and Mark buttons.
+- [x] **M27 Puzzles A (green on all eight screens 2026-09-24, run 35956832887):** Nonogram and friends (Sweeper, Tile Match and Word Guess moved to Stage 5, where the competitors' lists put them). Split: Nonogram, Mahjong Solitaire, Block Puzzle, Number Match. Nuts & Bolts was dropped: it is Color Sort with different pictures.
+  - [x] **M27d Number Match:** Take Ten: pairs that match or make ten, five adds, the grid shrinks to fit.
+  - [x] **M27c Block Puzzle:** 8 by 8, three pieces a deal, drag with the piece above your finger; goal 500.
+  - [x] **M27b Mahjong Solitaire:** 36, 72 and the 144-tile turtle, our own faces, deals built backwards so each can be cleared.
+  - [x] **M27a Nonogram:** 3 sizes, mirrored pictures that line logic alone solves; drag to paint, Fill and Mark buttons.
 - [x] **H1 Shelves (2026-09-24):** at 83 games one grid was a wall, so the home screen now has a shelf per kind: two on one phone, board games, games from long ago, cards, words and numbers, puzzles, party. One file (`games/shelves.ts`), the same tiles, and a last "More games" shelf so a game left off every list still shows. A design call made without the owner, and easy to undo: say so and it goes back to one grid.
-- [ ] **M28 Chill shelf A:** Pop bubbles, Bubble wrap, Newton's cradle, Zen garden. A toy ends when you finish it (both sides popped, or Done), so it fits the game contract. Pop bubbles and Bubble wrap are one toy: two would be a reskin.
-  - [ ] **M28c Newton's Cradle:** pull one to four, as many fly out the far side, a click at every crossing.
-  - [ ] **M28b Zen Garden:** rake with four tines, up to seven stones, Smooth, Done.
-  - [ ] **M28a Pop It:** four shapes, rainbow rows, drag to pop, flip for the second side.
-- [ ] **M30 Party B:** Would You Rather, Truth or Dare (family-safe), Hangman, Pointers.
-  - [ ] **M30d Pointers:** tap arrows off the board; three sizes, every board clearable with no bump.
-  - [ ] **M30c Hangman:** three levels, themed words with the theme as the clue, balloons instead of a gallows.
-  - [ ] **M30b Truth or Dare:** family-safe cards of our own, done or pass, three goes each.
-  - [ ] **M30a Would You Rather:** pick in secret on a passed phone, then the split; a point for siding with the table.
-- [ ] **M31 Duels C:** Bomb Pass and more from the catalog's two-on-one-phone list (docs/12 A).
-  - [ ] **M31a Bomb Pass:** hot potato, a button to hit in your half, a hidden fuse, three bangs lose.
-  - [ ] **M31b Brick Blast:** versus breakout, a wall between two paddles, two balls, first to five; the wall builds back once cleared.
-  - [ ] **M31c Sling Puck:** both at once, pull a puck back on your band and fire it through the slot, empty your side to win; a two-minute clock.
-  - [ ] **M31d Basketball Hoops:** each player's own side-on court, flick to throw, a minute, a golden basket if level.
+- [x] **M28 Chill shelf A (green on all eight screens 2026-09-24, run 35956832887):** Pop bubbles, Bubble wrap, Newton's cradle, Zen garden. A toy ends when you finish it (both sides popped, or Done), so it fits the game contract. Pop bubbles and Bubble wrap are one toy: two would be a reskin.
+  - [x] **M28c Newton's Cradle:** pull one to four, as many fly out the far side, a click at every crossing.
+  - [x] **M28b Zen Garden:** rake with four tines, up to seven stones, Smooth, Done.
+  - [x] **M28a Pop It:** four shapes, rainbow rows, drag to pop, flip for the second side.
+- [x] **M30 Party B (green on all eight screens 2026-09-24, run 35956832887):** Would You Rather, Truth or Dare (family-safe), Hangman, Pointers.
+  - [x] **M30d Pointers:** tap arrows off the board; three sizes, every board clearable with no bump.
+  - [x] **M30c Hangman:** three levels, themed words with the theme as the clue, balloons instead of a gallows.
+  - [x] **M30b Truth or Dare:** family-safe cards of our own, done or pass, three goes each.
+  - [x] **M30a Would You Rather:** pick in secret on a passed phone, then the split; a point for siding with the table.
+- [x] **M31 Duels C (green on all eight screens 2026-09-24, run 35956832887):** Bomb Pass and more from the catalog's two-on-one-phone list (docs/12 A).
+  - [x] **M31a Bomb Pass:** hot potato, a button to hit in your half, a hidden fuse, three bangs lose.
+  - [x] **M31b Brick Blast:** versus breakout, a wall between two paddles, two balls, first to five; the wall builds back once cleared.
+  - [x] **M31c Sling Puck:** both at once, pull a puck back on your band and fire it through the slot, empty your side to win; a two-minute clock.
+  - [x] **M31d Basketball Hoops:** each player's own side-on court, flick to throw, a minute, a golden basket if level.
 - [ ] **M32 Duels D:** more of the two-on-one-phone list.
   - [ ] **M32a Tank Duel:** one button, spin, hold to drive, press to fire bouncing shells; your own shells never hurt you; first to five.
   - [ ] **M32b Road Dodge:** your own road in your half, the same traffic for both, three bumps out.
