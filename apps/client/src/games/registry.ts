@@ -111,6 +111,7 @@ import {
   paintFight,
   grabIt,
   bombPass,
+  brickBlast,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -276,6 +277,7 @@ import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene'
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
 import { BOMB_COLORS, BOMB_SIZE, BombScene } from './bomb-pass/BombScene';
+import { BRICK_COLORS, BRICK_SIZE, BrickScene } from './brick-blast/BrickScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2577,6 +2579,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: BOMB_SIZE,
     color: DARK.tomato,
     createScene: (options) => new BombScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: brickBlast,
+    tagline: 'Breakout for two, one wall',
+    minutes: '2 min',
+    howTo: {
+      goal: 'Knock a way through the wall of bricks and get a ball past the other paddle.',
+      controls: 'Slide a finger along your half to move your paddle. On a keyboard: Left and Right move the bottom paddle, A and D the top one.',
+      win: 'First to five points wins.',
+      tip: 'There are two balls, so watch both. Hit the ball with the end of your paddle to send it off at an angle, and the grape bricks need two hits.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => BRICK_COLORS,
+    size: BRICK_SIZE,
+    color: DARK.grape,
+    createScene: (options) => new BrickScene(options),
   },
   {
     kind: 'realtime',

@@ -1898,6 +1898,26 @@ function BombPassArt() {
   );
 }
 
+function BrickBlastArt() {
+  // A wall of candy bricks with a gap knocked through it, a paddle at each end and a ball on its way.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="52" width="88" height="42" rx="10" fill={COLORS.sky} opacity="0.2" />
+      <rect x="6" y="6" width="88" height="42" rx="10" fill={COLORS.tomato} opacity="0.2" />
+      <rect x="10" y="38" width="18" height="9" rx="3" fill={COLORS.sunny} />
+      <rect x="31" y="38" width="18" height="9" rx="3" fill={COLORS.sunny} />
+      <rect x="73" y="38" width="18" height="9" rx="3" fill={COLORS.sunny} />
+      <rect x="10" y="50" width="18" height="9" rx="3" fill={COLORS.grape} />
+      <rect x="52" y="50" width="18" height="9" rx="3" fill={COLORS.grape} />
+      <rect x="73" y="50" width="18" height="9" rx="3" fill={COLORS.grape} />
+      <rect x="32" y="84" width="34" height="7" rx="3.5" fill={COLORS.sky} />
+      <rect x="40" y="10" width="34" height="7" rx="3.5" fill={COLORS.tomato} />
+      <circle cx="58" cy="30" r="6" fill="#fff" />
+      <circle cx="58" cy="30" r="4.5" fill={COLORS.sky} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2169,6 +2189,7 @@ const ART: Record<string, () => JSX.Element> = {
   hangman: HangmanArt,
   pointers: PointersArt,
   'bomb-pass': BombPassArt,
+  'brick-blast': BrickBlastArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

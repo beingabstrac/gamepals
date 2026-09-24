@@ -99,3 +99,4 @@ export * from './games/ultimate-ttt';
 export * from './games/yatzy';
 export * from './games/shut-the-box';
 export * from './games/dominoes';
+export * from './games/brick-blast';
