@@ -2225,6 +2225,24 @@ function OwareArt() {
   );
 }
 
+function MexicanTrainArt() {
+  // The double-nine hub with three trains of dominoes running out from it, one flagged.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="30" width="14" height="40" rx="4" fill="#FFFAF0" stroke="#E3DCCD" stroke-width="2" />
+      <rect x="30" y="18" width="20" height="11" rx="3" fill="#FFFAF0" stroke={COLORS.tomato} stroke-width="2" />
+      <rect x="52" y="18" width="20" height="11" rx="3" fill="#FFFAF0" stroke={COLORS.tomato} stroke-width="2" />
+      <rect x="30" y="45" width="20" height="11" rx="3" fill="#FFFAF0" stroke={COLORS.sky} stroke-width="2" />
+      <rect x="30" y="72" width="20" height="11" rx="3" fill="#FFFAF0" stroke={COLORS.bubblegum} stroke-width="2" />
+      <rect x="52" y="72" width="20" height="11" rx="3" fill="#FFFAF0" stroke={COLORS.bubblegum} stroke-width="2" />
+      <rect x="74" y="72" width="20" height="11" rx="3" fill="#FFFAF0" stroke={COLORS.bubblegum} stroke-width="2" />
+      <path d="M58 58 V40" stroke={INK} stroke-width="2" />
+      <path d="M58 40 L70 44 L58 48 Z" fill={COLORS.sky} />
+      <circle cx="15" cy="40" r="1.8" fill={COLORS.sky} /><circle cx="15" cy="60" r="1.8" fill={COLORS.sky} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2497,6 +2515,7 @@ const ART: Record<string, () => JSX.Element> = {
   'straighten-up': StraightenUpArt,
   gomoku: GomokuArt,
   oware: OwareArt,
+  'mexican-train': MexicanTrainArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,

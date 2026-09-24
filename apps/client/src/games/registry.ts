@@ -17,6 +17,8 @@ import {
   mancala,
   oware,
   type OwareState,
+  mexicanTrain,
+  type TrainState,
   snakesAndLadders,
   type SnakesState,
   ultimateTtt,
@@ -244,6 +246,7 @@ import { ReversiControls } from './reversi/ReversiControls';
 import { REVERSI_SIZE, ReversiScene } from './reversi/ReversiScene';
 import { SNAKE_SIZE, SnakeScene } from './snake-battle/SnakeScene';
 import { MANCALA_SIZE, MancalaScene } from './mancala/MancalaScene';
+import { TRAIN_CANVAS, TRAIN_COLORS, TRAIN_NAMES, trainResult, TrainScene, trainStatus } from './mexican-train/TrainScene';
 import { SnakesControls } from './snakes-and-ladders/SnakesControls';
 import { SNAKES_SEAT_COLORS, SNAKES_SEAT_NAMES, SNAKES_SIZE, SnakesScene } from './snakes-and-ladders/SnakesScene';
 import { BOARD_NAMES, ULTIMATE_SIZE, UltimateScene } from './ultimate-ttt/UltimateScene';
@@ -936,6 +939,28 @@ export const GAMES: readonly AnyEntry[] = [
     },
     Controls: DominoControls,
     createScene: (session) => new DominoScene(session),
+  }),
+  entry({
+    definition: mexicanTrain,
+    tagline: 'Build your train from the hub',
+    minutes: '10 min',
+    hint: 'Tap a tile, then a train it fits',
+    howTo: {
+      goal: 'Play all your tiles before anyone else.',
+      controls: 'Tap a tile in your hand, then a train it matches. On a keyboard: Left and Right pick a tile, Enter picks it up, then a number key picks the train. D draws, P passes.',
+      win: 'Play on your own train, the Mexican train, or any train with a flag on it. If you cannot, draw one; if you still cannot, pass and a flag goes on your train, so others may play on it. First to play out wins.',
+      draw: 'If nobody can go and the pile is empty, fewest pips in hand wins.',
+      tip: 'Play a double and it must be covered before anything else, and you get the first go at covering it. Keep the tiles that make a long run for your own train.',
+    },
+    sideNames: (players) => TRAIN_NAMES.slice(0, players),
+    sideColors: () => TRAIN_COLORS,
+    size: TRAIN_CANVAS,
+    color: DARK.bubblegum,
+    botDelayMs: 600,
+    status: (state, names) => trainStatus(state as TrainState, names),
+    resultText: (state, names) => trainResult(state as TrainState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new TrainScene(session),
   }),
   entry({
     definition: impostorGame,

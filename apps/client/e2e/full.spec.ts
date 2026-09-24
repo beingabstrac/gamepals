@@ -87,6 +87,7 @@ const GAMES = [
   'Straighten Up',
   'Gomoku',
   'Oware',
+  'Mexican Train',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",
