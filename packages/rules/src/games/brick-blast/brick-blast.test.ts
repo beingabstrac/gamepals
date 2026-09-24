@@ -64,7 +64,7 @@ describe('brick blast', () => {
   });
 
   it('a ball hitting a brick bounces back and the brick goes; a tough one cracks first', () => {
-    let s = { ...run(newBrickBlast(1), 200), balls: [ball({ x: 40, y: 600, vy: -500 }), ball({ x: 300, y: 150, held: 10, owner: 1 })] as [BrickBall, BrickBall] };
+    let s: BrickState = { ...run(newBrickBlast(1), 200), balls: [ball({ x: 40, y: 600, vy: -500 }), ball({ x: 300, y: 150, held: 10, owner: 1 })] as [BrickBall, BrickBall] };
     const broken: number[] = [];
     for (let i = 0; i < 120 && s.balls[0].vy < 0; i++) {
       const out = stepBrick(s, [stay, stay]);
@@ -75,7 +75,7 @@ describe('brick blast', () => {
     expect(broken).toEqual([(WALL.rows - 1) * WALL.cols]);
     // Straight into a tough brick: it takes two goes.
     const tough = 3 * WALL.cols;
-    s = { ...s, bricks: s.bricks.map((b, i) => (i === tough ? 2 : i === tough - WALL.cols ? 2 : 0)), balls: [ball({ x: 40, y: 600, vy: -500 }), s.balls[1]] };
+    s = { ...s, bricks: s.bricks.map((_, i) => (i === tough ? 2 : i === tough - WALL.cols ? 2 : 0)), balls: [ball({ x: 40, y: 600, vy: -500 }), s.balls[1]] };
     const cracked: number[] = [];
     for (let i = 0; i < 200 && s.balls[0].vy < 0; i++) {
       const out = stepBrick(s, [stay, stay]);

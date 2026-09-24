@@ -239,7 +239,7 @@ export class SlingScene extends Scene {
   private draw(): void {
     const s = this.state;
     const g = this.g.clear();
-    const aimed = new Map([...this.aims.values()].map((a) => [a.puck, a]));
+    const aimed = new Map([...this.aims.values()].map((a) => [a.puck, a] as const));
     // Bands: straight across, or stretched back to the puck being pulled.
     for (const seat of [0, 1] as const) {
       const y = BAND_Y[seat];

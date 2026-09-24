@@ -78,6 +78,9 @@ export interface TankEvents {
   timeout: boolean;
 }
 
+/** A tank while a step works on it. */
+type Moving = { -readonly [K in keyof Tank]: Tank[K] };
+
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 function hash(seed: number, n: number): number {
@@ -167,7 +170,7 @@ export function stepTank(state: TankState, inputs: readonly [TankInput, TankInpu
   const tanks = state.tanks.map((t, i) => {
     const seat = i as Seat;
     const held = inputs[seat].held;
-    const tank = { ...t, held, reload: Math.max(t.reload - dt, 0) };
+    const tank: Moving = { ...t, held, reload: Math.max(t.reload - dt, 0) };
     if (held && !t.held && tank.reload === 0 && state.shells.filter((s) => s.owner === seat).length < MAX_SHELLS) {
       // A press fires a shell from the end of the barrel.
       const ux = Math.cos(t.angle);
@@ -182,7 +185,7 @@ export function stepTank(state: TankState, inputs: readonly [TankInput, TankInpu
     } else tank.angle = (t.angle + TURN * dt) % (Math.PI * 2);
     pushOut(tank, TANK_R);
     return tank;
-  }) as [Tank & { reload: number }, Tank & { reload: number }];
+  }) as [Moving, Moving];
   // Tanks shove each other apart.
   const [a, b] = tanks;
   const d = Math.hypot(b.x - a.x, b.y - a.y);
