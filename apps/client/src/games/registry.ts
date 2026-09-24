@@ -15,6 +15,8 @@ import {
   fourInARow,
   ludo,
   mancala,
+  oware,
+  type OwareState,
   snakesAndLadders,
   type SnakesState,
   ultimateTtt,
@@ -710,6 +712,30 @@ export const GAMES: readonly AnyEntry[] = [
       if (event.capture) return 'capture';
       return event.extraTurn ? 'go' : 'place';
     },
+    createScene: (session) => new MancalaScene(session),
+  }),
+  entry({
+    definition: oware,
+    tagline: 'Sow round, take twos and threes',
+    minutes: '8 min',
+    howTo: {
+      goal: 'Capture more than half the seeds: 25 of the 48.',
+      controls: 'Tap one of your glowing pits to sow its seeds, one to each pit going round. On a keyboard: press 1 to 6, or arrows and Enter.',
+      win: 'If your last seed lands on the other side and makes two or three, you take them, and the pits before it that also hold two or three. First to more than 24 wins.',
+      draw: 'If the seeds just go round with nobody taking any for a long while, each player keeps the seeds on their side. Equal is a draw.',
+      tip: 'The end pits only hold what you capture: seeds are never sown into them. If the other side has no seeds, you must give them some if you can. Taking every seed they have is not allowed: that move takes nothing.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => DUEL_COLORS,
+    size: MANCALA_SIZE,
+    color: DARK.mint,
+    botDelayMs: 800,
+    status: (state) => {
+      const s = state as OwareState;
+      if (s.result) return undefined;
+      return `${s.currentSeat === 0 ? 'Blue' : 'Red'} to move. Taken: Blue ${s.store(0)}, Red ${s.store(1)}`;
+    },
+    moveCue: (_before, after) => ((after as OwareState).last?.capture ? 'capture' : 'place'),
     createScene: (session) => new MancalaScene(session),
   }),
   entry({

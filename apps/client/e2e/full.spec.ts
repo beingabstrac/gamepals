@@ -86,6 +86,7 @@ const GAMES = [
   'Clean It',
   'Straighten Up',
   'Gomoku',
+  'Oware',
   'Pop It',
   'Zen Garden',
   "Newton's Cradle",

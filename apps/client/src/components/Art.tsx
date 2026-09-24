@@ -2208,6 +2208,23 @@ function GomokuArt() {
   );
 }
 
+function OwareArt() {
+  // A mint board with two rows of six round pits, seeds in them, and a pair being taken.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="26" width="88" height="48" rx="20" fill={COLORS.mint} />
+      <circle cx="18" cy="40" r="6" fill="#fff" /><circle cx="31" cy="40" r="6" fill="#fff" /><circle cx="44" cy="40" r="6" fill="#fff" />
+      <circle cx="57" cy="40" r="6" fill="#fff" /><circle cx="70" cy="40" r="6" fill="#fff" /><circle cx="83" cy="40" r="6" fill="#fff" />
+      <circle cx="18" cy="60" r="6" fill="#fff" /><circle cx="31" cy="60" r="6" fill="#fff" /><circle cx="44" cy="60" r="6" fill="#fff" />
+      <circle cx="57" cy="60" r="6" fill="#fff" /><circle cx="70" cy="60" r="6" fill="#fff" /><circle cx="83" cy="60" r="6" fill="#fff" />
+      <circle cx="42" cy="39" r="2" fill={COLORS.tomato} /><circle cx="46" cy="41" r="2" fill={COLORS.sky} />
+      <circle cx="29" cy="59" r="2" fill={COLORS.sunny} /><circle cx="33" cy="61" r="2" fill={COLORS.grape} /><circle cx="31" cy="57" r="2" fill={COLORS.tomato} />
+      <circle cx="68" cy="59" r="2" fill={COLORS.sky} /><circle cx="72" cy="61" r="2" fill={COLORS.peach} />
+      <path d="M44 32 Q50 18 60 22" stroke={COLORS.soft} stroke-width="2" stroke-dasharray="3 3" fill="none" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2479,6 +2496,7 @@ const ART: Record<string, () => JSX.Element> = {
   'clean-it': CleanItArt,
   'straighten-up': StraightenUpArt,
   gomoku: GomokuArt,
+  oware: OwareArt,
   'pop-it': PopItArt,
   'zen-garden': ZenGardenArt,
   'newtons-cradle': CradleArt,
