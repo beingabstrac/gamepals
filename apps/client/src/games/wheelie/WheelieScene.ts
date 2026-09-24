@@ -217,6 +217,11 @@ export class WheelieScene extends Scene {
       // The rider: a round body leaning back, a helmet in the player's color.
       const body = at(36, 70);
       const head = at(30, 108);
+      // A leg over the seat down to the footpeg, so the rider sits on the bike rather than above it.
+      const peg = at(58, 14);
+      g.lineStyle(10, toHex(COLORS.ink), 1);
+      g.lineBetween(body.x, body.y, seatAt.x, seatAt.y);
+      g.lineBetween(seatAt.x, seatAt.y, peg.x, peg.y);
       g.fillStyle(toHex(COLORS.ink), 1);
       g.fillCircle(body.x, body.y, 20);
       g.lineStyle(7, toHex(COLORS.ink), 1);
