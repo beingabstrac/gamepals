@@ -218,6 +218,9 @@ export class ImpostorScene extends Scene {
       const g = this.card(toHex(IMPOSTOR_COLORS[seat % 8]!), toHex(IMPOSTOR_DARK[seat % 8]!));
       g.fillStyle(0xffffff, 0.18);
       for (let i = 0; i < 6; i++) g.fillCircle(130 + i * 70, MIDDLE_TOP + 70 + (i % 2) * 30, 14);
+      // A white disc behind the face: in its own color on its own card it would not show.
+      g.fillStyle(0xffffff, 1);
+      g.fillCircle(W / 2, mid - 40, 86);
       this.face(W / 2, mid - 40, 70, seat);
       const who = sharpText(this, W / 2, mid + 80, this.name(seat), 40, '#FFFFFF').setFontStyle('bold');
       const only = sharpText(this, W / 2, mid + 130, 'Only you look!', 24, '#FFFFFF');

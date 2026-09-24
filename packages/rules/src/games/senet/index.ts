@@ -135,7 +135,7 @@ export class SenetState implements GameState<SenetMove> {
     const from = Number(move.slice(1));
     const { backward } = this.options(seat, this.value);
     const to = this.target(seat, from, this.value, backward)!;
-    let mine = this.pieces[seat].filter((p, i, list) => i !== list.indexOf(from));
+    let mine = this.pieces[seat].filter((_, i, list) => i !== list.indexOf(from));
     let theirs = this.pieces[other].slice();
     const swapped = to !== SENET_OFF && theirs.includes(to);
     if (swapped) theirs = theirs.map((p) => (p === to ? from : p));
