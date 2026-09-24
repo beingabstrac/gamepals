@@ -153,10 +153,12 @@ export class CleanScene extends Scene {
       g.fillRect(x, y, w, h);
       g.fillStyle(toHex(COLORS.sunny), 1);
       g.fillCircle(x + w * 0.72, y + h * 0.22, 60);
+      // Two hills and a strip of grass, all kept inside the window.
       g.fillStyle(toHex('#7FD89B'), 1);
-      g.fillEllipse(x + w * 0.25, y + h, w * 0.9, h * 0.55);
+      g.fillEllipse(x + w * 0.3, y + h * 0.82, w * 0.6, h * 0.36);
       g.fillStyle(toHex('#5CC47E'), 1);
-      g.fillEllipse(x + w * 0.85, y + h, w * 0.8, h * 0.45);
+      g.fillEllipse(x + w * 0.75, y + h * 0.86, w * 0.5, h * 0.28);
+      g.fillRect(x, y + h * 0.9, w, h * 0.1);
       g.fillStyle(0xffffff, 1);
       g.fillEllipse(x + w * 0.3, y + h * 0.18, 120, 44);
       g.fillEllipse(x + w * 0.38, y + h * 0.16, 90, 50);
