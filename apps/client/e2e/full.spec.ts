@@ -69,6 +69,7 @@ const GAMES = [
   'Block Puzzle',
   'Number Match',
   'Pop It',
+  'Zen Garden',
   'Color Sort',
   'Echo',
   'Classic Snake',

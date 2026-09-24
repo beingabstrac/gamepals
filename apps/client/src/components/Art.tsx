@@ -1765,6 +1765,24 @@ function PopItArt() {
   );
 }
 
+function ZenGardenArt() {
+  // A tray of sand raked in lines, rings round two stones.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="14" width="84" height="76" rx="10" fill={DARK.peach} />
+      <rect x="8" y="10" width="84" height="76" rx="10" fill={COLORS.peach} />
+      <rect x="13" y="15" width="74" height="66" rx="7" fill="#F3E6C8" />
+      {[24, 32, 40, 64, 72].map((y) => (
+        <path key={y} d={`M16 ${y} H84`} stroke="#D9C394" stroke-width="2" />
+      ))}
+      <ellipse cx="38" cy="52" rx="16" ry="10" fill="none" stroke="#D9C394" stroke-width="2" />
+      <ellipse cx="38" cy="52" rx="10" ry="6" fill="#8F8BA3" />
+      <ellipse cx="68" cy="50" rx="11" ry="8" fill="none" stroke="#D9C394" stroke-width="2" />
+      <ellipse cx="68" cy="50" rx="6" ry="4.5" fill="#6F6D85" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2029,6 +2047,7 @@ const ART: Record<string, () => JSX.Element> = {
   'block-puzzle': BlockPuzzleArt,
   'number-match': NumberMatchArt,
   'pop-it': PopItArt,
+  'zen-garden': ZenGardenArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

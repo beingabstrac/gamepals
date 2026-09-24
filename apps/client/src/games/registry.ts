@@ -149,6 +149,8 @@ import {
   type NumberState,
   popIt,
   type PopState,
+  zenGarden,
+  type ZenState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -262,6 +264,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { ZEN_CANVAS, ZEN_COLORS, zenResult, ZenScene, zenStatus } from './zen-garden/ZenScene';
 import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it/PopScene';
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
@@ -1276,6 +1279,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => popResult(state as PopState),
     moveCue: () => undefined,
     createScene: (session) => new PopScene(session),
+  }),
+  entry({
+    definition: zenGarden,
+    tagline: 'Rake the sand, set the stones',
+    minutes: 'Any time',
+    hint: 'Drag across the sand to rake it',
+    howTo: {
+      goal: 'Make a calm garden: rake patterns in the sand and set a few stones.',
+      controls: 'Drag across the sand to rake it. Tap Stone, then tap the sand to set a stone or lift one. Smooth rakes it flat again. Tap Done when you like it. On a keyboard: arrows move, Enter sets a stone, R rakes a line, S smooths, D is done.',
+      win: 'There is nothing to win: it is done when you say so.',
+      tip: 'Rake round the stones in rings, the way the gardens in Kyoto are raked, and in straight lines everywhere else.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => ZEN_COLORS,
+    size: ZEN_CANVAS,
+    color: DARK.mint,
+    botDelayMs: 300,
+    status: (state) => zenStatus(state as ZenState),
+    resultText: (state) => zenResult(state as ZenState),
+    moveCue: () => undefined,
+    createScene: (session) => new ZenScene(session),
   }),
   entry({
     definition: fourInARow,
