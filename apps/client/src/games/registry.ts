@@ -117,6 +117,7 @@ import {
   tankDuel,
   roadDodge,
   slotCars,
+  wheelie,
   impostor as impostorGame,
   charades,
   CHARADES_GOES,
@@ -288,6 +289,7 @@ import { HOOPS_COLORS, HOOPS_SIZE, HoopsScene } from './hoops/HoopsScene';
 import { TANK_COLORS, TANK_SIZE, TankScene } from './tank-duel/TankScene';
 import { ROAD_COLORS, ROAD_SIZE, RoadScene } from './road-dodge/RoadScene';
 import { SLOT_COLORS, SLOT_SIZE, SlotScene } from './slot-cars/SlotScene';
+import { WHEELIE_COLORS, WHEELIE_SIZE, WheelieScene } from './wheelie/WheelieScene';
 import { POINTER_CANVAS, POINTER_COLORS, pointerResult, PointerScene, pointerStatus } from './pointers/PointerScene';
 import { HANG_CANVAS, HANG_COLORS, hangResult, HangScene, hangStatus } from './hangman/HangScene';
 import { TOD_CANVAS, TOD_COLORS, todResult, TodScene, todStatus } from './truth-or-dare/TodScene';
@@ -2691,6 +2693,23 @@ export const GAMES: readonly AnyEntry[] = [
     size: SLOT_SIZE,
     color: DARK.grape,
     createScene: (options) => new SlotScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: wheelie,
+    tagline: 'Front wheel up, do not go over',
+    minutes: '1 min',
+    howTo: {
+      goal: 'Ride a wheelie further than the other player, over three rides.',
+      controls: 'Hold your half of the screen to lift the front wheel. Let go to bring it down. On a keyboard: hold Space for the blue bike, Shift for the red one.',
+      win: 'Land a wheelie and the metres count. Go over backwards and that ride scores nothing. The longest total after three rides wins.',
+      tip: 'The road gets bumpier the further you go. Land it while you are ahead.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => WHEELIE_COLORS,
+    size: WHEELIE_SIZE,
+    color: DARK.tomato,
+    createScene: (options) => new WheelieScene(options),
   },
   {
     kind: 'realtime',

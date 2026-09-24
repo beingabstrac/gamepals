@@ -2009,6 +2009,24 @@ function SlotCarsArt() {
   );
 }
 
+function WheelieArt() {
+  // A little bike up on its back wheel, the rider leaning back, bumps on the road.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="74" width="88" height="20" rx="6" fill="#C9C2E0" />
+      <ellipse cx="70" cy="75" rx="6" ry="2.5" fill={COLORS.soft} />
+      <circle cx="30" cy="66" r="10" fill={INK} />
+      <circle cx="30" cy="66" r="6" fill="#fff" />
+      <circle cx="58" cy="36" r="10" fill={INK} />
+      <circle cx="58" cy="36" r="6" fill="#fff" />
+      <path d="M30 66 L42 52 L54 40" stroke="#2F7DD1" stroke-width="4" fill="none" stroke-linecap="round" />
+      <path d="M38 56 L50 44 L46 38 L34 50 Z" fill={COLORS.sky} />
+      <circle cx="30" cy="42" r="7" fill={INK} />
+      <circle cx="26" cy="28" r="7" fill={COLORS.sky} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2286,6 +2304,7 @@ const ART: Record<string, () => JSX.Element> = {
   'tank-duel': TankArt,
   'road-dodge': RoadDodgeArt,
   'slot-cars': SlotCarsArt,
+  wheelie: WheelieArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,
