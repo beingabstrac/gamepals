@@ -2243,6 +2243,23 @@ function MexicanTrainArt() {
   );
 }
 
+function BallRunArt() {
+  // Track tiles joined from a ramp on the left to a flag on the right, the ball on its way.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#ECE8F6" />
+      <rect x="14" y="36" width="24" height="24" rx="5" fill="#fff" /><rect x="38" y="36" width="24" height="24" rx="5" fill="#fff" />
+      <rect x="38" y="60" width="24" height="24" rx="5" fill="#fff" /><rect x="62" y="60" width="24" height="24" rx="5" fill="#fff" />
+      <rect x="14" y="12" width="24" height="24" rx="5" fill="#fff" /><rect x="62" y="36" width="24" height="24" rx="5" fill="#fff" />
+      <path d="M4 48 H50 V72 H96" stroke={COLORS.mint} stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M26 12 V24 H38 M74 36 V48" stroke={COLORS.sky} stroke-width="6" fill="none" stroke-linecap="round" />
+      <circle cx="30" cy="48" r="6" fill={COLORS.grape} />
+      <path d="M92 72 V56" stroke={INK} stroke-width="2" />
+      <path d="M92 56 L100 60 L92 64 Z" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2508,6 +2525,7 @@ const ART: Record<string, () => JSX.Element> = {
   'number-match': NumberMatchArt,
   'chain-merge': ChainMergeArt,
   'maze-paint': MazePaintArt,
+  'ball-run': BallRunArt,
   'fruit-merge': FruitMergeArt,
   tower: TowerArt,
   'switch-board': SwitchBoardArt,

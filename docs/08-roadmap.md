@@ -861,7 +861,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M36a Gomoku:** freestyle five in a row; bots score every window of five and search for wins by fours; Expert also breaks the other side's.
   - [ ] **M36b Oware:** Abapa rules on the Mancala board, captures of twos and threes, no grand slam, feed an empty side.
   - [ ] **M36c Mexican Train:** double nine, one round, trains, markers and doubles to cover; 2 to 4.
-- [ ] **M37+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M37 Puzzles and toys C:** Ball Run and more chill toys from docs/12 F.
+  - [ ] **M37a Ball Run:** turn track pieces to join the ball to the flag; three sizes, par to beat.
+- [ ] **M38+** The rest of the catalog, 3–4 per milestone, split here when we get there
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

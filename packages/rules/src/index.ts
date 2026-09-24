@@ -118,3 +118,4 @@ export * from './games/straighten-up';
 export * from './games/gomoku';
 export * from './games/oware';
 export * from './games/mexican-train';
+export * from './games/ball-run';

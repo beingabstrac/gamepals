@@ -80,6 +80,7 @@ const GAMES = [
   'Number Match',
   '2248',
   'Maze Paint',
+  'Ball Run',
   'Fruit Merge',
   'Tower',
   'Switch Board',

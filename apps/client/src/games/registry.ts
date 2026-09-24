@@ -164,6 +164,8 @@ import {
   numberMatch,
   chainMerge,
   mazePaint,
+  ballRun,
+  type RunState,
   fruitMerge,
   tower,
   type NumberState,
@@ -328,6 +330,7 @@ import { POP_CANVAS, POP_COLORS, popResult, PopScene, popStatus } from './pop-it
 import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
 import { CHAIN_CANVAS, CHAIN_COLORS, ChainScene, chainResultText, chainStatus } from './chain-merge/ChainScene';
 import { MAZE_CANVAS, MAZE_COLORS, mazeResult, MazeScene, mazeStatus } from './maze-paint/MazeScene';
+import { RUN_CANVAS, RUN_COLORS, runResult, RunScene, runStatus } from './ball-run/RunScene';
 import { FRUIT_CANVAS, FRUIT_COLORS, fruitResult, FruitScene, fruitStatus } from './fruit-merge/FruitScene';
 import { TOWER_CANVAS, TOWER_COLORS, towerResult, TowerScene, towerStatus } from './tower/TowerScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
@@ -1430,6 +1433,32 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => mazeResult(state as MazeState),
     moveCue: () => undefined,
     createScene: (session) => new MazeScene(session),
+  }),
+  entry({
+    definition: ballRun,
+    tagline: 'Turn the track, roll the ball home',
+    minutes: '3 min',
+    hint: 'Tap a piece to turn it',
+    levels: [
+      { id: 'small', label: 'Small' },
+      { id: 'medium', label: 'Medium' },
+      { id: 'large', label: 'Large' },
+    ],
+    howTo: {
+      goal: 'Join up a track from the ball on the left to the flag on the right.',
+      controls: 'Tap a piece to turn it a quarter turn. The track that already joins up from the ball lights up green. On a keyboard: arrows move, Enter turns.',
+      win: 'When the track runs all the way to the flag, the ball rolls home. Try to do it in par: the fewest turns it can be done in.',
+      tip: 'Follow the green from the ball and fix the first piece where it stops.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => RUN_COLORS,
+    size: RUN_CANVAS,
+    color: DARK.sky,
+    botDelayMs: 250,
+    status: (state) => runStatus(state as RunState),
+    resultText: (state) => runResult(state as RunState),
+    moveCue: () => undefined,
+    createScene: (session) => new RunScene(session),
   }),
   entry({
     definition: fruitMerge,
