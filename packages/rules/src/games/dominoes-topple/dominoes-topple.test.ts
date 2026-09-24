@@ -28,7 +28,8 @@ describe('dominoes topple', () => {
     expect(falls.map((f) => f.i)).toEqual([3, 4, 5, 6, 7]);
     let r = newTopple().apply(layMove(100, 100, 0)).apply(layMove(124, 100, 180));
     r = r.apply('t0');
-    expect((r.last as { falls: { dir: number }[] }).falls[1]!.dir).toBe(0);
+    const last = r.last;
+    expect(last?.kind === 'tip' ? last.falls[1]?.dir : null).toBe(0);
   });
 
   it('the path round a bend carries all the way, and every domino falls once', () => {
