@@ -1727,6 +1727,24 @@ function BlockPuzzleArt() {
   );
 }
 
+function NumberMatchArt() {
+  // A page of digits with a 3 and a 7 struck through together, and two ones side by side.
+  const digits = ['1', '3', '5', '7', '2', '9', '4', '1', '1'];
+  const gone = new Set([1, 3]);
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="18" width="80" height="64" rx="10" fill="#fff" stroke="#E6E0F4" stroke-width="2" />
+      {digits.map((d, i) => (
+        <text key={i} x={24 + (i % 3) * 26} y={32 + Math.floor(i / 3) * 18} text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="700" fill={gone.has(i) ? '#D8D3E6' : [COLORS.sky, COLORS.tomato, COLORS.mint][i % 3]}>
+          {d}
+        </text>
+      ))}
+      <path d="M50 32 L24 50" stroke={COLORS.tomato} stroke-width="3" stroke-linecap="round" />
+      <rect x="37" y="59" width="50" height="18" rx="8" fill="none" stroke={COLORS.grape} stroke-width="2.5" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1989,6 +2007,7 @@ const ART: Record<string, () => JSX.Element> = {
   nonogram: NonogramArt,
   mahjong: MahjongArt,
   'block-puzzle': BlockPuzzleArt,
+  'number-match': NumberMatchArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

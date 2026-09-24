@@ -67,6 +67,7 @@ const GAMES = [
   'Nonogram',
   'Mahjong Solitaire',
   'Block Puzzle',
+  'Number Match',
   'Color Sort',
   'Echo',
   'Classic Snake',

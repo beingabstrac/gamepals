@@ -145,6 +145,8 @@ import {
   type MahjongState,
   blockPuzzle,
   type BlockState,
+  numberMatch,
+  type NumberState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -258,6 +260,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { NUMBER_CANVAS, NUMBER_COLORS, numberResult, NumberScene, numberStatus } from './number-match/NumberScene';
 import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
@@ -1222,6 +1225,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => blockResult(state as BlockState),
     moveCue: () => undefined,
     createScene: (session) => new BlockScene(session),
+  }),
+  entry({
+    definition: numberMatch,
+    tagline: 'Pair up numbers that match or make ten',
+    minutes: '8 min',
+    hint: 'Tap two numbers that match or make 10',
+    howTo: {
+      goal: 'Cross out every number on the page.',
+      controls: 'Tap a number, then its partner. Hint shows a pair; Add copies every number still standing onto the end, five times a game. On a keyboard: arrows move, Enter picks, H hints, A adds.',
+      win: 'Cross them all out to win. With no pairs and no adds left, the game is over.',
+      tip: 'Two numbers go if they are the same or add up to 10, and nothing but crossed-out numbers lies between them: across, down, on a diagonal, or reading on from the end of one row to the start of the next. An empty row closes up and scores 10.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => NUMBER_COLORS,
+    size: NUMBER_CANVAS,
+    color: DARK.sky,
+    botDelayMs: 300,
+    status: (state) => numberStatus(state as NumberState),
+    resultText: (state) => numberResult(state as NumberState),
+    moveCue: () => undefined,
+    createScene: (session) => new NumberScene(session),
   }),
   entry({
     definition: fourInARow,
