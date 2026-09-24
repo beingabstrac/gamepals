@@ -237,7 +237,7 @@ export function chooseFruitMove(state: FruitState, tier: BotTier, rng: Rng): Fru
   const tries = tier === 'expert' ? moves : moves.filter((_, i) => i % 2 === 0);
   const score = (m: FruitMove) => {
     const after = state.apply(m);
-    const height = after.fruit.reduce((h, f) => Math.min(h, f.y - FRUIT_R[f.kind]!), FRUIT_BOX.bottom);
+    const height = after.fruit.reduce<number>((h, f) => Math.min(h, f.y - FRUIT_R[f.kind]!), FRUIT_BOX.bottom);
     return (after.result ? -1e6 : 0) + (after.score - state.score) * 20 + height;
   };
   const scored = tries.map((m) => ({ m, v: score(m) }));
