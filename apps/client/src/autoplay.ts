@@ -16,6 +16,11 @@ export const AUTOPLAY = params.has('autoplay') || SELFTEST;
  */
 export const INSPECT = params.has('inspect');
 export const SPEED = AUTOPLAY ? Math.max(1, Math.min(10, Number(params.get('autoplay')) || 6)) : 1;
+/**
+ * `?autoplay&seats=<n>` caps the table at n bots (never below the game's least), for the few games
+ * whose whole four-player game is too long for a test's time on the slower engines (Pachisi).
+ */
+export const AUTOPLAY_SEATS = Number(params.get('seats')) || Infinity;
 /** Bot pause between turns in test mode. */
 export const AUTOPLAY_BOT_DELAY_MS = 40;
 

@@ -7,7 +7,7 @@ import { COOKING, GAMES, isCooking, READY, type AnyEntry } from './games/registr
 import { shelve } from './games/shelves';
 import type { SeatController } from './session';
 import { settings, type Settings } from './settings';
-import { AUTOPLAY, autoplaySeats } from './autoplay';
+import { AUTOPLAY, AUTOPLAY_SEATS, autoplaySeats } from './autoplay';
 import { DAILY_GAMES, dailyGameId, dailySeed, doneToday, loadDaily, timeToNext, todayKey } from './daily';
 import { ProSheet, usePro } from './components/Pro';
 import { ArchiveSheet } from './components/Archive';
@@ -58,7 +58,7 @@ export function App() {
       <Setup
         entry={screen.entry}
         onBack={() => setScreen({ name: 'home' })}
-        onStart={(seats, variant) => setScreen({ name: 'play', entry: screen.entry, seats: AUTOPLAY ? autoplaySeats(seats.length) : seats, variant })}
+        onStart={(seats, variant) => setScreen({ name: 'play', entry: screen.entry, seats: AUTOPLAY ? autoplaySeats(Math.max(screen.entry.definition.minPlayers, Math.min(seats.length, AUTOPLAY_SEATS))) : seats, variant })}
       />
     );
   }

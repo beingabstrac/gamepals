@@ -104,6 +104,12 @@ const GAMES = [
   'Snake Battle',
 ];
 
+/**
+ * A four-player Pachisi is 700 to 1300 plies: past the time limit on the slower engines (it failed on
+ * iPad and desktop Safari at 240s). Two players is 300 to 460 and plays every rule just the same.
+ */
+const TWO_SEATS = new Set(['Pachisi']);
+
 /** Patience deals can be unwinnable, so for those a long stretch of play with no errors is the pass mark. */
 const MAY_NOT_FINISH = new Set(['Solitaire', 'FreeCell', 'Spider', 'Pyramid', 'TriPeaks']);
 
@@ -116,7 +122,7 @@ for (const name of GAMES) {
       if (message.type() === 'error') errors.push(`console: ${message.text()}`);
     });
 
-    await page.goto('/?autoplay=6');
+    await page.goto(TWO_SEATS.has(name) ? '/?autoplay=6&seats=2' : '/?autoplay=6');
     await page.getByRole('button', { name: new RegExp(`^${name}`) }).click();
     await page.getByRole('button', { name: 'Play', exact: true }).click();
     await expect(page.locator('.board canvas')).toBeVisible();
