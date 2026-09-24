@@ -1709,6 +1709,24 @@ function MahjongArt() {
   );
 }
 
+function BlockPuzzleArt() {
+  // A grid with a nearly full row, and an L piece on its way down to finish it.
+  const filled: [number, number, string][] = [
+    [0, 3, COLORS.sky], [1, 3, COLORS.sky], [2, 3, COLORS.mint], [4, 3, COLORS.grape], [0, 2, COLORS.tomato], [4, 2, COLORS.sunny], [3, 2, COLORS.peach],
+  ];
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="12" y="40" width="76" height="50" rx="8" fill="#F4F1FB" />
+      {filled.map(([x, y, c]) => (
+        <rect key={`${x}-${y}`} x={16 + x * 14} y={44 + (y - 1) * 14} width="12" height="12" rx="3" fill={c} />
+      ))}
+      <rect x="58" y="8" width="12" height="12" rx="3" fill={COLORS.bubblegum} />
+      <rect x="58" y="22" width="12" height="12" rx="3" fill={COLORS.bubblegum} />
+      <rect x="44" y="22" width="12" height="12" rx="3" fill={COLORS.bubblegum} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -1970,6 +1988,7 @@ const ART: Record<string, () => JSX.Element> = {
   'chinese-checkers': ChineseCheckersArt,
   nonogram: NonogramArt,
   mahjong: MahjongArt,
+  'block-puzzle': BlockPuzzleArt,
   'color-sort': ColorSortArt,
   echo: EchoArt,
   'classic-snake': ClassicSnakeArt,

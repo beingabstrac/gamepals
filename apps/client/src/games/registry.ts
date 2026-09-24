@@ -143,6 +143,8 @@ import {
   type NonoState,
   mahjong,
   type MahjongState,
+  blockPuzzle,
+  type BlockState,
   type DrawState,
   type CharadesState,
   type ImpostorState,
@@ -256,6 +258,7 @@ import { SWORD_COLORS, SWORD_SIZE, SwordScene } from './sword-duel/SwordScene';
 import { WHACK_COLORS, WHACK_SIZE, WhackScene } from './whack-a-mole/WhackScene';
 import { PAINT_COLORS, PAINT_SIZE, PaintScene } from './paint-fight/PaintScene';
 import { GRAB_COLORS, GRAB_SIZE, GrabScene } from './grab-it/GrabScene';
+import { BLOCK_CANVAS, BLOCK_COLORS, blockResult, BlockScene, blockStatus } from './block-puzzle/BlockScene';
 import { MAHJONG_CANVAS, MAHJONG_COLORS, mahjongResult, MahjongScene, mahjongStatus } from './mahjong/MahjongScene';
 import { NONO_CANVAS, NONO_COLORS, nonoResult, NonoScene, nonoStatus } from './nonogram/NonoScene';
 import { STAR_SIZE, StarScene, starSeatColors, starSeatNames, starStatus } from './chinese-checkers/StarScene';
@@ -1198,6 +1201,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => mahjongResult(state as MahjongState),
     moveCue: () => undefined,
     createScene: (session) => new MahjongScene(session),
+  }),
+  entry({
+    definition: blockPuzzle,
+    tagline: 'Fit the pieces, clear the lines',
+    minutes: '5 min',
+    hint: 'Drag a piece onto the grid',
+    howTo: {
+      goal: 'Fit the pieces onto the grid and clear full rows and columns for as long as you can.',
+      controls: 'Drag a piece from under the grid onto it, or tap a piece and then a square for its top-left corner. On a keyboard: 1 to 3 pick a piece, arrows move it, Enter drops it.',
+      win: 'The game ends when none of your pieces fits. Reach 500 points and it counts as a win.',
+      tip: 'A full row or column clears at once, and clearing two or more together scores far more. Pieces never turn. Keep a space for the long bars.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => BLOCK_COLORS,
+    size: BLOCK_CANVAS,
+    color: DARK.peach,
+    botDelayMs: 300,
+    status: (state) => blockStatus(state as BlockState),
+    resultText: (state) => blockResult(state as BlockState),
+    moveCue: () => undefined,
+    createScene: (session) => new BlockScene(session),
   }),
   entry({
     definition: fourInARow,
