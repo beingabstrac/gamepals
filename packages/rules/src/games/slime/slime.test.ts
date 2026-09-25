@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../core/rng';
 import { replay } from '../../core/replay';
-import { newSlime, slime } from './index';
+import { newSlime, slime, type SlimeState } from './index';
 
 describe('slime', () => {
   it('colors change, each mix-in goes in once, pokes count', () => {
@@ -24,7 +24,7 @@ describe('slime', () => {
       moves.push(m);
       s = s.apply(m);
     }
-    expect(s.mixins.every(Boolean)).toBe(true);
+    expect((s as SlimeState).mixins.every(Boolean)).toBe(true);
     expect(() => s.apply('p')).toThrow();
     expect(replay(slime, { gameId: 'slime', seed: 1, config: { players: 1 }, moves }).result).toEqual(s.result);
   });
