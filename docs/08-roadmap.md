@@ -877,9 +877,12 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M40a Marble Run:** tap pegs to set ramps, drop the marble into the cup; the roll is in the rules, every level checked all 81 ways.
   - [ ] **M40b Mirror Paint:** the catalog's neon paint made ours: symmetry painting in candy colors on white, 4 to 16 copies of every stroke, no glow.
   - [ ] **M40c Pizza Memory:** see an order, make it from memory, eight slices and five toppings, five orders that grow.
-- [ ] **M41 Puzzles E:** Escape Room, then Animal Stack if a stacking game can be made clearly its own beside Tower.
+- [ ] **M41 Puzzles E:** Escape Room. Animal Stack is held back: stacking needs rigid bodies that turn and rest on each other, and making that stable as a pure step in the rules is a project of its own (and it would sit close to Tower). It comes back if it gets that project.
   - [ ] **M41a Escape Room:** room-lite: count the things on the lock round four walls, open drawers, boxes and curtains; three rooms that grow.
-- [ ] **M42+** The held-back duels (Crash It, Stampede, Golf Football) once each has a core of its own.
+- [ ] **M42 Duels G:** the three held-back duels, each given a core of its own.
+  - [ ] **M42a Balloon Bumpers** (the catalog's Crash It): bumper cars with a balloon on each car's back; ram a balloon to pop it, last with a balloon wins. Sumo is pushing out of a ring; this is aiming at a weak spot while guarding your own.
+  - [ ] **M42b Flick Football** (the catalog's Golf Football): each side flicks its own round players to knock the ball into the other goal, like penny football. In Mini Golf you hit the ball; here you move your men and the ball only moves when they hit it.
+  - [ ] **M42c Stampede:** asymmetric: one player sends the herd down lanes they pick, the other runs and dodges, then they swap. In Road Dodge both players dodge the same traffic.
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 
