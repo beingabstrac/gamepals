@@ -186,7 +186,7 @@ export class ChimeScene extends Scene {
     const gusting = time < this.gustUntil;
     this.tubes.forEach((t, i) => {
       let force = -(GRAVITY / t.arm) * Math.sin(t.angle) - DAMPING * t.spin;
-      if (gusting) force += Math.sin(time / 170 + i * 1.7) * 6 + 2;
+      if (gusting) force += Math.sin(time / 170 + i * 1.7) * 3.2 + 1.1;
       t.spin += force * dt;
       t.angle += t.spin * dt;
       t.angle = Math.max(-0.6, Math.min(0.6, t.angle));

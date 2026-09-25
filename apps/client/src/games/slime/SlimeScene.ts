@@ -26,8 +26,9 @@ const MIX_Y = 730;
 const DONE_Y = 820;
 
 interface Bit {
-  /** Which ring point it follows, and how far out from the middle (0 to 1). */
+  /** Which ring point it follows (and how far on towards the next), and how far out from the middle (0 to 1). */
   at: number;
+  along: number;
   out: number;
   kind: number;
   color: number;
@@ -183,8 +184,9 @@ export class SlimeScene extends Scene {
   /** Bits of a mix-in, scattered through the slime and carried along with it. */
   private addBits(kind: number): void {
     const count = [40, 14, 26, 10][kind]!;
+    // 11 shares no factor with the 28 ring points, so the bits go all the way round, not in four spokes.
     for (let k = 0; k < count; k++)
-      this.bits.push({ at: (k * 7 + kind * 3) % N, out: 0.15 + ((k * 37 + kind * 11) % 70) / 100, kind, color: (k + kind) % COLORS_OF.length });
+      this.bits.push({ at: (k * 11 + kind * 5) % N, along: ((k * 0.618 + kind * 0.3) % 1), out: 0.12 + ((k * 37 + kind * 11) % 72) / 100, kind, color: (k + kind) % COLORS_OF.length });
   }
 
   private changed(): void {
@@ -276,8 +278,11 @@ export class SlimeScene extends Scene {
     g.fillStyle(toHex(COLORS_OF[color]!), 1);
     shape(1, 0);
     for (const b of this.bits) {
-      const x = cx + (this.px[b.at]! - cx) * b.out;
-      const y = cy + (this.py[b.at]! - cy) * b.out;
+      const next = (b.at + 1) % N;
+      const ex = this.px[b.at]! + (this.px[next]! - this.px[b.at]!) * b.along;
+      const ey = this.py[b.at]! + (this.py[next]! - this.py[b.at]!) * b.along;
+      const x = cx + (ex - cx) * b.out;
+      const y = cy + (ey - cy) * b.out;
       if (b.kind === 0) {
         g.fillStyle(b.color % 2 ? 0xffffff : toHex(COLORS.sunny), 0.9);
         g.fillRect(x - 1.5, y - 1.5, 3, 3);
