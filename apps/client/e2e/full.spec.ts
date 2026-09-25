@@ -93,6 +93,7 @@ const GAMES = [
   'Game of the Goose',
   'Pond',
   'Wind Chimes',
+  'Slime',
   'Gomoku',
   'Oware',
   'Mexican Train',

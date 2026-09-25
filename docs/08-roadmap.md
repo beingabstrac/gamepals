@@ -872,6 +872,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M39 Chill shelf C:** Pond, Wind Chimes and Slime, from docs/12 F. Bubble Wrap is held back: it is Pop It with a different skin.
   - [ ] **M39a Pond:** tap the water for ripples, hold to scatter food for the koi, tap each bud until every lotus is open.
   - [ ] **M39b Wind Chimes:** seven bamboo tubes swing as pendulums, knock their neighbours and ring a pentatonic note; ring every chime.
+  - [ ] **M39c Slime:** a soft body on the table: poke it, pull it and it wobbles back; seven colors and four mix-ins; done when you say.
 - [ ] **M40+** The rest of the catalog, 3–4 per milestone, split here when we get there: Marble Run, Neon Paint and Wood Carving (chill), then Animal Stack, Pizza Memory and a room-lite Escape.
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.

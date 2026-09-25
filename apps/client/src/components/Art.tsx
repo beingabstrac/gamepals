@@ -2381,6 +2381,23 @@ function WindChimesArt() {
   );
 }
 
+function SlimeArt() {
+  // A mint blob of slime on a table, with glitter and beads inside and a shine on top.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="76" width="84" height="10" rx="5" fill="#F1E6FF" />
+      <path d="M14 78 C12 52 30 30 52 32 C76 30 90 52 86 78 Z" fill={COLORS.mint} />
+      <ellipse cx="36" cy="46" rx="10" ry="5" fill="#FFFFFF" opacity="0.5" />
+      <circle cx="56" cy="58" r="4" fill={COLORS.bubblegum} />
+      <circle cx="40" cy="66" r="4" fill={COLORS.sky} />
+      <circle cx="70" cy="66" r="3.5" fill={COLORS.sunny} />
+      <rect x="62" y="46" width="3" height="3" fill="#FFFFFF" />
+      <rect x="48" y="70" width="3" height="3" fill="#FFFFFF" />
+      <rect x="28" y="58" width="3" height="3" fill={COLORS.sunny} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2656,6 +2673,7 @@ const ART: Record<string, () => JSX.Element> = {
   'sand-fall': SandFallArt,
   pond: PondArt,
   'wind-chimes': WindChimesArt,
+  slime: SlimeArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

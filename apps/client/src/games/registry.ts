@@ -109,6 +109,8 @@ import {
   type PondState,
   windChimes,
   type ChimeState,
+  slime,
+  type SlimeState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -292,6 +294,7 @@ import { SIX_CANVAS, SIX_COLORS, sixResult, SixScene, sixStatus } from './connec
 import { GOOSE_COLORS, gooseResult, GooseScene, GOOSE_SIZE, gooseStatus } from './goose/GooseScene';
 import { POND_SIZE, POND_TINTS, pondResult, PondScene, pondStatus } from './pond/PondScene';
 import { CHIME_SIZE, CHIME_TINTS, chimeResult, ChimeScene, chimeStatus } from './wind-chimes/ChimeScene';
+import { SLIME_SIZE, SLIME_TINTS, slimeResult, SlimeScene, slimeStatus } from './slime/SlimeScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1792,6 +1795,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => chimeResult(state as ChimeState),
     moveCue: () => undefined,
     createScene: (session) => new ChimeScene(session),
+  }),
+  entry({
+    definition: slime,
+    tagline: 'Squish it, stretch it, mix in glitter',
+    minutes: 'Any time',
+    hint: 'Poke the slime, or pull it and let go',
+    howTo: {
+      goal: 'Make a slime you like and play with it.',
+      controls: 'Tap a color to change it, and tap Glitter, Beads, Foam or Stars to mix them in. Poke the slime to squish it, or pull it and let go. Tap Done when you are happy. On a keyboard: 1 to 7 pick a color, G, B, F and S mix things in, Space pokes, D is done.',
+      win: 'There is nothing to win: it is done when you say so.',
+      tip: 'Pull a long way and let go for the biggest wobble.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => SLIME_TINTS,
+    size: SLIME_SIZE,
+    color: DARK.mint,
+    botDelayMs: 250,
+    status: (state) => slimeStatus(state as SlimeState),
+    resultText: (state) => slimeResult(state as SlimeState),
+    moveCue: () => undefined,
+    createScene: (session) => new SlimeScene(session),
   }),
   entry({
     definition: wouldYouRather,
