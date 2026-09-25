@@ -2412,6 +2412,22 @@ function MarbleRunArt() {
   );
 }
 
+function MirrorPaintArt() {
+  // A white disc with a six-way candy snowflake painted on it.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="42" fill="#FFFFFF" stroke="#E6E0F4" stroke-width="4" />
+      <g stroke={COLORS.bubblegum} stroke-width="5" stroke-linecap="round" fill="none">
+        <path d="M50 50 L50 16 M50 50 L79 33 M50 50 L79 67 M50 50 L50 84 M50 50 L21 67 M50 50 L21 33" />
+      </g>
+      <g stroke={COLORS.sky} stroke-width="4" stroke-linecap="round" fill="none">
+        <path d="M44 24 L50 30 L56 24 M70 38 L68 46 L75 50 M70 62 L68 54 M56 76 L50 70 L44 76 M30 62 L32 54 L25 50 M30 38 L32 46" />
+      </g>
+      <circle cx="50" cy="50" r="6" fill={COLORS.sunny} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2689,6 +2705,7 @@ const ART: Record<string, () => JSX.Element> = {
   'wind-chimes': WindChimesArt,
   slime: SlimeArt,
   'marble-run': MarbleRunArt,
+  'mirror-paint': MirrorPaintArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

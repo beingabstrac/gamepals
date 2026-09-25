@@ -128,3 +128,4 @@ export * from './games/pond';
 export * from './games/wind-chimes';
 export * from './games/slime';
 export * from './games/marble-run';
+export * from './games/mirror-paint';

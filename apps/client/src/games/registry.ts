@@ -113,6 +113,8 @@ import {
   type SlimeState,
   marbleRun,
   type MarbleState,
+  mirrorPaint,
+  type MirrorState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -298,6 +300,7 @@ import { POND_SIZE, POND_TINTS, pondResult, PondScene, pondStatus } from './pond
 import { CHIME_SIZE, CHIME_TINTS, chimeResult, ChimeScene, chimeStatus } from './wind-chimes/ChimeScene';
 import { SLIME_SIZE, SLIME_TINTS, slimeResult, SlimeScene, slimeStatus } from './slime/SlimeScene';
 import { MARBLE_SIZE, MARBLE_TINTS, marbleResult, MarbleScene, marbleStatus } from './marble-run/MarbleScene';
+import { MIRROR_SIZE, MIRROR_TINTS, mirrorResult, MirrorScene, mirrorStatus } from './mirror-paint/MirrorScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1840,6 +1843,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => marbleResult(state as MarbleState),
     moveCue: () => undefined,
     createScene: (session) => new MarbleScene(session),
+  }),
+  entry({
+    definition: mirrorPaint,
+    tagline: 'One stroke, a whole snowflake',
+    minutes: 'Any time',
+    hint: 'Drag in the circle to paint',
+    howTo: {
+      goal: 'Paint a pattern. Every stroke is copied round the circle, so a scribble turns into a snowflake.',
+      controls: 'Drag in the circle to paint. The numbers pick how many copies each stroke makes. Pick a color and a brush below. Clear starts again and Done finishes. On a keyboard: 1 to 7 colors, M the mirror, B the brush, arrow keys paint, Space lifts the pen, C clears, D is done.',
+      win: 'There is nothing to win: it is done when you say so.',
+      tip: 'Small wiggles near the middle make lace; long sweeps near the edge make petals.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => MIRROR_TINTS,
+    size: MIRROR_SIZE,
+    color: DARK.bubblegum,
+    botDelayMs: 300,
+    status: (state) => mirrorStatus(state as MirrorState),
+    resultText: (state) => mirrorResult(state as MirrorState),
+    moveCue: () => undefined,
+    createScene: (session) => new MirrorScene(session),
   }),
   entry({
     definition: wouldYouRather,

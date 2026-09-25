@@ -873,8 +873,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M39a Pond:** tap the water for ripples, hold to scatter food for the koi, tap each bud until every lotus is open.
   - [ ] **M39b Wind Chimes:** seven bamboo tubes swing as pendulums, knock their neighbours and ring a pentatonic note; ring every chime.
   - [ ] **M39c Slime:** a soft body on the table: poke it, pull it and it wobbles back; seven colors and four mix-ins; done when you say.
-- [ ] **M40 Puzzles and toys D:** Marble Run, Neon Paint and Pizza Memory. Wood Carving is held back: rubbing wood away to find a shape is Clean It run backwards.
+- [ ] **M40 Puzzles and toys D:** Marble Run, Mirror Paint (the catalog's neon paint) and Pizza Memory. Wood Carving is held back: rubbing wood away to find a shape is Clean It run backwards.
   - [ ] **M40a Marble Run:** tap pegs to set ramps, drop the marble into the cup; the roll is in the rules, every level checked all 81 ways.
+  - [ ] **M40b Mirror Paint:** the catalog's neon paint made ours: symmetry painting in candy colors on white, 4 to 16 copies of every stroke, no glow.
 - [ ] **M41+** The rest of the catalog: Animal Stack and a room-lite Escape, then the held-back duels once each has a core of its own.
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
