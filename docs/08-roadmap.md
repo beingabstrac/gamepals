@@ -861,14 +861,14 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M36a Gomoku:** freestyle five in a row; bots score every window of five and search for wins by fours; Expert also breaks the other side's.
   - [x] **M36b Oware:** Abapa rules on the Mancala board, captures of twos and threes, no grand slam, feed an empty side.
   - [x] **M36c Mexican Train:** double nine, one round, trains, markers and doubles to cover; 2 to 4.
-- [ ] **M37 Puzzles and toys C:** Ball Run and more chill toys from docs/12 F.
-  - [ ] **M37a Ball Run:** turn track pieces to join the ball to the flag; three sizes, par to beat.
-  - [ ] **M37b Sand Fall:** pour colored sand into a jar, falling-sand grains, shake to empty.
-  - [ ] **M37c Domino Topple:** draw a line of dominoes, push the first, the rules work out the chain.
-- [ ] **M38 Classics D:** Darts, Connect Six and Game of the Goose. Crash It, Stampede and Golf Football (docs/12 A) are held back: as described they are Sumo, Road Dodge and Mini Golf again, and each needs a core of its own before it is built.
-  - [ ] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
-  - [ ] **M38b Connect Six:** one stone then two a turn, six in a row; bots block every four, Hard and Expert look for three threats at once and Expert spoils the other player's (Medium beat Easy 11-0, Hard beat Medium 8-0, Expert beat Hard 10-4, draws aside, 16 games each).
-  - [ ] **M38c Game of the Goose:** the 63-square spiral, geese, Bridge, Inn, Well, Maze, Jail and Death, knocking back; 2 to 4, all luck.
+- [x] **M37 Puzzles and toys C (green on all eight screens 2026-09-25, run 36078603221):** Ball Run and more chill toys from docs/12 F.
+  - [x] **M37a Ball Run:** turn track pieces to join the ball to the flag; three sizes, par to beat.
+  - [x] **M37b Sand Fall:** pour colored sand into a jar, falling-sand grains, shake to empty.
+  - [x] **M37c Domino Topple:** draw a line of dominoes, push the first, the rules work out the chain.
+- [x] **M38 Classics D (green on all eight screens 2026-09-25, run 36078603221):** Darts, Connect Six and Game of the Goose. Crash It, Stampede and Golf Football (docs/12 A) are held back: as described they are Sumo, Road Dodge and Mini Golf again, and each needs a core of its own before it is built.
+  - [x] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
+  - [x] **M38b Connect Six:** one stone then two a turn, six in a row; bots block every four, Hard and Expert look for three threats at once and Expert spoils the other player's (Medium beat Easy 11-0, Hard beat Medium 8-0, Expert beat Hard 10-4, draws aside, 16 games each).
+  - [x] **M38c Game of the Goose:** the 63-square spiral, geese, Bridge, Inn, Well, Maze, Jail and Death, knocking back; 2 to 4, all luck.
 - [ ] **M39 Chill shelf C:** Pond, Wind Chimes and Slime, from docs/12 F. Bubble Wrap is held back: it is Pop It with a different skin.
   - [ ] **M39a Pond:** tap the water for ripples, hold to scatter food for the koi, tap each bud until every lotus is open.
   - [ ] **M39b Wind Chimes:** seven bamboo tubes swing as pendulums, knock their neighbours and ring a pentatonic note; ring every chime.

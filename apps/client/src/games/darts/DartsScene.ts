@@ -66,6 +66,11 @@ export class DartsScene extends Scene {
     onKeys(this, (key) => this.key(key));
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => (this.shift = event.shiftKey));
     this.input.keyboard?.on('keyup', (event: KeyboardEvent) => (this.shift = event.shiftKey));
+    // A scene built mid-turn (a rematch, or the table rebuilt) puts this turn's darts back in the board.
+    const state = this.state;
+    for (const t of state.throws.slice(state.throws.length - state.thrown)) {
+      this.stuck.push(this.makeDart(t.seat).setPosition(CX + t.at.x * S, CY + t.at.y * S));
+    }
     this.settle();
     const unsubscribe = this.session.subscribe(() => this.thrown());
     // A bot waits for the last dart to land before it throws.
