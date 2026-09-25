@@ -100,6 +100,7 @@ const GAMES = [
   'Escape Room',
   'Balloon Bumpers',
   'Flick Football',
+  'Stampede',
   'Gomoku',
   'Oware',
   'Mexican Train',

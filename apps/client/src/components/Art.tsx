@@ -2502,6 +2502,25 @@ function FlickFootballArt() {
   );
 }
 
+function StampedeArt() {
+  // Five green lanes, two cows charging down, a little runner dodging at the bottom.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="6" width="84" height="88" rx="12" fill={COLORS.mint} />
+      <rect x="25" y="6" width="17" height="88" fill="#FFFFFF" opacity="0.15" />
+      <rect x="59" y="6" width="17" height="88" fill="#FFFFFF" opacity="0.15" />
+      <ellipse cx="33" cy="30" rx="8" ry="10" fill="#FFFFFF" />
+      <circle cx="31" cy="27" r="3" fill={INK} />
+      <ellipse cx="33" cy="38" rx="5" ry="3" fill="#FFC2D6" />
+      <ellipse cx="67" cy="54" rx="8" ry="10" fill="#FFFFFF" />
+      <circle cx="69" cy="52" r="3" fill={INK} />
+      <ellipse cx="67" cy="62" rx="5" ry="3" fill="#FFC2D6" />
+      <ellipse cx="50" cy="82" rx="8" ry="5" fill={COLORS.sky} />
+      <circle cx="50" cy="78" r="5" fill="#FFE0C2" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2784,6 +2803,7 @@ const ART: Record<string, () => JSX.Element> = {
   'escape-room': EscapeRoomArt,
   'balloon-bumpers': BalloonBumpersArt,
   'flick-football': FlickFootballArt,
+  stampede: StampedeArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

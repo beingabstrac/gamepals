@@ -122,6 +122,7 @@ import {
   balloonBumpers,
   flickFootball,
   type FlickState,
+  stampede,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -312,6 +313,7 @@ import { PIZZA_SIZE, PIZZA_TINTS, pizzaResult, PizzaScene, pizzaStatus } from '.
 import { ESCAPE_SIZE, ESCAPE_TINTS, escapeResult, EscapeScene, escapeStatus } from './escape-room/EscapeScene';
 import { BUMPER_SIZE, BumperScene } from './balloon-bumpers/BumperScene';
 import { FLICK_COLORS, flickResult, FlickScene, FLICK_SIZE, flickStatus } from './flick-football/FlickScene';
+import { STAMPEDE_SIZE, StampedeScene } from './stampede/StampedeScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -3093,6 +3095,22 @@ export const GAMES: readonly AnyEntry[] = [
     size: BUMPER_SIZE,
     color: DARK.sky,
     createScene: (options) => new BumperScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: stampede,
+    tagline: 'One runs, one sends the herd',
+    minutes: '3 min',
+    howTo: {
+      goal: 'When you run, dodge the herd and last 20 seconds. When you herd, catch the runner.',
+      controls: 'The bottom half runs: hold and slide your finger left and right, or use the arrow keys. The top half herds: tap a lane to send a cow down it, or press 1 to 5. After each round you swap: turn the phone round.',
+      win: 'Lasting a round wins it for the runner; catching them wins it for the herder. Four rounds, two each way, most rounds wins. Level on rounds, the longest total run wins.',
+      tip: 'The herd gets faster through a round. As the herder, send one where they are and the next where they will run to.',
+    },
+    ...duelSides,
+    size: STAMPEDE_SIZE,
+    color: DARK.mint,
+    createScene: (options) => new StampedeScene(options),
   },
   {
     kind: 'realtime',

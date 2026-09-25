@@ -14,6 +14,7 @@ Checked 2026-09-13. Each game is compared with its real rules (see its brief) an
 | Reflex Race | Yes (party game): wait for green, first tap wins, false start loses | Tap your half | Big light pops | None |
 | Sumo | Yes: push out of the ring | Drag to move, tap to shove | Weight, momentum, clinch friction | None |
 | Balloon Bumpers | Bumper-car balloon battle: a balloon trails behind each car, ram it to pop it; three pops wins | Drag in your half to drive, tap to dash; arrows or WASD, Space or Shift | Bouncy car-to-car and wall bumps, a balloon on a string that sways, bursts into bits; walls close in on a long round | Rounds end empty after 40s and a match after seven, so two careful drivers still finish |
+| Stampede | Asymmetric duel: one herds cows down five lanes, the other dodges for 20 seconds; swap each round, four rounds | Bottom half runs (slide, arrows), top half herds (tap a lane, 1 to 5) | Cows charge and speed up through a round; a catch spins the runner | Two people turn the phone round at the swap; only Expert sets traps, measured as the difference between catching and drawing |
 | Penalty Kicks | Yes: 5 kicks each, early finish, sudden death, roles swap | Swipe to shoot, drag and flick to dive | Curling ball, diving keeper | None |
 | Snake Battle | Yes: grid snake, crashes lose, head-on draw | Turn buttons | Snakes glide between cells | None |
 | Sudoku | Yes: 9×9, one answer, levels by solving tricks, notes, mirrored clues | Tap a square, tap a number | Numbers pop in, repeats shake, finished lines sparkle | Race mode is planned |
