@@ -99,6 +99,7 @@ const GAMES = [
   'Pizza Memory',
   'Escape Room',
   'Balloon Bumpers',
+  'Flick Football',
   'Gomoku',
   'Oware',
   'Mexican Train',

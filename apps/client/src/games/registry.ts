@@ -120,6 +120,8 @@ import {
   escapeRoom,
   type EscapeState,
   balloonBumpers,
+  flickFootball,
+  type FlickState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -309,6 +311,7 @@ import { MIRROR_SIZE, MIRROR_TINTS, mirrorResult, MirrorScene, mirrorStatus } fr
 import { PIZZA_SIZE, PIZZA_TINTS, pizzaResult, PizzaScene, pizzaStatus } from './pizza-memory/PizzaScene';
 import { ESCAPE_SIZE, ESCAPE_TINTS, escapeResult, EscapeScene, escapeStatus } from './escape-room/EscapeScene';
 import { BUMPER_SIZE, BumperScene } from './balloon-bumpers/BumperScene';
+import { FLICK_COLORS, flickResult, FlickScene, FLICK_SIZE, flickStatus } from './flick-football/FlickScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -2828,6 +2831,27 @@ export const GAMES: readonly AnyEntry[] = [
     },
     moveCue: () => undefined,
     createScene: (session) => new ArcheryScene(session),
+  }),
+  entry({
+    definition: flickFootball,
+    tagline: 'Flick your men, score with the ball',
+    minutes: '5 min',
+    hint: 'Pull back from one of your men and let go',
+    howTo: {
+      goal: 'Knock the ball into the other goal by flicking your own round men into it.',
+      controls: 'Touch one of your men, pull back like a slingshot and let go: the further you pull, the harder the flick. The arrow shows where it will go. Then the other side has a go. On a keyboard: 1 to 3 pick a man, Left and Right aim, Up and Down set the power, Space flicks.',
+      win: 'First to 3 goals wins. After 30 flicks each, the most goals wins, and level is a draw.',
+      tip: 'You never touch the ball, only your men. Where your man stops matters too: leave one between the ball and your own goal.',
+    },
+    sideNames: () => ['Blue', 'Red'],
+    sideColors: () => FLICK_COLORS,
+    size: FLICK_SIZE,
+    color: DARK.mint,
+    botDelayMs: 500,
+    status: (state, names) => flickStatus(state as FlickState, names),
+    resultText: (state, names) => flickResult(state as FlickState, names),
+    moveCue: () => undefined,
+    createScene: (session) => new FlickScene(session),
   }),
   entry({
     definition: darts,

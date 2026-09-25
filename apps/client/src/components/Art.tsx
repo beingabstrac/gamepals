@@ -2485,6 +2485,23 @@ function BalloonBumpersArt() {
   );
 }
 
+function FlickFootballArt() {
+  // A green pitch, a blue man flicked at the ball, the ball heading for the red goal.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="4" width="80" height="92" rx="10" fill={COLORS.mint} />
+      <path d="M10 50 H90" stroke="#FFFFFF" stroke-width="2" opacity="0.8" />
+      <circle cx="50" cy="50" r="12" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.8" />
+      <path d="M34 6 H66" stroke={COLORS.tomato} stroke-width="5" stroke-linecap="round" />
+      <path d="M34 94 H66" stroke={COLORS.sky} stroke-width="5" stroke-linecap="round" />
+      <circle cx="30" cy="30" r="7" fill={COLORS.tomato} />
+      <circle cx="46" cy="72" r="9" fill={COLORS.sky} />
+      <circle cx="52" cy="54" r="5" fill="#FFFFFF" stroke={INK} stroke-width="1.5" />
+      <path d="M55 46 L60 30" stroke={COLORS.sunny} stroke-width="3" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2766,6 +2783,7 @@ const ART: Record<string, () => JSX.Element> = {
   'pizza-memory': PizzaMemoryArt,
   'escape-room': EscapeRoomArt,
   'balloon-bumpers': BalloonBumpersArt,
+  'flick-football': FlickFootballArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,
