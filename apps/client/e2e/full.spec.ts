@@ -94,6 +94,7 @@ const GAMES = [
   'Pond',
   'Wind Chimes',
   'Slime',
+  'Marble Run',
   'Gomoku',
   'Oware',
   'Mexican Train',

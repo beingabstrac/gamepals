@@ -2398,6 +2398,20 @@ function SlimeArt() {
   );
 }
 
+function MarbleRunArt() {
+  // A board with two candy ramps, a grape marble on its way and a pink cup below.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="10" y="6" width="80" height="88" rx="14" fill="#EEF6FF" />
+      <path d="M24 34 L56 46" stroke={COLORS.tomato} stroke-width="6" stroke-linecap="round" />
+      <path d="M76 58 L44 70" stroke={COLORS.sunny} stroke-width="6" stroke-linecap="round" />
+      <path d="M50 22 L66 34" stroke="#A9A3C2" stroke-width="6" stroke-linecap="round" />
+      <circle cx="30" cy="24" r="6" fill={COLORS.grape} />
+      <rect x="26" y="78" width="22" height="12" rx="5" fill={COLORS.bubblegum} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2674,6 +2688,7 @@ const ART: Record<string, () => JSX.Element> = {
   pond: PondArt,
   'wind-chimes': WindChimesArt,
   slime: SlimeArt,
+  'marble-run': MarbleRunArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

@@ -127,3 +127,4 @@ export * from './games/goose';
 export * from './games/pond';
 export * from './games/wind-chimes';
 export * from './games/slime';
+export * from './games/marble-run';

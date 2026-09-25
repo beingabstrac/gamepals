@@ -111,6 +111,8 @@ import {
   type ChimeState,
   slime,
   type SlimeState,
+  marbleRun,
+  type MarbleState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -295,6 +297,7 @@ import { GOOSE_COLORS, gooseResult, GooseScene, GOOSE_SIZE, gooseStatus } from '
 import { POND_SIZE, POND_TINTS, pondResult, PondScene, pondStatus } from './pond/PondScene';
 import { CHIME_SIZE, CHIME_TINTS, chimeResult, ChimeScene, chimeStatus } from './wind-chimes/ChimeScene';
 import { SLIME_SIZE, SLIME_TINTS, slimeResult, SlimeScene, slimeStatus } from './slime/SlimeScene';
+import { MARBLE_SIZE, MARBLE_TINTS, marbleResult, MarbleScene, marbleStatus } from './marble-run/MarbleScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1816,6 +1819,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => slimeResult(state as SlimeState),
     moveCue: () => undefined,
     createScene: (session) => new SlimeScene(session),
+  }),
+  entry({
+    definition: marbleRun,
+    tagline: 'Set the ramps, drop the marble',
+    minutes: '2 min',
+    hint: 'Tap a peg to put a ramp on it',
+    howTo: {
+      goal: 'Get the marble into the pink cup at the bottom.',
+      controls: 'Tap a peg to put a ramp on it. Tap again to tilt it the other way, and again to take it off. Then tap Drop. On a keyboard: 1 to 4 turn a peg, Space drops.',
+      win: 'The marble lands in the cup. Par is the fewest ramps that can do it.',
+      tip: 'Watch where it misses, then change one ramp at a time. You can drop as often as you like.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => MARBLE_TINTS,
+    size: MARBLE_SIZE,
+    color: DARK.grape,
+    botDelayMs: 400,
+    status: (state) => marbleStatus(state as MarbleState),
+    resultText: (state) => marbleResult(state as MarbleState),
+    moveCue: () => undefined,
+    createScene: (session) => new MarbleScene(session),
   }),
   entry({
     definition: wouldYouRather,
