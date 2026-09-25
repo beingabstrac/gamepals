@@ -69,9 +69,9 @@ export class PondScene extends Scene {
     g.fillStyle(toHex('#C8F2DC'), 1);
     g.fillRoundedRect(AT.x - 10, AT.y - 20, POND.w + 20, POND.h + 40, 40);
     g.fillStyle(toHex(DARK.sky), 1);
-    g.fillEllipse(AT.x + POND.w / 2, AT.y + POND.h / 2 + 8, POND.w, POND.h);
+    g.fillEllipse(AT.x + POND.w / 2, AT.y + POND.h / 2 + 8, POND.w, POND.h, 128);
     g.fillStyle(toHex('#7CC4FF'), 1);
-    g.fillEllipse(AT.x + POND.w / 2, AT.y + POND.h / 2, POND.w, POND.h);
+    g.fillEllipse(AT.x + POND.w / 2, AT.y + POND.h / 2, POND.w, POND.h, 128);
     this.food = this.add.graphics().setDepth(2);
     this.fish = KOI.map((color, i) => this.makeFish(color, SPOTS[i]!, i));
     this.water = this.add.graphics().setDepth(4);
