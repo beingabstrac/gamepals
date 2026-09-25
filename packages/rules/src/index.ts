@@ -129,3 +129,4 @@ export * from './games/wind-chimes';
 export * from './games/slime';
 export * from './games/marble-run';
 export * from './games/mirror-paint';
+export * from './games/pizza-memory';

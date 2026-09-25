@@ -96,6 +96,7 @@ const GAMES = [
   'Slime',
   'Marble Run',
   'Mirror Paint',
+  'Pizza Memory',
   'Gomoku',
   'Oware',
   'Mexican Train',

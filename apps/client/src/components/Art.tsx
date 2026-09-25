@@ -2428,6 +2428,26 @@ function MirrorPaintArt() {
   );
 }
 
+function PizzaMemoryArt() {
+  // A pizza cut in eight with a few toppings, and a thought bubble of the order.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="46" cy="56" r="36" fill={COLORS.peach} />
+      <circle cx="46" cy="56" r="31" fill={COLORS.tomato} />
+      <circle cx="46" cy="56" r="28" fill="#FFD66B" />
+      <path d="M46 28 V84 M18 56 H74 M26 36 L66 76 M66 36 L26 76" stroke="#E07A1F" stroke-width="1.5" opacity="0.6" />
+      <circle cx="54" cy="40" r="5" fill="#D93636" />
+      <circle cx="30" cy="62" r="5" fill="#D93636" />
+      <circle cx="60" cy="66" r="4" fill={INK} />
+      <circle cx="60" cy="66" r="1.8" fill="#FFD66B" />
+      <rect x="28" y="42" width="11" height="4" rx="2" fill={COLORS.mint} />
+      <circle cx="82" cy="18" r="11" fill="#FFFFFF" stroke="#E6E0F4" stroke-width="2" />
+      <circle cx="72" cy="32" r="3" fill="#FFFFFF" stroke="#E6E0F4" stroke-width="1.5" />
+      <text x="82" y="19" font-size="14" text-anchor="middle" dominant-baseline="central" fill={INK} font-weight="bold">?</text>
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2706,6 +2726,7 @@ const ART: Record<string, () => JSX.Element> = {
   slime: SlimeArt,
   'marble-run': MarbleRunArt,
   'mirror-paint': MirrorPaintArt,
+  'pizza-memory': PizzaMemoryArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

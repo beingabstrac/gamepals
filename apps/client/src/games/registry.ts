@@ -115,6 +115,8 @@ import {
   type MarbleState,
   mirrorPaint,
   type MirrorState,
+  pizzaMemory,
+  type PizzaState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -301,6 +303,7 @@ import { CHIME_SIZE, CHIME_TINTS, chimeResult, ChimeScene, chimeStatus } from '.
 import { SLIME_SIZE, SLIME_TINTS, slimeResult, SlimeScene, slimeStatus } from './slime/SlimeScene';
 import { MARBLE_SIZE, MARBLE_TINTS, marbleResult, MarbleScene, marbleStatus } from './marble-run/MarbleScene';
 import { MIRROR_SIZE, MIRROR_TINTS, mirrorResult, MirrorScene, mirrorStatus } from './mirror-paint/MirrorScene';
+import { PIZZA_SIZE, PIZZA_TINTS, pizzaResult, PizzaScene, pizzaStatus } from './pizza-memory/PizzaScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1864,6 +1867,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => mirrorResult(state as MirrorState),
     moveCue: () => undefined,
     createScene: (session) => new MirrorScene(session),
+  }),
+  entry({
+    definition: pizzaMemory,
+    tagline: 'Remember the order, make the pizza',
+    minutes: '3 min',
+    hint: 'Look at the pizza, then make it from memory',
+    howTo: {
+      goal: 'Make five pizzas from memory, each just like the order.',
+      controls: 'Look at the order while the bar runs down, or tap Ready. Then pick a topping from the tray and tap slices to put it on. Tap it again, or use the empty circle, to take it off. Tap Serve when it matches. On a keyboard: 1 to 5 pick a topping, 0 the empty hand, arrows move round the slices, Enter places, S serves, R is Ready.',
+      win: 'Every slice with the right topping, or rightly left empty, scores. A pizza with all eight right gets a star.',
+      tip: 'Say the toppings round the pizza to yourself, like a little song.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => PIZZA_TINTS,
+    size: PIZZA_SIZE,
+    color: DARK.tomato,
+    botDelayMs: 350,
+    status: (state) => pizzaStatus(state as PizzaState),
+    resultText: (state) => pizzaResult(state as PizzaState),
+    moveCue: () => undefined,
+    createScene: (session) => new PizzaScene(session),
   }),
   entry({
     definition: wouldYouRather,
