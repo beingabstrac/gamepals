@@ -38,6 +38,9 @@ export class SandScene extends Scene {
   private lastSent = 0;
   private frame = 0;
   private g!: GameObjects.Graphics;
+  /** Grains that moved in the last step, anywhere and near the top of the jar. */
+  private moved = 0;
+  private movedHigh = 0;
 
   constructor(private readonly session: Session<SandMove>) {
     super('sand-fall');
@@ -86,8 +89,18 @@ export class SandScene extends Scene {
       return false;
     });
     const off = this.session.subscribe(() => this.changed());
-    this.events.once('shutdown', off);
+    // A bot waits for its last pour to clear the top of the jar, so its colors lie in stripes.
+    this.session.holdBots = () => this.movedHigh > 0;
+    this.events.once('shutdown', () => {
+      off();
+      this.session.holdBots = null;
+    });
     this.drawControls();
+  }
+
+  /** Sand still falling: the result sheet waits for it to settle rather than cover it mid-fall. */
+  busy(): boolean {
+    return this.moved > 0;
   }
 
   private send(move: SandMove): void {
@@ -160,6 +173,8 @@ export class SandScene extends Scene {
   private stepSand(): void {
     const g = this.grid;
     const flip = this.frame % 2 === 0;
+    let moved = 0;
+    let movedHigh = 0;
     for (let y = GH - 2; y >= 0; y--) {
       for (let i = 0; i < GW; i++) {
         const x = flip ? i : GW - 1 - i;
@@ -169,6 +184,8 @@ export class SandScene extends Scene {
         if (g[below] === 0) {
           g[below] = c;
           g[y * GW + x] = 0;
+          moved++;
+          if (y < 40) movedHigh++;
           continue;
         }
         const first = (x + y + this.frame) % 2 === 0 ? -1 : 1;
@@ -178,11 +195,15 @@ export class SandScene extends Scene {
           if (g[(y + 1) * GW + nx] === 0) {
             g[(y + 1) * GW + nx] = c;
             g[y * GW + x] = 0;
+            moved++;
+            if (y < 40) movedHigh++;
             break;
           }
         }
       }
     }
+    this.moved = moved;
+    this.movedHigh = movedHigh;
   }
 
   update(time: number): void {

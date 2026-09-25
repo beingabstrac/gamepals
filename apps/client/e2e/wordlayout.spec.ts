@@ -141,9 +141,12 @@ for (const { name, limit } of [
  */
 for (const name of ['Mancala', 'Oware']) {
   test(`${name}: one sowing per move, never two at once`, async ({ page }) => {
+    // The bots now wait for the seeds to land, so on the slow Android engines six looks 900ms apart
+    // saw only three moves. Watch until there are enough moves to judge, or the game ends.
+    test.setTimeout(90_000);
     await open(page, name);
     let last = null as { sowings: number; moves: number; overlaps: number } | null;
-    for (let look = 0; look < 6; look++) {
+    for (let look = 0; look < 60 && !(last && last.moves >= 6); look++) {
       await page.waitForTimeout(900);
       const report = await page.evaluate(() => {
         const game = (window as unknown as { gamepalsTestGame?: { scene: { scenes: unknown[] } } }).gamepalsTestGame;
