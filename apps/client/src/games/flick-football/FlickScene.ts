@@ -265,7 +265,7 @@ export class FlickScene extends Scene {
 export function flickStatus(state: FlickState, names: readonly string[]): string | undefined {
   if (state.result) return undefined;
   const who = names[state.currentSeat] ?? `Player ${state.currentSeat + 1}`;
-  return `${names[0] ?? 'Blue'} ${state.goals[0]} · ${state.goals[1]} ${names[1] ?? 'Red'} · ${who} to flick`;
+  return `${names[0] ?? 'Blue'} ${state.goals[0]}, ${names[1] ?? 'Red'} ${state.goals[1]} · ${who} to flick`;
 }
 
 export function flickResult(state: FlickState, names: readonly string[]): string | undefined {

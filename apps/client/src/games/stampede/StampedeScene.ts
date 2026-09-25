@@ -32,7 +32,6 @@ const W = STAMPEDE_CANVAS.width;
 const H = STAMPEDE_CANVAS.height;
 const SEAT_HEX = [toHex(COLORS.sky), toHex(COLORS.tomato)];
 const HISTORY_SECONDS = 0.4;
-const NAMES = ['Blue', 'Red'];
 
 /**
  * Stampede. The rules run the field at a fixed step; the scene draws the lanes, the herd and the
@@ -63,6 +62,11 @@ export class StampedeScene extends Scene {
     this.rng = createRng(options.seed);
   }
 
+  /** What the table calls each seat (a person's name, or the bot's). */
+  private nameOf(seat: Seat): string {
+    return this.options.seats[seat]?.label ?? (seat === 0 ? 'Blue' : 'Red');
+  }
+
   create(): void {
     fitCamera(this, W, H);
     applySpeed(this);
@@ -79,7 +83,7 @@ export class StampedeScene extends Scene {
     this.runner = this.makeRunner();
     this.clockText = sharpText(this, W / 2, FIELD.bottom + 36, '', 26, COLORS.ink).setFontStyle('bold');
     this.banner = sharpText(this, W / 2, H / 2, '', 58, COLORS.ink).setDepth(10).setStroke('#FFFFFF', 10);
-    this.shout(`${NAMES[this.state.runner]} runs first`, false);
+    this.shout(`${this.nameOf(this.state.runner)} runs first`, false);
 
     this.input.on('pointerdown', (p: { id: number; worldX: number; worldY: number }) => {
       const s = this.state;
@@ -184,7 +188,7 @@ export class StampedeScene extends Scene {
       this.options.onScore(s.points);
       if (events.roundOver) {
         this.options.onCue('win');
-        this.shout(`${NAMES[before.runner]} made it!`);
+        this.shout(`${this.nameOf(before.runner)} made it!`);
       } else {
         this.options.onCue('capture');
         this.cameras.main.shake(260, 0.012);
@@ -194,7 +198,7 @@ export class StampedeScene extends Scene {
     }
     if (before.phase === 'over' && s.phase === 'countdown') {
       const twoPeople = this.options.seats.every((c) => c?.kind === 'human');
-      this.shout(twoPeople ? `Turn the phone round: ${NAMES[s.runner]} runs` : `${NAMES[s.runner]} runs now`, false);
+      this.shout(twoPeople ? `Turn the phone round: ${this.nameOf(s.runner)} runs` : `${this.nameOf(s.runner)} runs now`, false);
     }
     if (before.phase === 'countdown' && s.phase === 'run') this.shout('Go!');
   }

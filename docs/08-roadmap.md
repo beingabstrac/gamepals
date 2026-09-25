@@ -869,20 +869,20 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [x] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
   - [x] **M38b Connect Six:** one stone then two a turn, six in a row; bots block every four, Hard and Expert look for three threats at once and Expert spoils the other player's (Medium beat Easy 11-0, Hard beat Medium 8-0, Expert beat Hard 10-4, draws aside, 16 games each).
   - [x] **M38c Game of the Goose:** the 63-square spiral, geese, Bridge, Inn, Well, Maze, Jail and Death, knocking back; 2 to 4, all luck.
-- [ ] **M39 Chill shelf C:** Pond, Wind Chimes and Slime, from docs/12 F. Bubble Wrap is held back: it is Pop It with a different skin.
-  - [ ] **M39a Pond:** tap the water for ripples, hold to scatter food for the koi, tap each bud until every lotus is open.
-  - [ ] **M39b Wind Chimes:** seven bamboo tubes swing as pendulums, knock their neighbours and ring a pentatonic note; ring every chime.
-  - [ ] **M39c Slime:** a soft body on the table: poke it, pull it and it wobbles back; seven colors and four mix-ins; done when you say.
-- [ ] **M40 Puzzles and toys D:** Marble Run, Mirror Paint (the catalog's neon paint) and Pizza Memory. Wood Carving is held back: rubbing wood away to find a shape is Clean It run backwards.
-  - [ ] **M40a Marble Run:** tap pegs to set ramps, drop the marble into the cup; the roll is in the rules, every level checked all 81 ways.
-  - [ ] **M40b Mirror Paint:** the catalog's neon paint made ours: symmetry painting in candy colors on white, 4 to 16 copies of every stroke, no glow.
-  - [ ] **M40c Pizza Memory:** see an order, make it from memory, eight slices and five toppings, five orders that grow.
-- [ ] **M41 Puzzles E:** Escape Room. Animal Stack is held back: stacking needs rigid bodies that turn and rest on each other, and making that stable as a pure step in the rules is a project of its own (and it would sit close to Tower). It comes back if it gets that project.
-  - [ ] **M41a Escape Room:** room-lite: count the things on the lock round four walls, open drawers, boxes and curtains; three rooms that grow.
-- [ ] **M42 Duels G:** the three held-back duels, each given a core of its own.
-  - [ ] **M42a Balloon Bumpers** (the catalog's Crash It): bumper cars with a balloon on each car's back; ram a balloon to pop it, three pops wins. Sumo is pushing out of a ring; this is aiming at a weak spot. Three drive models were measured: cars that always cruise ended in endless tail chases (0 pops in 20 matches between good bots), so cars drive freely; guarding lost every time, so no tier guards; walls closing in and a round clock make every match finish.
-  - [ ] **M42b Flick Football** (the catalog's Golf Football): each side flicks its own round players to knock the ball into the other goal, like penny football. In Mini Golf you hit the ball; here you move your men and the ball only moves when they hit it. The roll is in the rules; bots think in the worker.
-  - [ ] **M42c Stampede:** asymmetric: one player sends the herd down lanes they pick, the other runs and dodges, then they swap. In Road Dodge both players dodge the same traffic. Medium beat Easy 17-3, Hard beat Medium 20-0, Expert beat Hard 12-0.
+- [x] **M39 Chill shelf C (green on all eight screens 2026-09-25, run 36093516604):** Pond, Wind Chimes and Slime, from docs/12 F. Bubble Wrap is held back: it is Pop It with a different skin.
+  - [x] **M39a Pond:** tap the water for ripples, hold to scatter food for the koi, tap each bud until every lotus is open.
+  - [x] **M39b Wind Chimes:** seven bamboo tubes swing as pendulums, knock their neighbours and ring a pentatonic note; ring every chime.
+  - [x] **M39c Slime:** a soft body on the table: poke it, pull it and it wobbles back; seven colors and four mix-ins; done when you say.
+- [x] **M40 Puzzles and toys D (green on all eight screens 2026-09-25, run 36093516604):** Marble Run, Mirror Paint (the catalog's neon paint) and Pizza Memory. Wood Carving is held back: rubbing wood away to find a shape is Clean It run backwards.
+  - [x] **M40a Marble Run:** tap pegs to set ramps, drop the marble into the cup; the roll is in the rules, every level checked all 81 ways.
+  - [x] **M40b Mirror Paint:** the catalog's neon paint made ours: symmetry painting in candy colors on white, 4 to 16 copies of every stroke, no glow.
+  - [x] **M40c Pizza Memory:** see an order, make it from memory, eight slices and five toppings, five orders that grow.
+- [x] **M41 Puzzles E (green on all eight screens 2026-09-25, run 36093516604):** Escape Room. Animal Stack is held back: stacking needs rigid bodies that turn and rest on each other, and making that stable as a pure step in the rules is a project of its own (and it would sit close to Tower). It comes back if it gets that project.
+  - [x] **M41a Escape Room:** room-lite: count the things on the lock round four walls, open drawers, boxes and curtains; three rooms that grow.
+- [x] **M42 Duels G (green on all eight screens 2026-09-25, run 36093516604):** the three held-back duels, each given a core of its own.
+  - [x] **M42a Balloon Bumpers** (the catalog's Crash It): bumper cars with a balloon on each car's back; ram a balloon to pop it, three pops wins. Sumo is pushing out of a ring; this is aiming at a weak spot. Three drive models were measured: cars that always cruise ended in endless tail chases (0 pops in 20 matches between good bots), so cars drive freely; guarding lost every time, so no tier guards; walls closing in and a round clock make every match finish.
+  - [x] **M42b Flick Football** (the catalog's Golf Football): each side flicks its own round players to knock the ball into the other goal, like penny football. In Mini Golf you hit the ball; here you move your men and the ball only moves when they hit it. The roll is in the rules; bots think in the worker.
+  - [x] **M42c Stampede:** asymmetric: one player sends the herd down lanes they pick, the other runs and dodges, then they swap. In Road Dodge both players dodge the same traffic. Medium beat Easy 17-3, Hard beat Medium 20-0, Expert beat Hard 12-0.
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 
