@@ -125,3 +125,4 @@ export * from './games/darts';
 export * from './games/connect-six';
 export * from './games/goose';
 export * from './games/pond';
+export * from './games/wind-chimes';

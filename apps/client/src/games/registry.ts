@@ -107,6 +107,8 @@ import {
   type GooseState,
   pond,
   type PondState,
+  windChimes,
+  type ChimeState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -289,6 +291,7 @@ import { DART_COLORS, dartsResult, DartsScene, DARTS_SIZE, dartsStatus } from '.
 import { SIX_CANVAS, SIX_COLORS, sixResult, SixScene, sixStatus } from './connect-six/SixScene';
 import { GOOSE_COLORS, gooseResult, GooseScene, GOOSE_SIZE, gooseStatus } from './goose/GooseScene';
 import { POND_SIZE, POND_TINTS, pondResult, PondScene, pondStatus } from './pond/PondScene';
+import { CHIME_SIZE, CHIME_TINTS, chimeResult, ChimeScene, chimeStatus } from './wind-chimes/ChimeScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1768,6 +1771,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => pondResult(state as PondState),
     moveCue: () => undefined,
     createScene: (session) => new PondScene(session),
+  }),
+  entry({
+    definition: windChimes,
+    tagline: 'Bamboo tubes that knock and sing',
+    minutes: 'Any time',
+    hint: 'Tap a tube, or swipe across them',
+    howTo: {
+      goal: 'Ring every chime.',
+      controls: 'Tap a tube to push it, or swipe across them. Tubes that swing into each other knock and ring. Wind blows a gust through them all. On a keyboard: 1 to 7 push a tube, W or Space blows the wind.',
+      win: 'When every chime has rung, a little star sits under each one. There is no clock and nothing to lose.',
+      tip: 'The long tubes are the low notes. Any order sounds nice.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => CHIME_TINTS,
+    size: CHIME_SIZE,
+    color: DARK.mint,
+    botDelayMs: 500,
+    status: (state) => chimeStatus(state as ChimeState),
+    resultText: (state) => chimeResult(state as ChimeState),
+    moveCue: () => undefined,
+    createScene: (session) => new ChimeScene(session),
   }),
   entry({
     definition: wouldYouRather,

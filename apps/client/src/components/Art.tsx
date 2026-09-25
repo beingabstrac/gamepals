@@ -2365,6 +2365,22 @@ function PondArt() {
   );
 }
 
+function WindChimesArt() {
+  // A bar with five candy bamboo tubes hanging from it, one swung out.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M50 6 V16" stroke={INK} stroke-width="2.5" />
+      <rect x="14" y="14" width="72" height="8" rx="4" fill={COLORS.peach} />
+      <path d="M24 22 V30 M37 22 V30 M50 22 V30 M63 22 V30 M76 22 V30" stroke={INK} stroke-width="1.5" />
+      <rect x="19" y="30" width="10" height="56" rx="5" fill={COLORS.tomato} />
+      <rect x="32" y="30" width="10" height="50" rx="5" fill={COLORS.sunny} />
+      <rect x="45" y="30" width="10" height="44" rx="5" fill={COLORS.mint} />
+      <rect x="58" y="30" width="10" height="38" rx="5" fill={COLORS.sky} />
+      <rect x="71" y="30" width="10" height="32" rx="5" fill={COLORS.grape} transform="rotate(-14 76 22)" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2639,6 +2655,7 @@ const ART: Record<string, () => JSX.Element> = {
   'straighten-up': StraightenUpArt,
   'sand-fall': SandFallArt,
   pond: PondArt,
+  'wind-chimes': WindChimesArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

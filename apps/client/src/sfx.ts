@@ -60,6 +60,17 @@ export const SFX = {
   echo1: [{ freq: 554.37, duration: 0.34, type: 'sine', volume: 0.22 }, { freq: 1108.73, duration: 0.2, type: 'triangle', volume: 0.04 }],
   echo2: [{ freq: 659.25, duration: 0.34, type: 'sine', volume: 0.22 }, { freq: 1318.51, duration: 0.2, type: 'triangle', volume: 0.04 }],
   echo3: [{ freq: 880, duration: 0.34, type: 'sine', volume: 0.2 }, { freq: 1760, duration: 0.2, type: 'triangle', volume: 0.04 }],
+  // Wind Chimes: seven bamboo tubes on a C major pentatonic, so any order sounds kind. A tube rings
+  // at its note and a hollow overtone about 2.76 times higher, which is what makes it sound like a tube.
+  ...Object.fromEntries(
+    [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66].map((f, i) => [
+      `chime${i}`,
+      [
+        { freq: f, duration: 0.7, type: 'sine' as const, volume: 0.16 },
+        { freq: f * 2.76, duration: 0.18, type: 'sine' as const, volume: 0.035 },
+      ],
+    ]),
+  ) as Record<`chime${0 | 1 | 2 | 3 | 4 | 5 | 6}`, readonly Tone[]>,
 } satisfies Record<string, readonly Tone[]>;
 
 export type SoundName = keyof typeof SFX;
