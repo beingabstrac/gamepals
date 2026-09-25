@@ -877,7 +877,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M40a Marble Run:** tap pegs to set ramps, drop the marble into the cup; the roll is in the rules, every level checked all 81 ways.
   - [ ] **M40b Mirror Paint:** the catalog's neon paint made ours: symmetry painting in candy colors on white, 4 to 16 copies of every stroke, no glow.
   - [ ] **M40c Pizza Memory:** see an order, make it from memory, eight slices and five toppings, five orders that grow.
-- [ ] **M41+** The rest of the catalog: Animal Stack and a room-lite Escape, then the held-back duels once each has a core of its own.
+- [ ] **M41 Puzzles E:** Escape Room, then Animal Stack if a stacking game can be made clearly its own beside Tower.
+  - [ ] **M41a Escape Room:** room-lite: count the things on the lock round four walls, open drawers, boxes and curtains; three rooms that grow.
+- [ ] **M42+** The held-back duels (Crash It, Stampede, Golf Football) once each has a core of its own.
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

@@ -117,6 +117,8 @@ import {
   type MirrorState,
   pizzaMemory,
   type PizzaState,
+  escapeRoom,
+  type EscapeState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -304,6 +306,7 @@ import { SLIME_SIZE, SLIME_TINTS, slimeResult, SlimeScene, slimeStatus } from '.
 import { MARBLE_SIZE, MARBLE_TINTS, marbleResult, MarbleScene, marbleStatus } from './marble-run/MarbleScene';
 import { MIRROR_SIZE, MIRROR_TINTS, mirrorResult, MirrorScene, mirrorStatus } from './mirror-paint/MirrorScene';
 import { PIZZA_SIZE, PIZZA_TINTS, pizzaResult, PizzaScene, pizzaStatus } from './pizza-memory/PizzaScene';
+import { ESCAPE_SIZE, ESCAPE_TINTS, escapeResult, EscapeScene, escapeStatus } from './escape-room/EscapeScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1888,6 +1891,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => pizzaResult(state as PizzaState),
     moveCue: () => undefined,
     createScene: (session) => new PizzaScene(session),
+  }),
+  entry({
+    definition: escapeRoom,
+    tagline: 'Count what you find, open the door',
+    minutes: '5 min',
+    hint: 'Look round every wall, then set the lock',
+    howTo: {
+      goal: 'Get out of three rooms. The lock on each door shows some pictures: the code is how many of each there are in the room, in that order.',
+      controls: 'Tap the arrows at the sides to turn to another wall. Tap drawers, boxes and curtains to look inside. On the door, tap the top of a wheel to count up or the bottom to count down, then Try. On a keyboard: Left and Right turn, Tab and Enter open things, on the door type the numbers and press Enter.',
+      win: 'The right code opens the door. Get out of all three rooms.',
+      tip: 'Look inside everything. In the last room some things come in two colors: only the color on the lock counts.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => ESCAPE_TINTS,
+    size: ESCAPE_SIZE,
+    color: DARK.peach,
+    botDelayMs: 600,
+    status: (state) => escapeStatus(state as EscapeState),
+    resultText: (state) => escapeResult(state as EscapeState),
+    moveCue: () => undefined,
+    createScene: (session) => new EscapeScene(session),
   }),
   entry({
     definition: wouldYouRather,

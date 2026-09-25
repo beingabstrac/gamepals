@@ -2448,6 +2448,25 @@ function PizzaMemoryArt() {
   );
 }
 
+function EscapeRoomArt() {
+  // A peach door with a lock of two pictures and number wheels, an apple on the wall beside it.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#FFE3C7" />
+      <rect x="6" y="78" width="88" height="16" fill="#E9D8C4" />
+      <path d="M30 94 V26 Q30 16 40 16 H60 Q70 16 70 26 V94 Z" fill={COLORS.peach} />
+      <rect x="36" y="32" width="28" height="30" rx="5" fill="#FFFFFF" />
+      <circle cx="44" cy="40" r="4" fill={COLORS.tomato} />
+      <path d="M52 40 L60 36 L60 44 Z" fill={COLORS.sky} />
+      <rect x="39" y="47" width="10" height="11" rx="3" fill="#F1ECFA" />
+      <rect x="51" y="47" width="10" height="11" rx="3" fill="#F1ECFA" />
+      <circle cx="64" cy="70" r="3" fill={COLORS.sunny} />
+      <circle cx="17" cy="38" r="6" fill={COLORS.tomato} />
+      <circle cx="84" cy="52" r="6" fill={COLORS.tomato} />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2727,6 +2746,7 @@ const ART: Record<string, () => JSX.Element> = {
   'marble-run': MarbleRunArt,
   'mirror-paint': MirrorPaintArt,
   'pizza-memory': PizzaMemoryArt,
+  'escape-room': EscapeRoomArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,
