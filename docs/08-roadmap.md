@@ -29,7 +29,7 @@ These block the milestones marked 🔑. Some have long lead times, so start them
 - [ ] Play every new game on a real phone after each quality pass and note what feels wrong. Tests prove games don't crash and can finish; they can't judge feel.
 - [ ] Free trademark search for "Game Pals" ([09](09-naming.md)).
 - [ ] A support email address for the store listings (M12b). Not a personal address unless you want it public.
-- [ ] **GitHub Actions is blocked on billing** (hit on 2026-09-18). Settings → Billing & plans: raise the Actions spending limit, or wait for the monthly reset. Nothing ships until a run can start.
+- [x] **GitHub Actions is blocked on billing** (hit on 2026-09-18). Resolved: the repo is public now and runs bill 0 minutes (seen 2026-09-23); every run since has started. Kept for the record: Settings → Billing & plans: raise the Actions spending limit, or wait for the monthly reset. Nothing ships until a run can start.
 
 ## Done so far
 - [x] Monorepo, pure rules package (seeded, replayable), bots with 4 levels, session with any mix of people and bots
@@ -869,7 +869,9 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
   - [ ] **M38a Darts:** 301 or 501, double out, busts, three darts a turn; a swaying sight; bots aim at checkouts and shake by tier (60, 35, 21 and 14 darts a 301 leg).
   - [ ] **M38b Connect Six:** one stone then two a turn, six in a row; bots block every four, Hard and Expert look for three threats at once and Expert spoils the other player's (Medium beat Easy 11-0, Hard beat Medium 8-0, Expert beat Hard 10-4, draws aside, 16 games each).
   - [ ] **M38c Game of the Goose:** the 63-square spiral, geese, Bridge, Inn, Well, Maze, Jail and Death, knocking back; 2 to 4, all luck.
-- [ ] **M39+** The rest of the catalog, 3–4 per milestone, split here when we get there
+- [ ] **M39 Chill shelf C:** Pond, Wind Chimes and Slime, from docs/12 F. Bubble Wrap is held back: it is Pop It with a different skin.
+  - [ ] **M39a Pond:** tap the water for ripples, hold to scatter food for the koi, tap each bud until every lotus is open.
+- [ ] **M40+** The rest of the catalog, 3–4 per milestone, split here when we get there: Marble Run, Neon Paint and Wood Carving (chill), then Animal Stack, Pizza Memory and a room-lite Escape.
 
 After launch, alternate: one Stage 3 or 4 milestone, then one polish/bug milestone driven by player reviews and crash reports.
 

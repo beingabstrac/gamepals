@@ -105,6 +105,8 @@ import {
   type SixState,
   goose,
   type GooseState,
+  pond,
+  type PondState,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -286,6 +288,7 @@ import { ARCHERY_COLORS, ARCHERY_SIZE, ArcheryScene, arrowOfEnd } from './archer
 import { DART_COLORS, dartsResult, DartsScene, DARTS_SIZE, dartsStatus } from './darts/DartsScene';
 import { SIX_CANVAS, SIX_COLORS, sixResult, SixScene, sixStatus } from './connect-six/SixScene';
 import { GOOSE_COLORS, gooseResult, GooseScene, GOOSE_SIZE, gooseStatus } from './goose/GooseScene';
+import { POND_SIZE, POND_TINTS, pondResult, PondScene, pondStatus } from './pond/PondScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -1744,6 +1747,27 @@ export const GAMES: readonly AnyEntry[] = [
     resultText: (state) => toppleResult(state as ToppleState),
     moveCue: () => undefined,
     createScene: (session) => new ToppleScene(session),
+  }),
+  entry({
+    definition: pond,
+    tagline: 'Ripples, koi and lotus flowers',
+    minutes: 'Any time',
+    hint: 'Tap the water, or hold to feed the fish',
+    howTo: {
+      goal: 'Open every lotus bud on the pond.',
+      controls: 'Tap the water to make ripples. Hold your finger on the water to scatter food for the fish. Tap a pink bud to open it. On a keyboard: 1 to 5 open a bud, F feeds the fish, Space makes a ripple.',
+      win: 'When every lotus is open, the pond is in bloom. There is no clock and nothing to lose.',
+      tip: 'The fish dart away from a splash and come back for food.',
+    },
+    sideNames: () => ['You'],
+    sideColors: () => POND_TINTS,
+    size: POND_SIZE,
+    color: DARK.sky,
+    botDelayMs: 600,
+    status: (state) => pondStatus(state as PondState),
+    resultText: (state) => pondResult(state as PondState),
+    moveCue: () => undefined,
+    createScene: (session) => new PondScene(session),
   }),
   entry({
     definition: wouldYouRather,

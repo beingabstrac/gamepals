@@ -91,6 +91,7 @@ const GAMES = [
   'Darts',
   'Connect Six',
   'Game of the Goose',
+  'Pond',
   'Gomoku',
   'Oware',
   'Mexican Train',

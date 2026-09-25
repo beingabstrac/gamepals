@@ -2343,6 +2343,28 @@ function GooseArt() {
   );
 }
 
+function PondArt() {
+  // A blue pond with a lily pad, an open lotus, and a koi.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <ellipse cx="50" cy="54" rx="42" ry="38" fill="#7CC4FF" />
+      <circle cx="36" cy="44" r="16" fill={COLORS.mint} />
+      <path d="M36 44 L53 38 L53 50 Z" fill="#7CC4FF" />
+      <g fill={COLORS.bubblegum}>
+        <ellipse cx="36" cy="36" rx="4" ry="8" />
+        <ellipse cx="44" cy="44" rx="8" ry="4" />
+        <ellipse cx="36" cy="52" rx="4" ry="8" />
+        <ellipse cx="28" cy="44" rx="8" ry="4" />
+      </g>
+      <circle cx="36" cy="44" r="4" fill={COLORS.sunny} />
+      <ellipse cx="64" cy="70" rx="12" ry="6" fill={COLORS.peach} transform="rotate(-20 64 70)" />
+      <path d="M53 75 L46 71 L48 80 Z" fill={COLORS.peach} />
+      <circle cx="70" cy="66" r="2.5" fill={COLORS.tomato} />
+      <circle cx="68" cy="30" r="9" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2616,6 +2638,7 @@ const ART: Record<string, () => JSX.Element> = {
   'clean-it': CleanItArt,
   'straighten-up': StraightenUpArt,
   'sand-fall': SandFallArt,
+  pond: PondArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,
