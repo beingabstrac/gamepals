@@ -119,6 +119,7 @@ import {
   type PizzaState,
   escapeRoom,
   type EscapeState,
+  balloonBumpers,
   ENDS,
   RANGE_METRES,
   type ArcheryState,
@@ -307,6 +308,7 @@ import { MARBLE_SIZE, MARBLE_TINTS, marbleResult, MarbleScene, marbleStatus } fr
 import { MIRROR_SIZE, MIRROR_TINTS, mirrorResult, MirrorScene, mirrorStatus } from './mirror-paint/MirrorScene';
 import { PIZZA_SIZE, PIZZA_TINTS, pizzaResult, PizzaScene, pizzaStatus } from './pizza-memory/PizzaScene';
 import { ESCAPE_SIZE, ESCAPE_TINTS, escapeResult, EscapeScene, escapeStatus } from './escape-room/EscapeScene';
+import { BUMPER_SIZE, BumperScene } from './balloon-bumpers/BumperScene';
 import { FreeCellControls } from './freecell/FreeCellControls';
 import { FREECELL_SIZE, freeCellStatus, FreeCellScene } from './freecell/FreeCellScene';
 import { SpiderControls } from './spider/SpiderControls';
@@ -3051,6 +3053,22 @@ export const GAMES: readonly AnyEntry[] = [
     size: SUMO_SIZE,
     color: DARK.peach,
     createScene: (options) => new SumoScene(options),
+  },
+  {
+    kind: 'realtime',
+    definition: balloonBumpers,
+    tagline: 'Pop the balloon on their car',
+    minutes: '3 min',
+    howTo: {
+      goal: 'Pop the balloon tied behind the other bumper car before they pop yours.',
+      controls: 'Hold and drag in your half to drive. Tap to dash. Your car turns to face the way it goes, and its balloon trails behind. On a keyboard: the arrow keys drive and Space dashes (the top player uses W A S D and Shift).',
+      win: 'Three pops wins. A round with no pop ends after 40 seconds, and after seven rounds the most pops wins.',
+      tip: 'Charge head on and your balloon is safe behind you; turn and it swings out. If nobody pops for a while, the walls close in.',
+    },
+    ...duelSides,
+    size: BUMPER_SIZE,
+    color: DARK.sky,
+    createScene: (options) => new BumperScene(options),
   },
   {
     kind: 'realtime',

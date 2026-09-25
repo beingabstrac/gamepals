@@ -131,3 +131,4 @@ export * from './games/marble-run';
 export * from './games/mirror-paint';
 export * from './games/pizza-memory';
 export * from './games/escape-room';
+export * from './games/balloon-bumpers';

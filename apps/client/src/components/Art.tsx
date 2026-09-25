@@ -2467,6 +2467,24 @@ function EscapeRoomArt() {
   );
 }
 
+function BalloonBumpersArt() {
+  // Two bumper cars, each trailing a balloon on a string, one about to be popped.
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="6" y="6" width="88" height="88" rx="16" fill="#F4EEFF" />
+      <path d="M30 70 L16 84" stroke={INK} stroke-width="1.5" />
+      <circle cx="14" cy="86" r="7" fill={COLORS.sky} />
+      <circle cx="36" cy="64" r="13" fill={INK} />
+      <circle cx="36" cy="64" r="10" fill={COLORS.sky} />
+      <path d="M70 34 L82 22" stroke={INK} stroke-width="1.5" />
+      <circle cx="84" cy="18" r="7" fill={COLORS.tomato} />
+      <circle cx="64" cy="40" r="13" fill={INK} />
+      <circle cx="64" cy="40" r="10" fill={COLORS.tomato} />
+      <path d="M44 56 L52 48" stroke={COLORS.sunny} stroke-width="3" stroke-linecap="round" />
+    </svg>
+  );
+}
+
 function SweeperArt() {
   // A cleared corner with the numbers along its edge and a flag on the mine they point at.
   const cells = ['', '', '1', 'c', '', '1', '2', 'c', '1', '2', 'f', 'c', 'c', 'c', 'c', 'c'];
@@ -2747,6 +2765,7 @@ const ART: Record<string, () => JSX.Element> = {
   'mirror-paint': MirrorPaintArt,
   'pizza-memory': PizzaMemoryArt,
   'escape-room': EscapeRoomArt,
+  'balloon-bumpers': BalloonBumpersArt,
   'dominoes-topple': DominoesToppleArt,
   gomoku: GomokuArt,
   'connect-six': ConnectSixArt,

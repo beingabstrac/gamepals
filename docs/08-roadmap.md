@@ -880,7 +880,7 @@ That is twenty-two more games on top of the forty-three, and it covers every gam
 - [ ] **M41 Puzzles E:** Escape Room. Animal Stack is held back: stacking needs rigid bodies that turn and rest on each other, and making that stable as a pure step in the rules is a project of its own (and it would sit close to Tower). It comes back if it gets that project.
   - [ ] **M41a Escape Room:** room-lite: count the things on the lock round four walls, open drawers, boxes and curtains; three rooms that grow.
 - [ ] **M42 Duels G:** the three held-back duels, each given a core of its own.
-  - [ ] **M42a Balloon Bumpers** (the catalog's Crash It): bumper cars with a balloon on each car's back; ram a balloon to pop it, last with a balloon wins. Sumo is pushing out of a ring; this is aiming at a weak spot while guarding your own.
+  - [ ] **M42a Balloon Bumpers** (the catalog's Crash It): bumper cars with a balloon on each car's back; ram a balloon to pop it, three pops wins. Sumo is pushing out of a ring; this is aiming at a weak spot. Three drive models were measured: cars that always cruise ended in endless tail chases (0 pops in 20 matches between good bots), so cars drive freely; guarding lost every time, so no tier guards; walls closing in and a round clock make every match finish.
   - [ ] **M42b Flick Football** (the catalog's Golf Football): each side flicks its own round players to knock the ball into the other goal, like penny football. In Mini Golf you hit the ball; here you move your men and the ball only moves when they hit it.
   - [ ] **M42c Stampede:** asymmetric: one player sends the herd down lanes they pick, the other runs and dodges, then they swap. In Road Dodge both players dodge the same traffic.
 

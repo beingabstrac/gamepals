@@ -98,6 +98,7 @@ const GAMES = [
   'Mirror Paint',
   'Pizza Memory',
   'Escape Room',
+  'Balloon Bumpers',
   'Gomoku',
   'Oware',
   'Mexican Train',
